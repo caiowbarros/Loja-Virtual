@@ -3,6 +3,8 @@
     Created on : 12/09/2019, 19:33:29
     Author     : Caio
 --%>
+    
+    <div class="fundo-branco"></div
     </body>
         <footer>
             <span>Site desenvolvido por:</span>

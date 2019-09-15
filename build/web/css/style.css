@@ -28,12 +28,14 @@ header {
     position: fixed;
     background: white;
     width: 100%;
-    display: inline-block;
+    display: flex;
     top: 0;
     text-align: center;
     vertical-align: middle;
     border-bottom: 1px solid lightgray;
     align-items: center;
+    justify-content: space-between;
+    z-index: 999;
 }
 
 footer {
@@ -50,7 +52,7 @@ footer {
     width: 15%;
     margin-top: 25px;
     margin-bottom: 25px;
-    margin-left: -50px;
+    margin-left: 140px;
 }
 
 /* Navbar */
@@ -82,6 +84,10 @@ input[type=text]:focus {
     width: 75%;
 }
 
+.canto-header {
+    display: inline-block;
+}
+
 .consulta-header {
     display: inline-block;
     margin-right: 20px;
@@ -94,6 +100,7 @@ input[type=text]:focus {
 
 .carrinho-header {
     display: inline-block;
+    padding-right: 200px;
 }
 
 /* Dropdown */

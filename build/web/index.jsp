@@ -8,6 +8,6 @@ and open the template in the editor.
     <jsp:param name="title" value="Home"/>
 </jsp:include>
 
-<div>TESTE</div>
+<div><a href="template-produto.jsp">PAGINA PRODUTO</a></div>
 
 <jsp:include page="footer.jsp"></jsp:include>
