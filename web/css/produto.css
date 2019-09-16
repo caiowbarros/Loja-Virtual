@@ -23,7 +23,7 @@ html, body {
   display: flex;
 }
 
-/* Columns */
+/* Colunas */
 .left-column {
   width: 65%;
   position: relative;
@@ -34,7 +34,7 @@ html, body {
   margin-top: 60px;
 }
 
-/* Left Column */
+/* Coluna da esquerda */
 .left-column img {
   position: absolute;
   left: 0;
@@ -47,7 +47,7 @@ html, body {
   width: 600px;
 }
 
-/* Product Description */
+/* Descrição do produto */
 .product-description {
   border-bottom: 1px solid #E1E8EE;
   margin-bottom: 20px;
@@ -73,7 +73,7 @@ html, body {
   text-align: justify;
 }
 
-/* Size Configuration */
+/* Escolha do tamanho */
 .escolha-tamanho {
   margin-bottom: 20px;
 }
@@ -122,7 +122,7 @@ html, body {
   margin-right: 5px;
 }
 
-/* Product Price */
+/* Preço */
 .product-price {
   display: flex;
   align-items: center;
@@ -138,6 +138,7 @@ html, body {
   margin-bottom: 20px;
 }
  
+/* Carrinho */
 .cart-btn {
   display: inline-block;
   background-color: #358ED7;
@@ -153,7 +154,7 @@ html, body {
   background-color: #64af3d;
 }
 
-/* Favorite */
+/* Favorito */
 [id='toggle-heart'] {
   position: absolute;
   left: -100vw;
@@ -175,11 +176,10 @@ html, body {
   margin-bottom: 20px;
 }
 
-/* Rating */
+/* Avaliação */
 .rate {
     float: left;
     height: 46px;
-    padding: 0 10px;
 }
 .rate:not(:checked) > input {
     position:absolute;

@@ -68,24 +68,71 @@ footer {
     float: inline-start;
 }
 
-input[type=text] {
-    width: 40%;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
-    padding: 7px 20px 7px 10px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
-
-input[type=text]:focus {
-    width: 75%;
-}
-
 .canto-header {
-    display: inline-block;
+   display: inline-block; 
+}
+
+/* Pesquisa */
+#pesquisa input[type=search] {
+    -webkit-appearance: textfield;
+    -webkit-box-sizing: content-box;
+    font-family: inherit;
+    font-size: 100%;
+    outline: none;
+}
+
+#pesquisa input::-webkit-search-decoration, #pesquisa input::-webkit-search-cancel-button {
+    display: none;
+}
+
+#pesquisa input[type=search] {
+    background: #ededed url('https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png') no-repeat 9px center;
+    border: solid 1px #ccc;
+    padding: 9px 10px 9px 32px;
+    width: 55px;
+    
+    -webkit-border-radius: 10em;
+    border-radius: 10em;
+    
+    -webkit-transition: all .5s;
+    transition: all .5s;
+}
+
+#pesquisa input[type=search]:focus {
+    width: 130px;
+    background-color: #fff;
+    border-color: #66CC75;
+    
+    -webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+    box-shadow: 0 0 5px rgba(109,207,246,.5);
+}
+
+#pesquisa input::-webkit-input-placeholder {
+    color: #999;
+}
+
+#pesquisa input[type=search] {
+    width: 15px;
+    padding-left: 10px;
+    color: transparent;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+#pesquisa input[type=search]:hover {
+    background-color: #fff;
+}
+
+#pesquisa input[type=search]:focus {
+    width: 130px;
+    padding-left: 32px;
+    color: #000;
+    background-color: #fff;
+    cursor: auto;
+}
+
+#pesquisa input::-webkit-input-placeholder {
+    color: transparent;
 }
 
 .consulta-header {
@@ -93,18 +140,19 @@ input[type=text]:focus {
     margin-right: 20px;
 }
 
+/* Login */
 .login-header {
     display: inline-block;
     margin-right: 20px;
 }
 
+/* Carrinho */
 .carrinho-header {
     display: inline-block;
     padding-right: 200px;
 }
 
 /* Dropdown */
-
 .dropbtn {
     background-color: white;
     color: black;
@@ -151,14 +199,13 @@ input[type=text]:focus {
 }
 
 .masc {
-    margin-left: 100px;
+    margin-left: 170px;
 }
 
 .inf {
-    margin-right: 100px;
+    margin-right: 170px;
 }
 
-/* Dropdown */
 
 .conteudo {
     display: block;
@@ -183,16 +230,19 @@ input[type=text]:focus {
     background-attachment: fixed;
 }
 
+/* Fundo para evitar imagem atrás de header ou footer */
 .fundo-branco {
     background: white;
     width: 100%;
     height: 80px;
 }
 
+/* Background */
 .fundo-paisagem1 {
     background-image: url('https://i.pinimg.com/originals/bc/c0/86/bcc0860537b4030e6e62fa0a38ef907b.jpg')
 }
 
+/* Produto */
 .produto {
     margin: 20px;
     background-color: #FFF;

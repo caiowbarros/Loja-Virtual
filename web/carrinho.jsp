@@ -4,6 +4,7 @@
     Author     : Caio
 --%>
 
+<!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Carrinho"/>
 </jsp:include>
@@ -31,4 +32,5 @@
     </tbody>
 </table>
 
+<!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

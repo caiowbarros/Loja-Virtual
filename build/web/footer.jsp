@@ -3,10 +3,12 @@
     Created on : 12/09/2019, 19:33:29
     Author     : Caio
 --%>
-    
+
+    <!-- Pra impedir de ficar elementos em cima do footer -->
     <div class="fundo-branco"></div
     </body>
         <footer>
+            <!-- Informações adicionais -->
             <span>Site desenvolvido por:</span>
             <ul class="lista-deitada devs">
                 <li>
