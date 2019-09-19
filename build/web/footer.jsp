@@ -5,7 +5,7 @@
 --%>
 
     <!-- Pra impedir de ficar elementos em cima do footer -->
-    <div class="fundo-branco"></div
+    <!-- <div class="fundo-branco"></div -->
     </body>
         <footer>
             <!-- Informações adicionais -->

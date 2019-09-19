@@ -12,6 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" type="text/css" rel="stylesheet">
         <link href="css/produto.css" type="text/css" rel="stylesheet">
+        <link href="css/login.css" type="text/css" rel="stylesheet">
     </head>
      
     <body>
@@ -31,7 +32,7 @@
                 </div>
                 <!-- Minha Conta -->
                 <div class="login-header">
-                    <a href=""><img src="https://cdn1.iconfinder.com/data/icons/freeline/32/account_friend_human_man_member_person_profile_user_users-512.png" width="20" style="vertical-align: middle"></a>
+                    <a href="./login.jsp"><img src="https://cdn1.iconfinder.com/data/icons/freeline/32/account_friend_human_man_member_person_profile_user_users-512.png" width="20" style="vertical-align: middle"></a>
                 </div>
                 <!-- Carrinho -->
                 <div class="carrinho-header">
