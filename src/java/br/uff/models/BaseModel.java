@@ -44,7 +44,7 @@ public class BaseModel {
             child = klass;
             table_name = get_table_name();
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cart_development", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
             return connection;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
