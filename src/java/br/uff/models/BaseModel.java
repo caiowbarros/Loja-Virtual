@@ -32,9 +32,21 @@ public class BaseModel {
     private static Connection connection = null;
     private static String table_name = null;
     protected final Evaluator evaluator;
+    protected boolean persisted;
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
+        this.persisted = false;
+    }
+    
+    public BaseModel(Map<String, Object> attrs) {
+        this.evaluator = new Evaluator(this);
+        this.persisted = (boolean) attrs.remove("persisted");
+        this.evaluator.initialize(attrs);
+    }
+    
+    public void setPersisted(boolean flag) {
+        this.persisted = flag;
     }
     
     public static Connection connect(Class klass) {
@@ -45,7 +57,7 @@ public class BaseModel {
             table_name = get_table_name();
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
-            return connection;
+             return connection;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,7 +98,41 @@ public class BaseModel {
     }
     
     public boolean save() {
+        HashMap<String, Object> where = new HashMap();
+        where.put("id", this.getAttribute("id"));
+        boolean response = this.persisted ? commitUpdate(this, where) : commit(this);
         return commit(this.getAttributes());
+    }
+    
+    public static boolean commit(BaseModel model) {
+        HashMap<String, Object> attrs = model.getAttributes();
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert into ");
+        sql.append(table_name);
+        sql.append("(");
+        int i = 1;
+        for (String key : attrs.keySet()) {
+            sql.append(Inflector.qf(key));
+            sql.append(i == attrs.size() ? ")" : ",");
+            i++;
+        }
+        i = 1;
+        sql.append(" values(");
+        for (Object value : attrs.values()) {
+            sql.append(String.valueOf(value));
+            sql.append(i == attrs.size() ? ")" : ",");
+            i++;
+        }
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(sql.toString());
+            statement.executeUpdate();
+            model.setPersisted(true);
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     public static boolean commit(HashMap<String, Object> attrs) {
@@ -118,6 +164,41 @@ public class BaseModel {
         return false;
     }
     
+    public static boolean commitUpdate(BaseModel model, HashMap<String, Object> where) {
+        HashMap<String, Object> attrs = model.getAttributes();
+        StringBuilder sql = new StringBuilder();
+        sql.append("update ");
+        sql.append(table_name);
+        sql.append(" set ");
+        int i = 1;
+        for (Map.Entry pair : attrs.entrySet()) {
+            sql.append(Inflector.qf(String.valueOf(pair.getKey())));
+            sql.append(" = ");
+            sql.append(String.valueOf(pair.getValue()));
+            sql.append(i == attrs.size() ? " " : ",");
+            i++;
+        }
+        i = 1;
+        sql.append(" where ");
+        for (Map.Entry pair : where.entrySet()) {
+            sql.append(pair.getKey());
+            sql.append(" = ");
+            sql.append(String.valueOf(pair.getValue()));
+            sql.append(i == where.size() ? "" : ",");
+            i++;
+        }
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(sql.toString());
+            statement.executeUpdate();
+            model.setPersisted(true);
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public static ArrayList<BaseModel> all() {
         ArrayList<BaseModel> models = new ArrayList();
         try {
@@ -131,6 +212,7 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 persitedAttrs.put(col_name, result.getObject(col_name));
             }
+            persitedAttrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             models.add(constructor.newInstance(persitedAttrs));
         } catch (SQLException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -151,6 +233,7 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 attrs.put(col_name, result.getObject(col_name));
             }
+            attrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             return constructor.newInstance(attrs);
         } catch (SQLException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
@@ -186,6 +269,7 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 persitedAttrs.put(col_name, result.getObject(col_name));
             }
+            persitedAttrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             models.add(constructor.newInstance(persitedAttrs));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {

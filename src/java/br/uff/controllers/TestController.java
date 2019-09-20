@@ -57,6 +57,8 @@ public class TestController extends HttpServlet {
             
             User user = (User) User.find(1);
             request.setAttribute("user", user);
+            user.setEmail("bar@foo.com");
+            user.save();
             
             RequestDispatcher view = request.getRequestDispatcher("/test.jsp");
             view.forward(request, response);

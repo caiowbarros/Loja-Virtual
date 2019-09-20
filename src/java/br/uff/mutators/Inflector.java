@@ -41,6 +41,10 @@ public class Inflector {
         return downsize(toSetter(str));
     }
     
+    public static String toQuotedString(String str) {
+        return "'" + str + "'";
+    }
+    
     public static String retrieveAttrName(String method) {
         String response = method;
         if (method.startsWith("set")) response = method.replaceFirst("set", "");
