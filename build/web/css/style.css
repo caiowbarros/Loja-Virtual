@@ -196,14 +196,14 @@ footer {
 }
 
 .dropdown:hover .dropbtn {
-    color: red;
+    color: #358ED7;
 }
 
-.masc {
+.ps {
     margin-left: 170px;
 }
 
-.inf {
+.wii {
     margin-right: 170px;
 }
 

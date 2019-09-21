@@ -21,7 +21,7 @@
             <form method="POST" action="">
 
                 <div class="group">      
-                    <input type="text" required>
+                    <input type="email" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>E-mail</label>
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="group">      
-                    <input type="text" required>
+                    <input type="email" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>E-mail</label>
