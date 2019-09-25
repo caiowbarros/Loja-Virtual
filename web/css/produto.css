@@ -71,6 +71,7 @@ html, body {
   color: #86939E;
   line-height: 24px;
   text-align: justify;
+  margin-bottom: 20px;
 }
 
 /* Preço */
@@ -191,6 +192,7 @@ html, body {
 .review-rate {
   margin-top: 20px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .review-list li {

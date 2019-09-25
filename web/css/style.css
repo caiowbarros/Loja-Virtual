@@ -70,7 +70,8 @@ footer {
 }
 
 .canto-header {
-   display: inline-block; 
+   display: flex;
+   align-items: center;
 }
 
 /* Pesquisa */
@@ -154,6 +155,10 @@ footer {
 }
 
 /* Dropdown */
+.dropdown-menu {
+    display: flex;
+}
+
 .dropbtn {
     background-color: white;
     color: black;
