@@ -5,6 +5,8 @@
  */
 package br.uff.models;
 
+import br.uff.exceptions.RecordAlreadyPersisted;
+import br.uff.exceptions.RecordNotPersisted;
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
 import java.lang.reflect.Constructor;
@@ -18,7 +20,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,21 +33,14 @@ public class BaseModel {
     private static Connection connection = null;
     private static String table_name = null;
     protected final Evaluator evaluator;
-    protected boolean persisted;
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
-        this.persisted = false;
     }
     
     public BaseModel(Map<String, Object> attrs) {
         this.evaluator = new Evaluator(this);
-        this.persisted = (boolean) attrs.remove("persisted");
         this.evaluator.initialize(attrs);
-    }
-    
-    public void setPersisted(boolean flag) {
-        this.persisted = flag;
     }
     
     public static Connection connect(Class klass) {
@@ -97,11 +91,17 @@ public class BaseModel {
         return attrs;
     }
     
-    public boolean save() {
+    public boolean save() throws RecordAlreadyPersisted {
+        if (this.getAttribute("id") != null) throw new RecordAlreadyPersisted();
+        return commit(this);
+    }
+    
+    public boolean update() throws RecordNotPersisted {
+        int id = (int) this.getAttribute("id");
+        if (this.getAttribute("id") == null) throw new RecordNotPersisted();
         HashMap<String, Object> where = new HashMap();
-        where.put("id", this.getAttribute("id"));
-        boolean response = this.persisted ? commitUpdate(this, where) : commit(this);
-        return commit(this.getAttributes());
+        where.put("id", id);
+        return commitUpdate(this, where);
     }
     
     public static boolean commit(BaseModel model) {
@@ -127,7 +127,6 @@ public class BaseModel {
         try {
             statement = connection.prepareStatement(sql.toString());
             statement.executeUpdate();
-            model.setPersisted(true);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -191,7 +190,6 @@ public class BaseModel {
         try {
             statement = connection.prepareStatement(sql.toString());
             statement.executeUpdate();
-            model.setPersisted(true);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,7 +210,6 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 persitedAttrs.put(col_name, result.getObject(col_name));
             }
-            persitedAttrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             models.add(constructor.newInstance(persitedAttrs));
         } catch (SQLException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -233,7 +230,6 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 attrs.put(col_name, result.getObject(col_name));
             }
-            attrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             return constructor.newInstance(attrs);
         } catch (SQLException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
@@ -269,7 +265,6 @@ public class BaseModel {
                 String col_name = meta.getColumnName(i);
                 persitedAttrs.put(col_name, result.getObject(col_name));
             }
-            persitedAttrs.put("persisted", true);
             Constructor<BaseModel> constructor = child.getConstructor(Map.class);
             models.add(constructor.newInstance(persitedAttrs));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
