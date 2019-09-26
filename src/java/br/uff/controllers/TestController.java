@@ -5,6 +5,7 @@
  */
 package br.uff.controllers;
 
+import br.uff.exceptions.RecordNotPersisted;
 import br.uff.models.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,11 +59,11 @@ public class TestController extends HttpServlet {
             User user = (User) User.find(1);
             request.setAttribute("user", user);
             user.setEmail("bar@foo.com");
-            user.save();
+            user.update();
             
             RequestDispatcher view = request.getRequestDispatcher("/test.jsp");
             view.forward(request, response);
-        } catch (SQLException ex) {
+        } catch (SQLException | RecordNotPersisted ex) {
             Logger.getLogger(TestController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
