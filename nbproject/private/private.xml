@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/xampp/htdocs/front/web/login.jsp</file>
+            <file>file:/C:/xampp/htdocs/front/web/header.jsp</file>
+            <file>file:/C:/xampp/htdocs/front/src/java/br/uff/controllers/TestController.java</file>
+            <file>file:/C:/xampp/htdocs/front/web/carrinho.jsp</file>
+            <file>file:/C:/xampp/htdocs/front/src/java/br/uff/controllers/LoginController.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -13,29 +13,29 @@
 <div class="login-background"></div>
 
 <main class="login-container">
-
+<% Cookie[] cookies = request.getCookies(); %>
     <!-- Coluna da esquerda (login) -->
     <div class="login-column">
         <h2>Login</h2>
         <div class="sub-container">
-            <form method="POST" action="">
+            <form method="POST" action="LoginController">
 
                 <div class="group">      
-                    <input type="email" required>
+                    <input name="email" type="email" required value="${cookie['loginEmail']}">
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>E-mail</label>
                 </div>
 
-                <div class="group">      
-                    <input type="password" required>
+                <div class="group">
+                    <input name="password" type="password" required value="${cookie['loginPassword']}">
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>Senha</label>
                 </div>
 
                 <div class="forgot-pswrd">
-                    <input type="checkbox">
+                    <input value="1" name="remember" type="checkbox">
                     <label>Lembre-me</label>
                 </div>
 

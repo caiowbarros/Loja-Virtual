@@ -5,7 +5,7 @@
 --%>
 <!DOCTYPE html>
 <html lang="pt-br">
-    
+
     <head>
         <title>UFF | ${param.title}</title>
         <meta charset="UTF-8">
@@ -14,7 +14,7 @@
         <link href="css/produto.css" type="text/css" rel="stylesheet">
         <link href="css/login.css" type="text/css" rel="stylesheet">
     </head>
-     
+
     <body>
         <header>
             <!-- Logo -->
@@ -22,7 +22,32 @@
                 <a href="index.jsp">UFF</a>
             </div>
             <!-- Dropdown -->
-            <jsp:include page="nav-menu.jsp"></jsp:include>
+            <div class="dropdown-menu">
+                <div class="dropdown ps">
+                    <button class="dropbtn">Playstation</button>
+                    <div class="dropdown-content">
+                        <a href="">Consoles</a>
+                        <a href="">Jogos</a>
+                        <a href="">Acessórios</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">Xbox</button>
+                    <div id="feminino" class="dropdown-content">
+                        <a href="">Consoles</a>
+                        <a href="">Jogos</a>
+                        <a href="">Acessórios</a>
+                    </div>
+                </div>
+                <div class="dropdown wii">
+                    <button class="dropbtn">Wii</button>
+                    <div id="infantil" class="dropdown-content">
+                        <a href="">Consoles</a>
+                        <a href="">Jogos</a>
+                        <a href="">Acessórios</a>
+                    </div>
+                </div>
+            </div>
             <div class="canto-header">
                 <!-- Pesquisa -->
                 <div class="consulta-header">
@@ -40,5 +65,5 @@
                 </div>
             </div>
         </header>
-            <!-- Pra impedir de ficar elementos em cima do header -->
-            <div class="fundo-branco"></div>
+        <!-- Pra impedir de ficar elementos em cima do header -->
+        <div class="fundo-branco"></div>
