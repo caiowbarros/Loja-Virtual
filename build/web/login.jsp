@@ -35,7 +35,7 @@
 
                 <div class="forgot-pswrd">
                     <input value="1" name="remember" type="checkbox">
-                    <label>Lembre-me</label>
+                    <label for="remember">Lembre-me</label>
                 </div>
 
                 <div class="login-btn">

@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+// inseri o http inteiro p pegar itens da sessao tbm
+import javax.servlet.http.*;
 
 /**
  *
@@ -35,7 +34,10 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
         String redirect = request.getParameter("redirect");
 
-        // valida login se estiver ok, executa a parte de lembrar login
+        // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", "1");
+        
         // seta cookie se solicitar para lembrar login
         if (request.getParameter("remember") != null) {
             int durMes = 2592000;
@@ -46,6 +48,7 @@ public class LoginController extends HttpServlet {
             ckPassword.setMaxAge(durMes);
             response.addCookie(ckPassword);
         }
+        // define redirect se n foi passado
         if (redirect == null) {
             redirect = "login.jsp";
         }
