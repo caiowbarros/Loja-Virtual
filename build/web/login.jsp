@@ -13,7 +13,6 @@
 <div class="login-background"></div>
 
 <main class="login-container">
-<% Cookie[] cookies = request.getCookies(); %>
     <!-- Coluna da esquerda (login) -->
     <div class="login-column">
         <h2>Login</h2>
@@ -21,14 +20,14 @@
             <form method="POST" action="LoginController">
 
                 <div class="group">      
-                    <input name="email" type="email" required value="${cookie['loginEmail']}">
+                    <input name="email" type="email" required value="${cookie['loginEmail'].getValue()}">
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>E-mail</label>
                 </div>
 
                 <div class="group">
-                    <input name="password" type="password" required value="${cookie['loginPassword']}">
+                    <input name="password" type="password" required value="${cookie['loginPassword'].getValue()}">
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>Senha</label>

@@ -33,17 +33,23 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String redirect = request.getParameter("redirect");
 
-        // valida login
+        // valida login se estiver ok, executa a parte de lembrar login
         // seta cookie se solicitar para lembrar login
         if (request.getParameter("remember") != null) {
             int durMes = 2592000;
             Cookie ckEmail = new Cookie("loginEmail", email);
             ckEmail.setMaxAge(durMes);
+            response.addCookie(ckEmail);
             Cookie ckPassword = new Cookie("loginPassword", password);
             ckPassword.setMaxAge(durMes);
+            response.addCookie(ckPassword);
         }
-        response.sendRedirect("login.jsp");
+        if (redirect == null) {
+            redirect = "login.jsp";
+        }
+        response.sendRedirect(redirect);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
