@@ -9,16 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-
-// inseri o http inteiro p pegar itens da sessao tbm
 import javax.servlet.http.*;
 
 /**
  *
  * @author HP
  */
-@WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "ContaController", urlPatterns = {"/ContaController"})
+public class ContaController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,33 +30,12 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // pega sessao
         HttpSession session = request.getSession();
-        // verifica se ja tem um usuario logado se n tiver manda p controller
-        if (session.getAttribute("userId") != null) {
-            response.sendRedirect("ContaController");
+        // verifica se userId eh diferente de null
+        if (session.getAttribute("userId") == null) {
+            response.sendRedirect("login.jsp");
         }
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String redirect = request.getParameter("redirect");
 
-        // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
-        // define variavel de sessao do userId como o Id do usuario q se logou
-        session.setAttribute("userId", "1");
-
-        // seta cookie se solicitar para lembrar login
-        if (request.getParameter("remember") != null) {
-            int durMes = 2592000;
-            Cookie ckEmail = new Cookie("loginEmail", email);
-            ckEmail.setMaxAge(durMes);
-            response.addCookie(ckEmail);
-            Cookie ckPassword = new Cookie("loginPassword", password);
-            ckPassword.setMaxAge(durMes);
-            response.addCookie(ckPassword);
-        }
-        // define redirect se n foi passado
-        if (redirect == null) {
-            redirect = "login.jsp";
-        }
-        response.sendRedirect(redirect);
+        response.sendRedirect("conta.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -97,7 +74,7 @@ public class LoginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Controlador da área de Login";
+        return "Short description";
     }// </editor-fold>
 
 }

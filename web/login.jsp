@@ -3,7 +3,12 @@
     Created on : 19/09/2019, 00:23:53
     Author     : Caio
 --%>
-
+<%
+    // se n tiver um usuario logado retorna p controller
+    if (session.getAttribute("userId") != null) {
+        response.sendRedirect("LoginController");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Login"/>
@@ -34,7 +39,7 @@
                 </div>
 
                 <div class="forgot-pswrd">
-                    <input value="1" name="remember" type="checkbox">
+                    <input value="1" name="remember" id="remember" type="checkbox">
                     <label for="remember">Lembre-me</label>
                 </div>
 

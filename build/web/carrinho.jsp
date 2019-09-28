@@ -8,7 +8,7 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Carrinho"/>
 </jsp:include>
-
+<p>${sessionId}</p>
 <table class="tabela-carrinho">
     <thead>
         <tr>

@@ -3,12 +3,17 @@
     Created on : 28/09/2019, 16:26:16
     Author     : HP
 --%>
-
+<%
+    // se n tiver um usuario logado retorna p controller
+    if (session.getAttribute("userId") != null) {
+        response.sendRedirect("ContaController");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Conta Pessoal"/>
 </jsp:include>
-<form method="post" action="">
+<form method="post" action="ContaController">
     <fieldset>
         <legend>user</legend>
         <div class="group">      
