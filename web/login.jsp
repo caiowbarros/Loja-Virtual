@@ -4,9 +4,9 @@
     Author     : Caio
 --%>
 <%
-    // se n tiver um usuario logado retorna p controller
+    // se tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") != null) {
-        response.sendRedirect("LoginController");
+        response.sendRedirect("UserController");
     }
 %>
 <!-- Header -->
@@ -22,7 +22,7 @@
     <div class="login-column">
         <h2>Login</h2>
         <div class="sub-container">
-            <form method="POST" action="LoginController">
+            <form method="POST" action="UserController">
 
                 <div class="group">      
                     <input name="email" type="email" required value="${cookie['loginEmail'].getValue()}">
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="login-btn">
-                    <button type="submit">Entrar</button>
+                    <button type="submit" name="action" value="login">Entrar</button>
                 </div>
 
             </form>

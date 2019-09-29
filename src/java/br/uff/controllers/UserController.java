@@ -9,16 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-
-// inseri o http inteiro p pegar itens da sessao tbm
 import javax.servlet.http.*;
 
 /**
  *
  * @author HP
  */
-@WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "UserController", urlPatterns = {"/UserController"})
+public class UserController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,32 +30,51 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // pega sessao
         HttpSession session = request.getSession();
-        // verifica se ja tem um usuario logado se n tiver manda p controller
-        if (session.getAttribute("userId") != null) {
-            response.sendRedirect("ContaController");
-        }
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+
+        // recupera acao solicitada se existir
+        String action = request.getParameter("action");
+
+        // recupera redirect
         String redirect = request.getParameter("redirect");
 
-        // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
-        // define variavel de sessao do userId como o Id do usuario q se logou
-        session.setAttribute("userId", "1");
+        // verifica acoes
+        if ("grava".equals(action)) {
+            // grava alteracoes
+        } else if ("logout".equals(action)) {
+            // invalida sessao
+            session.invalidate();
+            redirect = "login.jsp";
+        } else if ("login".equals(action)) {
+            // pega variaveis
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        // seta cookie se solicitar para lembrar login
-        if (request.getParameter("remember") != null) {
-            int durMes = 2592000;
-            Cookie ckEmail = new Cookie("loginEmail", email);
-            ckEmail.setMaxAge(durMes);
-            response.addCookie(ckEmail);
-            Cookie ckPassword = new Cookie("loginPassword", password);
-            ckPassword.setMaxAge(durMes);
-            response.addCookie(ckPassword);
+            // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
+            // define variavel de sessao do userId como o Id do usuario q se logou
+            session.setAttribute("userId", "1");
+
+            // seta cookie se solicitar para lembrar login
+            if (request.getParameter("remember") != null) {
+                int durMes = 2592000;
+                Cookie ckEmail = new Cookie("loginEmail", email);
+                ckEmail.setMaxAge(durMes);
+                response.addCookie(ckEmail);
+                Cookie ckPassword = new Cookie("loginPassword", password);
+                ckPassword.setMaxAge(durMes);
+                response.addCookie(ckPassword);
+            }
         }
+
         // define redirect se n foi passado
         if (redirect == null) {
-            redirect = "login.jsp";
+            // se tem usuario logado manda p conta caso contrario p login
+            if (session.getAttribute("userId") != null) {
+                redirect = "conta.jsp";
+            } else {
+                redirect = "login.jsp";
+            }
         }
+
         response.sendRedirect(redirect);
     }
 
@@ -97,7 +114,7 @@ public class LoginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Controlador da área de Login";
+        return "Short description";
     }// </editor-fold>
 
 }

@@ -57,7 +57,7 @@
                 </div>
                 <!-- Minha Conta -->
                 <div class="login-header">
-                    <a href="ContaController"><img src="https://cdn1.iconfinder.com/data/icons/freeline/32/account_friend_human_man_member_person_profile_user_users-512.png" width="20" style="vertical-align: middle"></a>
+                    <a href="UserController"><img src="https://cdn1.iconfinder.com/data/icons/freeline/32/account_friend_human_man_member_person_profile_user_users-512.png" width="20" style="vertical-align: middle"></a>
                 </div>
                 <!-- Carrinho -->
                 <div class="carrinho-header">

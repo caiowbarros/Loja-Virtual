@@ -5,15 +5,15 @@
 --%>
 <%
     // se n tiver um usuario logado retorna p controller
-    if (session.getAttribute("userId") != null) {
-        response.sendRedirect("ContaController");
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect("UserController");
     }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Conta Pessoal"/>
 </jsp:include>
-<form method="post" action="ContaController">
+<form method="post" action="UserController">
     <fieldset>
         <legend>user</legend>
         <div class="group">      
@@ -34,10 +34,11 @@
             <span class="bar"></span>
             <label>Senha</label>
         </div>
-        <button type="submit">Gravar</button>
+        <button type="submit" name="action" value="gravar">Gravar</button>
+        <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
 </form>
-<a href="./enderecosController">Seus Endereços</a>
-<a href="./favoritosController">Seus Produtos Favoritos</a>
+<a href="enderecosController">Seus Endereços</a>
+<a href="favoritosController">Seus Produtos Favoritos</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
