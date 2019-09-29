@@ -29,7 +29,7 @@
     <!-- Preço do produto -->
     <div class="product-price">
       <span>R$250,00</span>
-      <a href="carrinho.jsp" class="cart-btn">+ Carrinho</a>
+      <a href="carrinho.jsp?addProdutoId=" class="cart-btn">+ Carrinho</a>
       <!-- Botão de favorito -->
       <input id="toggle-heart" type="checkbox" />
       <label for="toggle-heart">&#x2764;</label>

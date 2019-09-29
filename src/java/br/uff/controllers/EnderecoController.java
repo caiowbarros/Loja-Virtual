@@ -15,8 +15,8 @@ import javax.servlet.http.*;
  *
  * @author HP
  */
-@WebServlet(name = "UserController", urlPatterns = {"/UserController"})
-public class UserController extends HttpServlet {
+@WebServlet(name = "EnderecoController", urlPatterns = {"/EnderecoController"})
+public class EnderecoController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,60 +31,17 @@ public class UserController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
 
-        // recupera acao solicitada se existir
-        String action = request.getParameter("action");
-
-        // verifica acoes
-        if ("grava".equals(action)) {
-            // grava alteracoes
-        } else if ("logout".equals(action)) {
-            // invalida sessao
-            session.invalidate();
-        } else if ("login".equals(action)) {
-            // pega variaveis
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-
-            // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
-            // define variavel de sessao do userId como o Id do usuario q se logou
-            session.setAttribute("userId", "1");
-
-            // seta cookie se solicitar para lembrar login
-            if (request.getParameter("remember") != null) {
-                int durMes = 2592000;
-                Cookie ckEmail = new Cookie("loginEmail", email);
-                ckEmail.setMaxAge(durMes);
-                response.addCookie(ckEmail);
-                Cookie ckPassword = new Cookie("loginPassword", password);
-                ckPassword.setMaxAge(durMes);
-                response.addCookie(ckPassword);
-            }
+        // se n tem usuario logado manda p controller de user
+        if (session.getAttribute("userId") == null) {
+            response.sendRedirect("UserController?redirect=EnderecoController");
         }
 
-        // recupera redirect
-        String redirect = request.getParameter("redirect");
-
-        //define um complemento caso o redirect seja diferente de vazio
-        String compl = "";
-        if (redirect != null) {
-            compl = "?redirect=" + redirect;
+        // se tem enderecoId definido mostra cadastro caso contrario mostra grid
+        if (session.getAttribute("enderecoId") == null) {
+            response.sendRedirect("endereco-grid.jsp");
+        } else {
+            response.sendRedirect("endereco-cadastro.jsp");
         }
-
-        try {
-            // se tem usuario logado manda p conta caso contrario p login
-            if (session.getAttribute("userId") != null) {
-                // define redirect se n foi passado
-                if (redirect == null) {
-                    redirect = "conta.jsp";
-                }
-            } else {
-                redirect = "login.jsp" + compl;
-            }
-        } catch (Exception ex) {
-            redirect = "login.jsp" + compl;
-        }
-
-        response.sendRedirect(redirect);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

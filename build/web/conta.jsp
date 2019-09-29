@@ -38,7 +38,7 @@
         <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
 </form>
-<a href="enderecosController">Seus Endereços</a>
-<a href="favoritosController">Seus Produtos Favoritos</a>
+<a href="EnderecoController">Seus Endereços</a>
+<a href="ProdutoController?favs">Seus Produtos Favoritos</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

@@ -26,33 +26,33 @@
                 <div class="dropdown ps">
                     <button class="dropbtn">Playstation</button>
                     <div class="dropdown-content">
-                        <a href="">Consoles</a>
-                        <a href="">Jogos</a>
-                        <a href="">Acessórios</a>
+                        <a href="produtos.jsp?categoria=playstation&sub=consoles">Consoles</a>
+                        <a href="produtos.jsp?categoria=playstation&sub=jogos">Jogos</a>
+                        <a href="produtos.jsp?categoria=playstation&sub=acessorios">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="dropbtn">Xbox</button>
                     <div id="feminino" class="dropdown-content">
-                        <a href="">Consoles</a>
-                        <a href="">Jogos</a>
-                        <a href="">Acessórios</a>
+                        <a href="produtos.jsp?categoria=xbox&sub=consoles">Consoles</a>
+                        <a href="produtos.jsp?categoria=xbox&sub=jogos">Jogos</a>
+                        <a href="produtos.jsp?categoria=xbox&sub=acessorios">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown wii">
                     <button class="dropbtn">Wii</button>
                     <div id="infantil" class="dropdown-content">
-                        <a href="">Consoles</a>
-                        <a href="">Jogos</a>
-                        <a href="">Acessórios</a>
+                        <a href="produtos.jsp?categoria=wii&sub=consoles">Consoles</a>
+                        <a href="produtos.jsp?categoria=wii&sub=jogos">Jogos</a>
+                        <a href="produtos.jsp?categoria=wii&sub=acessorios">Acessórios</a>
                     </div>
                 </div>
             </div>
             <div class="canto-header">
                 <!-- Pesquisa -->
                 <div class="consulta-header">
-                    <form id="pesquisa" method="POST">
-                        <input type="search" placeholder="Search" required>
+                    <form id="pesquisa" method="POST" action="ProductController">
+                        <input type="search" placeholder="Search">
                     </form>
                 </div>
                 <!-- Minha Conta -->
