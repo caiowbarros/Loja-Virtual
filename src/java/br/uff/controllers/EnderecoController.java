@@ -35,6 +35,7 @@ public class EnderecoController extends HttpServlet {
             // se n tem usuario logado manda p controller de user
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=EnderecoController");
+                return;
             }
 
             if (request.getParameter("sel") != null) {
@@ -49,6 +50,7 @@ public class EnderecoController extends HttpServlet {
             // se tem enderecoId definido mostra cadastro caso contrario mostra grid
             if (session.getAttribute("enderecoId") == null) {
                 request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
+                return;
             } else {
 
                 // recupera acao solicitada se existir
@@ -61,9 +63,11 @@ public class EnderecoController extends HttpServlet {
                 }
 
                 request.getRequestDispatcher("endereco-cadastro.jsp").forward(request, response);
+                return;
             }
         } catch (Exception ex) {
             response.sendRedirect("UserController");
+            return;
         }
     }
 

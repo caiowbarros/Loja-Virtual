@@ -37,7 +37,7 @@
             <span class="bar"></span>
             <label>Senha</label>
         </div>
-        <button type="submit" name="action" value="gravar">Gravar</button>
+        <button type="submit" name="action" value="grava">Gravar</button>
         <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
 </form>

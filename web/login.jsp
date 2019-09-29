@@ -27,6 +27,8 @@
         <div class="sub-container">
             <form method="POST" action="UserController">
 
+                <input name="redirect" style="display:none;" value="<%= request.getAttribute("redirect")%>">
+
                 <div class="group">      
                     <input name="email" type="email" required value="${cookie['loginEmail'].getValue()}">
                     <span class="highlight"></span>
@@ -59,6 +61,8 @@
         <h2>Criar Conta</h2>
         <div class="sub-container">
             <form method="POST" id="criaFORM" action="">
+
+                <input name="redirect" style="display:none;" value="<%= request.getAttribute("redirect")%>">
 
                 <div class="group">      
                     <input type="text" required>

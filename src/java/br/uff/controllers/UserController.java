@@ -78,10 +78,8 @@ public class UserController extends HttpServlet {
                 // se tem usuario logado manda p conta caso contrario p login
                 if (session.getAttribute("userId") != null) {
                     // define redirect se n foi passado
-                    if (redirect == null) {
+                    if (redirect == null || "null".equals(redirect)) {
                         redirect = "conta.jsp";
-                    } else {
-                        response.sendRedirect(redirect);
                     }
                 } else {
                     request.setAttribute("redirect", redirect);
@@ -93,6 +91,7 @@ public class UserController extends HttpServlet {
             }
 
             request.getRequestDispatcher(redirect).forward(request, response);
+            return;
         } catch (Exception ex) {
             response.sendRedirect("UserController");
         }
