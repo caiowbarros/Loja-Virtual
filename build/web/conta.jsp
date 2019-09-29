@@ -8,6 +8,9 @@
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController");
     }
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -40,5 +43,6 @@
 </form>
 <a href="EnderecoController">Seus Endereços</a>
 <a href="ProdutoController?favs">Seus Produtos Favoritos</a>
+<a href="compras.jsp">Suas Compras</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

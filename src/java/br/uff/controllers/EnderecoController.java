@@ -28,19 +28,42 @@ public class EnderecoController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // pega sessao
-        HttpSession session = request.getSession();
+        try {
+            // pega sessao
+            HttpSession session = request.getSession();
 
-        // se n tem usuario logado manda p controller de user
-        if (session.getAttribute("userId") == null) {
-            response.sendRedirect("UserController?redirect=EnderecoController");
-        }
+            // se n tem usuario logado manda p controller de user
+            if (session.getAttribute("userId") == null) {
+                response.sendRedirect("UserController?redirect=EnderecoController");
+            }
 
-        // se tem enderecoId definido mostra cadastro caso contrario mostra grid
-        if (session.getAttribute("enderecoId") == null) {
-            response.sendRedirect("endereco-grid.jsp");
-        } else {
-            response.sendRedirect("endereco-cadastro.jsp");
+            if (request.getParameter("sel") != null) {
+                session.setAttribute("enderecoId", request.getParameter("sel"));
+            } else if (request.getParameter("unsel") != null) {
+                session.setAttribute("enderecoId", null);
+            } else if (request.getParameter("del") != null) {
+                // exclui endereco do id request.getParameter("del") e do usuario session.getAttribute("userId")
+                request.setAttribute("msg", "Endereço deletado com sucesso!");
+            }
+
+            // se tem enderecoId definido mostra cadastro caso contrario mostra grid
+            if (session.getAttribute("enderecoId") == null) {
+                request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
+            } else {
+
+                // recupera acao solicitada se existir
+                String action = request.getParameter("action");
+
+                // verifica acoes
+                if ("grava".equals(action)) {
+                    // grava alteracoes do session.getAttribute("enderecoId")
+                    request.setAttribute("msg", "Endereço gravado com sucesso!");
+                }
+
+                request.getRequestDispatcher("endereco-cadastro.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            response.sendRedirect("UserController");
         }
     }
 

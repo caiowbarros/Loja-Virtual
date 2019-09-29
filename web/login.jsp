@@ -8,6 +8,9 @@
     if (session.getAttribute("userId") != null) {
         response.sendRedirect("UserController");
     }
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
