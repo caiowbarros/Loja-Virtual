@@ -35,7 +35,7 @@
             <th>
                 <a href="EnderecoController?sel=1">Selecionar</a>
                 &nbsp;|&nbsp;
-                <a href="EnderecoController?del=1">Excluir</a>
+                <a onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;" href="EnderecoController?del=1">Excluir</a>
             </th>
             <th>APT</th>
             <th>Rua Ary Parreiras, 4, 1201</th>

@@ -6,6 +6,26 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
+<div>
+    <fieldset>
+        <legend>filter</legend>
+        <fieldset>
+            <legend>category</legend>
+            <input type="checkbox" id="console" name="category" value="console"><label for="calca">Console</label>
+            <input type="checkbox" id="jogo" name="category" value="jogo"><label for="jogo">Jogo</label>
+            <input type="checkbox" id="acessorio" name="category" value="acessorio"><label for="acessorio">Acessorio</label>
+        </fieldset>
+        <label for="price">min value</label>
+        <input type="range" name="price_min" min="1" max="10" step="1" oninput="display_min.value=value" onchange="display_min.value = value">
+        <input type="number" readonly id="display_min" value="0"/>
+        <label for="price">max value</label>
+        <input type="range" name="price_max" min="1" max="10" step="1" oninput="display_max.value=value" onchange="display_max.value = value">
+        <input type="number" readonly id="display_max" value="0"/>
+        <input name="name" type="text" placeholder="name" maxlength="255" />
+        <input name="description" type="text" placeholder="description" maxlength="255" />
+        <button type="submit">filter</button>
+    </fieldset>
+</div>
 <div class="fundo-paisagem1 paralax">
     <section class="lista-produtos">
         <div class="produto">
@@ -143,6 +163,13 @@
         </div>
 
     </section>
+</div>
+<div>
+    <button>Primeira Página</button>
+    <button>Página Anterior</button>
+    <span>1</span>
+    <button>Próxima Página</button>
+    <button>Última Página</button>
 </div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
