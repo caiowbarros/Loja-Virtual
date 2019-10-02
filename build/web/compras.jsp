@@ -25,7 +25,7 @@
             <td colspan="2">
                 <table>
                     <thead>
-                        <tr>Endereço</tr>
+                        <tr>Endereço de Entrega</tr>
                         <tr>
                             <td>CEP</td>
                             <td>Endereço</td>
