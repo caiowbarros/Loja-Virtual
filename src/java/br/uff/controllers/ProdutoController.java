@@ -36,17 +36,21 @@ public class ProdutoController extends HttpServlet {
             // pega sessao
             HttpSession session = request.getSession();
 
-            // se n tem usuario logado manda p controller de user
-            if (session.getAttribute("userId") == null) {
-                response.sendRedirect("UserController?redirect=ProductController");
-                return;
-            }
+            
 
             if (request.getParameter("produto") != null) {
                 request.setAttribute("produtoId", request.getParameter("produto"));
                 request.getRequestDispatcher("produto.jsp").forward(request, response);
                 return;
-            } else if (request.getParameter("sel") != null) {
+            }
+            
+            // se n tem usuario logado manda p controller de user
+            if (session.getAttribute("userId") == null) {
+                response.sendRedirect("UserController?redirect=ProductController");
+                return;
+            }
+            
+            if (request.getParameter("sel") != null) {
                 // seleciona produtoId da sessao SE USUARIO FOR ADM
                 session.setAttribute("produtoId", request.getParameter("sel"));
             } else if (request.getParameter("unsel") != null) {
