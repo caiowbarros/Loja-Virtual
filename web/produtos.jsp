@@ -11,6 +11,12 @@
         <legend>filter</legend>
         <fieldset>
             <legend>category</legend>
+            <input type="checkbox" id="playstation" name="category" value="playstation"><label for="playstation">playstation</label>
+            <input type="checkbox" id="xbox" name="category" value="xbox"><label for="xbox">xbox</label>
+            <input type="checkbox" id="wii" name="category" value="wii"><label for="wii">wii</label>
+        </fieldset>
+        <fieldset>
+            <legend>sub-category</legend>
             <input type="checkbox" id="console" name="category" value="console"><label for="calca">Console</label>
             <input type="checkbox" id="jogo" name="category" value="jogo"><label for="jogo">Jogo</label>
             <input type="checkbox" id="acessorio" name="category" value="acessorio"><label for="acessorio">Acessorio</label>

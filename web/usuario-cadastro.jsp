@@ -47,7 +47,7 @@
     </fieldset>
 </form>
 <a href="EnderecoController">Seus Endereços</a>
-<a href="ProdutoController?favs">Seus Produtos Favoritos</a>
+<a href="ProdutosController?favs">Seus Produtos Favoritos</a>
 <a href="compras.jsp">Suas Compras</a>
 <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA ITEM ABAIXO -->
 <fieldset>
