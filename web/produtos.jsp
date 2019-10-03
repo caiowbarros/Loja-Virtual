@@ -35,14 +35,16 @@
 <div class="fundo-paisagem1 paralax">
     <section class="lista-produtos">
 
-        <div class="produto">
-            <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
-            <p class="titulo-produto">Tailored Jeans</p>
-            <p class="preco-produto">$19.99</p>
-            <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
-                jeansum. Lorem jeamsun denim
-                lorem jeansum.</p>
-        </div>
+        <a href="ProdutoController?produto=1">
+            <div class="produto">
+                <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
+                <p class="titulo-produto">Tailored Jeans</p>
+                <p class="preco-produto">$19.99</p>
+                <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
+                    jeansum. Lorem jeamsun denim
+                    lorem jeansum.</p>
+            </div>
+        </a>
 
     </section>
 </div>
