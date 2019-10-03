@@ -9,6 +9,7 @@ import br.uff.exceptions.RecordAlreadyPersisted;
 import br.uff.exceptions.RecordNotPersisted;
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
+import br.uff.sql.Selector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -238,39 +239,17 @@ public class BaseModel {
         return null;
     }
     
-    public static BaseModel find_by(Map<String, Object> attrs) throws SQLException {
-        BaseModel response = where(attrs).get(0);
-        return response;
+    public static Selector select() {
+        return new Selector(table_name, connection, child);        
     }
     
-    public static ArrayList<BaseModel> where(Map<String, Object> attrs) throws SQLException {
-        ArrayList<BaseModel> models = new ArrayList();
-        try {
-            StringBuilder sql = new StringBuilder();
-            sql.append("select * from ");
-            sql.append(table_name);
-            sql.append(" where ");
-            for (Map.Entry pair : attrs.entrySet()) {
-                sql.append(pair.getKey());
-                sql.append(" = ");
-                sql.append(String.valueOf(pair.getValue()));
-            }
-            PreparedStatement statement = connection.prepareStatement(sql.toString());
-            ResultSet result = statement.executeQuery();
-            result.next();
-            ResultSetMetaData meta = result.getMetaData();
-            int colCount = meta.getColumnCount();
-            Map<String, Object> persitedAttrs = new HashMap();
-            for (int i = 1; i <= colCount ; i++){
-                String col_name = meta.getColumnName(i);
-                persitedAttrs.put(col_name, result.getObject(col_name));
-            }
-            Constructor<BaseModel> constructor = child.getConstructor(Map.class);
-            models.add(constructor.newInstance(persitedAttrs));
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return models;
+    public static Selector select(String sl) {
+        return new Selector(table_name, connection, child).select(sl);
+    }
+    
+    public static BaseModel find_by(String condition) throws SQLException {
+        BaseModel response = new Selector(table_name, connection, child).where(condition).limit(1).run().get(0);
+        return response;
     }
     
     private static String get_table_name() {

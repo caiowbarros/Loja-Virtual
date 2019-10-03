@@ -5,6 +5,8 @@
  */
 package br.uff.mutators;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author felipe
@@ -50,5 +52,17 @@ public class Inflector {
         if (method.startsWith("set")) response = method.replaceFirst("set", "");
         if (method.startsWith("get")) response = method.replaceFirst("get", "");
         return response;
+    }
+    
+    public static String joins(ArrayList<String> arr) {
+        String str = arr.toString();
+        str = str.substring(1, str.length() - 1);
+        return str.replace(',', ' ');
+    }
+    
+    public static String joins(ArrayList<String> arr, char separator) {
+        String str = arr.toString();
+        str = str.substring(1, str.length() - 1);
+        return str.replace(',', separator);
     }
 }
