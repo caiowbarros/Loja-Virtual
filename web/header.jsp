@@ -51,7 +51,7 @@
             <div class="canto-header">
                 <!-- Pesquisa -->
                 <div class="consulta-header">
-                    <form id="pesquisaHeader" method="POST" action="ProdutoController">
+                    <form id="pesquisa" method="POST" action="ProdutoController">
                         <input type="search" placeholder="Search">
                     </form>
                 </div>
