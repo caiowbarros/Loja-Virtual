@@ -13,6 +13,7 @@
         <link href="css/style.css" type="text/css" rel="stylesheet">
         <link href="css/produto.css" type="text/css" rel="stylesheet">
         <link href="css/login.css" type="text/css" rel="stylesheet">
+        <link href="css/carrinho.css" type="text/css" rel="stylesheet">
     </head>
 
     <body>
