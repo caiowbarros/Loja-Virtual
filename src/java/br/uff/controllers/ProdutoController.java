@@ -36,8 +36,6 @@ public class ProdutoController extends HttpServlet {
             // pega sessao
             HttpSession session = request.getSession();
 
-            
-
             if (request.getParameter("produto") != null) {
                 request.setAttribute("produtoId", request.getParameter("produto"));
                 request.getRequestDispatcher("produto.jsp").forward(request, response);

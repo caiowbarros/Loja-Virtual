@@ -4,7 +4,7 @@
     Author     : Caio
 --%>
 <%
-    if (request.getAttribute("produto") == null || request.getParameter("produto") == null) {
+    if (request.getAttribute("produto") == null && request.getParameter("produto") == null) {
         response.sendRedirect("ProdutosController");
     }
     // mostra msg se tiver
