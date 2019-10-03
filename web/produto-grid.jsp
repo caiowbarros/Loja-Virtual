@@ -3,6 +3,15 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%
+    // se n tiver um usuario logado retorna p controller
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect("UserController?redirect=ProdutoController");
+    }
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Grid de Produtos"/>
@@ -22,11 +31,9 @@
     <tbody>
         <tr>
             <th>
-                <a href="">Selecionar</a>
+                <a href="ProdutoController?sel=1">Selecionar</a>
                 &nbsp;|&nbsp;
-                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="">Excluir</a>
-                &nbsp;|&nbsp;
-                <a href="">Add unidades no estoque</a>
+                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoControler?del=1">Excluir</a>                
             </th>
             <th>Xbox</th>
             <th>R$3000,00</th>
@@ -34,5 +41,7 @@
         </tr>
     </tbody>
 </table>
+<!-- SE N FOR PRODUTO NOVO MOSTRA INCLUIR -->
+<a href="ProdutoController?sel">Incluir</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

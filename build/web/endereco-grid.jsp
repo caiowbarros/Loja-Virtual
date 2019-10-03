@@ -57,5 +57,7 @@
         </tr>
     </tbody>
 </table>
+<!-- SE N FOR ENDERECO NOVO MOSTRA INCLUIR -->
+<a href="EnderecoController?sel">Incluir</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
