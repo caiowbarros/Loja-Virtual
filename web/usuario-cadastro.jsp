@@ -37,6 +37,11 @@
             <span class="bar"></span>
             <label>Senha</label>
         </div>
+        <!--SE FOR ADM MOSTRA O CAMPO ABAIXO-->
+        <div style="display:none;">
+            <input id="role_id_adm" name="role_id" required type="radio" value="1"><label for="role_id_adm">ADM</label><br>
+            <input id="role_id_cliente" name="role_id" required type="radio" value="2"><label for="role_id_cliente">Cliente</label>
+        </div>
         <button type="submit" name="action" value="grava">Gravar</button>
         <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
@@ -44,5 +49,10 @@
 <a href="EnderecoController">Seus Endereços</a>
 <a href="ProdutoController?favs">Seus Produtos Favoritos</a>
 <a href="compras.jsp">Suas Compras</a>
+<!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA ITEM ABAIXO -->
+<fieldset>
+    <legend>Opções Administrativas</legend>
+    <a href="ProdutoController">Cadastro de Produtos</a>
+</fieldset>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
