@@ -52,6 +52,7 @@
                     <thead>
                         <tr>Produtos da Compra</tr>
                         <tr>
+                            <td>Operações</td>
                             <td>Nome</td>
                             <td>Número de Unidades</td>
                             <td>Preço por Unidade</td>
@@ -59,16 +60,19 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td><a href="AvaliaController">Avaliar Produto</a></td>
                             <td>GTA V</td>
                             <td>1</td>
                             <td>R$199,99</td>
                         </tr>
                         <tr>
+                            <td><a href="AvaliaController">Avaliar Produto</a></td>
                             <td>Mario Bros</td>
                             <td>1</td>
                             <td>R$10,01</td>
                         </tr>
                         <tr>
+                            <td><a href="AvaliaController">Avaliar Produto</a></td>
                             <td>Wii Sports</td>
                             <td>2</td>
                             <td>R$40,00</td>

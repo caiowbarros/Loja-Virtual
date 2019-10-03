@@ -60,26 +60,26 @@
     <div class="register-column">
         <h2>Criar Conta</h2>
         <div class="sub-container">
-            <form method="POST" id="criaFORM" action="">
+            <form method="POST" action="UserController">
 
                 <input name="redirect" style="display:none;" value="<%= request.getAttribute("redirect")%>">
 
                 <div class="group">      
-                    <input type="text" required>
+                    <input name="nome" type="text" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>Nome Completo</label>
                 </div>
 
                 <div class="group">      
-                    <input type="email" required>
+                    <input name="email" type="email" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>E-mail</label>
                 </div>
 
                 <div class="group">      
-                    <input id="criaSENHA" type="password" required>
+                    <input name="senha" id="criaSENHA" type="password" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label>Senha</label>
@@ -104,7 +104,7 @@
                     }
                 </script>
                 <div class="login-btn">
-                    <button onclick="return verifica_senha();" type="submit">Criar Conta</button>
+                    <button onclick="return verifica_senha();" name="action" value="insere" type="submit">Criar Conta</button>
                 </div>
 
             </form>

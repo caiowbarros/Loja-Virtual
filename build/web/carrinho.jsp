@@ -17,8 +17,8 @@
     <div style="align-items:center;width: 100%">
         <p>Far Cry 3</p>
         <p>R$ 399,00</p>
-        <form>
-            <p>Qtd:&nbsp;<input type="number" value="1"><button type="submit">Mudar Qtd</button></p>
+        <form method="post" action="CarrinhoController?produtoId=1">
+            <p>Qtd:&nbsp;<input type="number" name="qtd" value="1"><button type="submit" value="mudaQtd" name="action">Mudar Qtd</button></p>
         </form>
     </div>
     <div style="align-items:flex-end">
@@ -28,5 +28,9 @@
     </div>
 </div>
 <hr>
+<form method="post" action="CarrinhoController">
+    <button name="action" type="submit" value="finaliza">Finaliza Compra</button>
+    <button name="action" type="submit" value="continua">Continuar Comprando</button>
+</form>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

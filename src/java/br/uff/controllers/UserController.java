@@ -62,6 +62,15 @@ public class UserController extends HttpServlet {
                     ckPassword.setMaxAge(durMes);
                     response.addCookie(ckPassword);
                 }
+            } else if ("insere".equals(action)) {
+                // pega variaveis
+                String name = request.getParameter("nome");
+                String email = request.getParameter("email");
+                String password = request.getParameter("senha");
+                // insere como cliente
+                Integer roleId = 2;
+
+                session.setAttribute("userId", "1");
             }
 
             String redirect;
