@@ -7,7 +7,7 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Avalia Produto"/>
 </jsp:include>
-<form action="">
+<form action="AvaliacaoController" method="post">
     <fieldset>
         <legend>Avaliação</legend>
         <!-- Avaliação do produto (em estrelas) -->
