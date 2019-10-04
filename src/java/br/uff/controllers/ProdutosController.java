@@ -30,7 +30,12 @@ public class ProdutosController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("produtos.jsp");
+        try {
+            request.getRequestDispatcher("produtos.jsp").forward(request, response);
+            return;
+        } catch (Exception ex) {
+            response.sendRedirect("");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

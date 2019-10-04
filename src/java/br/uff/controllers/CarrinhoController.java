@@ -36,8 +36,30 @@ public class CarrinhoController extends HttpServlet {
             // seta atributo de sessionId
             request.setAttribute("sessionId", session.getId());
 
-            if (request.getParameter("addProductId") != null) {
-// ADD PRODUTO NO SESSIONID
+            if (request.getParameter("addProdutoId") != null) {
+                // ADD PRODUTO NO SESSIONID
+            } else if (request.getParameter("confirmaCompra") != null) {
+                // manda atributos para a pagina definida, no caso carrinho-confirma.jsp
+                request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
+            }
+
+            // recupera acao solicitada se existir
+            String action = request.getParameter("action");
+
+            if ("mudaQtd".equals(action)) {
+                // muda qtd d produtos no carrinho
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Quantidade de Produtos alterada com sucesso!");
+            } else if ("removeProdutoId".equals(action)) {
+                // remove produtoId do carrinho de sessao id
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Produto removido do carrinho com sucesso!");
+            } else if ("finalizaCompra".equals(action)) {
+                // manda atributos para a pagina definida, no caso compra-pagamento.jsp
+                request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
+            } else if ("continuaCompra".equals(action)) {
+                // redireciona p controller de ProdutosController
+                response.sendRedirect("ProdutosController");
             }
 
             // manda atributos para a pagina definida, no caso carrinho.jsp

@@ -41,13 +41,17 @@ public class AvaliacaoController extends HttpServlet {
                 return;
             }
 
-            // verifica p ver se tem algum produtoId definido se n tiver, vai p pag d produtos
+            // verifica p ver se tem algum produtoId definido se n tiver, vai p pag d produtos, se tiver define produtoId
+            String produtoId = "";
             if (session.getAttribute("produtoId") == null) {
                 response.sendRedirect("ProdutosController");
                 return;
+            } else {
+                produtoId = session.getAttribute("produtoId").toString();
             }
 
-            request.setAttribute("produtoId", request.getParameter("produtoId"));
+            // define atributos
+            request.setAttribute("produtoId", produtoId);
             request.setAttribute("rating", request.getParameter("rating"));
 
             // recupera acao solicitada se existir
@@ -55,13 +59,16 @@ public class AvaliacaoController extends HttpServlet {
 
             if ("avalia".equals(action)) {
                 // grava avaliacao do produto
+                // define msg a ser mostrada
                 request.setAttribute("msg", "Produto avaliado com sucesso!");
-                request.getRequestDispatcher("ProdutoController?produtoId=" + session.getAttribute("produtoId")).forward(request, response);
+                //redireciona de volta p pag do produto avaliado
+                request.getRequestDispatcher("ProdutoController?produtoId=" + produtoId).forward(request, response);
                 return;
             }
 
             request.getRequestDispatcher("produto-avalia.jsp").forward(request, response);
             return;
+            // se der erro vai p ControllerProdutos
         } catch (Exception ex) {
             response.sendRedirect("ProdutosController");
             return;

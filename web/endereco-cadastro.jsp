@@ -27,7 +27,7 @@
         <input value="${address.address}" name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
         <input value="${address.city}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
         <input value="${address.state}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
-        <input value="${address.country}" name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
+        <input name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
         <button name="action" value="grava" type="submit">Salvar</button>
     </fieldset>
 </form>

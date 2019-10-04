@@ -39,16 +39,18 @@
             <label>Senha</label>
         </div>
         <button type="submit" name="action" value="grava">Gravar</button>
-        <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
+        <button onclick="return confirm('Tem certeza que deseja fazer o LOGOUT?');false;" type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
 </form>
 <a href="EnderecoController">Seus Endereços</a>
 <a href="ProdutosController?fav">Seus Produtos Favoritos</a>
 <a href="compras.jsp">Suas Compras</a>
-<!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA ITEM ABAIXO -->
+<!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
+<% if (session.getAttribute("userRole").equals("1")) { %>
 <fieldset>
     <legend>Opções Administrativas</legend>
     <a href="ProdutoController">Cadastro de Produtos</a>
 </fieldset>
+<% }%>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

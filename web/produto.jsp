@@ -7,7 +7,7 @@
     // recupera produtoId
     String produtoId = "";
     if (request.getParameter("produtoId") != null) {
-        produtoId = request.getAttribute("produtoId").toString();
+        produtoId = request.getParameter("produtoId").toString();
     } else if (session.getAttribute("produtoId") != null) {
         produtoId = session.getAttribute("produtoId").toString();
     } else if (request.getAttribute("produtoId") != null) {
@@ -47,9 +47,9 @@
         <!-- Preço do produto -->
         <div class="product-price">
             <span>R$250,00</span>
-            <a href="CarrinhoController?addProductId=<%= produtoId%>" class="cart-btn">+ Carrinho</a>
+            <a href="CarrinhoController?addProdutoId=<%= produtoId%>" class="cart-btn">+ Carrinho</a>
             <!-- Botão de favorito -->
-            <input id="toggle-heart" type="checkbox" />
+            <input onchange="window.location.href = 'ProdutoController?fav=<%= produtoId%>'" id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">&#x2764;</label>
         </div>
         <!-- Avaliação do produto (em estrelas) -->

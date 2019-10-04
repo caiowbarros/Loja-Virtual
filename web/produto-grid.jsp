@@ -34,7 +34,7 @@
             <th>
                 <a href="ProdutoController?sel=1">Selecionar</a>
                 &nbsp;|&nbsp;
-                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoControler?del=1">Excluir</a>                
+                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoController?del=1">Excluir</a>                
             </th>
             <th>Xbox</th>
             <th>R$3000,00</th>

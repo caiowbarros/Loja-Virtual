@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -29,20 +30,39 @@ public class CompraController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CompraController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CompraController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // pega sessao
+            HttpSession session = request.getSession();
+
+            // se n tem usuario logado manda p controller de user
+            if (session.getAttribute("userId") == null) {
+                response.sendRedirect("UserController?redirect=CompraController");
+                return;
+            }
+            
+            if (request.getParameter("paypal_pag") != null) {
+                // REGISTRA SALE NO BD
+            } else if (request.getParameter("paypal_cancela") != null) {
+                response.sendRedirect("CarrinhoController");
+            } else if (request.getParameter("paypal_erro") != null) {
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Um erro ocorreu no processamento do seu pagamento, por favor tente novamente!");
+            }
+
+            // recupera acao solicitada se existir
+            String action = request.getParameter("action");
+
+            if ("continuaCompra".equals(action)) {
+                // redireciona p controller de ProdutosController
+                response.sendRedirect("ProdutosController");
+            }
+
+            // manda atributos para a pagina definida, no caso carrinho.jsp
+            request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
+        } catch (Exception ex) {
+            response.sendRedirect("CarrinhoController");
+            return;
         }
     }
 
