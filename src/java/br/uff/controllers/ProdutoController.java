@@ -59,6 +59,7 @@ public class ProdutoController extends HttpServlet {
                 // exclui produto do id request.getParameter("del") SE USUARIO FOR ADM
                 request.setAttribute("msg", "Produto deletado com sucesso!");
             } else if (request.getParameter("qtdEstoque") != null) {
+                // SE USUARIO FOR ADM vai p pag de incrementar qtd de estoques
                 request.getRequestDispatcher("produto-incrementa.jsp").forward(request, response);
                 return;
             }
