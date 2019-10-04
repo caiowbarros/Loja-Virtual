@@ -34,15 +34,15 @@
 </form> -->
 
 <!-- Título da página -->
-<h2 class="cart-title">Carrinho</h2>
+<h1 class="cart-title">Carrinho</h1>
 
 <!-- Coluna de labels -->
 <div class="cart-column">
-    <label class="cart-img"></div>
-    <label class="cart-details">Produto</label>
+    <label class="cart-img transparent">Imagem</label>
+    <label class="cart-details transparent">Produto</label>
     <label class="cart-price">Preço</label>
     <label class="cart-qnt">Quantidade</label>
-    <label class="cart-remove">Remover</label>
+    <label class="cart-remove transparent">Remover</label>
     <label class="cart-total">Total</label>
 </div>
 
@@ -55,12 +55,62 @@
     </div>
     <div class="cart-price">R$250,00</div>
     <div class="cart-qnt">
-        <input type="number" value="1" min="1">
+        <select>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
     </div>
     <div class="cart-remove">
         <button class="cart-remove-btn">Remover</button>
     </div>
     <div class="cart-total">R$250,00</div>
+</div>
+
+<!-- Produto no carrinho -->
+<div class="cart-product">
+    <div class="cart-img"><img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg"></div>
+    <div class="cart-details">
+        <div class="cart-name">FIFA 20 - PS4</div>
+        <p class="cart-desc">Ea Sports Fifa 20 para PlayStation 4, Xbox One e Pc traz os dois lados do Maior Jogo do Mundo - o prestígio do nível profissional e uma nova experiência de autêntico futebol de rua com Ea Sports Volta. Fifa 20 inova no jogo inteiro, o sistema de Inteligência de Futebol libera uma plataforma sem precedentes para o realismo da jogabilidade, Fifa Ultimate Team? oferece mais maneiras de montar o seu time dos sonhos, e Ea Sports Volta leva o jogo de volta para as ruas, com uma forma autêntica de futebol com poucos jogadores.</p>
+    </div>
+    <div class="cart-price">R$250,00</div>
+    <div class="cart-qnt">
+        <select>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    <div class="cart-remove">
+        <button class="cart-remove-btn">Remover</button>
+    </div>
+    <div class="cart-total">R$250,00</div>
+</div>
+
+<!-- Checkout -->
+<div class="total-finalize">
+    <div class="total-item">
+        <p>Frete grátis para todo Brasil!</p>
+        <label>Subtotal</label>
+        <div class="total-subtotal">R$250,00</div>
+    </div>
+    <div class="total-item">
+        <label>Frete</label>
+        <div class="total-ship">Grátis</div>
+    </div>
+    <div class="total-item">
+        <label>Total</label>
+        <div class="total-total">R$250,00</div>
+    </div>
+    <div class="total-item">
+        <button class="total-keep">Continuar Comprando</button>
+        <button class="total-checkout">Finalizar Compra</button>
+    </div>
 </div>
 
 <!-- Footer -->
