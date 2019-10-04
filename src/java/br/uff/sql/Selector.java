@@ -24,15 +24,15 @@ import java.util.logging.Logger;
  *
  * @author felipe
  */
-public class Selector extends SqlExecutioner {
+public class Selector {
     private String select;
     private final String from;
     private String where;
-    private ArrayList<String> joins;
+    private final ArrayList<String> joins;
     private String limit;
     private String offset;
     private Class child = null;
-    private Connection connection = null;
+    protected Connection connection = null;
     
     public Selector(String tableName, Connection connection, Class child) {
         this.select = "";
@@ -45,7 +45,6 @@ public class Selector extends SqlExecutioner {
         this.connection = connection;
     }
     
-    @Override
     public ArrayList<BaseModel> run() {
 
         ArrayList<BaseModel> models = new ArrayList();
@@ -73,7 +72,7 @@ public class Selector extends SqlExecutioner {
         return models;
     }
     
-    private String build() {
+    protected String build() {
         StringBuilder sb = new StringBuilder();
         if(select.isEmpty()) sb.append("select *"); else sb.append(select);
         sb.append(" ");
