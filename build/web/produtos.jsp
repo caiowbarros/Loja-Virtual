@@ -35,7 +35,7 @@
 <div class="fundo-paisagem1 paralax">
     <section class="lista-produtos">
 
-        <a href="ProdutoController?produto=1">
+        <a href="ProdutoController?produtoId=1">
             <div class="produto">
                 <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
                 <p class="titulo-produto">Tailored Jeans</p>

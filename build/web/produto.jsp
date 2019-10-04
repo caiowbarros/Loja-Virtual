@@ -4,7 +4,8 @@
     Author     : Caio
 --%>
 <%
-    if (request.getAttribute("produto") == null && request.getParameter("produto") == null) {
+    // verifica se tem produto selecionado
+    if (request.getAttribute("produtoId") == null && request.getParameter("produtoId") == null) {
         response.sendRedirect("ProdutosController");
     }
     // mostra msg se tiver
@@ -44,15 +45,15 @@
         </div>
         <!-- Avaliação do produto (em estrelas) -->
         <div class="rate">
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=5'" type="radio" id="star5" name="rate" value="5" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=2&rating=5'" type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=4'" type="radio" id="star4" name="rate" value="4" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=2&rating=4'" type="radio" id="star4" name="rate" value="4" />
             <label for="star4" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=3'" type="radio" id="star3" name="rate" value="3" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=2&rating=3'" type="radio" id="star3" name="rate" value="3" />
             <label for="star3" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=2'" type="radio" id="star2" name="rate" value="2" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=2&rating=2'" type="radio" id="star2" name="rate" value="2" />
             <label for="star2" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=1'" type="radio" id="star1" name="rate" value="1" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=2&rating=1'" type="radio" id="star1" name="rate" value="1" />
             <label for="star1" title="text"></label>
         </div>
     </div>
@@ -131,7 +132,7 @@
 
         <!-- Botão para avaliar o produto -->
         <div class="review-btn">
-            <a href="ProdutoController?action=mostra_avaliacao&produtoId=2">Adicionar uma avaliação</a>
+            <a href="AvaliacaoController">Adicionar uma avaliação</a>
         </div>
     </div>
 </div>
