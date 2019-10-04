@@ -199,56 +199,24 @@ public class BaseModel {
     }
     
     public static ArrayList<BaseModel> all() {
-        ArrayList<BaseModel> models = new ArrayList();
-        try {
-            PreparedStatement sql = connection.prepareStatement("select * from " + table_name);
-            ResultSet result = sql.executeQuery();
-            result.next();
-            ResultSetMetaData meta = result.getMetaData();
-            int colCount = meta.getColumnCount();
-            Map<String, Object> persitedAttrs = new HashMap();
-            for (int i = 1; i <= colCount ; i++){
-                String col_name = meta.getColumnName(i);
-                persitedAttrs.put(col_name, result.getObject(col_name));
-            }
-            Constructor<BaseModel> constructor = child.getConstructor(Map.class);
-            models.add(constructor.newInstance(persitedAttrs));
-        } catch (SQLException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return models;
+        return selector().run();
     }
     
     public static BaseModel find(int id) throws SQLException {
-        try {
-            PreparedStatement sql = connection.prepareStatement("select * from " + table_name + " where id = " + String.valueOf(id));
-            ResultSet result = sql.executeQuery();
-            result.next();
-            ResultSetMetaData meta = result.getMetaData();
-            int colCount = meta.getColumnCount();
-            Map<String, Object> attrs = new HashMap();
-            for (int i = 1; i <= colCount ; i++){  
-                String col_name = meta.getColumnName(i);
-                attrs.put(col_name, result.getObject(col_name));
-            }
-            Constructor<BaseModel> constructor = child.getConstructor(Map.class);
-            return constructor.newInstance(attrs);
-        } catch (SQLException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        ArrayList<BaseModel> result = selector().where("id = " + id).run();
+        return result.get(0);
     }
     
     public static Selector select() {
-        return new Selector(table_name, connection, child);        
+        return selector();        
     }
     
     public static Selector select(String sl) {
-        return new Selector(table_name, connection, child).select(sl);
+        return selector().select(sl);
     }
     
     public static BaseModel find_by(String condition) throws SQLException {
-        BaseModel response = new Selector(table_name, connection, child).where(condition).limit(1).run().get(0);
+        BaseModel response = selector().where(condition).limit(1).run().get(0);
         return response;
     }
     
@@ -256,5 +224,9 @@ public class BaseModel {
         String table = child.getSimpleName();
         table = Character.toLowerCase(table.charAt(0)) + table.substring(1);
         return table + "s";
+    }
+    
+    public static Selector selector() {
+        return new Selector(table_name, connection, child);
     }
 }
