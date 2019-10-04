@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -31,6 +32,20 @@ public class ProdutosController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // pega sessao
+            HttpSession session = request.getSession();
+
+            // verifica se chama favoritos
+            if (request.getParameter("fav") != null) {
+                // se tem usuario logado mostra filtra produtos por favoritos
+                if (session.getAttribute("userId") != null) {
+                    
+                } else {
+                    // se n tem usuario logado mostra msg solicitando login
+                    request.setAttribute("msg", "Realize login para ver seus favoritos!");
+                }
+            }
+
             request.getRequestDispatcher("produtos.jsp").forward(request, response);
             return;
         } catch (Exception ex) {
