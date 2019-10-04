@@ -7,6 +7,7 @@
     // recupera produtoId
     String produtoId = "";
     if (request.getParameter("produtoId") != null) {
+        session.setAttribute("produtoId", request.getParameter("produtoId"));
         produtoId = request.getParameter("produtoId").toString();
     } else if (session.getAttribute("produtoId") != null) {
         produtoId = session.getAttribute("produtoId").toString();

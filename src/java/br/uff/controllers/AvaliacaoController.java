@@ -51,7 +51,6 @@ public class AvaliacaoController extends HttpServlet {
             }
 
             // define atributos
-            request.setAttribute("produtoId", produtoId);
             request.setAttribute("rating", request.getParameter("rating"));
 
             // recupera acao solicitada se existir
