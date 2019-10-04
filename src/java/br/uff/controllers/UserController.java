@@ -51,6 +51,8 @@ public class UserController extends HttpServlet {
                 // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
                 // define variavel de sessao do userId como o Id do usuario q se logou
                 session.setAttribute("userId", "1");
+                // define variavel de sessao do userRole como o Role do usuario q se logou (1=>ADM,0=>CLIENTE)
+                session.setAttribute("userRole", "1");
 
                 // seta cookie se solicitar para lembrar login
                 if (request.getParameter("remember") != null) {
@@ -62,15 +64,17 @@ public class UserController extends HttpServlet {
                     ckPassword.setMaxAge(durMes);
                     response.addCookie(ckPassword);
                 }
+                request.setAttribute("msg", "Seja bem vindo!");
             } else if ("insere".equals(action)) {
                 // pega variaveis
                 String name = request.getParameter("nome");
                 String email = request.getParameter("email");
                 String password = request.getParameter("senha");
-                // insere como cliente
-                Integer roleId = 2;
 
                 session.setAttribute("userId", "1");
+                session.setAttribute("userRole", "2");
+                request.setAttribute("msg", "Seja bem vindo " + name + "!");
+
             }
 
             String redirect;

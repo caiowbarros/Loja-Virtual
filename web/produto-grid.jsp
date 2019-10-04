@@ -4,10 +4,11 @@
     Author     : HP
 --%>
 <%
-    // se n tiver um usuario logado retorna p controller
-    if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=ProdutoController");
+    // se n usuario n for adm retorna p ProdutosController
+    if (!session.getAttribute("userRole").equals("1")) {
+        response.sendRedirect("UserController?redirect=ProdutosController");
     }
+    // mostra se tiver msg
     if (request.getAttribute("msg") != null) {
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }
@@ -33,7 +34,7 @@
             <th>
                 <a href="ProdutoController?sel=1">Selecionar</a>
                 &nbsp;|&nbsp;
-                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoControler?del=1">Excluir</a>                
+                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoController?del=1">Excluir</a>                
             </th>
             <th>Xbox</th>
             <th>R$3000,00</th>

@@ -14,8 +14,9 @@
     </head>
     <body>
         <h1>Hello World! Uff</h1>
-        <% User user = (User) request.getAttribute("user"); %>
-        <% System.out.println("User: " + String.valueOf(user)); %>
-        <h4><%= user.getEmail() %></h4>
+        <%
+            User user = (User) request.getAttribute("user");
+        %>
+        <h4><%= user.getEmail()%></h4>
     </body>
 </html>

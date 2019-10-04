@@ -3,6 +3,16 @@
     Created on : 02/10/2019, 11:42:33
     Author     : HP
 --%>
+<%
+    // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CarrinhoController
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect("UserController?redirect=CarrinhoController");
+    }
+    // mostra msg se existir
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Carrinho"/>

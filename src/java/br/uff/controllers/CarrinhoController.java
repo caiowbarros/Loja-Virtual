@@ -29,12 +29,45 @@ public class CarrinhoController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // pega sessao
-        HttpSession session = request.getSession();
-        // seta atributo de sessionId
-        request.setAttribute("sessionId", session.getId());
-        // manda atributos para a pagina definida, no caso carrinho.jsp
-        request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+        try {
+            // pega sessao
+            HttpSession session = request.getSession();
+
+            // seta atributo de sessionId
+            request.setAttribute("sessionId", session.getId());
+
+            if (request.getParameter("addProdutoId") != null) {
+                // ADD PRODUTO NO SESSIONID
+            } else if (request.getParameter("confirmaCompra") != null) {
+                // manda atributos para a pagina definida, no caso carrinho-confirma.jsp
+                request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
+            }
+
+            // recupera acao solicitada se existir
+            String action = request.getParameter("action");
+
+            if ("mudaQtd".equals(action)) {
+                // muda qtd d produtos no carrinho
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Quantidade de Produtos alterada com sucesso!");
+            } else if ("removeProdutoId".equals(action)) {
+                // remove produtoId do carrinho de sessao id
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Produto removido do carrinho com sucesso!");
+            } else if ("finalizaCompra".equals(action)) {
+                // manda atributos para a pagina definida, no caso compra-pagamento.jsp
+                request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
+            } else if ("continuaCompra".equals(action)) {
+                // redireciona p controller de ProdutosController
+                response.sendRedirect("ProdutosController");
+            }
+
+            // manda atributos para a pagina definida, no caso carrinho.jsp
+            request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+        } catch (Exception ex) {
+            response.sendRedirect("ProdutosController");
+            return;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

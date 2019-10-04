@@ -8,6 +8,7 @@
     if (session.getAttribute("userId") != null) {
         response.sendRedirect("UserController");
     }
+    // mostra se tiver msg
     if (request.getAttribute("msg") != null) {
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }

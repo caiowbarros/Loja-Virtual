@@ -60,6 +60,8 @@ public class EnderecoController extends HttpServlet {
                 if ("grava".equals(action)) {
                     // grava alteracoes do session.getAttribute("enderecoId")
                     request.setAttribute("msg", "Endereço gravado com sucesso!");
+                    request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
+                    return;
                 }
 
                 request.getRequestDispatcher("endereco-cadastro.jsp").forward(request, response);

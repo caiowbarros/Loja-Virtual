@@ -4,10 +4,11 @@
     Author     : HP
 --%>
 <%
-    // se n tiver um usuario logado retorna p controller
+    // se n tiver um usuario logado retorna p controller com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController?redirect=EnderecoController");
     }
+    // se tiver msg mostra
     if (request.getAttribute("msg") != null) {
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }

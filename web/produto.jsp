@@ -4,7 +4,18 @@
     Author     : Caio
 --%>
 <%
-    if (request.getAttribute("produto") == null || request.getParameter("produto") == null) {
+    // recupera produtoId
+    String produtoId = "";
+    if (request.getParameter("produtoId") != null) {
+        session.setAttribute("produtoId", request.getParameter("produtoId"));
+        produtoId = request.getParameter("produtoId").toString();
+    } else if (session.getAttribute("produtoId") != null) {
+        produtoId = session.getAttribute("produtoId").toString();
+    } else if (request.getAttribute("produtoId") != null) {
+        produtoId = request.getAttribute("produtoId").toString();
+    }
+    // se produtoId for igual a string vazia retorna p ProdutosController
+    if ("".equals(produtoId)) {
         response.sendRedirect("ProdutosController");
     }
     // mostra msg se tiver
@@ -37,22 +48,22 @@
         <!-- Preço do produto -->
         <div class="product-price">
             <span>R$250,00</span>
-            <a href="carrinho.jsp?addProdutoId=" class="cart-btn">+ Carrinho</a>
+            <a href="CarrinhoController?addProdutoId=<%= produtoId%>" class="cart-btn">+ Carrinho</a>
             <!-- Botão de favorito -->
-            <input id="toggle-heart" type="checkbox" />
+            <input onchange="window.location.href = 'ProdutoController?fav=<%= produtoId%>'" id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">&#x2764;</label>
         </div>
         <!-- Avaliação do produto (em estrelas) -->
         <div class="rate">
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=5'" type="radio" id="star5" name="rate" value="5" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=5'" type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=4'" type="radio" id="star4" name="rate" value="4" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=4'" type="radio" id="star4" name="rate" value="4" />
             <label for="star4" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=3'" type="radio" id="star3" name="rate" value="3" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=3'" type="radio" id="star3" name="rate" value="3" />
             <label for="star3" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=2'" type="radio" id="star2" name="rate" value="2" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=2'" type="radio" id="star2" name="rate" value="2" />
             <label for="star2" title="text"></label>
-            <input onClick="window.location.href = 'ProdutoController?action=mostra_avaliacao&produtoId=2&rating=1'" type="radio" id="star1" name="rate" value="1" />
+            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=1'" type="radio" id="star1" name="rate" value="1" />
             <label for="star1" title="text"></label>
         </div>
     </div>
@@ -131,7 +142,7 @@
 
         <!-- Botão para avaliar o produto -->
         <div class="review-btn">
-            <a href="ProdutoController?action=mostra_avaliacao&produtoId=2">Adicionar uma avaliação</a>
+            <a href="AvaliacaoController">Adicionar uma avaliação</a>
         </div>
     </div>
 </div>

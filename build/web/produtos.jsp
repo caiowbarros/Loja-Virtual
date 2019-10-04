@@ -29,13 +29,13 @@
         <input type="number" readonly id="display_max" value="0"/>
         <input name="name" type="text" placeholder="name" maxlength="255" />
         <input name="description" type="text" placeholder="description" maxlength="255" />
-        <button type="submit">filter</button>
+        <button type="submit" name="action" value="filtra">filter</button>
     </fieldset>
 </div>
 <div class="fundo-paisagem1 paralax">
     <section class="lista-produtos">
 
-        <a href="ProdutoController?produto=1">
+        <a href="ProdutoController?produtoId=1">
             <div class="produto">
                 <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
                 <p class="titulo-produto">Tailored Jeans</p>
@@ -49,11 +49,11 @@
     </section>
 </div>
 <div>
-    <button>Primeira Página</button>
-    <button>Página Anterior</button>
-    <span>1</span>
-    <button>Próxima Página</button>
-    <button>Última Página</button>
+    <form action="ProdutosController?paginacao">
+        <button name="action" value="ant">Página Anterior</button>
+        <span><%= session.getAttribute("ProdutosPag") %></span>
+        <button name="action" value="prox">Próxima Página</button>
+    </form>
 </div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

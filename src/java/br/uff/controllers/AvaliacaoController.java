@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author HP
  */
-@WebServlet(name = "CompraController", urlPatterns = {"/CompraController"})
-public class CompraController extends HttpServlet {
+@WebServlet(name = "AvaliacaoController", urlPatterns = {"/AvaliacaoController"})
+public class AvaliacaoController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,31 +37,39 @@ public class CompraController extends HttpServlet {
 
             // se n tem usuario logado manda p controller de user
             if (session.getAttribute("userId") == null) {
-                response.sendRedirect("UserController?redirect=CompraController");
+                response.sendRedirect("UserController?redirect=AvaliacaoController");
                 return;
             }
-            
-            if (request.getParameter("paypal_pag") != null) {
-                // REGISTRA SALE NO BD
-            } else if (request.getParameter("paypal_cancela") != null) {
-                response.sendRedirect("CarrinhoController");
-            } else if (request.getParameter("paypal_erro") != null) {
-                // define msg a ser mostrada
-                request.setAttribute("msg", "Um erro ocorreu no processamento do seu pagamento, por favor tente novamente!");
+
+            // verifica p ver se tem algum produtoId definido se n tiver, vai p pag d produtos, se tiver define produtoId
+            String produtoId = "";
+            if (session.getAttribute("produtoId") == null) {
+                response.sendRedirect("ProdutosController");
+                return;
+            } else {
+                produtoId = session.getAttribute("produtoId").toString();
             }
+
+            // define atributos
+            request.setAttribute("rating", request.getParameter("rating"));
 
             // recupera acao solicitada se existir
             String action = request.getParameter("action");
 
-            if ("continuaCompra".equals(action)) {
-                // redireciona p controller de ProdutosController
-                response.sendRedirect("ProdutosController");
+            if ("avalia".equals(action)) {
+                // grava avaliacao do produto
+                // define msg a ser mostrada
+                request.setAttribute("msg", "Produto avaliado com sucesso!");
+                //redireciona de volta p pag do produto avaliado
+                request.getRequestDispatcher("ProdutoController?produtoId=" + produtoId).forward(request, response);
+                return;
             }
 
-            // manda atributos para a pagina definida, no caso carrinho.jsp
-            request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
+            request.getRequestDispatcher("produto-avalia.jsp").forward(request, response);
+            return;
+            // se der erro vai p ControllerProdutos
         } catch (Exception ex) {
-            response.sendRedirect("CarrinhoController");
+            response.sendRedirect("ProdutosController");
             return;
         }
     }
