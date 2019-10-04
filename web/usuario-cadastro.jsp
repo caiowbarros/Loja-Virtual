@@ -20,27 +20,22 @@
     <fieldset>
         <legend>user</legend>
         <div class="group">      
-            <input name="name" required type="text" maxlength="255">
+            <input name="name" required type="text" maxlength="255" value="${user.name}">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Nome Completo</label>
         </div>
         <div class="group">      
-            <input name="email" required type="email" maxlength="255">
+            <input name="email" required type="email" maxlength="255" value="${user.email}">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>E-mail</label>
         </div>
         <div class="group">
-            <input name="password" required type="password" maxlength="255">
+            <input name="password" required type="password" maxlength="255" value="${user.password}">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Senha</label>
-        </div>
-        <!--SE FOR ADM MOSTRA O CAMPO ABAIXO-->
-        <div style="display:none;">
-            <input id="role_id_adm" name="role_id" required type="radio" value="1"><label for="role_id_adm">ADM</label><br>
-            <input id="role_id_cliente" name="role_id" required type="radio" value="2"><label for="role_id_cliente">Cliente</label>
         </div>
         <button type="submit" name="action" value="grava">Gravar</button>
         <button type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>

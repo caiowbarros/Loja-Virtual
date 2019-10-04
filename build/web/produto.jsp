@@ -4,8 +4,16 @@
     Author     : Caio
 --%>
 <%
+    String produtoId = "";
+    if (session.getAttribute("produtoId") != null) {
+        produtoId = session.getAttribute("produtoId").toString();
+    } else if (request.getAttribute("produtoId") != null) {
+        produtoId = request.getAttribute("produtoId").toString();
+    } else if (request.getParameter("produtoId") != null) {
+        produtoId = request.getAttribute("produtoId").toString();
+    }
     // verifica se tem produto selecionado
-    if (request.getAttribute("produtoId") == null && request.getParameter("produtoId") == null) {
+    if ("".equals(produtoId)) {
         response.sendRedirect("ProdutosController");
     }
     // mostra msg se tiver
@@ -38,7 +46,7 @@
         <!-- Preço do produto -->
         <div class="product-price">
             <span>R$250,00</span>
-            <a href="carrinho.jsp?addProdutoId=" class="cart-btn">+ Carrinho</a>
+            <a href="CarrinhoController?addProductId=<%= produtoId %>" class="cart-btn">+ Carrinho</a>
             <!-- Botão de favorito -->
             <input id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">&#x2764;</label>

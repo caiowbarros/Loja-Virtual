@@ -78,7 +78,10 @@ public class ProdutoController extends HttpServlet {
                 if ("grava".equals(action)) {
                     PrintWriter out = response.getWriter();
                     response.setContentType("text/html");
+                    //pega img passada
                     String img = request.getParameter("img");
+                    
+                    //pega path da img
                     java.nio.file.Path mypath = java.nio.file.Paths.get(img);
 
                     //recupera bytes da imagem

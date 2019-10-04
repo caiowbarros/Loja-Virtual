@@ -29,12 +29,23 @@ public class CarrinhoController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // pega sessao
-        HttpSession session = request.getSession();
-        // seta atributo de sessionId
-        request.setAttribute("sessionId", session.getId());
-        // manda atributos para a pagina definida, no caso carrinho.jsp
-        request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+        try {
+            // pega sessao
+            HttpSession session = request.getSession();
+
+            // seta atributo de sessionId
+            request.setAttribute("sessionId", session.getId());
+
+            if (request.getParameter("addProductId") != null) {
+// ADD PRODUTO NO SESSIONID
+            }
+
+            // manda atributos para a pagina definida, no caso carrinho.jsp
+            request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+        } catch (Exception ex) {
+            response.sendRedirect("ProdutosController");
+            return;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
