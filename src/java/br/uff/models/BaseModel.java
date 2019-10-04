@@ -9,6 +9,7 @@ import br.uff.exceptions.RecordAlreadyPersisted;
 import br.uff.exceptions.RecordNotPersisted;
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
+import br.uff.sql.Counter;
 import br.uff.sql.Selector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -220,13 +221,21 @@ public class BaseModel {
         return response;
     }
     
+    public static int count() throws SQLException {
+        return counter().count();
+    }
+    
     private static String get_table_name() {
         String table = child.getSimpleName();
         table = Character.toLowerCase(table.charAt(0)) + table.substring(1);
         return table + "s";
     }
     
-    public static Selector selector() {
+    private static Selector selector() {
         return new Selector(table_name, connection, child);
+    }
+    
+    private static Counter counter() {
+        return new Counter(table_name, connection, child);
     }
 }
