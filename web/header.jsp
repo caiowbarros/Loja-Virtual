@@ -9,6 +9,8 @@
     <head>
         <title>UFF | ${param.title}</title>
         <meta charset="UTF-8">
+        <!-- tirando cache p obrigar a pag a recarregar -->
+        <meta http-equiv="cache-control" content="no-cache">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/style.css" type="text/css" rel="stylesheet">
         <link href="css/produto.css" type="text/css" rel="stylesheet">
