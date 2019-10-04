@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Base64;
 
 /**
  *
@@ -42,7 +43,7 @@ public class ProdutoController extends HttpServlet {
                 request.getRequestDispatcher("produto.jsp").forward(request, response);
                 return;
             }
-            
+
             // se n tem usuario logado manda p controller de user
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=ProdutoController");
@@ -75,8 +76,29 @@ public class ProdutoController extends HttpServlet {
 
                 // verifica acoes
                 if ("grava".equals(action)) {
+                    PrintWriter out = response.getWriter();
+                    response.setContentType("text/html");
+                    String img = request.getParameter("img");
+                    java.nio.file.Path mypath = java.nio.file.Paths.get(img);
+
+                    //recupera bytes da imagem
+                    byte[] mydata = java.nio.file.Files.readAllBytes(mypath);
+
+                    // pega extensao
+                    String extension = "";
+                    int i = img.lastIndexOf('.');
+                    int p = Math.max(img.lastIndexOf('/'), img.lastIndexOf('\\'));
+                    if (i > p) {
+                        extension = img.substring(i + 1);
+                    }
+
+                    // pega base 64 dos bytes recuperados
+                    String src = "data:image/" + extension + ";base64," + Base64.getEncoder().encodeToString(mydata);
+
+                    out.print("<img src='" + src + "' />");
+                    return;
                     // grava alteracoes do session.getAttribute("produtoId") SE USUARIO FOR ADM
-                    request.setAttribute("msg", "Produto gravado com sucesso!");
+                    //request.setAttribute("msg", "Produto gravado com sucesso!");
                 } else if ("estoqueInsere".equals(action)) {
                     // aumenta qtd em estoque do produto do session.getAttribute("produtoId") SE USUARIO FOR ADM
                     request.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");

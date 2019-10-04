@@ -25,7 +25,7 @@
         <input name="description" required type="text" placeholder="description" maxlength="255" />
         <input name="category_id" required type="text" maxlength="255" />
         <input name="created_at" type="datetime" required/>
-        <input name="img" required type="file"/>
+        <input name="img" accept="image/x-png,image/gif,image/jpeg" required type="file"/>
         <button type="submit" name="action" value="grava">Gravar</button>
     </fieldset>
 </form>
