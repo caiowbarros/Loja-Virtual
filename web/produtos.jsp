@@ -29,7 +29,7 @@
         <input type="number" readonly id="display_max" value="0"/>
         <input name="name" type="text" placeholder="name" maxlength="255" />
         <input name="description" type="text" placeholder="description" maxlength="255" />
-        <button type="submit">filter</button>
+        <button type="submit" name="action" value="filtra">filter</button>
     </fieldset>
 </div>
 <div class="fundo-paisagem1 paralax">

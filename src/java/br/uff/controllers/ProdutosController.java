@@ -39,11 +39,30 @@ public class ProdutosController extends HttpServlet {
             if (request.getParameter("fav") != null) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
-                    
+
                 } else {
                     // se n tem usuario logado mostra msg solicitando login
                     request.setAttribute("msg", "Realize login para ver seus favoritos!");
                 }
+            }
+
+            Integer ProdutosPag = 1;
+            if (session.getAttribute("ProdutosPag") != null) {
+                ProdutosPag = (Integer) session.getAttribute("ProdutosPag");
+            } else {
+                session.setAttribute("ProdutosPag", ProdutosPag);
+            }
+
+            // recupera acao solicitada se existir
+            String action = request.getParameter("action");
+
+            // verifica acoes
+            if ("ant".equals(action)) {
+                ProdutosPag = ProdutosPag - 1;
+                session.setAttribute("ProdutosPag", ProdutosPag);
+            } else if ("prox".equals(action)) {
+                ProdutosPag = ProdutosPag + 1;
+                session.setAttribute("ProdutosPag", ProdutosPag);
             }
 
             request.getRequestDispatcher("produtos.jsp").forward(request, response);
