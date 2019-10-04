@@ -3,11 +3,19 @@
     Created on : 02/10/2019, 00:50:48
     Author     : HP
 --%>
-
+<%
+    // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CompraController
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect("UserController?redirect=CompraController");
+    }
+    // mostra msg se existir
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
+%>
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
-
 <table witdh="100%" border="1">
     <thead>
         <tr>Compra - 1</tr>

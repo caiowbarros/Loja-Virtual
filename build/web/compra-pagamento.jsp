@@ -3,7 +3,16 @@
     Created on : 02/10/2019, 02:31:48
     Author     : HP
 --%>
-
+<%
+    // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CompraController
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect("UserController?redirect=CompraController");
+    }
+    // mostra msg se existir
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Página de Pagamento"/>
@@ -34,10 +43,10 @@
                 payment: {
                     transactions: [{
                             amount: {
-                                total: "1.69",
+                                total: "${sales.total_price}",
                                 currency: "BRL"
                             },
-                            description: "Total: R$1.69 (Depósito de R$1 na carteira de igor + taxa da paypal)",
+                            description: "Aquisição de produtos por ${session.userId}",
                             payment_options: {
                                 allowed_payment_method: "IMMEDIATE_PAY",
                             }
@@ -49,17 +58,17 @@
             return actions.payment.execute().then(function (payment) {
                 console.log("Pagamento OK");
                 console.log(actions);
-                window.location.href = "?paypal_pag";
+                window.location.href = "CompraController?paypal_pag";
                 return false;
             });
         },
         onCancel: function (data, actions) {
-            window.location.href = "?paypal_cancelado";
+            window.location.href = "CompraController?paypal_cancelado";
             return false;
         },
         onError: function (err) {
             console.log(err);
-            window.location.href = "?paypal_erro";
+            window.location.href = "CompraController?paypal_erro";
             return false;
         }
     },

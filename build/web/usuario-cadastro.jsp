@@ -4,10 +4,11 @@
     Author     : HP
 --%>
 <%
-    // se n tiver um usuario logado retorna p controller
+    // se n tiver um usuario logado retorna p userController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController");
     }
+    // mostra se tiver msg
     if (request.getAttribute("msg") != null) {
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }

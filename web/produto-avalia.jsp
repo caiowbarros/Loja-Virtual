@@ -8,7 +8,7 @@
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController?redirect=ProdutoController");
     }
-    // verifica se tem produto selecionado
+    // se n tiver produto selecionado retorna p pag d produtos
     if (request.getAttribute("produtoId") == null && session.getAttribute("produtoId") == null && request.getParameter("produtoId") == null) {
         response.sendRedirect("ProdutosController");
     }
@@ -43,7 +43,7 @@
             <input <%= rating.equals("1") ? "selected" : ""%> type="radio" id="star1" name="rating" value="1" />
             <label for="star1" title="text"></label>
         </div>
-        <input name="Title" required type="text" placeholder="Título da Avaliação" maxlength="255" />
+        <input name="title" required type="text" placeholder="Título da Avaliação" maxlength="255" />
         <input name="description" required type="text" placeholder="Descricao da Avaliação" maxlength="255" />
         <button name="action" value="avalia" type="submit">Salvar</button>
     </fieldset>

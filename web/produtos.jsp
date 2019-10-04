@@ -49,11 +49,11 @@
     </section>
 </div>
 <div>
-    <button>Primeira Página</button>
-    <button>Página Anterior</button>
-    <span>1</span>
-    <button>Próxima Página</button>
-    <button>Última Página</button>
+    <form action="ProdutosController?paginacao">
+        <button name="action" value="ant">Página Anterior</button>
+        <span><%= session.getAttribute("ProdutosPag") %></span>
+        <button name="action" value="prox">Próxima Página</button>
+    </form>
 </div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

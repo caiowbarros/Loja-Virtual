@@ -51,6 +51,8 @@ public class UserController extends HttpServlet {
                 // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
                 // define variavel de sessao do userId como o Id do usuario q se logou
                 session.setAttribute("userId", "1");
+                // define variavel de sessao do userRole como o Role do usuario q se logou (1=>ADM,0=>CLIENTE)
+                session.setAttribute("userRole", "1");
 
                 // seta cookie se solicitar para lembrar login
                 if (request.getParameter("remember") != null) {

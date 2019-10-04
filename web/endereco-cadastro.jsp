@@ -4,10 +4,11 @@
     Author     : HP
 --%>
 <%
-    // se n tiver um usuario logado retorna p controller
+    // se n tiver um usuario logado retorna p controller de usuario com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController?redirect=EnderecoController");
     }
+    // mostra msg se tiver
     if (request.getAttribute("msg") != null) {
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }
@@ -21,12 +22,12 @@
     <fieldset>
         <legend>Endereço</legend>
         <!--onblur ocorre qnd o objeto perde o foco-->
-        <input name="zipcode" required type="number" placeholder="CEP" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
-        <input name="name" required type="text" placeholder="Apelido Curto para o Endereço" maxlength="255" />
-        <input name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
-        <input name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
-        <input name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
-        <input name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
+        <input value="${address.zipcode}" name="zipcode" required type="number" placeholder="CEP" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
+        <input value="${address.name}" name="name" required type="text" placeholder="Apelido Curto para o Endereço" maxlength="255" />
+        <input value="${address.address}" name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
+        <input value="${address.city}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
+        <input value="${address.state}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
+        <input value="${address.country}" name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
         <button name="action" value="grava" type="submit">Salvar</button>
     </fieldset>
 </form>
