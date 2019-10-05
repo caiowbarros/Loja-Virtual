@@ -31,17 +31,17 @@ public class Selector {
     private final ArrayList<String> joins;
     private String limit;
     private String offset;
-    private Class child = null;
+    private Class klass = null;
     protected Connection connection = null;
     
-    public Selector(String tableName, Connection connection, Class child) {
+    public Selector(String tableName, Connection connection, Class klass) {
         this.select = "";
         this.from = "from " + tableName;
         this.where = "";
         this.joins = new ArrayList();
         this.limit = "";
         this.offset = "";
-        this.child = child;
+        this.klass = klass;
         this.connection = connection;
     }
     
@@ -61,7 +61,7 @@ public class Selector {
                     String col_name = meta.getColumnName(i);
                     persitedAttrs.put(col_name, result.getObject(col_name));
                 }
-                Constructor<BaseModel> constructor = child.getConstructor(Map.class);
+                Constructor<BaseModel> constructor = klass.getConstructor(Map.class);
                 models.add(constructor.newInstance(persitedAttrs));
             }
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | NoSuchMethodException ex) {
