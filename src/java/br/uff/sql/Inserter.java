@@ -30,9 +30,14 @@ public class Inserter {
     private HashMap<String, Object> attrs;
     
     public Inserter(String tableName, Connection connection, Class klass) {
+        this.reload();
         this.insert = "insert into" + tableName;
         this.klass = klass;
         this.connection = connection;
+    }
+    
+    protected void reload() {
+        this.columns = new ArrayList();
         this.values = new ArrayList();
         this.attrs = new HashMap();
     }
@@ -40,6 +45,7 @@ public class Inserter {
     public BaseModel run() throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         PreparedStatement statement = connection.prepareStatement(this.build());
         if(statement.executeUpdate() != 1) throw new SQLException();
+        this.reload();
         return model();
     }
     
