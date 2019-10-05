@@ -7,16 +7,15 @@ package br.uff.models;
 
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
-import br.uff.sql.Getter;
+import br.uff.sql.Destroyer;
+import br.uff.sql.SqlManager;
 import br.uff.sql.Inserter;
 import br.uff.sql.Selector;
-import br.uff.sql.Setter;
 import br.uff.sql.Updater;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +32,7 @@ public class BaseModel {
     private static Connection connection = null;
     private static String tableName = null;
     protected final Evaluator evaluator;
-    private static Getter getter;
-    private static Setter setter;
+    private static SqlManager query;
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
@@ -53,8 +51,7 @@ public class BaseModel {
             tableName = Inflector.classToTable(child);
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
-            getter = new Getter(tableName, connection, child);
-            setter = new Setter(tableName, connection, child);
+            query = new SqlManager(tableName, connection, child);
              return connection;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,7 +144,7 @@ public class BaseModel {
     }
     
     public static BaseModel find(int id) throws SQLException {
-        ArrayList<BaseModel> result = getter.select().where("id = " + id).run();
+        ArrayList<BaseModel> result = select().where("id = " + id).run();
         return result.get(0);
     }
     
@@ -160,22 +157,26 @@ public class BaseModel {
     * Delegated Methods
     */
     public static Selector select() {
-        return getter.select();
+        return query.select();
     }
     
     public static Selector select(String str) {
-        return getter.select(str);
+        return query.select(str);
     }
     
     public static int count() throws SQLException {
-        return getter.count();
+        return query.count();
     }
     
     public static Inserter insert() {
-        return setter.insert();
+        return query.insert();
     }
     
     public static Updater update() {
-        return setter.update();
+        return query.update();
+    }
+    
+    public static Destroyer delete() {
+        return query.delete();
     }
 }
