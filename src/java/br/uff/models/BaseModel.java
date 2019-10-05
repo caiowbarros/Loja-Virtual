@@ -121,8 +121,18 @@ public class BaseModel {
         }
     }
     
-    public static boolean commitUpdate(BaseModel model, HashMap<String, Object> where) {
+    public static boolean commitUpdate(BaseModel model) {
         HashMap<String, Object> attrs = model.getAttributes();
+        try {
+            update().set(attrs).run();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    public static boolean commitUpdate(HashMap<String, Object> attrs) {
         try {
             update().set(attrs).run();
             return true;
