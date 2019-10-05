@@ -26,8 +26,7 @@ public class User extends BaseModel {
     }
     
     public User(Map<String, Object> attrs) {
-        super();
-        this.evaluator.initialize(attrs);
+        super(attrs);
     }
 
     /**

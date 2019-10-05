@@ -39,11 +39,23 @@ public class Evaluator {
     }
     
     public Method getMethod(String name) throws NoSuchMethodException {
-        return klass.getDeclaredMethod(name, null);
+        Method method;
+        try {
+            method = klass.getDeclaredMethod(name, null);
+        } catch (NoSuchMethodException ex) {
+            method = klass.getSuperclass().getDeclaredMethod(name, null);
+        }
+        return method;
     }
     
     public Method getMethod(String name, Class... types) throws NoSuchMethodException {
-        return klass.getDeclaredMethod(name, types);
+        Method method;
+        try {
+            method = klass.getDeclaredMethod(name, types);
+        } catch (NoSuchMethodException ex) {
+            method = klass.getSuperclass().getDeclaredMethod(name, types);
+        }
+        return method;
     }
     
     public Method[] getMethods() {

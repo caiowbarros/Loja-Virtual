@@ -4,6 +4,7 @@
     Author     : felipe
 --%>
 
+<%@page import="java.util.HashMap"%>
 <%@page import="br.uff.models.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,9 +15,9 @@
     </head>
     <body>
         <h1>Hello World! Uff</h1>
-        <%
-            User user = (User) request.getAttribute("user");
-        %>
-        <h4><%= user.getEmail()%></h4>
+        <% User user = (User) request.getAttribute("user"); %>
+        <% HashMap<String, Object> attrs = user.getAttributes(); %>
+        <% System.out.println("User: " + String.valueOf(user)); %>
+        <h4><%= user.getEmail() %></h4>
     </body>
 </html>
