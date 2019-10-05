@@ -3,3 +3,4 @@
 /web/WEB-INF/**/*
 !web/WEB-INF/.gitkeep
 
+/build/

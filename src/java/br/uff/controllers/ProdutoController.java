@@ -85,33 +85,10 @@ public class ProdutoController extends HttpServlet {
 
                     // verifica acoes
                     if ("grava".equals(action)) {
-                        PrintWriter out = response.getWriter();
-                        response.setContentType("text/html");
-                        //pega img passada
-                        String img = request.getParameter("img");
-
-                        //pega path da img
-                        java.nio.file.Path mypath = java.nio.file.Paths.get(img);
-
-                        //recupera bytes da imagem
-                        byte[] mydata = java.nio.file.Files.readAllBytes(mypath);
-
-                        // pega extensao
-                        String extension = "";
-                        int i = img.lastIndexOf('.');
-                        int p = Math.max(img.lastIndexOf('/'), img.lastIndexOf('\\'));
-                        if (i > p) {
-                            extension = img.substring(i + 1);
-                        }
-
-                        // pega base 64 dos bytes recuperados
-                        String src = "data:image/" + extension + ";base64," + Base64.getEncoder().encodeToString(mydata);
-
-                        out.print("<img src='" + src + "' />");
                         // grava alteracoes do session.getAttribute("produtoId") SE USUARIO FOR ADM
-                        //request.setAttribute("msg", "Produto gravado com sucesso!");
+                        request.setAttribute("msg", "Produto gravado com sucesso!");
                         // manda p pag d produto
-                        //request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
+                        request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
                         return;
                     } else if ("estoqueInsere".equals(action)) {
                         // aumenta qtd em estoque do produto do session.getAttribute("produtoId") SE USUARIO FOR ADM
