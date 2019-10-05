@@ -52,7 +52,7 @@ public class BaseModel {
         if (connection != null) return connection;
         try {
             child = klass;
-            tableName = getTableName();
+            tableName = Inflector.classToTable(child);
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
              return connection;
@@ -228,11 +228,5 @@ public class BaseModel {
     
     public static int count() throws SQLException {
         return getter.count();
-    }
-    
-    private static String getTableName() {
-        String table = child.getSimpleName();
-        table = Character.toLowerCase(table.charAt(0)) + table.substring(1);
-        return table + "s";
     }
 }

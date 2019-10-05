@@ -65,4 +65,16 @@ public class Inflector {
         str = str.substring(1, str.length() - 1);
         return str.replace(',', separator);
     }
+    
+    public static String pluralize(String str) {
+        String plural = Inflections.fetchPlural(str);
+        if (plural == null) return str + "s";
+        return plural;
+    }
+    
+    public static String classToTable(Class klass) {
+        String table = klass.getSimpleName();
+        table = downsize(table);
+        return pluralize(table);
+    }
 }
