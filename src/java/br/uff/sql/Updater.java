@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.util.Pair;
 
 /**
  *
@@ -48,21 +47,32 @@ public class Updater {
         return affectedRows;
     }
     
-    public Updater set(Pair<String,Object>... attrs ) {
-        for(Pair<String,Object> attr : attrs) {
-            String key = attr.getKey();
-            String parsedValue;
-            Object value = attr.getValue();
-            if (value instanceof String) {
-                parsedValue = Inflector.toQuotedString(String.valueOf(value));
-            } else if (value == null) {
-                parsedValue = "NULL";
-            } else {
-                parsedValue  = String.valueOf(value);
-            }
-            this.attrs.put(key, parsedValue);
+    public Updater set(Map.Entry<String,Object>... attrs ) {
+        for(Map.Entry<String,Object> attr : attrs) {
+            addAttr(attr);
         }
         return this;
+    }
+    
+    public Updater set(HashMap<String,Object> attrs ) {
+        attrs.entrySet().forEach((attr) -> {
+            addAttr(attr);
+        });
+        return this;
+    }
+    
+    private void addAttr(Map.Entry<String, Object> attr) {
+        String key = attr.getKey();
+        String parsedValue;
+        Object value = attr.getValue();
+        if (value instanceof String) {
+            parsedValue = Inflector.toQuotedString(String.valueOf(value));
+        } else if (value == null) {
+            parsedValue = "NULL";
+        } else {
+            parsedValue  = String.valueOf(value);
+        }
+        this.attrs.put(key, parsedValue);
     }
     
     public Updater where(String where) {
