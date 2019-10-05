@@ -54,7 +54,7 @@ public class TestController extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             
-            User user = (User) User.find_by("email = 'admin@admin.com'");
+            User user = (User) User.findBy("email = 'admin@admin.com'");
             
             RequestDispatcher view = request.getRequestDispatcher("/test.jsp");
             view.forward(request, response);

@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 public class BaseModel {
     private static Class child = null;
     private static Connection connection = null;
-    private static String table_name = null;
+    private static String tableName = null;
     protected final Evaluator evaluator;
     
     public BaseModel(){
@@ -50,7 +50,7 @@ public class BaseModel {
         if (connection != null) return connection;
         try {
             child = klass;
-            table_name = get_table_name();
+            tableName = getTableName();
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
              return connection;
@@ -110,7 +110,7 @@ public class BaseModel {
         HashMap<String, Object> attrs = model.getAttributes();
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(table_name);
+        sql.append(tableName);
         sql.append("(");
         int i = 1;
         for (String key : attrs.keySet()) {
@@ -139,7 +139,7 @@ public class BaseModel {
     public static boolean commit(HashMap<String, Object> attrs) {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(table_name);
+        sql.append(tableName);
         sql.append("(");
         int i = 1;
         for (String key : attrs.keySet()) {
@@ -169,7 +169,7 @@ public class BaseModel {
         HashMap<String, Object> attrs = model.getAttributes();
         StringBuilder sql = new StringBuilder();
         sql.append("update ");
-        sql.append(table_name);
+        sql.append(tableName);
         sql.append(" set ");
         int i = 1;
         for (Map.Entry pair : attrs.entrySet()) {
@@ -209,14 +209,14 @@ public class BaseModel {
     }
     
     public static Selector select() {
-        return selector();        
+        return selector();
     }
     
     public static Selector select(String sl) {
         return selector().select(sl);
     }
     
-    public static BaseModel find_by(String condition) throws SQLException {
+    public static BaseModel findBy(String condition) throws SQLException {
         BaseModel response = selector().where(condition).limit(1).run().get(0);
         return response;
     }
@@ -225,17 +225,17 @@ public class BaseModel {
         return counter().count();
     }
     
-    private static String get_table_name() {
+    private static String getTableName() {
         String table = child.getSimpleName();
         table = Character.toLowerCase(table.charAt(0)) + table.substring(1);
         return table + "s";
     }
     
     private static Selector selector() {
-        return new Selector(table_name, connection, child);
+        return new Selector(tableName, connection, child);
     }
     
     private static Counter counter() {
-        return new Counter(table_name, connection, child);
+        return new Counter(tableName, connection, child);
     }
 }
