@@ -11,7 +11,10 @@ import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
 import br.uff.sql.Counter;
 import br.uff.sql.Getter;
+import br.uff.sql.Inserter;
 import br.uff.sql.Selector;
+import br.uff.sql.Setter;
+import br.uff.sql.Updater;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,7 +39,8 @@ public class BaseModel {
     private static Connection connection = null;
     private static String tableName = null;
     protected final Evaluator evaluator;
-    private static final Getter getter = new Getter(tableName, connection, child);
+    private static Getter getter;
+    private static Setter setter;
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
@@ -55,6 +59,8 @@ public class BaseModel {
             tableName = Inflector.classToTable(child);
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
+            getter = new Getter(tableName, connection, child);
+            setter = new Setter(tableName, connection, child);
              return connection;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +106,7 @@ public class BaseModel {
         return commit(this);
     }
     
-    public boolean update() throws RecordNotPersisted {
+    public boolean selfUpdate() throws RecordNotPersisted {
         int id = (int) this.getAttribute("id");
         if (this.getAttribute("id") == null) throw new RecordNotPersisted();
         HashMap<String, Object> where = new HashMap();
@@ -228,5 +234,13 @@ public class BaseModel {
     
     public static int count() throws SQLException {
         return getter.count();
+    }
+    
+    public static Inserter insert() {
+        return setter.insert();
+    }
+    
+    public static Updater update() {
+        return setter.update();
     }
 }
