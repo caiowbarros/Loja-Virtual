@@ -5,24 +5,18 @@
  */
 package br.uff.models;
 
-import br.uff.exceptions.RecordAlreadyPersisted;
-import br.uff.exceptions.RecordNotPersisted;
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
-import br.uff.sql.Counter;
 import br.uff.sql.Getter;
 import br.uff.sql.Inserter;
 import br.uff.sql.Selector;
 import br.uff.sql.Setter;
 import br.uff.sql.Updater;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,110 +95,41 @@ public class BaseModel {
         return attrs;
     }
     
-    public boolean save() throws RecordAlreadyPersisted {
-        if (this.getAttribute("id") != null) throw new RecordAlreadyPersisted();
-        return commit(this);
+    public boolean save() {
+        Object id = this.getAttribute("id");
+        if (id == null) return commit(this);
+        return commitUpdate(this);
     }
-    
-    public boolean selfUpdate() throws RecordNotPersisted {
-        int id = (int) this.getAttribute("id");
-        if (this.getAttribute("id") == null) throw new RecordNotPersisted();
-        HashMap<String, Object> where = new HashMap();
-        where.put("id", id);
-        return commitUpdate(this, where);
-    }
-    
     public static boolean commit(BaseModel model) {
         HashMap<String, Object> attrs = model.getAttributes();
-        StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(tableName);
-        sql.append("(");
-        int i = 1;
-        for (String key : attrs.keySet()) {
-            sql.append(Inflector.qf(key));
-            sql.append(i == attrs.size() ? ")" : ",");
-            i++;
-        }
-        i = 1;
-        sql.append(" values(");
-        for (Object value : attrs.values()) {
-            sql.append(String.valueOf(value));
-            sql.append(i == attrs.size() ? ")" : ",");
-            i++;
-        }
-        PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(sql.toString());
-            statement.executeUpdate();
+            insert().values(attrs).run();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
     }
     
     public static boolean commit(HashMap<String, Object> attrs) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(tableName);
-        sql.append("(");
-        int i = 1;
-        for (String key : attrs.keySet()) {
-            sql.append(Inflector.qf(key));
-            sql.append(i == attrs.size() ? ")" : ",");
-            i++;
-        }
-        i = 1;
-        sql.append(" values(");
-        for (Object value : attrs.values()) {
-            sql.append(String.valueOf(value));
-            sql.append(i == attrs.size() ? ")" : ",");
-            i++;
-        }
-        PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(sql.toString());
-            statement.executeUpdate();
+            insert().values(attrs).run();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
     }
     
     public static boolean commitUpdate(BaseModel model, HashMap<String, Object> where) {
         HashMap<String, Object> attrs = model.getAttributes();
-        StringBuilder sql = new StringBuilder();
-        sql.append("update ");
-        sql.append(tableName);
-        sql.append(" set ");
-        int i = 1;
-        for (Map.Entry pair : attrs.entrySet()) {
-            sql.append(Inflector.qf(String.valueOf(pair.getKey())));
-            sql.append(" = ");
-            sql.append(String.valueOf(pair.getValue()));
-            sql.append(i == attrs.size() ? " " : ",");
-            i++;
-        }
-        i = 1;
-        sql.append(" where ");
-        for (Map.Entry pair : where.entrySet()) {
-            sql.append(pair.getKey());
-            sql.append(" = ");
-            sql.append(String.valueOf(pair.getValue()));
-            sql.append(i == where.size() ? "" : ",");
-            i++;
-        }
-        PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(sql.toString());
-            statement.executeUpdate();
+            update().set(attrs).run();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
     }
     
     public static ArrayList<BaseModel> all() {
