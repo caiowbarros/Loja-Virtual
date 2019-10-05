@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.util.Pair;
 
 /**
  *
@@ -61,20 +60,31 @@ public class Inserter {
         return sb.toString();
     }
     
-    public Inserter values(Pair<String,Object>... attrs ) {
-        for(Pair<String,Object> attr : attrs) {
-            columns.add(attr.getKey());
-            Object value = attr.getValue();
-            if (value instanceof String) {
-                values.add(Inflector.toQuotedString(String.valueOf(value)));
-            } else if (value == null) {
-                values.add("NULL");
-            } else {
-                values.add(String.valueOf(value));
-            }
-            this.attrs.put(attr.getKey(), value);
+    public Inserter values(Map.Entry<String,Object>... attrs ) {
+        for(Map.Entry<String,Object> attr : attrs) {
+            addAttr(attr);
         }
         return this;
+    }
+    
+    public Inserter values(HashMap<String, Object> attrs) {
+        attrs.entrySet().forEach((attr) -> {
+            addAttr(attr);
+        });
+        return this;
+    }
+    
+    private void addAttr(Map.Entry<String, Object> attr) {
+        columns.add(attr.getKey());
+        Object value = attr.getValue();
+        if (value instanceof String) {
+            values.add(Inflector.toQuotedString(String.valueOf(value)));
+        } else if (value == null) {
+            values.add("NULL");
+        } else {
+            values.add(String.valueOf(value));
+        }
+        this.attrs.put(attr.getKey(), value);
     }
     
     private BaseModel model() throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
