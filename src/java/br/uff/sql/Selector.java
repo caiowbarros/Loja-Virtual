@@ -28,30 +28,31 @@ public class Selector {
     private String select;
     private final String from;
     private String where;
-    private final ArrayList<String> joins;
+    private ArrayList<String> joins;
     private String limit;
     private String offset;
-    private Class child = null;
+    private Class klass = null;
     protected Connection connection = null;
     
-    public Selector(String tableName, Connection connection, Class child) {
-        this.select = "";
+    public Selector(String tableName, Connection connection, Class klass) {
+        this.reload();
         this.from = "from " + tableName;
-        this.where = "";
-        this.joins = new ArrayList();
-        this.limit = "";
-        this.offset = "";
-        this.child = child;
+        this.klass = klass;
         this.connection = connection;
     }
     
+    protected void reload() {
+        this.where = "";
+        this.select = "";
+        this.joins = new ArrayList();
+        this.limit = "";
+        this.offset = "";
+    }
+    
     public ArrayList<BaseModel> run() {
-
         ArrayList<BaseModel> models = new ArrayList();
         try {
-            String b = this.build();
-
-            PreparedStatement statement = connection.prepareStatement(b);
+            PreparedStatement statement = connection.prepareStatement(this.build());
             ResultSet result = statement.executeQuery();
             while(result.next()) {
                 ResultSetMetaData meta = result.getMetaData();
@@ -61,7 +62,7 @@ public class Selector {
                     String col_name = meta.getColumnName(i);
                     persitedAttrs.put(col_name, result.getObject(col_name));
                 }
-                Constructor<BaseModel> constructor = child.getConstructor(Map.class);
+                Constructor<BaseModel> constructor = klass.getConstructor(Map.class);
                 models.add(constructor.newInstance(persitedAttrs));
             }
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | NoSuchMethodException ex) {
@@ -69,6 +70,7 @@ public class Selector {
         } catch (SQLException ex) {
             Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.reload();
         return models;
     }
     

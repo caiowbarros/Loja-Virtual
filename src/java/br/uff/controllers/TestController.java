@@ -5,7 +5,6 @@
  */
 package br.uff.controllers;
 
-import br.uff.exceptions.RecordNotPersisted;
 import br.uff.models.User;
 import java.io.IOException;
 import java.sql.SQLException;

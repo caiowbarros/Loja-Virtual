@@ -17,8 +17,8 @@ import java.util.ArrayList;
  * @author felipe
  */
 public class Counter extends Selector {
-    public Counter(String tableName, Connection connection, Class child) {
-        super(tableName, connection, child);
+    public Counter(String tableName, Connection connection, Class klass) {
+        super(tableName, connection, klass);
         super.select("count(*) as c");
     }
     
@@ -35,7 +35,8 @@ public class Counter extends Selector {
     public int count() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(super.build());
         ResultSet result = statement.executeQuery();
-        if (result.next()) return result.getInt("c");
-        return 0;
+        if (!result.next()) return 0;
+        super.reload();
+        return result.getInt("c");
     }
 }
