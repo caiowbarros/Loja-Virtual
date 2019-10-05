@@ -1,4 +1,5 @@
 /dist/
-*web/WEB-INF/.
+/build/**/*
+/web/WEB-INF/**/*
 !web/WEB-INF/.gitkeep
 
