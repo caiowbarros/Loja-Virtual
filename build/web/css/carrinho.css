@@ -1,0 +1,157 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03/10/2019, 01:48:52
+    Author     : Caio
+*/
+
+.transparent {
+    color: transparent;
+}
+
+.cart-title {
+    margin-left: 5%;
+    position: absolute;
+    margin-top: 57px;
+    
+}
+
+.cart-column {
+    display: flex;
+    margin: 50px 5% 0px 5%;
+    width: 90%;
+    color: #aaa;
+    justify-content: space-between;
+}
+
+.cart-product {
+    display: flex;
+    margin: 15px 5%;
+    border-top: 1px solid #E1E8EE;
+    width: 90%;
+    justify-content: space-between;
+}
+
+.cart-img {
+    margin-top: 15px;
+    width: 100px;
+}
+
+.cart-img img {
+    width: 150px;
+    height: 150px;
+}
+
+.cart-details {
+    margin-top: 15px;
+    width: 500px;
+}
+
+.cart-name {
+    font-weight: 600;
+}
+
+.cart-desc {
+    font-size: 14px;
+    text-align: justify;
+}
+
+.cart-price {
+    margin-top: 15px;
+}
+
+.cart-qnt {
+    margin-top: 15px;
+}
+
+.cart-qnt select {
+    width: 40px;
+}
+
+.cart-remove {
+    margin-top: 15px;
+}
+
+.cart-remove-btn {
+    background-color: #358ED7;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 3px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.cart-remove-btn:hover {
+    background-color: #5264AE;
+}
+
+.cart-total {
+    margin-top: 15px;
+}
+
+.total-finalize {
+    border-top: 1px solid #E1E8EE;
+    width: 90%;
+    margin: 15px 5%;
+}
+
+.total-item {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.total-item label {
+    color: #aaa;
+    margin-right: 100px;
+}
+
+.total-item p {
+    margin-right: auto;
+}
+
+.total-ship {
+    margin-left: 27px;
+}
+
+.total-keep {
+    background-color: #358ED7;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 30px;
+    border: none;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: all .5s;
+    margin-bottom: 50px;
+}
+
+.total-keep:hover {
+    background-color: #64af3d;
+}
+
+.total-checkout {
+    background-color: #358ED7;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 30px;
+    border: none;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: all .5s;
+    margin-left: 20px;
+    margin-bottom: 50px;
+}
+
+.total-checkout:hover {
+    background-color: #64af3d;
+}
