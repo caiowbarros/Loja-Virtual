@@ -37,12 +37,12 @@ public class Selector {
     public Selector(String tableName, Connection connection, Class klass) {
         this.reload();
         this.from = "from " + tableName;
-        this.where = "";
         this.klass = klass;
         this.connection = connection;
     }
     
     protected void reload() {
+        this.where = "";
         this.select = "";
         this.joins = new ArrayList();
         this.limit = "";
