@@ -10,6 +10,7 @@ import br.uff.exceptions.RecordNotPersisted;
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
 import br.uff.sql.Counter;
+import br.uff.sql.Getter;
 import br.uff.sql.Selector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +36,7 @@ public class BaseModel {
     private static Connection connection = null;
     private static String tableName = null;
     protected final Evaluator evaluator;
+    private static final Getter getter = new Getter(tableName, connection, child);
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
@@ -200,42 +202,37 @@ public class BaseModel {
     }
     
     public static ArrayList<BaseModel> all() {
-        return selector().run();
+        return select().run();
     }
     
     public static BaseModel find(int id) throws SQLException {
-        ArrayList<BaseModel> result = selector().where("id = " + id).run();
+        ArrayList<BaseModel> result = getter.select().where("id = " + id).run();
         return result.get(0);
     }
     
-    public static Selector select() {
-        return selector();
-    }
-    
-    public static Selector select(String sl) {
-        return selector().select(sl);
-    }
-    
     public static BaseModel findBy(String condition) throws SQLException {
-        BaseModel response = selector().where(condition).limit(1).run().get(0);
+        BaseModel response = select().where(condition).limit(1).run().get(0);
         return response;
     }
     
+    /*
+    * Delegated Methods
+    */
+    public static Selector select() {
+        return getter.select();
+    }
+    
+    public static Selector select(String str) {
+        return getter.select(str);
+    }
+    
     public static int count() throws SQLException {
-        return counter().count();
+        return getter.count();
     }
     
     private static String getTableName() {
         String table = child.getSimpleName();
         table = Character.toLowerCase(table.charAt(0)) + table.substring(1);
         return table + "s";
-    }
-    
-    private static Selector selector() {
-        return new Selector(tableName, connection, child);
-    }
-    
-    private static Counter counter() {
-        return new Counter(tableName, connection, child);
     }
 }

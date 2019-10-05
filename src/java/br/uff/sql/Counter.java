@@ -35,7 +35,8 @@ public class Counter extends Selector {
     public int count() throws SQLException {
         PreparedStatement statement = connection.prepareStatement(super.build());
         ResultSet result = statement.executeQuery();
-        if (result.next()) return result.getInt("c");
-        return 0;
+        if (!result.next()) return 0;
+        super.reload();
+        return result.getInt("c");
     }
 }
