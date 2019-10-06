@@ -1,0 +1,159 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 04/10/2019, 20:27:45
+    Author     : Caio
+*/
+
+.confirma-container {
+    width: 60%;
+    margin: 50px 20%;
+    display: flex;
+}
+
+.left-confirma {
+    width: 65%;
+    margin-right: 20px;
+}
+
+.left-confirma h2 {
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.confirma-end {
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+}
+
+.confirma-novoend {
+    margin: 20px 0px 5px 5px;
+}
+
+.confirma-novoend a {
+    text-decoration: none;
+    color: #226EBB;
+}
+
+.confirma-novoend a:hover {
+    color: #358ED7;
+}
+
+.confirma-radio {
+    border-top: 1px solid #E1E8EE;
+    border-bottom: 1px solid #E1E8EE;
+    display: flex;
+    align-items: center;
+}
+
+.radio-container {
+    margin-right: 475px;
+    align-items: center;
+    display: flex;
+    width: 0px;
+}
+
+.radio-container input {
+    margin: 20px 5px;
+    cursor: pointer;
+}
+
+.radio-container input:checked ~ .confirma-radio {
+    background-color: #ccc;
+}
+
+.confirma-radio a {
+    float: left;
+    font-size: 14px;
+    text-decoration: none;
+    color: #226EBB;
+    margin-left: 75px;
+}
+
+.radio-label {
+    position: absolute;
+    margin-left: 25px;
+}
+
+.confirma-radio a:hover {
+    color: #358ED7;
+}
+
+.confirma-compra {
+    margin: 20px 0px 0px 5px;
+    background-color: #358ED7;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 30px;
+    border: none;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.confirma-compra:hover {
+    background-color: #64af3d;
+}
+
+.right-confirma {
+    width: 35%;
+    margin-left: 20px;
+    background-color: #EBEBEB;
+}
+
+.right-confirma h2 {
+    text-transform: uppercase;
+    margin: 20px 0px 20px 10px;
+    font-size: 20px;
+}
+
+.detalhe-carrinho {
+    margin: 0px 10px 20px 10px;
+    background-color: white;
+}
+
+.detalhe-valor {
+    padding: 10px;
+}
+
+.detalhe-item {
+    display: flex;
+    padding: 10px 0px 10px 0px;
+    border-bottom: 1px solid #E1E8EE;
+    justify-content: space-between;
+}
+
+.detalhe-produto {
+    display: flex;
+    margin: 15px 0px 15px 0px;
+    border-bottom: 1px solid #E1E8EE;
+}
+
+.detalhe-img img {
+    width: 75px;
+    height: 75px;
+}
+
+.detalhe-nome {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.detalhe-voltar {
+    text-align: center;
+}
+
+.detalhe-voltar a {
+    text-decoration: none;
+    color: #226EBB;
+    font-size: 15px;
+}
+
+.detalhe-voltar a:hover {
+    color: #358ED7;
+}
