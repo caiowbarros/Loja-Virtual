@@ -58,8 +58,10 @@ public class ProdutosController extends HttpServlet {
 
             // verifica acoes
             if ("ant".equals(action)) {
-                ProdutosPag = ProdutosPag - 1;
-                session.setAttribute("ProdutosPag", ProdutosPag);
+                if (ProdutosPag > 0) {
+                    ProdutosPag = ProdutosPag - 1;
+                    session.setAttribute("ProdutosPag", ProdutosPag);
+                }
             } else if ("prox".equals(action)) {
                 ProdutosPag = ProdutosPag + 1;
                 session.setAttribute("ProdutosPag", ProdutosPag);
