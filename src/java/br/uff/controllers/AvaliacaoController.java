@@ -35,6 +35,11 @@ public class AvaliacaoController extends HttpServlet {
             // pega sessao
             HttpSession session = request.getSession();
 
+            // seta produtoId na sessao se estiver passado por parametro antes de verificar login
+            if (request.getParameter("produtoId") != null) {
+                session.setAttribute("produtoId", request.getParameter("produtoId"));
+            }
+
             // se n tem usuario logado manda p controller de user
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=AvaliacaoController");
