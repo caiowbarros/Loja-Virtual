@@ -139,7 +139,7 @@ public class BaseModel {
         }
     }
     
-    public static ArrayList<BaseModel> all() {
+    public static ArrayList<BaseModel> all() throws SQLException {
         return select().run();
     }
     

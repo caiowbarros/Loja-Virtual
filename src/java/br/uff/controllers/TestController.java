@@ -5,9 +5,12 @@
  */
 package br.uff.controllers;
 
+import br.uff.models.BaseModel;
+import br.uff.models.Role;
 import br.uff.models.User;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -28,12 +31,14 @@ public class TestController extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         User.connect();
+        Role.connect();
     }
     
     @Override
     public void destroy() {
         try {
             User.disconnect();
+            Role.disconnect();
         } catch (SQLException ex) {
             Logger.getLogger(TestController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,8 +58,10 @@ public class TestController extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             
-            User user = (User) User.findBy("email = 'admin@admin.com'");
-            
+            User user = (User) User.all().get(0);
+            ArrayList<BaseModel> roles = Role.all();
+            request.setAttribute("user", user);
+            request.setAttribute("roles", roles);
             RequestDispatcher view = request.getRequestDispatcher("/test.jsp");
             view.forward(request, response);
         } catch (SQLException ex) {

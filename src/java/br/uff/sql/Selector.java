@@ -49,7 +49,7 @@ public class Selector {
         this.offset = "";
     }
     
-    public ArrayList<BaseModel> run() {
+    public ArrayList<BaseModel> run() throws SQLException {
         ArrayList<BaseModel> models = new ArrayList();
         try {
             PreparedStatement statement = connection.prepareStatement(this.build());
@@ -67,8 +67,6 @@ public class Selector {
             }
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | NoSuchMethodException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.reload();
         return models;
