@@ -144,13 +144,15 @@ public class BaseModel {
     }
     
     public static BaseModel find(int id) throws SQLException {
-        ArrayList<BaseModel> result = select().where("id = " + id).run();
-        return result.get(0);
+        ArrayList<BaseModel> queryResults = select().where("id = " + id).run();
+        if(queryResults.isEmpty()) return null;
+        return queryResults.get(0);
     }
     
     public static BaseModel findBy(String condition) throws SQLException {
-        BaseModel response = select().where(condition).limit(1).run().get(0);
-        return response;
+        ArrayList<BaseModel> queryResults = select().where(condition).limit(1).run();
+        if(queryResults.isEmpty()) return null;
+        return queryResults.get(0);
     }
     
     /*
