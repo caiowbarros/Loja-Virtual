@@ -34,11 +34,11 @@ public class Selector {
     private Class klass = null;
     protected Connection connection = null;
     
-    public Selector(String tableName, Connection connection, Class klass) {
+    public Selector(String tableName, Class klass) {
         this.reload();
         this.from = "from " + tableName;
         this.klass = klass;
-        this.connection = connection;
+        this.connection = ConnectionManager.getConnection();
     }
     
     protected void reload() {
@@ -49,7 +49,7 @@ public class Selector {
         this.offset = "";
     }
     
-    public ArrayList<BaseModel> run() {
+    public ArrayList<BaseModel> run() throws SQLException {
         ArrayList<BaseModel> models = new ArrayList();
         try {
             PreparedStatement statement = connection.prepareStatement(this.build());
@@ -67,8 +67,6 @@ public class Selector {
             }
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | NoSuchMethodException ex) {
             Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.reload();
         return models;

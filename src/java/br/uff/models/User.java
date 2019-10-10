@@ -28,13 +28,6 @@ public class User extends BaseModel {
     public User(Map<String, Object> attrs) {
         super(attrs);
     }
-
-    /**
-     * Override inherited method
-     */
-    public static void connect() {
-        connect(User.class);
-    }
     
     public int getId() {
         return this.id;

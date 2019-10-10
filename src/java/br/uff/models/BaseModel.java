@@ -7,6 +7,7 @@ package br.uff.models;
 
 import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
+import br.uff.sql.ConnectionManager;
 import br.uff.sql.Destroyer;
 import br.uff.sql.SqlManager;
 import br.uff.sql.Inserter;
@@ -28,11 +29,7 @@ import java.util.logging.Logger;
  * @author felipe
  */
 public class BaseModel {
-    private static Class child = null;
-    private static Connection connection = null;
-    private static String tableName = null;
     protected final Evaluator evaluator;
-    private static SqlManager query;
     
     public BaseModel(){
         this.evaluator = new Evaluator(this);
@@ -41,26 +38,6 @@ public class BaseModel {
     public BaseModel(Map<String, Object> attrs) {
         this.evaluator = new Evaluator(this);
         this.evaluator.initialize(attrs);
-    }
-    
-    public static Connection connect(Class klass) {
-        
-        if (connection != null) return connection;
-        try {
-            child = klass;
-            tableName = Inflector.classToTable(child);
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
-            query = new SqlManager(tableName, connection, child);
-             return connection;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    public static void disconnect() throws SQLException {
-        connection.close();
     }
     
     public Object getAttribute(String attr) {
@@ -90,93 +67,5 @@ public class BaseModel {
             } 
         }
         return attrs;
-    }
-    
-    public boolean save() {
-        Object id = this.getAttribute("id");
-        if (id == null) return commit(this);
-        return commitUpdate(this);
-    }
-    public static boolean commit(BaseModel model) {
-        HashMap<String, Object> attrs = model.getAttributes();
-        try {
-            insert().values(attrs).run();
-            return true;
-        } catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    
-    public static boolean commit(HashMap<String, Object> attrs) {
-        try {
-            insert().values(attrs).run();
-            return true;
-        } catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    
-    public static boolean commitUpdate(BaseModel model) {
-        HashMap<String, Object> attrs = model.getAttributes();
-        try {
-            update().set(attrs).run();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    
-    public static boolean commitUpdate(HashMap<String, Object> attrs) {
-        try {
-            update().set(attrs).run();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    
-    public static ArrayList<BaseModel> all() {
-        return select().run();
-    }
-    
-    public static BaseModel find(int id) throws SQLException {
-        ArrayList<BaseModel> result = select().where("id = " + id).run();
-        return result.get(0);
-    }
-    
-    public static BaseModel findBy(String condition) throws SQLException {
-        BaseModel response = select().where(condition).limit(1).run().get(0);
-        return response;
-    }
-    
-    /*
-    * Delegated Methods
-    */
-    public static Selector select() {
-        return query.select();
-    }
-    
-    public static Selector select(String str) {
-        return query.select(str);
-    }
-    
-    public static int count() throws SQLException {
-        return query.count();
-    }
-    
-    public static Inserter insert() {
-        return query.insert();
-    }
-    
-    public static Updater update() {
-        return query.update();
-    }
-    
-    public static Destroyer delete() {
-        return query.delete();
     }
 }

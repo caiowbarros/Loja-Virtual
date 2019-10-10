@@ -5,7 +5,7 @@
  */
 package br.uff.sql;
 
-import java.sql.Connection;
+import br.uff.mutators.Inflector;
 import java.sql.SQLException;
 
 /**
@@ -13,14 +13,15 @@ import java.sql.SQLException;
  * @author felipe
  */
 public class SqlManager {
-    private Getter getter;
-    private Setter setter;
-    private Destroyer destroyer;
+    private final Getter getter;
+    private final Setter setter;
+    private final Destroyer destroyer;
     
-    public SqlManager(String tableName, Connection connection, Class klass) {
-        getter = new Getter(tableName, connection, klass);
-        setter = new Setter(tableName, connection, klass);
-        destroyer = new Destroyer(tableName, connection);
+    public SqlManager(Class klass) {
+        String tableName = Inflector.classToTable(klass);
+        getter = new Getter(tableName, klass);
+        setter = new Setter(tableName, klass);
+        destroyer = new Destroyer(tableName);
     }
     
     public Selector select() {
