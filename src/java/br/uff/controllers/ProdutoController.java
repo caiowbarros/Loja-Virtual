@@ -5,16 +5,15 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Base64;
 
 /**
  *
@@ -86,7 +85,27 @@ public class ProdutoController extends HttpServlet {
                     // verifica acoes
                     if ("grava".equals(action)) {
                         // grava alteracoes do session.getAttribute("produtoId") SE USUARIO FOR ADM
-                        request.setAttribute("msg", "Produto gravado com sucesso!");
+                        String name = request.getParameter("name");
+                        String price = request.getParameter("price");
+                        String description = request.getParameter("description");
+                        String img = request.getParameter("src");
+                        String categoryId = request.getParameter("categoryId");
+
+                        if (session.getAttribute("userRole").equals("1")) {
+                            MySql db = null;
+                            try {
+                                db = new MySql("test", "root", "");
+                                String[] bind = {name, price, description, img, categoryId};
+                                db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
+                                request.setAttribute("msg", "Produto gravado com sucesso!");
+                            } catch (ClassNotFoundException | SQLException e) {
+                                request.setAttribute("msg", "Falha ao gravar produto: " + e.getMessage());
+                            } finally {
+                                db.destroyDb();
+                            }
+                        } else {
+                            request.setAttribute("msg", "Ação não permitida!");
+                        }
                         // manda p pag d produto
                         request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
                         return;
@@ -102,7 +121,8 @@ public class ProdutoController extends HttpServlet {
             }
             response.sendRedirect("ProdutosController");
         } catch (Exception ex) {
-            response.sendRedirect("ProdutosController");
+            request.setAttribute("msg", ex.getMessage());
+            request.getRequestDispatcher("ProdutosController").forward(request, response);
             return;
         }
     }

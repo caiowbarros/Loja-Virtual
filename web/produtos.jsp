@@ -6,6 +6,12 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
+<%
+    // mostra se tiver msg
+    if (request.getAttribute("msg") != null) {
+        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    }
+%>
 <div>
     <fieldset>
         <legend>filter</legend>

@@ -55,7 +55,7 @@ public class DaoExample extends HttpServlet {
                     db.dbGrava("INSERT INTO ROLES (NAME) VALUES (?)", bindGrava);
                     out.println("gravacao ok");
                 } catch (SQLException e) {
-                    out.println("gravacao err");
+                    out.println("gravacao err: " + e.getMessage());
                 }
 
                 ResultSet result = db.dbCarrega("SELECT * FROM ROLES", null);
