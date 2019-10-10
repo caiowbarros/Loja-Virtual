@@ -28,11 +28,11 @@ public class Inserter {
     private ArrayList<String> values;
     private HashMap<String, Object> attrs;
     
-    public Inserter(String tableName, Connection connection, Class klass) {
+    public Inserter(String tableName, Class klass) {
         this.reload();
         this.insert = "insert into" + tableName;
         this.klass = klass;
-        this.connection = connection;
+        this.connection = ConnectionManager.getConnection();
     }
     
     protected void reload() {

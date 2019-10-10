@@ -34,11 +34,11 @@ public class Selector {
     private Class klass = null;
     protected Connection connection = null;
     
-    public Selector(String tableName, Connection connection, Class klass) {
+    public Selector(String tableName, Class klass) {
         this.reload();
         this.from = "from " + tableName;
         this.klass = klass;
-        this.connection = connection;
+        this.connection = ConnectionManager.getConnection();
     }
     
     protected void reload() {

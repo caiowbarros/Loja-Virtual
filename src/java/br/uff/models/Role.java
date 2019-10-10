@@ -5,7 +5,6 @@
  */
 package br.uff.models;
 
-import static br.uff.models.BaseModel.connect;
 import java.util.Map;
 
 /**
@@ -23,13 +22,6 @@ public class Role extends BaseModel {
     
     public Role(Map<String, Object> attrs) {
         super(attrs);
-    }
-
-    /**
-     * Override inherited method
-     */
-    public static void connect() {
-        connect(Role.class);
     }
     
     public int getId() {

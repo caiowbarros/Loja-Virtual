@@ -18,9 +18,9 @@ public class Destroyer {
     private final String delete;
     private String where;
     
-    public Destroyer(String tableName, Connection connection) {
+    public Destroyer(String tableName) {
         this.reload();
-        this.connection = connection;
+        this.connection = ConnectionManager.getConnection();
         this.delete = "delete from" + tableName;
     }
     
