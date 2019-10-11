@@ -4,7 +4,6 @@
     Author     : HP
 --%>
 <%@page import="br.uff.models.Product"%>
-<%@page import="br.uff.dao.Components"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
     if (!session.getAttribute("userRole").equals("1")) {
@@ -24,6 +23,8 @@
         response.sendRedirect("ProdutoAdmController");
         return;
     }
+
+    String sel = request.getParameter("sel");
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -32,34 +33,38 @@
 <form method="post" action="ProdutoAdmController">
     <button name="action" formnovalidate value="unsel">Voltar</button>
     <fieldset>
-        <legend>product</legend>
-        <input value="${produto.getName()}" name="name" required type="text" placeholder="name" maxlength="255"/>
-        <input value="${produto.getPrice()}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
-        <input value="${produto.getDescription()}" name="description" required type="text" placeholder="description" maxlength="255" />
-        <jsp:include page="partials/components/select.jsp">
+        <legend>Produto</legend>
+        <label>Nome:&nbsp;</label><input value="${produto.getName()}" name="name" required type="text" placeholder="name" maxlength="255"/>
+        <br>
+        <label>Preço:&nbsp;</label><input value="${produto.getPrice()}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
+        <br>
+        <label>Descrição:&nbsp;</label><textarea name="description" required placeholder="description" maxlength="255">${produto.getDescription()}</textarea>
+        <br>
+        <label>Categoria:&nbsp;</label><jsp:include page="partials/components/select.jsp">
             <jsp:param name="nameSelect" value="categoryId"/>
             <jsp:param name="required" value="1"/>
             <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
             <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
         </jsp:include>
-        <input name="img" id="img" accept="image/*" <% if (request.getParameter("sel").equals("")) { %>required<% }%> type="file"/>
+        <br>
+        <label>Imagem:&nbsp;</label><input name="img" id="img" accept="image/*" <% if (sel.equals("")) { %>required<% }%> type="file"/>
+        <br>
         <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
-        <input name="quantity" required readonly type="text" value="${produto.getQuantity()}"/>
-        <% if (!request.getParameter("sel").equals("")) { %>
+        <button type="submit" name="action" value="grava">Gravar</button>
+        <% if (!sel.equals("")) { %>
         <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;">Apagar</button>
         <% }%>
-        <button type="submit" name="action" value="grava">Gravar</button>
     </fieldset>
 </form>
 <fieldset>
     <legend>Previa da Imagem</legend>
     <img style="width: 100px;height:auto" id="prev"/>
 </fieldset>
-<% if (!request.getParameter("sel").equals("")) { %>
+<% if (!sel.equals("")) { %>
 <form action="ProdutoAdmController" method="post">
     <fieldset>
         <legend>Incrementar Unidades do Produto no Estoque</legend>
-        <input name="quantity" min="1" required type="number" placeholder="Quantidade a entrar no estoque" maxlength="11">
+        <label>Quantidade a entrar no estoque:&nbsp;</label><input name="quantity" min="1" required type="number" placeholder="Quantidade a entrar no estoque" maxlength="11">
         <button type="submit" name="action" value="estoqueInsere">Inserir</button>
     </fieldset>
 </form>
