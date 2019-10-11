@@ -9,11 +9,13 @@
 <%
     // se n usuario n for adm retorna p ProdutosController
     if (!session.getAttribute("userRole").equals("1")) {
-        response.sendRedirect("UserController?redirect=ProdutosController");
+        response.sendRedirect("UserController");
     }
     // mostra se tiver msg
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
 %>
 <!-- Header -->
@@ -42,9 +44,7 @@
         %>
         <tr>
             <th>
-                <a href="ProdutoController?sel=<%= ret.getString("ID")%>">Selecionar</a>
-                &nbsp;|&nbsp;
-                <a onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;" href="ProdutoController?del=<%= ret.getString("ID")%>">Excluir</a>                
+                <a href="ProdutoAdmController?sel=<%= ret.getString("ID")%>">Selecionar</a>             
             </th>
             <th><%= ret.getString("name")%></th>
             <th>R$<%= ret.getString("price")%></th>
@@ -61,8 +61,13 @@
         }
     %>
 </tbody>
+<tfoot>
+    <tr>
+        <th colspan="4">
+            <a href="ProdutoAdmController?sel">Incluir</a>
+        </th>
+    </tr>
+</tfoot>
 </table>
-<!-- SE N FOR PRODUTO NOVO MOSTRA INCLUIR -->
-<a href="ProdutoController?sel">Incluir</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

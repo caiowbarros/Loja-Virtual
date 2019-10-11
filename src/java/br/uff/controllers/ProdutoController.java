@@ -5,9 +5,7 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,9 +30,9 @@ public class ProdutoController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // pega sessao
+        HttpSession session = request.getSession();
         try {
-            // pega sessao
-            HttpSession session = request.getSession();
 
             // se tem produto selecionado manda p pag d produto
             if (request.getParameter("produtoId") != null) {
@@ -43,85 +41,25 @@ public class ProdutoController extends HttpServlet {
                 return;
             }
 
-            // se n tem usuario logado manda p controller de user
+            // VERIFICA SE ESTA LOGADO
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=ProdutoController");
                 return;
-            }
-
-            if (request.getParameter("fav") != null) {
-                // favorita produto request.getParameter("fav")
-                request.setAttribute("msg", "Produto favoritado com sucesso!");
-                request.getRequestDispatcher("produto.jsp").forward(request, response);
-                return;
-            }
-
-            // opcoes restritas a usuario ADM
-            if (session.getAttribute("userRole").toString().equals("1")) {
-                if (request.getParameter("sel") != null) {
-                    // seleciona produtoId da sessao SE USUARIO FOR ADM
-                    session.setAttribute("produtoId", request.getParameter("sel"));
-                } else if (request.getParameter("unsel") != null) {
-                    // apaga produtoId da sessao SE USUARIO FOR ADM
-                    session.setAttribute("produtoId", null);
-                } else if (request.getParameter("del") != null) {
-                    // exclui produto do id request.getParameter("del") SE USUARIO FOR ADM
-                    request.setAttribute("msg", "Produto deletado com sucesso!");
-                } else if (request.getParameter("qtdEstoque") != null) {
-                    // SE USUARIO FOR ADM vai p pag de incrementar qtd de estoques
-                    request.getRequestDispatcher("produto-incrementa.jsp").forward(request, response);
-                    return;
+            } else {
+                // checa se eh para favoritar ou desfavoritar produto
+                if (request.getParameter("fav") != null) {
+                    // favorita produto request.getParameter("fav")
+                    session.setAttribute("msg", "Produto favoritado com sucesso!");
+                } else if (request.getParameter("unfav") != null) {
+                    // favorita produto request.getParameter("fav")
+                    session.setAttribute("msg", "Produto desfavoritado com sucesso!");
                 }
-
-                // se tem produtoId definido mostra cadastro caso contrario mostra grid SE USUARIO FOR ADM
-                if (session.getAttribute("produtoId") == null) {
-                    request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
-                    return;
-                } else {
-
-                    // recupera acao solicitada se existir
-                    String action = request.getParameter("action");
-
-                    // verifica acoes
-                    if ("grava".equals(action)) {
-                        // grava alteracoes do session.getAttribute("produtoId") SE USUARIO FOR ADM
-                        String name = request.getParameter("name");
-                        String price = request.getParameter("price");
-                        String description = request.getParameter("description");
-                        String img = request.getParameter("src");
-                        String categoryId = request.getParameter("categoryId");
-
-                        if (session.getAttribute("userRole").equals("1")) {
-                            MySql db = null;
-                            try {
-                                db = new MySql("test", "root", "");
-                                String[] bind = {name, price, description, img, categoryId};
-                                db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
-                                request.setAttribute("msg", "Produto gravado com sucesso!");
-                            } catch (ClassNotFoundException | SQLException e) {
-                                request.setAttribute("msg", "Falha ao gravar produto: " + e.getMessage());
-                            } finally {
-                                db.destroyDb();
-                            }
-                        } else {
-                            request.setAttribute("msg", "Ação não permitida!");
-                        }
-                        // manda p pag d produto
-                        request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
-                        return;
-                    } else if ("estoqueInsere".equals(action)) {
-                        // aumenta qtd em estoque do produto do session.getAttribute("produtoId") SE USUARIO FOR ADM
-                        request.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
-                    }
-
-                    request.getRequestDispatcher("produto-cadastro.jsp").forward(request, response);
-                    return;
-                }
-
             }
-            response.sendRedirect("ProdutosController");
+            
+            request.getRequestDispatcher("produto.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
-            request.setAttribute("msg", ex.getMessage());
+            session.setAttribute("msg", ex.getMessage());
             request.getRequestDispatcher("ProdutosController").forward(request, response);
             return;
         }

@@ -14,10 +14,10 @@ import java.sql.SQLException;
  */
 public class Components {
 
-    public String mostraSelect(String nameSelect, boolean required, String consulta, String[] bind, String selectedValue) throws SQLException {
+    public String mostraSelect(String nameSelect, boolean required, String consulta, String[] bind, String selectedValue, String cssclass, String style) throws SQLException {
         MySql db = null;
         String html = null;
-        html = "<select name=\"" + nameSelect + "\" " + (required == true ? " required " : "") + ">";
+        html = "<select style=\"" + style + "\" class=\"" + nameSelect + "\" name=\"" + nameSelect + "\" " + (required == true ? " required " : "") + ">";
         try {
             db = new MySql("test", "root", "");
             ResultSet ret = db.dbCarrega(consulta, bind);

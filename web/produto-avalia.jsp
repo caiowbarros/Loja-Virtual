@@ -6,28 +6,31 @@
 <%
     // se n tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=ProdutoController");
+        response.sendRedirect("UserController?redirect=AvaliacaoController");
     }
     // se n tiver produto selecionado retorna p pag d produtos
-    if (request.getAttribute("produtoId") == null && session.getAttribute("produtoId") == null && request.getParameter("produtoId") == null) {
+    if (session.getAttribute("produtoId") == null) {
         response.sendRedirect("ProdutosController");
     }
     // mostra msg se tiver
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
+
     // define rating
     String rating = "";
-    if (request.getParameter("rating") != null) {
-        rating = request.getParameter("rating");
+    if (session.getAttribute("rating") != null) {
+        rating = session.getAttribute("rating").toString();
     }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Avalia Produto"/>
 </jsp:include>
-<a href="ProdutoController?produtoId=<%= session.getAttribute("produtoId")%>">Voltar</a>
-<form action="AvaliacaoController?produtoId=2" method="post">
+<a href="ProdutoController">Voltar</a>
+<form action="AvaliacaoController" method="post">
     <fieldset>
         <legend>Avaliação</legend>
         <!-- Avaliação do produto (em estrelas) -->

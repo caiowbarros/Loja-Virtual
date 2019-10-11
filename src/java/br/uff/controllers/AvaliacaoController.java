@@ -5,8 +5,10 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,13 +33,18 @@ public class AvaliacaoController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // pega sessao
+        HttpSession session = request.getSession();
         try {
-            // pega sessao
-            HttpSession session = request.getSession();
 
             // seta produtoId na sessao se estiver passado por parametro antes de verificar login
             if (request.getParameter("produtoId") != null) {
                 session.setAttribute("produtoId", request.getParameter("produtoId"));
+            }
+
+            // seta rating na sessao se estiver passado por parametro antes de verificar login
+            if (request.getParameter("rating") != null) {
+                session.setAttribute("rating", request.getParameter("rating"));
             }
 
             // se n tem usuario logado manda p controller de user
@@ -46,34 +53,49 @@ public class AvaliacaoController extends HttpServlet {
                 return;
             }
 
-            // verifica p ver se tem algum produtoId definido se n tiver, vai p pag d produtos, se tiver define produtoId
-            String produtoId = "";
-            if (session.getAttribute("produtoId") == null) {
+            String produtoId = null;
+            if (session.getAttribute("produtoId") != null) {
+                produtoId = session.getAttribute("produtoId").toString();
+            } else {
+                session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("ProdutosController");
                 return;
-            } else {
-                produtoId = session.getAttribute("produtoId").toString();
             }
-
-            // define atributos
-            request.setAttribute("rating", request.getParameter("rating"));
 
             // recupera acao solicitada se existir
             String action = request.getParameter("action");
 
             if ("avalia".equals(action)) {
+
                 // grava avaliacao do produto
-                // define msg a ser mostrada
-                request.setAttribute("msg", "Produto avaliado com sucesso!");
-                //redireciona de volta p pag do produto avaliado
-                request.getRequestDispatcher("ProdutoController?produtoId=" + produtoId).forward(request, response);
-                return;
+                MySql db = null;
+                try {
+                    db = new MySql("test", "root", "");
+                    //RECUPERA VALUES
+                    String userId = session.getAttribute("userId").toString();
+                    String productId = session.getAttribute("produtoId").toString();
+                    String rating = request.getParameter("rating").toString();
+                    String description = request.getParameter("description").toString();
+                    String title = request.getParameter("title").toString();
+                    String[] bind = {userId, productId, rating, description, title};
+                    db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
+                    // define msg a ser mostrada
+                    session.setAttribute("msg", "Produto avaliado com sucesso!");
+
+                    response.sendRedirect("ProdutoController");
+                    return;
+                } catch (ClassNotFoundException | SQLException e) {
+                    throw new Exception("Falha ao avaliar produto: " + e.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
             }
 
             request.getRequestDispatcher("produto-avalia.jsp").forward(request, response);
             return;
             // se der erro vai p ControllerProdutos
         } catch (Exception ex) {
+            session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");
             return;
         }

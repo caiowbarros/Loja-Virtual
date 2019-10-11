@@ -3,66 +3,40 @@
     Created on : 02/10/2019, 02:09:04
     Author     : HP
 --%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="br.uff.dao.MySql"%>
 <%@page import="br.uff.dao.Components"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
     if (!session.getAttribute("userRole").equals("1")) {
         response.sendRedirect("UserController?redirect=ProdutosController");
     }
-    // campos
-    String name = "";
-    String price = "";
-    String description = "";
-    String categoryId = "";
-    String img = "";
-    String quantity = "";
 
-    if (session.getAttribute("produtoId") != null) {
-        String produtoId = session.getAttribute("produtoId").toString();
-        MySql db = null;
-        try {
-            db = new MySql("test", "root", "");
-            String[] bind = {produtoId};
-            ResultSet ret = db.dbCarrega("SELECT * FROM products WHERE id=?", bind);
-            if (ret.next()) {
-                name = ret.getString("name");
-                price = ret.getString("price");
-                description = ret.getString("description");
-                categoryId = ret.getString("category_id");
-                img = ret.getString("img");
-                quantity = ret.getString("quantity");
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            request.setAttribute("msg", ex.getMessage());
-        } finally {
-            db.destroyDb();
-        }
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
-
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
-    }
-
+    // define componente
     Components comp = new Components();
+    String selectCategoryId = comp.mostraSelect("categoryId", true, "SELECT id value,category_name text FROM vw_category ORDER BY 2", null, "", "", "");
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Produtos"/>
 </jsp:include>
-<a href="ProdutoController?unsel">Voltar</a>
-<form method="post" action="ProdutoController">
+<form method="post" action="ProdutoAdmController">
+    <button name="action" formnovalidate value="unsel">Voltar</button>
     <fieldset>
         <legend>product</legend>
-        <input value="<%= name%>" name="name" required type="text" placeholder="name" maxlength="255"/>
-        <input value="<%= price%>" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
-        <input value="<%= description%>" name="description" required type="text" placeholder="description" maxlength="255" />
-        <%= comp.mostraSelect("categoryId", true, "SELECT c.id as `value`, c.category_name as text FROM vw_category c", null, categoryId)%>
+        <input value="${product.name}" name="name" required type="text" placeholder="name" maxlength="255"/>
+        <input value="${product.price}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
+        <input value="${product.description}" name="description" required type="text" placeholder="description" maxlength="255" />
+        <%= selectCategoryId%>
         <input name="img" id="img" accept="image/*" required type="file"/>
-        <input value="<%= img%>" style="display:none;" name="src" required readonly type="text"/>
-        <input style="display:none;" name="quantity" required readonly type="text" value="0"/>
+        <input value="${product.img}" style="display:none;" name="src" readonly type="text"/>
+        <input name="quantity" required readonly type="text" value="${product.quantity == null ? "0" : product.quantity}"/>
+        <% if (!request.getParameter("sel").equals("")) { %>
+        <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;">Apagar</button>
+        <% }%>
         <button type="submit" name="action" value="grava">Gravar</button>
     </fieldset>
 </form>
@@ -70,7 +44,15 @@
     <legend>Previa da Imagem</legend>
     <img style="width: 100px;height:auto" id="prev"/>
 </fieldset>
-<a href="ProdutoController?qtdEstoque">Add unidades no estoque</a>
+<% if (!request.getParameter("sel").equals("")) { %>
+<form action="ProdutoAdmController" method="post">
+    <fieldset>
+        <legend>Incrementar Unidades do Produto no Estoque</legend>
+        <input name="quantity" min="1" required type="number" placeholder="Quantidade a entrar no estoque" maxlength="11">
+        <button type="submit" name="action" value="estoqueInsere">Inserir</button>
+    </fieldset>
+</form>
+<% }%>
 <script>
     window.onload = function () {
         // qnd a pag esta carregada set prev
