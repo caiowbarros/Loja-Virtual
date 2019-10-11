@@ -19,8 +19,8 @@ public class MySql {
 
     Connection conn = null;
 
-    public MySql(String dataBase, String nomeUsuario, String senhaUsuario) throws SQLException, ClassNotFoundException {
-        this.initDbMySql(dataBase, nomeUsuario, senhaUsuario);
+    public MySql() throws SQLException, ClassNotFoundException {
+        this.initDbMySql("test", "root", "");
     }
 
     public void dbTransaction(String[] comandos, String[][] bind) throws SQLException {

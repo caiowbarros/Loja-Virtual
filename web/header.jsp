@@ -31,25 +31,25 @@
                 <div class="dropdown ps">
                     <button class="dropbtn">Playstation</button>
                     <div class="dropdown-content">
-                        <a href="ProdutosController?categoria=playstation&sub=consoles">Consoles</a>
-                        <a href="ProdutosController?categoria=playstation&sub=jogos">Jogos</a>
-                        <a href="ProdutosController?categoria=playstation&sub=acessorios">Acessórios</a>
+                        <a href="ProdutosController?categoryId=5">Consoles</a>
+                        <a href="ProdutosController?categoryId=6">Jogos</a>
+                        <a href="ProdutosController?categoryId=4">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="dropbtn">Xbox</button>
                     <div id="feminino" class="dropdown-content">
-                        <a href="ProdutosController?categoria=xbox&sub=consoles">Consoles</a>
-                        <a href="ProdutosController?categoria=xbox&sub=jogos">Jogos</a>
-                        <a href="ProdutosController?categoria=xbox&sub=acessorios">Acessórios</a>
+                        <a href="ProdutosController?categoryId=8">Consoles</a>
+                        <a href="ProdutosController?categoryId=9">Jogos</a>
+                        <a href="ProdutosController?categoryId=7">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown wii">
                     <button class="dropbtn">Wii</button>
                     <div id="infantil" class="dropdown-content">
-                        <a href="ProdutosController?categoria=wii&sub=consoles">Consoles</a>
-                        <a href="ProdutosController?categoria=wii&sub=jogos">Jogos</a>
-                        <a href="ProdutosController?categoria=wii&sub=acessorios">Acessórios</a>
+                        <a href="ProdutosController?categoryId=11">Consoles</a>
+                        <a href="ProdutosController?categoryId=12">Jogos</a>
+                        <a href="ProdutosController?categoryId=10">Acessórios</a>
                     </div>
                 </div>
             </div>

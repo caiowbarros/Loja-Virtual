@@ -54,7 +54,7 @@ public class ProdutoAdmController extends HttpServlet {
                         // define produto
                         MySql dbProd = null;
                         try {
-                            dbProd = new MySql("test", "root", "");
+                            dbProd = new MySql();
                             String[] bindSel = {selParameter};
                             ResultSet ret = dbProd.dbCarrega("SELECT * FROM products WHERE id=?", bindSel);
                             if (ret.next()) {
@@ -105,7 +105,7 @@ public class ProdutoAdmController extends HttpServlet {
 
                         MySql db = null;
                         try {
-                            db = new MySql("test", "root", "");
+                            db = new MySql();
                             if (sel.equals("")) {
                                 String[] bind = {name, price, description, img, categoryId};
                                 db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
@@ -124,7 +124,7 @@ public class ProdutoAdmController extends HttpServlet {
                     case "estoqueInsere": {
                         MySql db = null;
                         try {
-                            db = new MySql("test", "root", "");
+                            db = new MySql();
                             String quantity = request.getParameter("quantity");
                             String[] bindIncrease = {quantity, sel};
                             db.dbGrava("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
@@ -139,7 +139,7 @@ public class ProdutoAdmController extends HttpServlet {
                     case "del": {
                         MySql db = null;
                         try {
-                            db = new MySql("test", "root", "");
+                            db = new MySql();
                             String[] bindDel = {sel};
                             db.dbGrava("DELETE FROM products WHERE id=?", bindDel);
                             session.setAttribute("msg", "Produto deletado com sucesso!");
@@ -163,7 +163,7 @@ public class ProdutoAdmController extends HttpServlet {
             // define grid
             MySql dbGrid = null;
             try {
-                dbGrid = new MySql("test", "root", "");
+                dbGrid = new MySql();
                 ArrayList<ArrayList> grid = new ArrayList<>();
                 ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
                 while (ret.next()) {

@@ -70,7 +70,7 @@ public class AvaliacaoController extends HttpServlet {
                     // grava avaliacao do produto
                     MySql db = null;
                     try {
-                        db = new MySql("test", "root", "");
+                        db = new MySql();
                         //RECUPERA VALUES
                         String userId = session.getAttribute("userId").toString();
                         String productId = session.getAttribute("produtoId").toString();

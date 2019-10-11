@@ -70,7 +70,7 @@ public class ProdutoController extends HttpServlet {
                 } else {
                     MySql db = null;
                     try {
-                        db = new MySql("test", "root", "");
+                        db = new MySql();
                         String userId = session.getAttribute("userId").toString();
                         String[] bindFav = {produtoId, userId};
                         String count = "0";

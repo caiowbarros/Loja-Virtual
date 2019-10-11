@@ -19,7 +19,7 @@ public class Components {
         String html = null;
         html = "<select style=\"" + style + "\" class=\"" + nameSelect + "\" name=\"" + nameSelect + "\" " + (required == true ? " required " : "") + ">";
         try {
-            db = new MySql("test", "root", "");
+            db = new MySql();
             ResultSet ret = db.dbCarrega(consulta, bind);
             while (ret.next()) {
                 html += "<option value=\"" + ret.getString("value") + "\" " + (selectedValue.equals(ret.getString("value")) ? " selected " : "") + ">" + ret.getString("text") + "</option>";
