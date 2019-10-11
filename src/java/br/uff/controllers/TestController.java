@@ -5,9 +5,14 @@
  */
 package br.uff.controllers;
 
+import br.uff.models.BaseModel;
+import br.uff.models.Role;
 import br.uff.models.User;
+import br.uff.sql.ConnectionManager;
+import br.uff.sql.SqlManager;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -27,14 +32,9 @@ public class TestController extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        User.connect();
-    }
-    
-    @Override
-    public void destroy() {
         try {
-            User.disconnect();
-        } catch (SQLException ex) {
+            ConnectionManager.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TestController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -53,8 +53,10 @@ public class TestController extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             
-            User user = (User) User.findBy("email = 'admin@admin.com'");
-            
+            User user = (User) new SqlManager(User.class).select().run().get(0);
+            ArrayList<BaseModel> roles = new SqlManager(Role.class).select().run();
+            request.setAttribute("user", user);
+            request.setAttribute("roles", roles);
             RequestDispatcher view = request.getRequestDispatcher("/test.jsp");
             view.forward(request, response);
         } catch (SQLException ex) {

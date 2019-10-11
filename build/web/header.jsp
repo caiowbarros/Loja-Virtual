@@ -17,6 +17,7 @@
         <link href="css/login.css" type="text/css" rel="stylesheet">
         <link href="css/carrinho.css" type="text/css" rel="stylesheet">
         <link href="css/carrinho-confirma.css" type="text/css" rel="stylesheet">
+        <link href="css/produtos.css" type="text/css" rel="stylesheet">
     </head>
 
     <body>
@@ -56,7 +57,7 @@
                 <!-- Pesquisa -->
                 <div class="consulta-header">
                     <form id="pesquisa" method="POST" action="ProdutosController">
-                        <input type="search" placeholder="Search">
+                        <input type="search" placeholder="Search" required>
                     </form>
                 </div>
                 <!-- Minha Conta -->

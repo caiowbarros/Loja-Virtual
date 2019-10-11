@@ -23,11 +23,11 @@ public class Updater {
     private String where;
     private HashMap<String, String> attrs;
     
-    public Updater(String tableName, Connection connection, Class klass) {
+    public Updater(String tableName, Class klass) {
         this.reload();
         this.update = "update " + tableName;
         this.klass = klass;
-        this.connection = connection;
+        this.connection = ConnectionManager.getConnection();
     }
     
     private void reload() {

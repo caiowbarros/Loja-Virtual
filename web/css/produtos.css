@@ -1,0 +1,118 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10/10/2019, 19:14:35
+    Author     : Caio
+*/
+
+/* Container principal */
+.products-main {
+    display: flex;
+}
+
+/* Container dos filtros */
+.products-filter {
+    width: 15%;
+    margin: 100px 20px 50px 15px;
+}
+
+.products-item-filter {
+    border-bottom: 1px solid #E1E8EE;
+    padding: 10px 0px;
+}
+
+.products-item-filter p {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.products-item-filter input {
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+/* Container dos produtos */
+.products-page {
+    width: 80%;
+    margin: 100px 5% 50px 0px;
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.products-item {
+    margin: 0px 15px 20px 15px;
+    border: 1px solid #E1E8EE;
+}
+
+.products-item:hover {
+    border: 1px solid black;
+}
+
+.products-item a {
+    text-decoration: none;
+    color: black;
+}
+
+.products-item a img {
+    width: 225px;
+    height: 225px;
+    margin: 10px;
+}
+
+.products-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.products-details {
+    color: #666666;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.products-price {
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+/* Páginas */
+.products-paging {
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 6%;
+}
+
+.products-prev {
+    padding: 5px 10px;
+    background-color: #E1E8EE;
+    color: black;
+    border-radius: 50%;
+    -webkit-appearance: media-slider;
+    cursor: pointer;
+}
+
+.products-prev:hover {
+    background-color: #ddd;
+}
+
+.products-next {
+    padding: 5px 10px;
+    background-color: #E1E8EE;
+    color: black;
+    border-radius: 50%;
+    -webkit-appearance: media-slider;
+    cursor: pointer;
+}
+
+.products-next:hover {
+    background-color: #ddd;
+}
