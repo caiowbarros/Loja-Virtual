@@ -165,7 +165,7 @@ public class ProdutoAdmController extends HttpServlet {
             try {
                 dbGrid = new MySql("test", "root", "");
                 ArrayList<ArrayList> grid = new ArrayList<>();
-                ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name FROM products p left join vw_category c on (p.category_id=c.id)", null);
+                ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -173,6 +173,7 @@ public class ProdutoAdmController extends HttpServlet {
                     row.add(ret.getString("name"));
                     row.add(ret.getString("price"));
                     row.add(ret.getString("category_name"));
+                    row.add(ret.getString("quantity"));
                     // add row no grid
                     grid.add(row);
                 }

@@ -28,13 +28,14 @@
 <table width="100%" border="1" cellspacing="10">
     <thead>
         <tr>
-            <th colspan="4"><h2>Produtos</h2></th>
+            <th colspan="5"><h2>Produtos</h2></th>
         </tr>
         <tr>
             <th>Operações</th>
             <th>Nome</th>
             <th>Preço</th>
             <th>Categoria</th>
+            <th>Quantidade no Estoque</th>
         </tr>
     </thead>
     <tbody>
@@ -48,6 +49,7 @@
             <th><%= grid.get(i).get(1)%></th>
             <th>R$<%= grid.get(i).get(2)%></th>
             <th><%= grid.get(i).get(3)%></th>
+            <th><%= grid.get(i).get(4)%></th>
         </tr>
         <%
             }
@@ -55,7 +57,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="4">
+            <th colspan="5">
                 <a href="ProdutoAdmController?sel">Incluir</a>
             </th>
         </tr>
