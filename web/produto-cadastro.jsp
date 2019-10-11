@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 02:09:04
     Author     : HP
 --%>
+<%@page import="br.uff.models.Product"%>
 <%@page import="br.uff.dao.Components"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
@@ -15,9 +16,14 @@
         session.setAttribute("msg", null);
         out.println("<script>alert('" + msg + "');</script>");
     }
-    // define componente
-    Components comp = new Components();
-    String selectCategoryId = comp.mostraSelect("categoryId", true, "SELECT id value,category_name text FROM vw_category ORDER BY 2", null, "", "", "");
+
+    Product produto = null;
+    if (request.getAttribute("produto") != null) {
+        produto = (Product) request.getAttribute("produto");
+    } else {
+        response.sendRedirect("ProdutoAdmController");
+        return;
+    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -27,13 +33,18 @@
     <button name="action" formnovalidate value="unsel">Voltar</button>
     <fieldset>
         <legend>product</legend>
-        <input value="${product.name}" name="name" required type="text" placeholder="name" maxlength="255"/>
-        <input value="${product.price}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
-        <input value="${product.description}" name="description" required type="text" placeholder="description" maxlength="255" />
-        <%= selectCategoryId%>
+        <input value="${produto.getName()}" name="name" required type="text" placeholder="name" maxlength="255"/>
+        <input value="${produto.getPrice()}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
+        <input value="${produto.getDescription()}" name="description" required type="text" placeholder="description" maxlength="255" />
+        <jsp:include page="partials/components/select.jsp">
+            <jsp:param name="nameSelect" value="categoryId"/>
+            <jsp:param name="required" value="1"/>
+            <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
+            <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
+        </jsp:include>
         <input name="img" id="img" accept="image/*" required type="file"/>
-        <input value="${product.img}" style="display:none;" name="src" readonly type="text"/>
-        <input name="quantity" required readonly type="text" value="${product.quantity == null ? "0" : product.quantity}"/>
+        <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
+        <input name="quantity" required readonly type="text" value="${produto.getQuantity()}"/>
         <% if (!request.getParameter("sel").equals("")) { %>
         <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;">Apagar</button>
         <% }%>

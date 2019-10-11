@@ -6,10 +6,12 @@
 package br.uff.controllers;
 
 import br.uff.dao.MySql;
+import br.uff.models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -45,7 +47,36 @@ public class ProdutoAdmController extends HttpServlet {
             if (session.getAttribute("userRole").equals("1")) {
 
                 if (request.getParameter("sel") != null) {
-                    session.setAttribute("sel", request.getParameter("sel"));
+                    String selParameter = request.getParameter("sel");
+                    Product produto;
+                    produto = new Product("", "", "", "", 0, 0, "SYSDATE()");
+                    if (!selParameter.equals("")) {
+                        // define produto
+                        MySql dbProd = null;
+                        try {
+                            dbProd = new MySql("test", "root", "");
+                            String[] bindSel = {selParameter};
+                            ResultSet ret = dbProd.dbCarrega("SELECT * FROM products WHERE id=?", bindSel);
+                            if (ret.next()) {
+                                // preenche row
+                                produto.setId(ret.getInt("id"));
+                                produto.setName(ret.getString("name"));
+                                produto.setPrice(ret.getString("price"));
+                                produto.setDescription(ret.getString("description"));
+                                produto.setImg(ret.getString("img"));
+                                produto.setCategoryId(ret.getInt("category_id"));
+                                produto.setQuantity(ret.getInt("quantity"));
+                                produto.setCreatedAt(ret.getString("created_at"));
+                            }
+                        } catch (SQLException ex) {
+                            throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                        } finally {
+                            dbProd.destroyDb();
+                        }
+                    }
+                    // define atributo de produto
+                    request.setAttribute("produto", produto);
+                    session.setAttribute("sel", selParameter);
                     request.getRequestDispatcher("produto-cadastro.jsp").forward(request, response);
                     return;
                 }
@@ -129,12 +160,35 @@ public class ProdutoAdmController extends HttpServlet {
                 throw new Exception("Usuário não permitido!");
             }
 
+            // define grid
+            MySql dbGrid = null;
+            try {
+                dbGrid = new MySql("test", "root", "");
+                ArrayList<ArrayList> grid = new ArrayList<>();
+                ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name FROM products p left join vw_category c on (p.category_id=c.id)", null);
+                while (ret.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(ret.getString("id"));
+                    row.add(ret.getString("name"));
+                    row.add(ret.getString("price"));
+                    row.add(ret.getString("category_name"));
+                    // add row no grid
+                    grid.add(row);
+                }
+                request.setAttribute("grid", grid);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbGrid.destroyDb();
+            }
+
             // manda p pag de grid de produtos
             request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
             return;
         } catch (Exception e) {
             session.setAttribute("msg", e.getMessage());
-            response.sendRedirect("UserController?redirect=ProdutoAdmController");
+            response.sendRedirect("UserController");
             return;
         }
 
