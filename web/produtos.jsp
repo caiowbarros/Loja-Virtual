@@ -12,7 +12,93 @@
         out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
     }
 %>
-<div>
+
+<!-- Container principal -->
+<div class="products-main">
+
+    <!-- Container dos filtros -->
+    <div class="products-filter">
+        <!-- Filtro das categorias -->
+        <div class="products-item-filter">
+            <p>Categorias</p>
+            <input type="checkbox">Playstation<br>
+            <input type="checkbox">Xbox<br>
+            <input type="checkbox">Wii<br>
+        </div>
+        <!-- Fitro das subcategorias -->
+        <div class="products-item-filter">
+            <p>Subcategorias</p>
+            <input type="checkbox">Consoles<br>
+            <input type="checkbox">Jogos<br>
+            <input type="checkbox">Acessórios<br>
+        </div>
+        <!-- Filtro dos preços -->
+        <div class="products-item-filter">
+            <p>Preços</p>
+            <input type="range" min="1" max="1000" step="100">Min<br>
+            <input type="range" min="1" max="1000" step="100">Max<br>
+        </div>
+    </div>
+
+    <!-- Container dos produtos -->
+    <div class="products-page">
+        <div class="products-container">
+            
+            <!-- Produto -->
+            <div class="products-item">
+                <a href="produto.jsp">
+                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    <div class="products-title">FIFA 20</div>
+                    <div class="products-details">PS4 - Jogos</div>
+                    <div class="products-price">R$250,00</div>
+                </a>
+            </div>
+            
+            <!-- Produto -->
+            <div class="products-item">
+                <a href="produto.jsp">
+                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    <div class="products-title">FIFA 20</div>
+                    <div class="products-details">PS4 - Jogos</div>
+                    <div class="products-price">R$250,00</div>
+                </a>
+            </div>
+            
+            <!-- Produto -->
+            <div class="products-item">
+                <a href="produto.jsp">
+                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    <div class="products-title">FIFA 20</div>
+                    <div class="products-details">PS4 - Jogos</div>
+                    <div class="products-price">R$250,00</div>
+                </a>
+            </div>
+            
+            <!-- Produto -->
+            <div class="products-item">
+                <a href="produto.jsp">
+                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    <div class="products-title">FIFA 20</div>
+                    <div class="products-details">PS4 - Jogos</div>
+                    <div class="products-price">R$250,00</div>
+                </a>
+            </div>
+            
+        </div>
+        
+        <!-- Páginas -->
+        <div class="products-paging">
+            <form action="ProdutosController?paginacao">
+                <button class="products-prev" name="action" value="ant">&#8249;</button>
+                <span><%= session.getAttribute("ProdutosPag") %></span>
+                <button class="products-next" name="action" value="prox">&#8250;</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+<!-- <div>
     <fieldset>
         <legend>filter</legend>
         <fieldset>
@@ -51,6 +137,43 @@
                     lorem jeansum.</p>
             </div>
         </a>
+<a href="ProdutoController?produtoId=1">
+            <div class="produto">
+                <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
+                <p class="titulo-produto">Tailored Jeans</p>
+                <p class="preco-produto">$19.99</p>
+                <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
+                    jeansum. Lorem jeamsun denim
+                    lorem jeansum.</p>
+            </div>
+        </a><a href="ProdutoController?produtoId=1">
+            <div class="produto">
+                <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
+                <p class="titulo-produto">Tailored Jeans</p>
+                <p class="preco-produto">$19.99</p>
+                <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
+                    jeansum. Lorem jeamsun denim
+                    lorem jeansum.</p>
+            </div>
+        </a><a href="ProdutoController?produtoId=1">
+            <div class="produto">
+                <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
+                <p class="titulo-produto">Tailored Jeans</p>
+                <p class="preco-produto">$19.99</p>
+                <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
+                    jeansum. Lorem jeamsun denim
+                    lorem jeansum.</p>
+            </div>
+        </a><a href="ProdutoController?produtoId=1">
+            <div class="produto">
+                <img src="https://www.w3schools.com/w3images/jeans3.jpg" alt="Denim Jeans" class="imagem-produto">
+                <p class="titulo-produto">Tailored Jeans</p>
+                <p class="preco-produto">$19.99</p>
+                <p class="descricao-produto">Some text about the jeans. Super slim and comfy lorem ipsum lorem
+                    jeansum. Lorem jeamsun denim
+                    lorem jeansum.</p>
+            </div>
+        </a>
 
     </section>
 </div>
@@ -60,6 +183,6 @@
         <span><%= session.getAttribute("ProdutosPag") %></span>
         <button name="action" value="prox">Próxima Página</button>
     </form>
-</div>
+</div> -->
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
