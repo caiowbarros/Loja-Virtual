@@ -42,7 +42,7 @@
             <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
             <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
         </jsp:include>
-        <input name="img" id="img" accept="image/*" required type="file"/>
+        <input name="img" id="img" accept="image/*" <% if (request.getParameter("sel").equals("")) { %>required<% }%> type="file"/>
         <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
         <input name="quantity" required readonly type="text" value="${produto.getQuantity()}"/>
         <% if (!request.getParameter("sel").equals("")) { %>
