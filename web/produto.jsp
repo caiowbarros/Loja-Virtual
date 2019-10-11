@@ -6,21 +6,17 @@
 <%
     // recupera produtoId
     String produtoId = "";
-    if (request.getParameter("produtoId") != null) {
-        session.setAttribute("produtoId", request.getParameter("produtoId"));
-        produtoId = request.getParameter("produtoId").toString();
-    } else if (session.getAttribute("produtoId") != null) {
+    if (session.getAttribute("produtoId") != null) {
         produtoId = session.getAttribute("produtoId").toString();
-    } else if (request.getAttribute("produtoId") != null) {
-        produtoId = request.getAttribute("produtoId").toString();
+    } else {
+        response.sendRedirect("ProdutoController");
     }
-    // se produtoId for igual a string vazia retorna p ProdutosController
-    if ("".equals(produtoId)) {
-        response.sendRedirect("ProdutosController");
-    }
+    
     // mostra msg se tiver
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
 %>
 <!-- Header -->
@@ -59,7 +55,7 @@
             <label for="star5" title="text"></label>
             <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=4'" type="radio" id="star4" name="rate" value="4" />
             <label for="star4" title="text"></label>
-            <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=3'" type="radio" id="star3" name="rate" value="3" />
+            <input checked onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=3'" type="radio" id="star3" name="rate" value="3" />
             <label for="star3" title="text"></label>
             <input onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=2'" type="radio" id="star2" name="rate" value="2" />
             <label for="star2" title="text"></label>

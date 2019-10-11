@@ -5,6 +5,7 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,28 +35,64 @@ public class ProdutoController extends HttpServlet {
         HttpSession session = request.getSession();
         try {
 
-            // se tem produto selecionado manda p pag d produto
+            // se tem produto selecionado por parametro passa p sessao
             if (request.getParameter("produtoId") != null) {
                 session.setAttribute("produtoId", request.getParameter("produtoId"));
-                request.getRequestDispatcher("produto.jsp").forward(request, response);
+            }
+
+            // se fav esta definido por parametro passa p sessao
+            if (request.getParameter("fav") != null) {
+                session.setAttribute("fav", "1");
+            }
+
+            String fav = null;
+            // recupera fav da sessao
+            if (session.getAttribute("fav") != null) {
+                fav = session.getAttribute("fav").toString();
+            }
+
+            // se produtoId for null manda p pag d produtos
+            String produtoId = null;
+            if (session.getAttribute("produtoId") != null) {
+                produtoId = session.getAttribute("produtoId").toString();
+            } else {
+                session.setAttribute("msg", "Por favor, selecione um produto.");
+                response.sendRedirect("ProdutosController");
                 return;
             }
 
-            // VERIFICA SE ESTA LOGADO
-            if (session.getAttribute("userId") == null) {
-                response.sendRedirect("UserController?redirect=ProdutoController");
-                return;
-            } else {
-                // checa se eh para favoritar ou desfavoritar produto
-                if (request.getParameter("fav") != null) {
-                    // favorita produto request.getParameter("fav")
-                    session.setAttribute("msg", "Produto favoritado com sucesso!");
-                } else if (request.getParameter("unfav") != null) {
-                    // favorita produto request.getParameter("fav")
-                    session.setAttribute("msg", "Produto desfavoritado com sucesso!");
+            // checa se eh para favoritar ou desfavoritar produto
+            if (fav != null) {
+                // VERIFICA SE ESTA LOGADO
+                if (session.getAttribute("userId") == null) {
+                    response.sendRedirect("UserController?redirect=ProdutoController");
+                    return;
+                } else {
+                    MySql db = null;
+                    try {
+                        db = new MySql("test", "root", "");
+                        String userId = session.getAttribute("userId").toString();
+                        String[] bindFav = {produtoId, userId};
+                        String count = "0";
+                        count = db.dbValor("count(*)", "favorite_products", "product_id=? AND user_id=?", bindFav);
+                        // se ja tiver registro, remove, se nao tiver insere
+                        if (!count.equals("0")) {
+                            db.dbGrava("DELETE FROM favorite_products WHERE product_id=? AND user_id=?", bindFav);
+                            session.setAttribute("msg", "Produto desfavoritado com sucesso!");
+                        } else {
+                            db.dbGrava("INSERT INTO favorite_products (product_id,user_id) VALUES (?,?)", bindFav);
+                            session.setAttribute("msg", "Produto favoritado com sucesso!");
+                        }
+                    } catch (Exception ex) {
+                        throw new Exception(ex.getMessage());
+                    } finally {
+                        db.destroyDb();
+                        // define fav como null
+                        session.setAttribute("fav", null);
+                    }
                 }
             }
-            
+
             request.getRequestDispatcher("produto.jsp").forward(request, response);
             return;
         } catch (Exception ex) {

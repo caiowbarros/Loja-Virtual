@@ -36,13 +36,6 @@ public class Product extends BaseModel {
         super(attrs);
     }
 
-    /**
-     * Override inherited method
-     */
-    public static void connect() {
-        connect(Product.class);
-    }
-
     public int getId() {
         return this.id;
     }

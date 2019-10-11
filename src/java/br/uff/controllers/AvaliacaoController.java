@@ -65,29 +65,31 @@ public class AvaliacaoController extends HttpServlet {
             // recupera acao solicitada se existir
             String action = request.getParameter("action");
 
-            if ("avalia".equals(action)) {
+            switch (action) {
+                case "avalia": {
+                    // grava avaliacao do produto
+                    MySql db = null;
+                    try {
+                        db = new MySql("test", "root", "");
+                        //RECUPERA VALUES
+                        String userId = session.getAttribute("userId").toString();
+                        String productId = session.getAttribute("produtoId").toString();
+                        String rating = session.getAttribute("rating").toString();
+                        String description = request.getParameter("description").toString();
+                        String title = request.getParameter("title").toString();
+                        String[] bind = {userId, productId, rating, description, title};
+                        db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
+                        // define msg a ser mostrada
+                        session.setAttribute("msg", "Produto avaliado com sucesso!");
 
-                // grava avaliacao do produto
-                MySql db = null;
-                try {
-                    db = new MySql("test", "root", "");
-                    //RECUPERA VALUES
-                    String userId = session.getAttribute("userId").toString();
-                    String productId = session.getAttribute("produtoId").toString();
-                    String rating = request.getParameter("rating").toString();
-                    String description = request.getParameter("description").toString();
-                    String title = request.getParameter("title").toString();
-                    String[] bind = {userId, productId, rating, description, title};
-                    db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
-                    // define msg a ser mostrada
-                    session.setAttribute("msg", "Produto avaliado com sucesso!");
-
+                    } catch (ClassNotFoundException | SQLException e) {
+                        throw new Exception("Falha ao avaliar produto: " + e.getMessage());
+                    } finally {
+                        db.destroyDb();
+                        session.setAttribute("rating", null);
+                    }
                     response.sendRedirect("ProdutoController");
                     return;
-                } catch (ClassNotFoundException | SQLException e) {
-                    throw new Exception("Falha ao avaliar produto: " + e.getMessage());
-                } finally {
-                    db.destroyDb();
                 }
             }
 
@@ -96,7 +98,7 @@ public class AvaliacaoController extends HttpServlet {
             // se der erro vai p ControllerProdutos
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
-            response.sendRedirect("ProdutosController");
+            response.sendRedirect("ProdutoController");
             return;
         }
     }
