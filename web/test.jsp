@@ -14,10 +14,33 @@
         <title>Test Page</title>
     </head>
     <body>
-        <h1>Hello World! Uff</h1>
-        <% User user = (User) request.getAttribute("user"); %>
-        <% HashMap<String, Object> attrs = user.getAttributes(); %>
-        <% System.out.println("User: " + String.valueOf(user)); %>
-        <h4><%= user.getEmail() %></h4>
+        <div id="select-test" style="border: solid; border-radius: 8px; padding: 8px;" >
+            <h2>Select Test:</h2>
+            <% User user = (User) request.getAttribute("user"); %>
+            <h4>Nome: <%= user.getName() %></h4>
+            <h4>Email: <%= user.getEmail() %></h4>
+            <h4>Cargo: <%= user.getEmail() %></h4>
+        </div>
+        <br/>
+        <div id="create-test" style="border: solid; border-radius: 8px; padding: 8px;" >
+            <h2>Create Test:</h2>
+            <jsp:include page="partials/test/form.jsp">
+                <jsp:param name="action" value="create" />
+            </jsp:include>
+        </div>
+        <br/>
+        <div id="update-test" style="border: solid; border-radius: 8px; padding: 8px;" >
+            <h2>Update Test:</h2>
+            <jsp:include page="partials/test/form.jsp">
+                <jsp:param name="action" value="update" />
+            </jsp:include>
+        </div>
+        <br/>
+        <div id="delete-test" style="border: solid; border-radius: 8px; padding: 8px;" >
+            <h2>Delete Test:</h2>
+            <form id="delete-form">
+                
+            </form>
+        </div>
     </body>
 </html>

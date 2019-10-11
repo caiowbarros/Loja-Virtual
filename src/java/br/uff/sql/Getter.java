@@ -16,9 +16,9 @@ public class Getter {
     private final Selector selector;
     private final Counter counter;
     
-    public Getter(String tableName, Connection connection, Class klass) {
-        this.selector = new Selector(tableName, connection, klass);
-        this.counter = new Counter(tableName, connection, klass);
+    public Getter(String tableName, Class klass) {
+        this.selector = new Selector(tableName, klass);
+        this.counter = new Counter(tableName, klass);
     }
     
     public int count() throws SQLException {

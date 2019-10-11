@@ -15,9 +15,9 @@ public class Setter {
     private final Inserter INSERTER;
     private final Updater UPDATER;
     
-    public Setter(String tableName, Connection connection, Class klass) {
-        this.INSERTER = new Inserter(tableName, connection, klass);
-        this.UPDATER = new Updater(tableName, connection, klass);
+    public Setter(String tableName, Class klass) {
+        this.INSERTER = new Inserter(tableName, klass);
+        this.UPDATER = new Updater(tableName, klass);
     }
     
     public Inserter insert() {
