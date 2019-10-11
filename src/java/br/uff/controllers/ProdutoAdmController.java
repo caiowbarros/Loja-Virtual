@@ -106,7 +106,7 @@ public class ProdutoAdmController extends HttpServlet {
                         MySql db = null;
                         try {
                             db = new MySql("test", "root", "");
-                            if (sel != null) {
+                            if (sel.equals("")) {
                                 String[] bind = {name, price, description, img, categoryId};
                                 db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
                             } else {
