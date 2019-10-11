@@ -3,14 +3,22 @@
     Created on : 29/09/2019, 00:45:25
     Author     : HP
 --%>
+<%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado retorna p controller com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController?redirect=EnderecoController");
     }
-    // se tiver msg mostra
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    // mostra se tiver msg
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
+    }
+
+    ArrayList<ArrayList<String>> grid = null;
+    if (request.getAttribute("grid") != null) {
+        grid = (ArrayList<ArrayList<String>>) request.getAttribute("grid");
     }
 %>
 <!-- Header -->
@@ -32,33 +40,30 @@
         </tr>
     </thead>
     <tbody>
+        <%
+            for (int i = 0; i < grid.size(); i++) {
+        %>
         <tr>
             <th>
-                <a href="EnderecoController?sel=1">Selecionar</a>
-                &nbsp;|&nbsp;
-                <a onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;" href="EnderecoController?del=1">Excluir</a>
+                <a href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Selecionar</a>             
             </th>
-            <th>APT</th>
-            <th>Rua Ary Parreiras, 4, 1201</th>
-            <th>Niterói</th>
-            <th>RJ</th>
-            <th>Brasil</th>
+            <th><%= grid.get(i).get(1)%></th>
+            <th>R$<%= grid.get(i).get(2)%></th>
+            <th><%= grid.get(i).get(3)%></th>
+            <th><%= grid.get(i).get(4)%></th>
+            <th><%= grid.get(i).get(5)%></th>
         </tr>
-        <tr>
-            <th>
-                <a href="EnderecoController?sel=2">Selecionar</a>
-                &nbsp;|&nbsp;
-                <a href="EnderecoController?del=2">Excluir</a>
-            </th>
-            <th>Trabalho</th>
-            <th>Rua Miguel Couto, 105</th>
-            <th>Rio de Janeiro</th>
-            <th>RJ</th>
-            <th>Brasil</th>
-        </tr>
+        <%
+            }
+        %>
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                <a href="EnderecoController?sel">Incluir</a>
+            </td>
+        </tr>
+    </tfoot>
 </table>
-<!-- SE N FOR ENDERECO NOVO MOSTRA INCLUIR -->
-<a href="EnderecoController?sel">Incluir</a>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

@@ -9,16 +9,18 @@
         response.sendRedirect("UserController?redirect=EnderecoController");
     }
     // mostra msg se tiver
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-<a href="EnderecoController?unsel">Voltar</a>
 <form action="EnderecoController">
+    <button name="action" formnovalidate value="unsel">Voltar</button>
     <fieldset>
         <legend>Endereço</legend>
         <!--onblur ocorre qnd o objeto perde o foco-->
@@ -28,6 +30,9 @@
         <input value="${address.city}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
         <input value="${address.state}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
         <input name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
+        <% if (!request.getParameter("sel").equals("")) { %>
+        <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
+        <% }%>
         <button name="action" value="grava" type="submit">Salvar</button>
     </fieldset>
 </form>

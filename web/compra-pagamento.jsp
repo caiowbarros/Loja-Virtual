@@ -43,10 +43,10 @@
                 payment: {
                     transactions: [{
                             amount: {
-                                total: "${sales.total_price}",
+                                total: "12.02",
                                 currency: "BRL"
                             },
-                            description: "Aquisição de produtos por ${session.userId}",
+                            description: "Aquisição de produtos por",
                             payment_options: {
                                 allowed_payment_method: "IMMEDIATE_PAY",
                             }
