@@ -48,7 +48,7 @@ and open the template in the editor.
 }
 
 .products-item {
-    margin: 0px 15px 20px 15px;
+    margin: 0px 15px 35px 15px;
     border: 1px solid #E1E8EE;
 }
 
@@ -56,9 +56,25 @@ and open the template in the editor.
     border: 1px solid black;
 }
 
+.products-item:hover .products-cart {
+    display: flex;
+}
+
 .products-item a {
     text-decoration: none;
     color: black;
+}
+
+.products-cart {
+    position: absolute;
+    background-color: black;
+    color: white;
+    padding: 12px;
+    justify-content: center;
+    width: 222.5px;
+    margin-top: 200px;
+    display: none;
+    margin-left: -1px;
 }
 
 .products-item a img {

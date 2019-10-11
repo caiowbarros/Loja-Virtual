@@ -47,6 +47,7 @@
             <!-- Produto -->
             <div class="products-item">
                 <a href="ProdutoController?produtoId=4">
+                    <div class="products-cart">Ver Detalhes</div>
                     <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
                     <div class="products-title">FIFA 20</div>
                     <div class="products-details">PS4 - Jogos</div>
@@ -56,7 +57,8 @@
             
             <!-- Produto -->
             <div class="products-item">
-                <a href="ProdutoController?produtoId=3">
+                <a href="ProdutoController?produtoId=4">
+                    <div class="products-cart">Ver Detalhes</div>
                     <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
                     <div class="products-title">FIFA 20</div>
                     <div class="products-details">PS4 - Jogos</div>
@@ -66,7 +68,8 @@
             
             <!-- Produto -->
             <div class="products-item">
-                <a href="ProdutoController?produtoId=2">
+                <a href="ProdutoController?produtoId=4">
+                    <div class="products-cart">Ver Detalhes</div>
                     <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
                     <div class="products-title">FIFA 20</div>
                     <div class="products-details">PS4 - Jogos</div>
@@ -76,7 +79,19 @@
             
             <!-- Produto -->
             <div class="products-item">
-                <a href="ProdutoController?produtoId=1">
+                <a href="ProdutoController?produtoId=4">
+                    <div class="products-cart">Ver Detalhes</div>
+                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    <div class="products-title">FIFA 20</div>
+                    <div class="products-details">PS4 - Jogos</div>
+                    <div class="products-price">R$250,00</div>
+                </a>
+            </div>
+            
+            <!-- Produto -->
+            <div class="products-item">
+                <a href="ProdutoController?produtoId=4">
+                    <div class="products-cart">Ver Detalhes</div>
                     <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
                     <div class="products-title">FIFA 20</div>
                     <div class="products-details">PS4 - Jogos</div>
