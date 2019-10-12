@@ -5,8 +5,14 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
+import br.uff.models.Address;
+import br.uff.models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -28,46 +34,145 @@ public class EnderecoController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            // pega sessao
-            HttpSession session = request.getSession();
+        // pega sessao
+        HttpSession session = request.getSession();
 
-            // se n tem usuario logado manda p controller de user
-            if (session.getAttribute("userId") == null) {
+        try {
+            // recupera usuario logado
+            String userId = null;
+            if (session.getAttribute("userId") != null) {
+                userId = session.getAttribute("userId").toString();
+            } else {
                 response.sendRedirect("UserController?redirect=EnderecoController");
                 return;
             }
 
             if (request.getParameter("sel") != null) {
-                session.setAttribute("enderecoId", request.getParameter("sel"));
-            } else if (request.getParameter("unsel") != null) {
-                session.setAttribute("enderecoId", null);
-            } else if (request.getParameter("del") != null) {
-                // exclui endereco do id request.getParameter("del") e do usuario session.getAttribute("userId")
-                request.setAttribute("msg", "Endereço deletado com sucesso!");
-            }
-
-            // se tem enderecoId definido mostra cadastro caso contrario mostra grid
-            if (session.getAttribute("enderecoId") == null) {
-                request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
-                return;
-            } else {
-
-                // recupera acao solicitada se existir
-                String action = request.getParameter("action");
-
-                // verifica acoes
-                if ("grava".equals(action)) {
-                    // grava alteracoes do session.getAttribute("enderecoId")
-                    request.setAttribute("msg", "Endereço gravado com sucesso!");
-                    request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
-                    return;
+                String selParameter = request.getParameter("sel");
+                Address endereco;
+                endereco = new Address("", "", "", "", "", "");
+                if (!selParameter.equals("")) {
+                    // define endereco
+                    MySql dbEnd = null;
+                    try {
+                        dbEnd = new MySql();
+                        String[] bindSel = {selParameter};
+                        ResultSet ret = dbEnd.dbCarrega("SELECT * FROM address WHERE id=?", bindSel);
+                        if (ret.next()) {
+                            // preenche endereco
+                            endereco.setId(ret.getInt("id"));
+                            endereco.setName(ret.getString("name"));
+                            endereco.setAddress(ret.getString("address"));
+                            endereco.setCity(ret.getString("city"));
+                            endereco.setCountry(ret.getString("country"));
+                            endereco.setState(ret.getString("state"));
+                            endereco.setZipcode(ret.getString("zipcode"));
+                        }
+                    } catch (SQLException ex) {
+                        throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                    } finally {
+                        dbEnd.destroyDb();
+                    }
                 }
-
+                // define atributo de produto
+                request.setAttribute("endereco", endereco);
+                session.setAttribute("sel", selParameter);
                 request.getRequestDispatcher("endereco-cadastro.jsp").forward(request, response);
                 return;
             }
-        } catch (Exception ex) {
+
+            // define endereco selecionado
+            String sel = null;
+            if (session.getAttribute("sel") != null) {
+                sel = session.getAttribute("sel").toString();
+            }
+
+            // recupera acao solicitada se existir
+            String action = "";
+
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
+            }
+
+            switch (action) {
+                case "grava": {
+                    // grava alteracoes do session.getAttribute("produtoId")
+                    String name = request.getParameter("name");
+                    String address = request.getParameter("address");
+                    String zipcode = request.getParameter("zipcode");
+                    String city = request.getParameter("city");
+                    String state = request.getParameter("state");
+                    String country = request.getParameter("country");
+
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        if (sel.equals("")) {
+                            String[] bind = {name, address, zipcode, city, state, country, userId};
+                            db.dbGrava("INSERT INTO address (name, address, zipcode, city, state, country, user_id) VALUES (?,?,?,?,?,?,?)", bind);
+                        } else {
+                            String[] bind = {name, address, zipcode, city, state, country, sel};
+                            db.dbGrava("UPDATE address set name=?, address=?, zipcode=?, city=?, state=?, country=? WHERE id=?", bind);
+                        }
+                        session.setAttribute("msg", "Endereço gravado com sucesso!");
+                    } catch (ClassNotFoundException | SQLException e) {
+                        throw new Exception("Falha ao gravar endereço: " + e.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
+                case "del": {
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        String[] bindDel = {sel};
+                        db.dbGrava("DELETE FROM address WHERE id=?", bindDel);
+                        session.setAttribute("msg", "Endereço deletado com sucesso!");
+                    } catch (Exception ed) {
+                        throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
+                case "unsel": {
+                    // apaga sel da sessao
+                    session.setAttribute("sel", null);
+                    break;
+                }
+            }
+
+            // define grid
+            MySql dbGrid = null;
+            try {
+                dbGrid = new MySql();
+                ArrayList<ArrayList> grid = new ArrayList<>();
+                String[] bindAddress = {userId};
+                ResultSet ret = dbGrid.dbCarrega("SELECT id,name,address,city,state FROM address WHERE user_id=?", bindAddress);
+                while (ret.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(ret.getString("id"));
+                    row.add(ret.getString("name"));
+                    row.add(ret.getString("address"));
+                    row.add(ret.getString("city"));
+                    row.add(ret.getString("state"));
+                    // add row no grid
+                    grid.add(row);
+                }
+                request.setAttribute("grid", grid);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbGrid.destroyDb();
+            }
+
+            // manda p pag de grid de produtos
+            request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
+            return;
+        } catch (Exception e) {
+            session.setAttribute("msg", e.getMessage());
             response.sendRedirect("UserController");
             return;
         }

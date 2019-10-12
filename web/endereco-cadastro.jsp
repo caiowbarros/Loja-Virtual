@@ -3,6 +3,7 @@
     Created on : 28/09/2019, 23:42:18
     Author     : HP
 --%>
+<%@page import="br.uff.models.Address"%>
 <%
     // se n tiver um usuario logado retorna p controller de usuario com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
@@ -14,23 +15,33 @@
         session.setAttribute("msg", null);
         out.println("<script>alert('" + msg + "');</script>");
     }
+
+    Address endereco = null;
+    if (request.getAttribute("endereco") != null) {
+        endereco = (Address) request.getAttribute("endereco");
+    } else {
+        response.sendRedirect("EnderecoController");
+        return;
+    }
+
+    String sel = request.getParameter("sel");
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-<form action="EnderecoController">
+<form action="EnderecoController" method="post">
     <button name="action" formnovalidate value="unsel">Voltar</button>
     <fieldset>
         <legend>Endereço</legend>
         <!--onblur ocorre qnd o objeto perde o foco-->
-        <input value="${address.zipcode}" name="zipcode" required type="number" placeholder="CEP" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
-        <input value="${address.name}" name="name" required type="text" placeholder="Apelido Curto para o Endereço" maxlength="255" />
-        <input value="${address.address}" name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
-        <input value="${address.city}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
-        <input value="${address.state}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
+        <input value="${endereco.getZipcode()}" name="zipcode" required type="number" placeholder="CEP" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
+        <input value="${endereco.getName()}" name="name" required type="text" placeholder="Apelido Curto para o Endereço" maxlength="255" />
+        <input value="${endereco.getAddress()}" name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
+        <input value="${endereco.getCity()}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
+        <input value="${endereco.getState()}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
         <input name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
-        <% if (!request.getParameter("sel").equals("")) { %>
+        <% if (!sel.equals("")) { %>
         <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
         <% }%>
         <button name="action" value="grava" type="submit">Salvar</button>

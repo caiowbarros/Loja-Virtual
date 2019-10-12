@@ -151,7 +151,7 @@ public class ProdutoAdmController extends HttpServlet {
                         break;
                     }
                     case "unsel": {
-                        // apaga produtoId da sessao
+                        // apaga sel da sessao
                         session.setAttribute("sel", null);
                         break;
                     }

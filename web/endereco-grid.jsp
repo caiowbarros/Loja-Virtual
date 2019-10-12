@@ -28,7 +28,7 @@
 <table width="100%" border="1" cellspacing="10">
     <thead>
         <tr>
-            <th colspan="6"><h2>Endereços</h2></th>
+            <th colspan="5"><h2>Endereços</h2></th>
         </tr>
         <tr>
             <th>Operações</th>
@@ -36,7 +36,6 @@
             <th>Rua</th>
             <th>Cidade</th>
             <th>Estado</th>
-            <th>País</th>
         </tr>
     </thead>
     <tbody>
@@ -48,10 +47,9 @@
                 <a href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Selecionar</a>             
             </th>
             <th><%= grid.get(i).get(1)%></th>
-            <th>R$<%= grid.get(i).get(2)%></th>
+            <th><%= grid.get(i).get(2)%></th>
             <th><%= grid.get(i).get(3)%></th>
             <th><%= grid.get(i).get(4)%></th>
-            <th><%= grid.get(i).get(5)%></th>
         </tr>
         <%
             }
@@ -59,9 +57,9 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="6">
+            <th colspan="5">
                 <a href="EnderecoController?sel">Incluir</a>
-            </td>
+            </th>
         </tr>
     </tfoot>
 </table>
