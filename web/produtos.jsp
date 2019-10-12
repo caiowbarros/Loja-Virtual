@@ -78,7 +78,7 @@
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
                 <% }%>
                 <span><%= session.getAttribute("ProdutosPag")%></span>
-                <% if (!session.getAttribute("ProdutosPag").toString().equals(session.getAttribute("maxPag").toString())) { %>
+                <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) < Integer.valueOf(session.getAttribute("maxPag").toString())) { %>
                 <button class="products-next" name="action" value="prox">&#8250;</button>
                 <% }%>
             </form>

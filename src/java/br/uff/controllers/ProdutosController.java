@@ -39,11 +39,11 @@ public class ProdutosController extends HttpServlet {
         HttpSession session = request.getSession();
 
         try {
-
+            String qtdMaxProdutosPag = "8";
             String consulta = "SELECT p.id,p.name,p.price,p.img,c.category_name,p.category_id FROM products p LEFT JOIN vw_category c on(p.category_id=c.id)";
             String filtro = "";
             String[] bind = null;
-            String limit = " LIMIT 8 ";
+            String limit = " LIMIT " + qtdMaxProdutosPag + " ";
             String offset = "";
             String userId = null;
             // verifica se chama favoritos
@@ -66,7 +66,7 @@ public class ProdutosController extends HttpServlet {
             try {
                 dbMaxPag = new MySql();
                 String maxP = null;
-                maxP = dbMaxPag.dbValor("ceil(count(*)/8)", consulta + filtro, "", null);
+                maxP = dbMaxPag.dbValor("ceil(count(*)/" + qtdMaxProdutosPag + ")", consulta + filtro, "", bind);
                 session.setAttribute("maxPag", maxP);
             } catch (Exception ed) {
                 throw new Exception(ed.getMessage());
@@ -116,7 +116,7 @@ public class ProdutosController extends HttpServlet {
                 calcOffset = (int) Integer.valueOf(session.getAttribute("ProdutosPag").toString());
                 if (calcOffset > 1) {
                     calcOffset = calcOffset - 1;
-                    calcOffset = calcOffset * 8;
+                    calcOffset = calcOffset * Integer.valueOf(qtdMaxProdutosPag);
                     offset = " OFFSET " + calcOffset + " ";
                 }
             }
@@ -126,7 +126,7 @@ public class ProdutosController extends HttpServlet {
             try {
                 dbProdutos = new MySql();
                 ArrayList<ArrayList> produtos = new ArrayList<>();
-                ResultSet ret = dbProdutos.dbCarrega(consulta + filtro + limit + offset, null);
+                ResultSet ret = dbProdutos.dbCarrega(consulta + filtro + limit + offset, bind);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
