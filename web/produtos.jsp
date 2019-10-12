@@ -3,13 +3,21 @@
     Created on : 02/10/2019, 00:11:02
     Author     : HP
 --%>
+<%@page import="java.util.ArrayList"%>
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
 <%
     // mostra se tiver msg
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
+    }
+
+    ArrayList<ArrayList<String>> produtos = null;
+    if (request.getAttribute("produtos") != null) {
+        produtos = (ArrayList<ArrayList<String>>) request.getAttribute("produtos");
     }
 %>
 
@@ -43,70 +51,36 @@
     <!-- Container dos produtos -->
     <div class="products-page">
         <div class="products-container">
-            
-            <!-- Produto -->
+
+
+            <%
+                for (int i = 0; i < produtos.size(); i++) {
+            %>
             <div class="products-item">
-                <a href="ProdutoController?produtoId=4">
+                <a href="ProdutoController?produtoId=<%= produtos.get(i).get(0)%>">
                     <div class="products-cart">Ver Detalhes</div>
-                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
-                    <div class="products-title">FIFA 20</div>
-                    <div class="products-details">PS4 - Jogos</div>
-                    <div class="products-price">R$250,00</div>
+                    <img src="<%= produtos.get(i).get(3)%>">
+                    <div class="products-title"><%= produtos.get(i).get(1)%></div>
+                    <div class="products-details"><%= produtos.get(i).get(4)%></div>
+                    <div class="products-price">R$<%= produtos.get(i).get(2)%></div>
                 </a>
             </div>
-            
-            <!-- Produto -->
-            <div class="products-item">
-                <a href="ProdutoController?produtoId=4">
-                    <div class="products-cart">Ver Detalhes</div>
-                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
-                    <div class="products-title">FIFA 20</div>
-                    <div class="products-details">PS4 - Jogos</div>
-                    <div class="products-price">R$250,00</div>
-                </a>
-            </div>
-            
-            <!-- Produto -->
-            <div class="products-item">
-                <a href="ProdutoController?produtoId=4">
-                    <div class="products-cart">Ver Detalhes</div>
-                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
-                    <div class="products-title">FIFA 20</div>
-                    <div class="products-details">PS4 - Jogos</div>
-                    <div class="products-price">R$250,00</div>
-                </a>
-            </div>
-            
-            <!-- Produto -->
-            <div class="products-item">
-                <a href="ProdutoController?produtoId=4">
-                    <div class="products-cart">Ver Detalhes</div>
-                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
-                    <div class="products-title">FIFA 20</div>
-                    <div class="products-details">PS4 - Jogos</div>
-                    <div class="products-price">R$250,00</div>
-                </a>
-            </div>
-            
-            <!-- Produto -->
-            <div class="products-item">
-                <a href="ProdutoController?produtoId=4">
-                    <div class="products-cart">Ver Detalhes</div>
-                    <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
-                    <div class="products-title">FIFA 20</div>
-                    <div class="products-details">PS4 - Jogos</div>
-                    <div class="products-price">R$250,00</div>
-                </a>
-            </div>
-            
+            <%
+                }
+            %>
+
         </div>
-        
+
         <!-- Páginas -->
         <div class="products-paging">
             <form method="post" action="ProdutosController">
+                <% if (!session.getAttribute("ProdutosPag").toString().equals("1")) {%>
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
-                <span><%= session.getAttribute("ProdutosPag") %></span>
+                <% }%>
+                <span><%= session.getAttribute("ProdutosPag")%></span>
+                <% if (!session.getAttribute("ProdutosPag").toString().equals(session.getAttribute("maxPag").toString())) { %>
                 <button class="products-next" name="action" value="prox">&#8250;</button>
+                <% }%>
             </form>
         </div>
     </div>

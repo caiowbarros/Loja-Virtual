@@ -5,8 +5,12 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,21 +35,46 @@ public class ProdutosController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            // pega sessao
-            HttpSession session = request.getSession();
+        // pega sessao
+        HttpSession session = request.getSession();
 
+        try {
+
+            String consulta = "SELECT p.id,p.name,p.price,p.img,c.category_name,p.category_id FROM products p LEFT JOIN vw_category c on(p.category_id=c.id)";
+            String filtro = "";
+            String[] bind = null;
+            String limit = " LIMIT 8 ";
+            String offset = "";
+            String userId = null;
             // verifica se chama favoritos
             if (request.getParameter("fav") != null) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
-
+                    filtro = (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=1)";
+                    userId = session.getAttribute("userId").toString();
+                    bind[bind.length] = userId;
                 } else {
                     // se n tem usuario logado mostra msg solicitando login
-                    request.setAttribute("msg", "Realize login para ver seus favoritos!");
+                    throw new Exception("Realize login para ver seus favoritos!");
                 }
+            } else {
+                filtro = (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
             }
 
+            // joga numero max de pags p sessao
+            MySql dbMaxPag = null;
+            try {
+                dbMaxPag = new MySql();
+                String maxP = null;
+                maxP = dbMaxPag.dbValor("ceil(count(*)/8)", consulta + filtro, "", null);
+                session.setAttribute("maxPag", maxP);
+            } catch (Exception ed) {
+                throw new Exception(ed.getMessage());
+            } finally {
+                dbMaxPag.destroyDb();
+            }
+
+            // define pag atual
             Integer ProdutosPag = 1;
             if (session.getAttribute("ProdutosPag") != null) {
                 ProdutosPag = (Integer) session.getAttribute("ProdutosPag");
@@ -54,22 +83,72 @@ public class ProdutosController extends HttpServlet {
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
 
-            // verifica acoes
-            if ("ant".equals(action)) {
-                if (ProdutosPag > 0) {
-                    ProdutosPag = ProdutosPag - 1;
-                    session.setAttribute("ProdutosPag", ProdutosPag);
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
+            }
+
+            switch (action) {
+                case "ant": {
+                    if (ProdutosPag > 1) {
+                        ProdutosPag = ProdutosPag - 1;
+                        session.setAttribute("ProdutosPag", ProdutosPag);
+                    }
+                    break;
                 }
-            } else if ("prox".equals(action)) {
-                ProdutosPag = ProdutosPag + 1;
-                session.setAttribute("ProdutosPag", ProdutosPag);
+                case "prox": {
+                    int maxPag = 1;
+                    if (session.getAttribute("maxPag") != null) {
+                        maxPag = Integer.valueOf(session.getAttribute("maxPag").toString());
+                    }
+                    if (maxPag > ProdutosPag) {
+                        ProdutosPag = ProdutosPag + 1;
+                        session.setAttribute("ProdutosPag", ProdutosPag);
+                    }
+                    break;
+                }
+            }
+
+            // define offset
+            if (session.getAttribute("ProdutosPag") != null) {
+                int calcOffset = 0;
+                calcOffset = (int) Integer.valueOf(session.getAttribute("ProdutosPag").toString());
+                if (calcOffset > 1) {
+                    calcOffset = calcOffset - 1;
+                    calcOffset = calcOffset * 8;
+                    offset = " OFFSET " + calcOffset + " ";
+                }
+            }
+
+            // define grid
+            MySql dbProdutos = null;
+            try {
+                dbProdutos = new MySql();
+                ArrayList<ArrayList> produtos = new ArrayList<>();
+                ResultSet ret = dbProdutos.dbCarrega(consulta + filtro + limit + offset, null);
+                while (ret.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(ret.getString("id"));
+                    row.add(ret.getString("name"));
+                    row.add(ret.getString("price"));
+                    row.add(ret.getString("img"));
+                    row.add(ret.getString("category_name"));
+                    // add row no grid
+                    produtos.add(row);
+                }
+                request.setAttribute("produtos", produtos);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbProdutos.destroyDb();
             }
 
             request.getRequestDispatcher("produtos.jsp").forward(request, response);
             return;
         } catch (Exception ex) {
+            session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("");
         }
     }
