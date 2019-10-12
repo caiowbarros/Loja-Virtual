@@ -167,6 +167,7 @@ footer {
     border: none;
     text-transform: uppercase;
     letter-spacing: .05em;
+    cursor: pointer;
 }
 
 .dropdown {

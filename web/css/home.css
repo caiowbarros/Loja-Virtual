@@ -38,7 +38,7 @@ and open the template in the editor.
 }
 
 .sec-container {
-  margin: 100px 5% 50px 5%;
+  margin: 50px 5% 50px 5%;
   display: flex;
   justify-content: space-between;
 }
@@ -49,8 +49,8 @@ and open the template in the editor.
 }
 
 .sec-img img {
-  width: 400px;
-  height: 300px;
+  width: 420px;
+  height: 320px;
   z-index: -1;
 }
 

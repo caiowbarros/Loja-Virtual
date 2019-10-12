@@ -43,8 +43,12 @@
         <!-- Filtro dos preços -->
         <div class="products-item-filter">
             <p>Preços</p>
-            <input type="range" min="1" max="1000" step="100">Min<br>
-            <input type="range" min="1" max="1000" step="100">Max<br>
+            <input type="checkbox">Até R$ 250<br>
+            <input type="checkbox">De R$ 250 à R$ 500<br>
+            <input type="checkbox">De R$ 500 à R$ 1000<br>
+            <input type="checkbox">A partir de R$ 1000<br>
+            <!--<input type="range" min="1" max="1000" step="100">Min<br>
+            <input type="range" min="1" max="1000" step="100">Max<br>-->
         </div>
     </div>
 

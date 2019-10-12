@@ -30,7 +30,7 @@
             <!-- Dropdown -->
             <div class="dropdown-menu">
                 <div class="dropdown ps">
-                    <button class="dropbtn">Playstation</button>
+                    <button class="dropbtn" onclick="location.href='';">Playstation</button>
                     <div class="dropdown-content">
                         <a href="ProdutosController?categoryId=5">Consoles</a>
                         <a href="ProdutosController?categoryId=6">Jogos</a>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button class="dropbtn">Xbox</button>
+                    <button class="dropbtn" onclick="location.href='';">Xbox</button>
                     <div id="feminino" class="dropdown-content">
                         <a href="ProdutosController?categoryId=8">Consoles</a>
                         <a href="ProdutosController?categoryId=9">Jogos</a>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="dropdown wii">
-                    <button class="dropbtn">Wii</button>
+                    <button class="dropbtn" onclick="location.href='';">Wii</button>
                     <div id="infantil" class="dropdown-content">
                         <a href="ProdutosController?categoryId=11">Consoles</a>
                         <a href="ProdutosController?categoryId=12">Jogos</a>
