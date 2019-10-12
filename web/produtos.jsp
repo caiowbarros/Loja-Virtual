@@ -29,16 +29,16 @@
         <!-- Filtro das categorias -->
         <div class="products-item-filter">
             <p>Categorias</p>
-            <input type="checkbox">Playstation<br>
-            <input type="checkbox">Xbox<br>
-            <input type="checkbox">Wii<br>
+            <input name="category" type="checkbox" value="playstation">Playstation<br>
+            <input name="category" type="checkbox" value="xbox">Xbox<br>
+            <input name="category" type="checkbox" value="wii">Wii<br>
         </div>
         <!-- Fitro das subcategorias -->
         <div class="products-item-filter">
             <p>Subcategorias</p>
-            <input type="checkbox">Consoles<br>
-            <input type="checkbox">Jogos<br>
-            <input type="checkbox">Acessórios<br>
+            <input name="category" type="checkbox" value="consoles">Consoles<br>
+            <input name="category" type="checkbox" value="jogos">Jogos<br>
+            <input name="category" type="checkbox" value="acessórios">Acessórios<br>
         </div>
         <!-- Filtro dos preços -->
         <div class="products-item-filter">

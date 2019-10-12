@@ -50,7 +50,7 @@ public class ProdutosController extends HttpServlet {
             if (request.getParameter("fav") != null) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
-                    filtro = (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=1)";
+                    filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=1)";
                     userId = session.getAttribute("userId").toString();
                     bind[bind.length] = userId;
                 } else {
@@ -58,7 +58,14 @@ public class ProdutosController extends HttpServlet {
                     throw new Exception("Realize login para ver seus favoritos!");
                 }
             } else {
-                filtro = (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
+            }
+
+            // filtra categorias
+            String categorias[] = request.getParameterValues("category");
+            for (String value : categorias) {
+                bind[bind.length] = "%" + value.toUpperCase() + "%";
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " UPPER(c.category_name) like ? ";
             }
 
             // joga numero max de pags p sessao
