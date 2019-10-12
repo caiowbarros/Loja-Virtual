@@ -64,8 +64,8 @@ public class ProdutosController extends HttpServlet {
             // filtra categorias
             String categorias[] = request.getParameterValues("category");
             for (String value : categorias) {
-                bind[bind.length] = "%" + value.toUpperCase() + "%";
-                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " UPPER(c.category_name) like ? ";
+                // bind[bind.length] = "%" + value.toUpperCase() + "%";
+                // filtro += (filtro.equals("") ? " WHERE " : " AND ") + " UPPER(c.category_name) like ? ";
             }
 
             // joga numero max de pags p sessao
