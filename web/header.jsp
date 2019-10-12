@@ -18,6 +18,7 @@
         <link href="css/carrinho.css" type="text/css" rel="stylesheet">
         <link href="css/carrinho-confirma.css" type="text/css" rel="stylesheet">
         <link href="css/produtos.css" type="text/css" rel="stylesheet">
+        <link href="css/home.css" type="text/css" rel="stylesheet">
     </head>
 
     <body>
