@@ -59,9 +59,12 @@
 
         <!-- Container dos produtos -->
         <div class="products-page" style="margin-left:20%;margin-top:50px;">
+            <% if (produtos.size() < 1) { %>
+            <h3>O filtro escolhido não retornou nenhum produto, tente com outro!</h3>
+            <%
+            } else {
+            %>
             <div class="products-container">
-
-
                 <%
                     for (int i = 0; i < produtos.size(); i++) {
                 %>
@@ -76,14 +79,8 @@
                 </div>
                 <%
                     }
-                    if (produtos.size() < 1) {
-                %>
-                <h3>O filtro escolhido não retornou nenhum produto, tente com outro!</h3>
-                <%
-                    }
                 %>
             </div>
-
             <!-- Páginas -->
             <div class="products-paging">
                 <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) > 1) {%>
@@ -94,6 +91,9 @@
                 <button class="products-next" name="action" value="prox">&#8250;</button>
                 <% }%>
             </div>
+            <%
+                }
+            %>
         </div>
     </div>
 </form>
@@ -101,11 +101,12 @@
     function verifica_precos() {
         var price_min = document.getElementById('display_min').value;
         var price_max = document.getElementById('display_max').value;
-        if (price_min >= price_max) {
-            alert("Valor mínimo não pode ser igual ou maior que o valor máximo!");
+        if (parseInt(price_min) >= parseInt(price_max)) {
+            alert("Valor mínimo(R$" + price_min + ") não pode ser igual ou maior que o valor máximo(R$" + price_max + ")!");
             return false;
         } else {
             document.getElementById('frmProdutos').submit();
+            return true;
         }
     }
 </script>

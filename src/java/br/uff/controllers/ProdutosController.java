@@ -228,10 +228,13 @@ public class ProdutosController extends HttpServlet {
 
             // joga numero max de pags p sessao
             MySql dbMaxPag = null;
+            String maxP = null;
             try {
                 dbMaxPag = new MySql();
-                String maxP = null;
                 maxP = dbMaxPag.dbValor("ceil(count(*)/" + qtdMaxProdutosPag + ")", consulta + filtro, "", bind);
+                if (Integer.valueOf(maxP) < 1) {
+                    maxP = "1";
+                }
                 session.setAttribute("maxPag", maxP);
             } catch (Exception ed) {
                 throw new Exception(ed.getMessage());
@@ -243,9 +246,13 @@ public class ProdutosController extends HttpServlet {
             Integer ProdutosPag = 1;
             if (session.getAttribute("ProdutosPag") != null) {
                 ProdutosPag = (Integer) session.getAttribute("ProdutosPag");
-            } else {
-                session.setAttribute("ProdutosPag", ProdutosPag);
             }
+            // se produtos pag for maior q o num max de pag, define max como pag atual 
+            if (ProdutosPag > Integer.valueOf(maxP)) {
+                ProdutosPag = Integer.valueOf(maxP);
+            }
+            // joga produtos pag p sessao
+            session.setAttribute("ProdutosPag", ProdutosPag);
 
             // recupera acao solicitada se existir
             String action = "";
@@ -265,7 +272,7 @@ public class ProdutosController extends HttpServlet {
                 case "prox": {
                     int maxPag = 1;
                     if (session.getAttribute("maxPag") != null) {
-                        maxPag = Integer.valueOf(session.getAttribute("maxPag").toString());
+                        maxPag = Integer.valueOf(maxP);
                     }
                     if (maxPag > ProdutosPag) {
                         ProdutosPag = ProdutosPag + 1;
@@ -302,14 +309,6 @@ public class ProdutosController extends HttpServlet {
                     row.add(ret.getString("category_name"));
                     // add row no grid
                     produtos.add(row);
-                }
-                // se qtd d produtos for 0 mandar p pag 1
-                if (produtos.size() == 0) {
-                    int maxPage = Integer.valueOf(session.getAttribute("maxPag").toString());
-                    if (maxPage < 1) {
-                        maxPage = 1;
-                    }
-                    session.setAttribute("ProdutosPag", maxPage);
                 }
                 request.setAttribute("produtos", produtos);
             } catch (SQLException ex) {
