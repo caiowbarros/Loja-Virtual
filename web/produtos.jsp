@@ -29,26 +29,30 @@
         <!-- Filtro das categorias -->
         <div class="products-item-filter">
             <p>Categorias</p>
-            <input name="category" type="checkbox" value="playstation">Playstation<br>
-            <input name="category" type="checkbox" value="xbox">Xbox<br>
-            <input name="category" type="checkbox" value="wii">Wii<br>
+            <input name="category" id="playstation" type="checkbox" value="playstation"><label for="playstation">Playstation</label><br>
+            <input name="category" id="xbox" type="checkbox" value="xbox"><label for="xbox">Xbox</label><br>
+            <input name="category" id="wii" type="checkbox" value="wii"><label for="wii">Wii</label><br>
         </div>
         <!-- Fitro das subcategorias -->
         <div class="products-item-filter">
             <p>Subcategorias</p>
-            <input name="category" type="checkbox" value="consoles">Consoles<br>
-            <input name="category" type="checkbox" value="jogos">Jogos<br>
-            <input name="category" type="checkbox" value="acessórios">Acessórios<br>
+            <input name="category" type="checkbox" value="consoles" id="consoles"><label for="consoles">Consoles</label><br>
+            <input name="category" type="checkbox" value="jogos" id="jogos"><label for="jogos">Jogos</label><br>
+            <input name="category" type="checkbox" id="acessorios" value="acessórios"><label for="acessorios">Acessórios</label><br>
         </div>
         <!-- Filtro dos preços -->
         <div class="products-item-filter">
             <p>Preços</p>
-            <input type="checkbox">Até R$ 250<br>
-            <input type="checkbox">De R$ 250 à R$ 500<br>
-            <input type="checkbox">De R$ 500 à R$ 1000<br>
-            <input type="checkbox">A partir de R$ 1000<br>
-            <!--<input type="range" min="1" max="1000" step="100">Min<br>
-            <input type="range" min="1" max="1000" step="100">Max<br>-->
+            <label>Valor Mínimo (R$)</label>
+            <div style="width: 100%;display:flex;">
+                <input type="range" min="0" max="1000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
+                <input style="border:none;"  name="price_min" type="number" readonly id="display_min"/>
+            </div>
+            <label>Valor Máximo (R$)</label>
+            <div style="width: 100%;display:flex;">
+                <input type="range" min="0" max="1000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
+                <input style="border:none;" name="price_max" type="number" readonly id="display_max"/>
+            </div>
         </div>
     </div>
 
