@@ -25,8 +25,8 @@
     <div class="products-main">
 
         <!-- Container dos filtros -->
-        <div class="products-filter" style="position:fixed;">
-            <h2>Filtros</h2>
+        <div class="products-filter">
+            <!--<h2>Filtrar por</h2>-->
             <!-- Filtro das categorias -->
             <div class="products-item-filter">
                 <p>Categorias</p>
@@ -45,22 +45,22 @@
             <div class="products-item-filter">
                 <p>Preços</p>
                 <label>Valor Mínimo (R$)</label>
-                <div style="width: 100%;display:flex;">
+                <div class="products-range">
                     <input value="${priceMin}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_min.value=value" onchange="display_min.value = value">
-                    <input value="${priceMin}" style="border:none;background-color: transparent;" name="price_min" type="number" readonly id="display_min"/>
+                    <input value="${priceMin}" name="price_min" type="number" readonly id="display_min"/>
                 </div>
                 <label>Valor Máximo (R$)</label>
-                <div style="width: 100%;display:flex;">
+                <div  class="products-range">
                     <input value="${priceMax}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_max.value=value" onchange="display_max.value = value">
-                    <input value="${priceMax}" style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
+                    <input value="${priceMax}" name="price_max" type="number" readonly id="display_max"/>
                 </div>
             </div>
         </div>
 
         <!-- Container dos produtos -->
-        <div class="products-page" style="margin-left:20%;margin-top:50px;">
+        <div class="products-page">
             <% if (produtos.size() < 1) { %>
-            <h3>O filtro escolhido não retornou nenhum produto, tente com outro!</h3>
+            <h3>O filtro escolhido não retornou nenhum produto. Mas não desista, tente com outro.</h3>
             <%
             } else {
             %>
