@@ -67,25 +67,36 @@ public class ProdutosController extends HttpServlet {
             // pega categorias
             String[] categorias = request.getParameterValues("category");
 
-            // Convert String Array to List
+            // pega sub categorias
+            String[] subCategorias = request.getParameterValues("subCategory");
+
+            // Converte String Array de categorias p Lista
             List<String> listaCategorias = new ArrayList<String>();;
             if (categorias != null) {
                 listaCategorias = Arrays.asList(categorias);
+            }
+
+            // Converte String Array de sub categorias p Lista
+            List<String> listaSubCategorias = new ArrayList<String>();;
+            if (subCategorias != null) {
+                listaSubCategorias = Arrays.asList(subCategorias);
             }
 
             // carrega categorias com base nos selects checados
             session.setAttribute("playstation", (listaCategorias.contains("playstation") ? "checked" : ""));
             session.setAttribute("xbox", (listaCategorias.contains("xbox") ? "checked" : ""));
             session.setAttribute("wii", (listaCategorias.contains("wii") ? "checked" : ""));
-            session.setAttribute("consoles", (listaCategorias.contains("consoles") ? "checked" : ""));
-            session.setAttribute("jogos", (listaCategorias.contains("jogos") ? "checked" : ""));
-            session.setAttribute("acessorios", (listaCategorias.contains("acessorios") ? "checked" : ""));
+            session.setAttribute("consoles", (listaSubCategorias.contains("consoles") ? "checked" : ""));
+            session.setAttribute("jogos", (listaSubCategorias.contains("jogos") ? "checked" : ""));
+            session.setAttribute("acessorios", (listaSubCategorias.contains("acessorios") ? "checked" : ""));
 
             // verifica se chamou o carregamento de categorias
             String categoryIdParameter = "";
             if (request.getParameter("categoryId") != null) {
                 categoryIdParameter = request.getParameter("categoryId");
             }
+
+            // define na sessao as variaveis para os checkboxes com base no category id passado
             if (categoryIdParameter.equals("5")) {
                 session.setAttribute("playstation", "checked");
                 session.setAttribute("consoles", "checked");
@@ -115,28 +126,31 @@ public class ProdutosController extends HttpServlet {
                 session.setAttribute("acessorios", "checked");
             }
 
-            // pega categorias setadas q n estao na lista de categorias
+            // pega sub categoria console q n esta na lista de sub categorias e insere
             if (session.getAttribute("consoles") != null) {
                 if (session.getAttribute("consoles").toString().equals("checked")) {
-                    if (!listaCategorias.contains("consoles")) {
-                        listaCategorias.add("consoles");
+                    if (!listaSubCategorias.contains("consoles")) {
+                        listaSubCategorias.add("consoles");
                     }
                 }
             }
+            // pega  sub categoria jogo q n esta na lista de sub categorias e insere
             if (session.getAttribute("jogos") != null) {
                 if (session.getAttribute("jogos").toString().equals("checked")) {
-                    if (!listaCategorias.contains("jogos")) {
-                        listaCategorias.add("jogos");
+                    if (!listaSubCategorias.contains("jogos")) {
+                        listaSubCategorias.add("jogos");
                     }
                 }
             }
+            // pega sub categoria acessorio q n esta na lista de sub categorias e insere
             if (session.getAttribute("acessorios") != null) {
                 if (session.getAttribute("acessorios").toString().equals("checked")) {
-                    if (!listaCategorias.contains("acessorios")) {
-                        listaCategorias.add("acessorios");
+                    if (!listaSubCategorias.contains("acessorios")) {
+                        listaSubCategorias.add("acessorios");
                     }
                 }
             }
+            // pega categoria playstation q n esta na lista de categorias e insere
             if (session.getAttribute("playstation") != null) {
                 if (session.getAttribute("playstation").toString().equals("checked")) {
                     if (!listaCategorias.contains("playstation")) {
@@ -144,6 +158,7 @@ public class ProdutosController extends HttpServlet {
                     }
                 }
             }
+            // pega categoria xbox q n esta na lista de categorias e insere
             if (session.getAttribute("xbox") != null) {
                 if (session.getAttribute("xbox").toString().equals("checked")) {
                     if (!listaCategorias.contains("xbox")) {
@@ -151,6 +166,7 @@ public class ProdutosController extends HttpServlet {
                     }
                 }
             }
+            // pega categoria wii q n esta na lista de categorias e insere
             if (session.getAttribute("wii") != null) {
                 if (session.getAttribute("wii").toString().equals("checked")) {
                     if (!listaCategorias.contains("wii")) {
@@ -168,6 +184,29 @@ public class ProdutosController extends HttpServlet {
                 }
                 categoriaFiltro += (categoriaFiltro.equals("") ? "" : " ) ");
                 filtro += (filtro.equals("") ? " WHERE " : " AND ") + categoriaFiltro;
+            }
+
+            // filtra sub categorias
+            if (listaSubCategorias.size() > 0) {
+                String subCategoriaFiltro = "";
+                for (String value : listaSubCategorias) {
+                    bindItens.add("%" + value.toUpperCase() + "%");
+                    subCategoriaFiltro += (subCategoriaFiltro.equals("") ? " ( " : " OR ") + " UPPER(c.category_name) like ? ";
+                }
+                subCategoriaFiltro += (subCategoriaFiltro.equals("") ? "" : " ) ");
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + subCategoriaFiltro;
+            }
+
+            // filtra menor preco
+            if (request.getParameter("price_min") != null) {
+                bindItens.add(request.getParameter("price_min"));
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price >= ? ";
+            }
+
+            // filtra maior preco
+            if (request.getParameter("price_max") != null) {
+                bindItens.add(request.getParameter("price_max"));
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price <= ? ";
             }
 
             // monta bind
@@ -258,9 +297,11 @@ public class ProdutosController extends HttpServlet {
                 }
                 // se qtd d produtos for 0 mandar p pag 1
                 if (produtos.size() == 0) {
-                    session.setAttribute("ProdutosPag", 1);
-                    response.sendRedirect("ProdutosController");
-                    return;
+                    int maxPage = Integer.valueOf(session.getAttribute("maxPag").toString());
+                    if (maxPage < 1) {
+                        maxPage = 1;
+                    }
+                    session.setAttribute("ProdutosPag", maxPage);
                 }
                 request.setAttribute("produtos", produtos);
             } catch (SQLException ex) {

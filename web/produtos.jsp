@@ -37,21 +37,21 @@
             <!-- Fitro das subcategorias -->
             <div class="products-item-filter">
                 <p>Subcategorias</p>
-                <input ${consoles} onchange="document.getElementById('frmProdutos').submit()" name="category" type="checkbox" value="consoles" id="consoles"><label for="consoles">Consoles</label><br>
-                <input ${jogos} onchange="document.getElementById('frmProdutos').submit()" name="category" type="checkbox" value="jogos" id="jogos"><label for="jogos">Jogos</label><br>
-                <input ${acessorios} onchange="document.getElementById('frmProdutos').submit()" name="category" type="checkbox" id="acessorios" value="acessorios"><label for="acessorios">Acessórios</label><br>
+                <input ${consoles} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" value="consoles" id="consoles"><label for="consoles">Consoles</label><br>
+                <input ${jogos} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" value="jogos" id="jogos"><label for="jogos">Jogos</label><br>
+                <input ${acessorios} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" id="acessorios" value="acessorios"><label for="acessorios">Acessórios</label><br>
             </div>
             <!-- Filtro dos preços -->
             <div class="products-item-filter">
                 <p>Preços</p>
                 <label>Valor Mínimo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input type="range" min="0" max="1000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
+                    <input onblur="document.getElementById('frmProdutos').submit()"type="range" min="0" max="1000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
                     <input style="border:none;background-color: transparent;"  name="price_min" type="number" readonly id="display_min"/>
                 </div>
                 <label>Valor Máximo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input type="range" min="0" max="1000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
+                    <input onblur="document.getElementById('frmProdutos').submit()" type="range" min="0" max="1000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
                     <input style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
                 </div>
             </div>
@@ -76,13 +76,17 @@
                 </div>
                 <%
                     }
+                    if (produtos.size() < 1) {
                 %>
-
+                <h3>O filtro escolhido não retornou nenhum produto, tente com outro!</h3>
+                <%
+                    }
+                %>
             </div>
 
             <!-- Páginas -->
             <div class="products-paging">
-                <% if (!session.getAttribute("ProdutosPag").toString().equals("1")) {%>
+                <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) > 1) {%>
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
                 <% }%>
                 <span><%= session.getAttribute("ProdutosPag")%></span>
