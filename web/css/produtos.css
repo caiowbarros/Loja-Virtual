@@ -17,6 +17,7 @@ and open the template in the editor.
 .products-filter {
     width: 15%;
     margin: 100px 20px 50px 15px;
+    position: fixed;
 }
 
 .products-item-filter {
@@ -31,6 +32,14 @@ and open the template in the editor.
     font-size: 15px;
 }
 
+.products-range {
+    display: flex;
+}
+
+.products-range input[type=number] {
+    border: none;
+}
+
 .products-item-filter input {
     margin-bottom: 5px;
     margin-right: 5px;
@@ -40,6 +49,7 @@ and open the template in the editor.
 .products-page {
     width: 80%;
     margin: 100px 5% 50px 0px;
+    margin-left: 20%;
 }
 
 .products-container {

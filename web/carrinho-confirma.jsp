@@ -59,7 +59,7 @@ Aqui tem que ter:
                 </div>
             </div>
         </div>
-        <button class="confirma-compra">Continuar Pagamento</button>
+        <button class="confirma-compra" onclick="location.href='compra-pagamento.jsp';">Continuar Pagamento</button>
     </div>
     
     <div class="right-confirma">
