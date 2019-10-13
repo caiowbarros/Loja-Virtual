@@ -3,6 +3,7 @@
     Created on : 13/09/2019, 18:51:42
     Author     : Caio
 --%>
+<%@page import="java.util.ArrayList"%>
 <%
     // recupera produtoId
     String produtoId = "";
@@ -11,24 +12,33 @@
     } else {
         response.sendRedirect("ProdutoController");
     }
-    
+
     // mostra msg se tiver
     if (session.getAttribute("msg") != null) {
         String msg = session.getAttribute("msg").toString();
         session.setAttribute("msg", null);
         out.println("<script>alert('" + msg + "');</script>");
     }
+
+    ArrayList<String> produto = null;
+    if (request.getAttribute("produto") != null) {
+        produto = (ArrayList<String>) request.getAttribute("produto");
+    } else {
+        session.setAttribute("msg", "Por favor selecione um produto!");
+        response.sendRedirect("ProdutosController");
+        return;
+    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Camisa CR Flamengo 1"/>
+    <jsp:param name="title" value="<%= produto.get(1) %>"/>
 </jsp:include>
 
 <main class="container">
 
     <!-- Coluna da esquerda / Imagem do produto -->
     <div class="left-column">
-        <img src="https://wqsurf.vteximg.com.br/arquivos/ids/176435-1000-1000/camisa-flamengo-jogo-1-adidas-2019-bs2-58454-1.jpg?v=636987970579800000">
+        <img src="<%= produto.get(5) %>">
     </div>
 
     <!-- Coluna da direita -->
@@ -36,14 +46,14 @@
 
         <!-- Descrição do produto -->
         <div class="product-description">
-            <span>Camisetas</span>
-            <h1>Camisa CR Flamengo 1</h1>
-            <p>As ruas do Rio de Janeiro são pavimentadas com mosaicos coloridos. O design fragmentado desta camisa de futebol foi montado para refletir o estilo único da casa do CR Flamengo. Feita para os fãs, ela coloca o conforto em primeiro lugar com um tecido sedoso que absorve o suor e uma modelagem um pouco mais larga do que a usada pelos jogadores em campo. Um escudo do time se destaca no peito.</p>
+            <span><%= produto.get(6) %></span>
+            <h1><%= produto.get(1) %></h1>
+            <p><%= produto.get(3) %></p>
         </div>
 
         <!-- Preço do produto -->
         <div class="product-price">
-            <span>R$250,00</span>
+            <span>R$<%= produto.get(4) %></span>
             <a href="CarrinhoController?addProdutoId=<%= produtoId%>" class="cart-btn">+ Carrinho</a>
             <!-- Botão de favorito -->
             <input onchange="window.location.href = 'ProdutoController?fav=<%= produtoId%>'" id="toggle-heart" type="checkbox" />
@@ -120,7 +130,6 @@
         <div class="review-star">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;
             <div class="review-date">setembro 15, 2019</div>
         </div>
-
         <div class="review-title">Entrega rápida, numeração top!
             <div class="review-text">Produto de excelente qualidade, entrega rápida e personalização da numeração diferenciada.</div>
         </div>

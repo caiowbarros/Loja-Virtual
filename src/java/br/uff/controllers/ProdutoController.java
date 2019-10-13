@@ -7,6 +7,9 @@ package br.uff.controllers;
 
 import br.uff.dao.MySql;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,23 +39,13 @@ public class ProdutoController extends HttpServlet {
         try {
 
             // se tem produto selecionado por parametro passa p sessao
-            if (request.getParameter("produtoId") != null) {
-                session.setAttribute("produtoId", request.getParameter("produtoId"));
-            }
-
-            // se fav esta definido por parametro passa p sessao
-            if (request.getParameter("fav") != null) {
-                session.setAttribute("fav", "1");
-            }
-
-            String fav = null;
-            // recupera fav da sessao
-            if (session.getAttribute("fav") != null) {
-                fav = session.getAttribute("fav").toString();
-            }
-
-            // se produtoId for null manda p pag d produtos
             String produtoId = null;
+            if (request.getParameter("produtoId") != null) {
+                produtoId = request.getParameter("produtoId");
+                session.setAttribute("produtoId", produtoId);
+            }
+
+            // se produtoId da sessao for null manda p pag d produtos
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
             } else {
@@ -61,17 +54,33 @@ public class ProdutoController extends HttpServlet {
                 return;
             }
 
+            // se fav esta definido por parametro passa p sessao
+            String fav = null;
+            if (request.getParameter("fav") != null) {
+                fav = request.getParameter("fav");
+                session.setAttribute("fav", fav);
+            }
+            // recupera fav da sessao
+            if (session.getAttribute("fav") != null) {
+                fav = session.getAttribute("fav").toString();
+            }
+
+            // recupera user id
+            String userId = null;
+            if (session.getAttribute("userId") != null) {
+                userId = session.getAttribute("userId").toString();
+            }
+
             // checa se eh para favoritar ou desfavoritar produto
             if (fav != null) {
                 // VERIFICA SE ESTA LOGADO
-                if (session.getAttribute("userId") == null) {
+                if (userId == null) {
                     response.sendRedirect("UserController?redirect=ProdutoController");
                     return;
                 } else {
                     MySql db = null;
                     try {
                         db = new MySql();
-                        String userId = session.getAttribute("userId").toString();
                         String[] bindFav = {produtoId, userId};
                         String count = "0";
                         count = db.dbValor("count(*)", "favorite_products", "product_id=? AND user_id=?", bindFav);
@@ -91,6 +100,66 @@ public class ProdutoController extends HttpServlet {
                         session.setAttribute("fav", null);
                     }
                 }
+            }
+
+            String filtroUser = (userId == null ? "null" : userId);
+            String[] bind = {filtroUser, filtroUser, produtoId};
+            String consulta = "SELECT\n"
+                    + "	p.id,\n"
+                    + "	p.`name`,\n"
+                    + "	p.quantity,\n"
+                    + "	p.description,\n"
+                    + "	p.price,\n"
+                    + "	p.img,\n"
+                    + "	c.category_name,\n"
+                    + "	(SELECT count(*) FROM favorite_products f WHERE f.product_id = p.id AND f.user_id=?) user_fav_product,\n"
+                    + "	(SELECT f.rating FROM user_produts_rating f WHERE f.product_id = p.id AND f.user_id=?) rate_gave_by_user,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id) qtd_ratings,\n"
+                    + "	(SELECT COALESCE(sum(f.rating),0) FROM user_produts_rating f WHERE f.product_id = p.id) sum_rating,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='1') qtd_ratings_1,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='2') qtd_ratings_2,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='3') qtd_ratings_3,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='4') qtd_ratings_4,\n"
+                    + "	(SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='5') qtd_ratings_5\n"
+                    + "FROM\n"
+                    + "	products p\n"
+                    + "LEFT JOIN\n"
+                    + "	vw_category c\n"
+                    + "ON\n"
+                    + "	(p.category_id = c.id)\n"
+                    + "WHERE\n"
+                    + "	p.id=?";
+
+            // define grid
+            MySql dbProduto = null;
+            try {
+                dbProduto = new MySql();
+                ArrayList<String> produto = new ArrayList<>();
+                ResultSet ret = dbProduto.dbCarrega(consulta, bind);
+                if (ret.next()) {
+                    // preenche row
+                    produto.add(ret.getString("id"));
+                    produto.add(ret.getString("name"));
+                    produto.add(ret.getString("quantity"));
+                    produto.add(ret.getString("description"));
+                    produto.add(ret.getString("price"));
+                    produto.add(ret.getString("img"));
+                    produto.add(ret.getString("category_name"));
+                    produto.add(ret.getString("user_fav_product"));
+                    produto.add(ret.getString("rate_gave_by_user"));
+                    produto.add(ret.getString("qtd_ratings"));
+                    produto.add(ret.getString("sum_rating"));
+                    produto.add(ret.getString("qtd_ratings_1"));
+                    produto.add(ret.getString("qtd_ratings_2"));
+                    produto.add(ret.getString("qtd_ratings_3"));
+                    produto.add(ret.getString("qtd_ratings_4"));
+                    produto.add(ret.getString("qtd_ratings_5"));
+                }
+                request.setAttribute("produto", produto);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbProduto.destroyDb();
             }
 
             request.getRequestDispatcher("produto.jsp").forward(request, response);
