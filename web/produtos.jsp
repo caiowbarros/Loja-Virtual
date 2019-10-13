@@ -46,13 +46,13 @@
                 <p>Preços</p>
                 <label>Valor Mínimo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input onblur="document.getElementById('frmProdutos').submit()"type="range" min="0" max="1000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
-                    <input style="border:none;background-color: transparent;"  name="price_min" type="number" readonly id="display_min"/>
+                    <input value="${priceMin}" onchange="document.getElementById('frmProdutos').submit()" type="range" min="0" max="5000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
+                    <input value="${priceMin}" style="border:none;background-color: transparent;" name="price_min" type="number" readonly id="display_min"/>
                 </div>
                 <label>Valor Máximo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input onblur="document.getElementById('frmProdutos').submit()" type="range" min="0" max="1000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
-                    <input style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
+                    <input value="${priceMax}" onchange="document.getElementById('frmProdutos').submit()" type="range" min="0" max="5000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
+                    <input value="${priceMax}" style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
                 </div>
             </div>
         </div>

@@ -199,14 +199,22 @@ public class ProdutosController extends HttpServlet {
 
             // filtra menor preco
             if (request.getParameter("price_min") != null) {
-                bindItens.add(request.getParameter("price_min"));
-                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price >= ? ";
+                String priceMin = request.getParameter("price_min");
+                if (!priceMin.equals("")) {
+                    session.setAttribute("priceMin", priceMin);
+                    bindItens.add(priceMin);
+                    filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price >= ? ";
+                }
             }
 
             // filtra maior preco
             if (request.getParameter("price_max") != null) {
-                bindItens.add(request.getParameter("price_max"));
-                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price <= ? ";
+                String priceMax = request.getParameter("price_max");
+                if (!priceMax.equals("")) {
+                    session.setAttribute("priceMax", priceMax);
+                    bindItens.add(priceMax);
+                    filtro += (filtro.equals("") ? " WHERE " : " AND ") + " price <= ? ";
+                }
             }
 
             // monta bind
