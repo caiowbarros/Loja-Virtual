@@ -46,12 +46,12 @@
                 <p>Preços</p>
                 <label>Valor Mínimo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input value="${priceMin}" onchange="document.getElementById('frmProdutos').submit()" type="range" min="0" max="5000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
+                    <input value="${priceMin}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_min.value=value" onchange="display_min.value = value">
                     <input value="${priceMin}" style="border:none;background-color: transparent;" name="price_min" type="number" readonly id="display_min"/>
                 </div>
                 <label>Valor Máximo (R$)</label>
                 <div style="width: 100%;display:flex;">
-                    <input value="${priceMax}" onchange="document.getElementById('frmProdutos').submit()" type="range" min="0" max="5000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
+                    <input value="${priceMax}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_max.value=value" onchange="display_max.value = value">
                     <input value="${priceMax}" style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
                 </div>
             </div>
@@ -97,5 +97,17 @@
         </div>
     </div>
 </form>
+<script>
+    function verifica_precos() {
+        var price_min = document.getElementById('display_min').value;
+        var price_max = document.getElementById('display_max').value;
+        if (price_min >= price_max) {
+            alert("Valor mínimo não pode ser igual ou maior que o valor máximo!");
+            return false;
+        } else {
+            document.getElementById('frmProdutos').submit();
+        }
+    }
+</script>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

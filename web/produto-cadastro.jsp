@@ -36,7 +36,7 @@
         <legend>Produto</legend>
         <label>Nome:&nbsp;</label><input value="${produto.getName()}" name="name" required type="text" placeholder="name" maxlength="255"/>
         <br>
-        <label>Preço:&nbsp;</label><input value="${produto.getPrice()}" name="price" required type="number" min="0.01" step="0.01" placeholder="price" maxlength="255" />
+        <label>Preço:&nbsp;</label><input value="${produto.getPrice()}" name="price" required type="number" max="5000" min="0.01" step="0.01" placeholder="price" maxlength="255" />
         <br>
         <label>Descrição:&nbsp;</label><textarea name="description" required placeholder="description" maxlength="255">${produto.getDescription()}</textarea>
         <br>
