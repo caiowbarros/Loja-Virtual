@@ -25,7 +25,8 @@
 <div class="products-main">
 
     <!-- Container dos filtros -->
-    <div class="products-filter">
+    <div class="products-filter" style="position:fixed;">
+        <h2>Filtros</h2>
         <!-- Filtro das categorias -->
         <div class="products-item-filter">
             <p>Categorias</p>
@@ -46,18 +47,18 @@
             <label>Valor Mínimo (R$)</label>
             <div style="width: 100%;display:flex;">
                 <input type="range" min="0" max="1000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
-                <input style="border:none;"  name="price_min" type="number" readonly id="display_min"/>
+                <input style="border:none;background-color: transparent;"  name="price_min" type="number" readonly id="display_min"/>
             </div>
             <label>Valor Máximo (R$)</label>
             <div style="width: 100%;display:flex;">
                 <input type="range" min="0" max="1000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
-                <input style="border:none;" name="price_max" type="number" readonly id="display_max"/>
+                <input style="border:none;background-color: transparent;" name="price_max" type="number" readonly id="display_max"/>
             </div>
         </div>
     </div>
 
     <!-- Container dos produtos -->
-    <div class="products-page">
+    <div class="products-page" style="margin-left:20%;margin-top:50px;">
         <div class="products-container">
 
 
