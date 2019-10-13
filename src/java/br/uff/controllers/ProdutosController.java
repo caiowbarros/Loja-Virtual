@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,17 +44,18 @@ public class ProdutosController extends HttpServlet {
             String qtdMaxProdutosPag = "8";
             String consulta = "SELECT p.id,p.name,p.price,p.img,c.category_name,p.category_id FROM products p LEFT JOIN vw_category c on(p.category_id=c.id)";
             String filtro = "";
-            String[] bind = null;
+            ArrayList<String> bindItens = new ArrayList<>();
             String limit = " LIMIT " + qtdMaxProdutosPag + " ";
             String offset = "";
             String userId = null;
+
             // verifica se chama favoritos
             if (request.getParameter("fav") != null) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
                     filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=1)";
                     userId = session.getAttribute("userId").toString();
-                    bind[bind.length] = userId;
+                    bindItens.add(userId);
                 } else {
                     // se n tem usuario logado mostra msg solicitando login
                     throw new Exception("Realize login para ver seus favoritos!");
@@ -61,12 +64,118 @@ public class ProdutosController extends HttpServlet {
                 filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
             }
 
-            // filtra categorias
-            String categorias[] = request.getParameterValues("category");
+            // pega categorias
+            String[] categorias = request.getParameterValues("category");
+
+            // Convert String Array to List
+            List<String> listaCategorias = new ArrayList<String>();;
             if (categorias != null) {
-                for (String value : categorias) {
-                    // bind[bind.length] = "%" + value.toUpperCase() + "%";
-                    // filtro += (filtro.equals("") ? " WHERE " : " AND ") + " UPPER(c.category_name) like ? ";
+                listaCategorias = Arrays.asList(categorias);
+            }
+
+            // carrega categorias com base nos selects checados
+            session.setAttribute("playstation", (listaCategorias.contains("playstation") ? "checked" : ""));
+            session.setAttribute("xbox", (listaCategorias.contains("xbox") ? "checked" : ""));
+            session.setAttribute("wii", (listaCategorias.contains("wii") ? "checked" : ""));
+            session.setAttribute("consoles", (listaCategorias.contains("consoles") ? "checked" : ""));
+            session.setAttribute("jogos", (listaCategorias.contains("jogos") ? "checked" : ""));
+            session.setAttribute("acessorios", (listaCategorias.contains("acessorios") ? "checked" : ""));
+
+            // verifica se chamou o carregamento de categorias
+            String categoryIdParameter = "";
+            if (request.getParameter("categoryId") != null) {
+                categoryIdParameter = request.getParameter("categoryId");
+            }
+            if (categoryIdParameter.equals("5")) {
+                session.setAttribute("playstation", "checked");
+                session.setAttribute("consoles", "checked");
+            } else if (categoryIdParameter.equals("6")) {
+                session.setAttribute("playstation", "checked");
+                session.setAttribute("jogos", "checked");
+            } else if (categoryIdParameter.equals("4")) {
+                session.setAttribute("playstation", "checked");
+                session.setAttribute("acessorios", "checked");
+            } else if (categoryIdParameter.equals("8")) {
+                session.setAttribute("xbox", "checked");
+                session.setAttribute("consoles", "checked");
+            } else if (categoryIdParameter.equals("9")) {
+                session.setAttribute("xbox", "checked");
+                session.setAttribute("jogos", "checked");
+            } else if (categoryIdParameter.equals("7")) {
+                session.setAttribute("xbox", "checked");
+                session.setAttribute("acessorios", "checked");
+            } else if (categoryIdParameter.equals("11")) {
+                session.setAttribute("wii", "checked");
+                session.setAttribute("consoles", "checked");
+            } else if (categoryIdParameter.equals("12")) {
+                session.setAttribute("wii", "checked");
+                session.setAttribute("jogos", "checked");
+            } else if (categoryIdParameter.equals("10")) {
+                session.setAttribute("wii", "checked");
+                session.setAttribute("acessorios", "checked");
+            }
+
+            // pega categorias setadas q n estao na lista de categorias
+            if (session.getAttribute("consoles") != null) {
+                if (session.getAttribute("consoles").toString().equals("checked")) {
+                    if (!listaCategorias.contains("consoles")) {
+                        listaCategorias.add("consoles");
+                    }
+                }
+            }
+            if (session.getAttribute("jogos") != null) {
+                if (session.getAttribute("jogos").toString().equals("checked")) {
+                    if (!listaCategorias.contains("jogos")) {
+                        listaCategorias.add("jogos");
+                    }
+                }
+            }
+            if (session.getAttribute("acessorios") != null) {
+                if (session.getAttribute("acessorios").toString().equals("checked")) {
+                    if (!listaCategorias.contains("acessorios")) {
+                        listaCategorias.add("acessorios");
+                    }
+                }
+            }
+            if (session.getAttribute("playstation") != null) {
+                if (session.getAttribute("playstation").toString().equals("checked")) {
+                    if (!listaCategorias.contains("playstation")) {
+                        listaCategorias.add("playstation");
+                    }
+                }
+            }
+            if (session.getAttribute("xbox") != null) {
+                if (session.getAttribute("xbox").toString().equals("checked")) {
+                    if (!listaCategorias.contains("xbox")) {
+                        listaCategorias.add("xbox");
+                    }
+                }
+            }
+            if (session.getAttribute("wii") != null) {
+                if (session.getAttribute("wii").toString().equals("checked")) {
+                    if (!listaCategorias.contains("wii")) {
+                        listaCategorias.add("wii");
+                    }
+                }
+            }
+
+            // filtra categorias
+            if (listaCategorias.size() > 0) {
+                String categoriaFiltro = "";
+                for (String value : listaCategorias) {
+                    bindItens.add("%" + value.toUpperCase() + "%");
+                    categoriaFiltro += (categoriaFiltro.equals("") ? " ( " : " OR ") + " UPPER(c.category_name) like ? ";
+                }
+                categoriaFiltro += (categoriaFiltro.equals("") ? "" : " ) ");
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + categoriaFiltro;
+            }
+
+            // monta bind
+            String[] bind = null;
+            if (bindItens.size() > 0) {
+                bind = new String[bindItens.size()];
+                for (int i = 0; i < bindItens.size(); i++) {
+                    bind[i] = bindItens.get(i);
                 }
             }
 
@@ -146,6 +255,12 @@ public class ProdutosController extends HttpServlet {
                     row.add(ret.getString("category_name"));
                     // add row no grid
                     produtos.add(row);
+                }
+                // se qtd d produtos for 0 mandar p pag 1
+                if (produtos.size() == 0) {
+                    session.setAttribute("ProdutosPag", 1);
+                    response.sendRedirect("ProdutosController");
+                    return;
                 }
                 request.setAttribute("produtos", produtos);
             } catch (SQLException ex) {
