@@ -71,6 +71,7 @@ public class AvaliacaoController extends HttpServlet {
                     validador.destroyDb();
                 }
                 if (qtdAvaliacoes > 0) {
+                    session.setAttribute("rating", null);
                     throw new Exception("Produto já avaliado!");
                 }
             } else {
