@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class MySql {
 
-    Connection conn = null;
+    private Connection conn = null;
 
     public MySql() throws SQLException, ClassNotFoundException {
         this.initDbMySql("test", "root", "");
@@ -29,7 +29,7 @@ public class MySql {
             Integer aux = 0;
             for (String comando : comandos) {
                 // pega comando e verifica se index existe e pega bind
-                dbGrava(comando, aux < bind.length ? bind[aux] : null);
+                this.dbGrava(comando, aux < bind.length ? bind[aux] : null);
                 // incrementa aux
                 aux += 1;
             }
@@ -43,9 +43,9 @@ public class MySql {
     }
 
     public void dbGrava(String comando, String[] bind) throws SQLException {
-        PreparedStatement sql = montaComando(comando, bind);
+        PreparedStatement sql = this.montaComando(comando, bind);
         sql.executeUpdate();
-        sql = fechaComando(sql);
+        sql = this.fechaComando(sql);
     }
 
     public String dbValor(String campo, String tabela, String filtro, String[] bind) throws SQLException {
@@ -58,7 +58,7 @@ public class MySql {
         String consulta = "SELECT " + campo + " FROM (" + tabela + ") _x2";
 
         PreparedStatement sql;
-        sql = montaComando(consulta, bind);
+        sql = this.montaComando(consulta, bind);
         ResultSet resultado = sql.executeQuery();
         if (resultado.next()) {
             return resultado.getString(campo);
@@ -68,7 +68,7 @@ public class MySql {
     }
 
     public ResultSet dbCarrega(String consulta, String[] bind) throws SQLException {
-        PreparedStatement sql = montaComando(consulta, bind);
+        PreparedStatement sql = this.montaComando(consulta, bind);
         ResultSet rs = sql.executeQuery();
         return rs;
     }
@@ -96,7 +96,7 @@ public class MySql {
         comando = this.conn.prepareStatement(sql);
         // retorna comando com bind inserido
         if (bind != null) {
-            comando = setBind(comando, bind);
+            comando = this.setBind(comando, bind);
         }
         return comando;
     }

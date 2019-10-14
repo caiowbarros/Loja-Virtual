@@ -128,6 +128,9 @@ public class UserController extends HttpServlet {
                     // define redirect se n foi passado
                     if (redirect == null || "null".equals(redirect)) {
                         redirect = "usuario-cadastro.jsp";
+                    } else {
+                        response.sendRedirect(redirect);
+                        return;
                     }
                 } else {
                     request.setAttribute("redirect", redirect);

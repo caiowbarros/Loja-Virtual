@@ -35,15 +35,15 @@
         <legend>Avaliação</legend>
         <!-- Avaliação do produto (em estrelas) -->
         <div class="rate">
-            <input <%= rating.equals("5") ? "selected" : ""%> type="radio" id="star5" name="rating" value="5" />
+            <input <%= rating.equals("5") ? "checked" : ""%> type="radio" id="star5" name="rating" value="5" />
             <label for="star5" title="text"></label>
-            <input <%= rating.equals("4") ? "selected" : ""%> type="radio" id="star4" name="rating" value="4" />
+            <input <%= rating.equals("4") ? "checked" : ""%> type="radio" id="star4" name="rating" value="4" />
             <label for="star4" title="text"></label>
-            <input <%= rating.equals("3") ? "selected" : ""%> type="radio" id="star3" name="rating" value="3" />
+            <input <%= rating.equals("3") ? "checked" : ""%> type="radio" id="star3" name="rating" value="3" />
             <label for="star3" title="text"></label>
-            <input <%= rating.equals("2") ? "selected" : ""%> type="radio" id="star2" name="rating" value="2" />
+            <input <%= rating.equals("2") ? "checked" : ""%> type="radio" id="star2" name="rating" value="2" />
             <label for="star2" title="text"></label>
-            <input <%= rating.equals("1") ? "selected" : ""%> type="radio" id="star1" name="rating" value="1" />
+            <input <%= rating.equals("1") ? "checked" : ""%> type="radio" id="star1" name="rating" value="1" />
             <label for="star1" title="text"></label>
         </div>
         <input name="title" required type="text" placeholder="Título da Avaliação" maxlength="255" />

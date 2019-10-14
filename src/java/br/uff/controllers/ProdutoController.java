@@ -130,7 +130,7 @@ public class ProdutoController extends HttpServlet {
                     + "WHERE\n"
                     + "	p.id=?";
 
-            // define grid
+            // define produto
             MySql dbProduto = null;
             try {
                 dbProduto = new MySql();
@@ -162,11 +162,52 @@ public class ProdutoController extends HttpServlet {
                 dbProduto.destroyDb();
             }
 
+            String consultaAvaliacao = "SELECT\n"
+                    + "	u.`name`,\n"
+                    + "	r.title,\n"
+                    + "	r.rating,\n"
+                    + "	r.description,\n"
+                    + "	DATE_FORMAT(r.created_at, '%M %d, %Y') date_w_month,\n"
+                    + "	DATE_FORMAT(r.created_at, '%d/%m/%Y') date_simple\n"
+                    + "FROM\n"
+                    + "	user_produts_rating r\n"
+                    + "LEFT JOIN users u ON (r.user_id = u.id)\n"
+                    + "WHERE\n"
+                    + "	r.product_id = ?\n"
+                    + "ORDER BY\n"
+                    + "	r.created_at";
+            String[] bindAvaliacao = {produtoId};
+            
+            // define avaliacoes
+            MySql dbAvaliacoes = null;
+            try {
+                dbAvaliacoes = new MySql();
+                ArrayList<ArrayList> avaliacoes = new ArrayList<>();
+                ResultSet aval = dbAvaliacoes.dbCarrega(consultaAvaliacao, bindAvaliacao);
+                while (aval.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(aval.getString("name"));
+                    row.add(aval.getString("title"));
+                    row.add(aval.getString("rating"));
+                    row.add(aval.getString("description"));
+                    row.add(aval.getString("date_w_month"));
+                    row.add(aval.getString("date_simple"));
+                    // add row no grid
+                    avaliacoes.add(row);
+                }
+                request.setAttribute("avaliacoes", avaliacoes);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbAvaliacoes.destroyDb();
+            }
+
             request.getRequestDispatcher("produto.jsp").forward(request, response);
             return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
-            request.getRequestDispatcher("ProdutosController").forward(request, response);
+            response.sendRedirect("ProdutosController");
             return;
         }
     }

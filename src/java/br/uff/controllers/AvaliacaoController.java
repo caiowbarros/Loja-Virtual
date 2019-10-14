@@ -48,14 +48,31 @@ public class AvaliacaoController extends HttpServlet {
             }
 
             // se n tem usuario logado manda p controller de user
+            String userId = null;
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=AvaliacaoController");
                 return;
+            } else {
+                userId = session.getAttribute("userId").toString();
             }
 
             String produtoId = null;
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
+                int qtdAvaliacoes;
+                MySql validador = null;
+                try {
+                    validador = new MySql();
+                    String[] bindValidador = {userId, produtoId};
+                    qtdAvaliacoes = Integer.valueOf(validador.dbValor("count(*)", "user_produts_rating", "user_id=? AND product_id=?", bindValidador));
+                } catch (ClassNotFoundException | SQLException e) {
+                    throw new Exception("Falha ao recuperar quantidade de avaliacoes do usuário para o produto: " + e.getMessage());
+                } finally {
+                    validador.destroyDb();
+                }
+                if (qtdAvaliacoes > 0) {
+                    throw new Exception("Produto já avaliado!");
+                }
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("ProdutosController");
@@ -63,7 +80,10 @@ public class AvaliacaoController extends HttpServlet {
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
+            }
 
             switch (action) {
                 case "avalia": {
@@ -72,12 +92,10 @@ public class AvaliacaoController extends HttpServlet {
                     try {
                         db = new MySql();
                         //RECUPERA VALUES
-                        String userId = session.getAttribute("userId").toString();
-                        String productId = session.getAttribute("produtoId").toString();
                         String rating = session.getAttribute("rating").toString();
                         String description = request.getParameter("description").toString();
                         String title = request.getParameter("title").toString();
-                        String[] bind = {userId, productId, rating, description, title};
+                        String[] bind = {userId, produtoId, rating, description, title};
                         db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
                         // define msg a ser mostrada
                         session.setAttribute("msg", "Produto avaliado com sucesso!");
