@@ -45,7 +45,7 @@
     </fieldset>
 </form>
 <a href="EnderecoController">Seus Endereços</a>
-<a href="ProdutosController?fav">Seus Produtos Favoritos</a>
+<a href="ProdutosController?esp=favoritos">Seus Produtos Favoritos</a>
 <a href="compras.jsp">Suas Compras</a>
 <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
 <% if (session.getAttribute("userRole").equals("1")) { %>
