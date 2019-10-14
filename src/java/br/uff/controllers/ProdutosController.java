@@ -49,20 +49,11 @@ public class ProdutosController extends HttpServlet {
             String offset = "";
             String userId = null;
 
-            // verifica se chama favoritos
-            if (request.getParameter("fav") != null) {
-                // se tem usuario logado mostra filtra produtos por favoritos
-                if (session.getAttribute("userId") != null) {
-                    filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=1)";
-                    userId = session.getAttribute("userId").toString();
-                    bindItens.add(userId);
-                } else {
-                    // se n tem usuario logado mostra msg solicitando login
-                    throw new Exception("Realize login para ver seus favoritos!");
-                }
-            } else {
-                filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
-            }
+            //recupera apenas produtos que tem no estoque
+            filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";
+
+            // pega esp
+            String[] especiais = request.getParameterValues("esp");
 
             // pega categorias
             String[] categorias = request.getParameterValues("category");
@@ -82,6 +73,12 @@ public class ProdutosController extends HttpServlet {
                 listaSubCategorias = Arrays.asList(subCategorias);
             }
 
+            // Converte String Array de especiais p Lista
+            List<String> listaEsp = new ArrayList<String>();;
+            if (especiais != null) {
+                listaEsp = Arrays.asList(especiais);
+            }
+
             // carrega categorias com base nos selects checados
             session.setAttribute("playstation", (listaCategorias.contains("playstation") ? "checked" : ""));
             session.setAttribute("xbox", (listaCategorias.contains("xbox") ? "checked" : ""));
@@ -89,6 +86,8 @@ public class ProdutosController extends HttpServlet {
             session.setAttribute("consoles", (listaSubCategorias.contains("consoles") ? "checked" : ""));
             session.setAttribute("jogos", (listaSubCategorias.contains("jogos") ? "checked" : ""));
             session.setAttribute("acessorios", (listaSubCategorias.contains("acessorios") ? "checked" : ""));
+            session.setAttribute("favoritos", (listaEsp.contains("favoritos") ? "checked" : ""));
+            session.setAttribute("lancamentos", (listaEsp.contains("lancamentos") ? "checked" : ""));
 
             // verifica se chamou o carregamento de categorias
             String categoryIdParameter = "";
@@ -124,6 +123,42 @@ public class ProdutosController extends HttpServlet {
             } else if (categoryIdParameter.equals("10")) {
                 session.setAttribute("wii", "checked");
                 session.setAttribute("acessorios", "checked");
+            } else if (categoryIdParameter.equals("1")) {
+                session.setAttribute("playstation", "checked");
+            } else if (categoryIdParameter.equals("2")) {
+                session.setAttribute("xbox", "checked");
+            } else if (categoryIdParameter.equals("3")) {
+                session.setAttribute("wii", "checked");
+            }
+
+            // verifica se chamou um filtro especial
+            String espParameter = "";
+            if (request.getParameter("esp") != null) {
+                espParameter = request.getParameter("esp");
+            }
+
+            if (espParameter.equals("lancamentos")) {
+                session.setAttribute("lancamentos", "checked");
+            } else if (espParameter.equals("favoritos")) {
+                session.setAttribute("favoritos", "checked");
+            }
+
+            // pega esp lancamentos q n esta na lista de esp e insere
+            if (session.getAttribute("lancamentos") != null) {
+                if (session.getAttribute("lancamentos").toString().equals("checked")) {
+                    if (!listaEsp.contains("lancamentos")) {
+                        listaEsp.add("lancamentos");
+                    }
+                }
+            }
+
+            // pega esp favoritos q n esta na lista de esp e insere
+            if (session.getAttribute("favoritos") != null) {
+                if (session.getAttribute("favoritos").toString().equals("checked")) {
+                    if (!listaEsp.contains("favoritos")) {
+                        listaEsp.add("favoritos");
+                    }
+                }
             }
 
             // pega sub categoria console q n esta na lista de sub categorias e insere
@@ -195,6 +230,22 @@ public class ProdutosController extends HttpServlet {
                 }
                 subCategoriaFiltro += (subCategoriaFiltro.equals("") ? "" : " ) ");
                 filtro += (filtro.equals("") ? " WHERE " : " AND ") + subCategoriaFiltro;
+            }
+
+            // filtra favoritos
+            if (listaEsp.contains("favoritos")) {
+                // se tem usuario logado mostra filtra produtos por favoritos
+                if (session.getAttribute("userId") != null) {
+                    filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=?)";
+                    userId = session.getAttribute("userId").toString();
+                    bindItens.add(userId);
+                } else {
+                    session.setAttribute("msg", "Realize login para ver seus favoritos!");
+                    response.sendRedirect("UserController?redirect=ProdutosController");
+                    return;
+                }
+            } else if (listaEsp.contains("lancamentos")) {
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
             }
 
             // filtra menor preco

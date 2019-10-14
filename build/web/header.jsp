@@ -25,7 +25,7 @@
         <header>
             <!-- Logo -->
             <div class="logo-div">
-                <a href="index.jsp">UFF</a>
+                <a href="./">UFF</a>
             </div>
             <!-- Dropdown -->
             <div class="dropdown-menu">

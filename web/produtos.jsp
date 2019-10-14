@@ -55,6 +55,11 @@
                     <input value="${priceMax}" name="price_max" type="number" readonly id="display_max"/>
                 </div>
             </div>
+            <!-- Filtros Especiais -->
+            <div class="products-item-filter">
+                <input ${favoritos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="favoritos" id="favs"><label for="favs">Apenas Favoritos</label><br>
+                <input ${lancamentos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="lancamentos" id="lancs"><label for="lancs">Apenas Lançamentos</label><br>
+            </div>
         </div>
 
         <!-- Container dos produtos -->

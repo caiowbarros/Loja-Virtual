@@ -38,6 +38,8 @@ and open the template in the editor.
 
 .products-range input[type=number] {
     border: none;
+    background-color: transparent;
+    pointer-events: none;
 }
 
 .products-item-filter input {
