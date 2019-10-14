@@ -3,6 +3,7 @@
     Created on : 28/09/2019, 16:26:16
     Author     : HP
 --%>
+<%@page import="br.uff.models.User"%>
 <%
     // se n tiver um usuario logado retorna p userController
     if (session.getAttribute("userId") == null) {
@@ -14,45 +15,38 @@
         session.setAttribute("msg", null);
         out.println("<script>alert('" + msg + "');</script>");
     }
+
+    User usuario = null;
+    if (request.getAttribute("usuario") != null) {
+        usuario = (User) request.getAttribute("usuario");
+    } else {
+        response.sendRedirect("UserController");
+        return;
+    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Conta Pessoal"/>
 </jsp:include>
+<a href="UserController">Voltar</a>
 <form method="post" action="UserController">
     <fieldset>
-        <legend>user</legend>
-        <div class="group">      
-            <input name="name" required type="text" maxlength="255" value="${user.name}">
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label>Nome Completo</label>
-        </div>
-        <div class="group">      
-            <input name="email" required type="email" maxlength="255" value="${user.email}">
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label>E-mail</label>
-        </div>
-        <div class="group">
-            <input name="password" required type="password" maxlength="255" value="${user.password}">
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label>Senha</label>
-        </div>
+        <legend>Usuário</legend>
+        <input name="name" required type="text" maxlength="255" value="${usuario.getName()}">
+        <input name="email" required type="email" maxlength="255" value="${usuario.getEmail()}">
+        <input name="password" required type="password" maxlength="255" value="${usuario.getPassword()}">
+        <% if (session.getAttribute("userRole").equals("1")) { %>
+        <jsp:include page="partials/components/select.jsp">
+            <jsp:param name="nameSelect" value="roleId"/>
+            <jsp:param name="required" value="1"/>
+            <jsp:param name="consulta" value="SELECT id value,name text FROM roles ORDER BY 2"/>
+            <jsp:param name="selectedValue" value="${usuario.getRoleId()}"/>
+        </jsp:include>
+        <% } else { %>
+        <input name="roleId" required type="text" style="display:none;" value="${usuario.getRoleId()}">
+        <% }%>
         <button type="submit" name="action" value="grava">Gravar</button>
-        <button onclick="return confirm('Tem certeza que deseja fazer o LOGOUT?');false;" type="submit" name="action" value="logout" formnovalidate>LOGOUT</button>
     </fieldset>
 </form>
-<a href="EnderecoController">Seus Endereços</a>
-<a href="ProdutosController?esp=favoritos">Seus Produtos Favoritos</a>
-<a href="compras.jsp">Suas Compras</a>
-<!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
-<% if (session.getAttribute("userRole").equals("1")) { %>
-<fieldset>
-    <legend>Opções Administrativas</legend>
-    <a href="ProdutoAdmController">Cadastro de Produtos</a>
-</fieldset>
-<% }%>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
