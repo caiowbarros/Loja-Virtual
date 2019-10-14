@@ -28,8 +28,8 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Conta Pessoal"/>
 </jsp:include>
-<a href="UserController">Voltar</a>
 <form method="post" action="UserController">
+    <button type="submit" name="action" value="unsel">Voltar</button>
     <fieldset>
         <legend>Usuário</legend>
         <input name="name" required type="text" maxlength="255" value="${usuario.getName()}">

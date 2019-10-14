@@ -39,6 +39,15 @@ public class UserController extends HttpServlet {
         HttpSession session = request.getSession();
         try {
 
+            if (request.getParameter("sel") != null) {
+                session.setAttribute("selUser", request.getParameter("sel"));
+            }
+
+            String selUser = null;
+            if (session.getAttribute("selUser") != null) {
+                selUser = session.getAttribute("selUser").toString();
+            }
+
             // recupera acao solicitada se existir
             String action = "";
             if (request.getParameter("action") != null) {
@@ -48,8 +57,32 @@ public class UserController extends HttpServlet {
             switch (action) {
                 case "grava": {
                     // grava alteracoes no cadastro d usuario feito na pag de usuario-cadastro
-                    session.setAttribute("msg", "Usuário gravado com sucesso!");
-                    break;
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        // pega variaveis
+                        String email = request.getParameter("email");
+                        String password = request.getParameter("password");
+                        String roleId = request.getParameter("roleId");
+                        String name = request.getParameter("name");
+                        String[] bind = null;
+                        String comando = "";
+                        if (selUser.equals("")) {
+                            String[] bindUpdate = {email, password, roleId, name};
+                            bind = bindUpdate;
+                            comando = "INSERT INTO users (email,password,role_id,name) VALUES (?,?,?,?)";
+                        } else {
+                            String[] bindInsert = {email, password, roleId, name, selUser};
+                            bind = bindInsert;
+                            comando = "UPDATE users set email=?,password=?,role_id=?,name=? WHERE id=?";
+                        }
+                        db.dbGrava(comando, bind);
+                        session.setAttribute("msg", "Usuário gravado com sucesso!");
+                    } catch (Exception ec) {
+                        throw new Exception(ec.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
                 }
                 case "logout": {
                     // invalida sessao
@@ -115,6 +148,11 @@ public class UserController extends HttpServlet {
                     }
                     break;
                 }
+                case "unsel": {
+                    session.setAttribute("selUser", null);
+                    response.sendRedirect("UserController");
+                    return;
+                }
             }
 
             String redirect;
@@ -134,15 +172,14 @@ public class UserController extends HttpServlet {
                     String userId = session.getAttribute("userId").toString();
                     // define redirect se n foi passado
                     if (redirect == null || "null".equals(redirect)) {
-                        if (request.getParameter("sel") != null) {
-                            String selParameter = request.getParameter("sel");
+                        if (selUser != null) {
                             User usuario;
                             usuario = new User("", "", "", 2);
                             // define endereco
                             MySql dbEnd = null;
                             try {
                                 dbEnd = new MySql();
-                                String[] bindSel = {selParameter};
+                                String[] bindSel = {selUser};
                                 ResultSet ret = dbEnd.dbCarrega("SELECT * FROM users WHERE id=?", bindSel);
                                 if (ret.next()) {
                                     // preenche endereco
@@ -159,7 +196,6 @@ public class UserController extends HttpServlet {
                             }
                             // define atributo de produto
                             request.setAttribute("usuario", usuario);
-                            session.setAttribute("sel", selParameter);
                             redirect = "usuario-cadastro.jsp";
                         } else {
                             // define grid
