@@ -5,8 +5,10 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -28,53 +30,86 @@ public class UserController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // pega sessao
+        HttpSession session = request.getSession();
         try {
-            // pega sessao
-            HttpSession session = request.getSession();
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
+            }
 
-            // verifica acoes
-            if ("grava".equals(action)) {
-                // grava alteracoes
-                request.setAttribute("msg", "Usuário gravado com sucesso!");
-            } else if ("logout".equals(action)) {
-                // invalida sessao
-                session.invalidate();
-                request.setAttribute("msg", "Usuário deslogado com sucesso!");
-            } else if ("login".equals(action)) {
-                // pega variaveis
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-
-                // valida login se estiver ok, executa a parte de lembrar login e seta userID se login for validos
-                // define variavel de sessao do userId como o Id do usuario q se logou
-                session.setAttribute("userId", "1");
-                // define variavel de sessao do userRole como o Role do usuario q se logou (1=>ADM,0=>CLIENTE)
-                session.setAttribute("userRole", "1");
-
-                // seta cookie se solicitar para lembrar login
-                if (request.getParameter("remember") != null) {
-                    int durMes = 2592000;
-                    Cookie ckEmail = new Cookie("loginEmail", email);
-                    ckEmail.setMaxAge(durMes);
-                    response.addCookie(ckEmail);
-                    Cookie ckPassword = new Cookie("loginPassword", password);
-                    ckPassword.setMaxAge(durMes);
-                    response.addCookie(ckPassword);
+            switch (action) {
+                case "grava": {
+                    // grava alteracoes no cadastro d usuario feito na pag de usuario-cadastro
+                    session.setAttribute("msg", "Usuário gravado com sucesso!");
+                    break;
                 }
-                request.setAttribute("msg", "Seja bem vindo!");
-            } else if ("insere".equals(action)) {
-                // pega variaveis
-                String name = request.getParameter("nome");
-                String email = request.getParameter("email");
-                String password = request.getParameter("senha");
-
-                session.setAttribute("userId", "1");
-                session.setAttribute("userRole", "2");
-                request.setAttribute("msg", "Seja bem vindo " + name + "!");
-
+                case "logout": {
+                    // invalida sessao
+                    session.invalidate();
+                    //session.setAttribute("msg", "Usuário deslogado com sucesso!");
+                    break;
+                }
+                case "login": {
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        // pega variaveis
+                        String email = request.getParameter("email");
+                        String password = request.getParameter("password");
+                        String[] bind = {email, password};
+                        // inserindo com role = 2 (cliente)
+                        ResultSet ret = db.dbCarrega("SELECT id,name,role_id FROM users WHERE email=? AND password=?", bind);
+                        if (ret.next()) {
+                            session.setAttribute("userId", ret.getString("id"));
+                            session.setAttribute("userRole", ret.getString("role_id"));
+                            session.setAttribute("msg", "Seja bem vindo " + ret.getString("name") + "!");
+                            // seta cookie se solicitar para lembrar login
+                            if (request.getParameter("remember") != null) {
+                                int durMes = 2592000;
+                                Cookie ckEmail = new Cookie("loginEmail", email);
+                                ckEmail.setMaxAge(durMes);
+                                response.addCookie(ckEmail);
+                                Cookie ckPassword = new Cookie("loginPassword", password);
+                                ckPassword.setMaxAge(durMes);
+                                response.addCookie(ckPassword);
+                            }
+                        } else {
+                            session.setAttribute("msg", "Combinação de email e senha inválidos!");
+                        }
+                    } catch (Exception ex) {
+                        throw new Exception(ex.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
+                case "insere": {
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        // pega variaveis
+                        String name = request.getParameter("nome");
+                        String email = request.getParameter("email");
+                        String password = request.getParameter("senha");
+                        String role = "2";
+                        String[] bind = {name, email, password, role};
+                        // inserindo com role = 2 (cliente)
+                        db.dbGrava("INSERT INTO users (name,email,password,role_id) VALUES (?,?,?,?)", bind);
+                        String id = null;
+                        id = db.dbValor("id", "users", "name=? AND email=? AND password=? AND role_id=?", bind);
+                        session.setAttribute("userId", id);
+                        session.setAttribute("userRole", role);
+                        session.setAttribute("msg", "Seja bem vindo " + name + "!");
+                    } catch (Exception ex) {
+                        throw new Exception(ex.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
             }
 
             String redirect;
@@ -106,6 +141,7 @@ public class UserController extends HttpServlet {
             request.getRequestDispatcher(redirect).forward(request, response);
             return;
         } catch (Exception ex) {
+            session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("UserController");
         }
     }
