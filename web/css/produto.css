@@ -36,7 +36,6 @@ html, body {
 
 /* Coluna da esquerda */
 .left-column img {
-  position: absolute;
   left: 0;
   top: 0;
   opacity: 1;

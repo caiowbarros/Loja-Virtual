@@ -24,16 +24,6 @@
         <h2>Método de pagamento</h2>
         <div class="confirma-end">
             <div id="paypal-button"></div>
-            <div class="confirma-radio">
-                <div class="radio-container">
-                    <input type="radio" name="end"> Trabalho<br>
-                    
-                </div>
-                <a href="">Editar</a>
-            </div>
-            <div class="confirma-novoend">
-                <a href="">Inserir novo endereço</a>
-            </div>
         </div>
         
     </div>
@@ -63,6 +53,30 @@
                 </div>
                 <div class="detalhe-voltar">
                     <a href="carrinho.jsp">Editar Carrinho</a>
+                </div>
+            </div>
+        </div>
+        <div class="detalhe-carrinho">
+            <div class="detalhe-valor">
+                <div class="detalhe-endereco">endereço de entrega</div>
+                <div class="detalhe-endereco-info">    
+                    <p>Caio Wey Barros</p>
+                    <p>Rua Xingu, 236, apt: 206</p>
+                    <p>22760-070</p>
+                    <p>Rio de Janeiro - RJ</p>
+                    <p>Brasil</p>
+                </div>
+                <div class="detalhe-voltar">
+                    <a href="carrinho-confirma.jsp">Editar Endereço</a>
+                </div>
+            </div>
+        </div>
+        <div class="detalhe-carrinho">
+            <div class="detalhe-valor">
+                <div class="detalhe-endereco">Método de entrega</div>
+                <div class="detalhe-entrega">ENTREGA CONVENCIONAL - Frete grátis para todo o Brasil (Previsão de entrega em 5 dias úteis)</div>
+                <div class="detalhe-voltar">
+                    <a href="carrinho-confirma.jsp">Editar Entrega</a>
                 </div>
             </div>
         </div>
