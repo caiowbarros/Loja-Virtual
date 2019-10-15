@@ -83,6 +83,7 @@ public class UserController extends HttpServlet {
                     } finally {
                         db.destroyDb();
                     }
+                    break;
                 }
                 case "logout": {
                     // invalida sessao

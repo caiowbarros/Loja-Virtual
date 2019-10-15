@@ -55,17 +55,53 @@ public class CarrinhoController extends HttpServlet {
             // recupera userId e se tiver carrinhoId como cookie mas n tiver userId cadastrado p esse carrinho id cadastra user
             if (session.getAttribute("userId") != null) {
                 userId = session.getAttribute("userId").toString();
-                if (carrinhoId != null) {
-                    MySql db = null;
-                    try {
-                        db = new MySql();
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    // verifica se carrinhoId recuperado pertence a outro usuario
+                    if (carrinhoId != null) {
+                        String[] bindVerifica = {carrinhoId};
+                        String carrinhoIdVerificaUser = db.dbValor("user_id", "carts", "id=?", bindVerifica);
+                        if (carrinhoIdVerificaUser != null) {
+                            if (!carrinhoIdVerificaUser.equals(userId)) {
+                                // define carrinhoId como null pois pertence a outro usuario
+                                carrinhoId = null;
+                            }
+                        }
+                    }
+                    // pega id de carrinho se n estiver vendido, se user id bater e se n for null
+                    String[] bindCarrinhoUser = {userId};
+                    String CarrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
+                    if (CarrinhoUser != null) {
+                        carrinhoId = CarrinhoUser;
+                    }
+                    // se carrinho id n for null, define usuario se n tiver
+                    if (carrinhoId != null) {
                         String[] bind = {userId, carrinhoId};
                         db.dbGrava("UPDATE carts set user_id=? WHERE id=? AND user_id IS NULL", bind);
-                    } catch (Exception ed) {
-                        throw new Exception(ed.getMessage());
-                    } finally {
-                        db.destroyDb();
                     }
+                } catch (Exception ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
+            } else {
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    // verifica se carrinhoId pertence a algum usuario
+                    if (carrinhoId != null) {
+                        String[] bindVerifica = {carrinhoId};
+                        String carrinhoIdVerificaUser = db.dbValor("user_id", "carts", "id=?", bindVerifica);
+                        if (carrinhoIdVerificaUser != null) {
+                            // define carrinhoId como null pois pertence a um usuario
+                            carrinhoId = null;
+                        }
+                    }
+                } catch (Exception ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
                 }
             }
 
@@ -78,7 +114,25 @@ public class CarrinhoController extends HttpServlet {
                 }
             }
 
-            // se n achou o cookie cria e seta
+            // verifica se carrinhoId ja esta vendido
+            if (carrinhoId != null) {
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    String[] bind = {carrinhoId};
+                    int verificaCarrinho = Integer.valueOf(db.dbValor("count(*)", "carts", "id=? AND id in (SELECT cart_id FROM sales)", bind));
+                    //se encontrou carrinho vendido define carrinhoId como null
+                    if (verificaCarrinho > 0) {
+                        carrinhoId = null;
+                    }
+                } catch (Exception ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
+            }
+
+            // se n achou carrinhoId define
             if (carrinhoId == null) {
                 // formato da data p mysql
                 String pattern = "yyyy-MM-dd HH:mm:ss";
@@ -100,40 +154,86 @@ public class CarrinhoController extends HttpServlet {
                 } finally {
                     db.destroyDb();
                 }
-                int durMes = 2592000;
-                Cookie ckCarrinhoId = new Cookie("carrinhoId", carrinhoId);
-                ckCarrinhoId.setMaxAge(durMes);
-                response.addCookie(ckCarrinhoId);
             }
 
+            // define cookie com carrinhoId
+            int durMes = 2592000;
+            Cookie ckCarrinhoId = new Cookie("carrinhoId", carrinhoId);
+            ckCarrinhoId.setMaxAge(durMes);
+            response.addCookie(ckCarrinhoId);
+
             if (request.getParameter("addProdutoId") != null) {
-                // ADD PRODUTO NO SESSIONID
-            } else if (request.getParameter("confirmaCompra") != null) {
-                // manda atributos para a pagina definida, no caso carrinho-confirma.jsp
-                request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
+                MySql db = null;
+                String addProdutoId = request.getParameter("addProdutoId");
+                try {
+                    db = new MySql();
+                    String[] bind = {addProdutoId, carrinhoId};
+                    int qtdValidador = Integer.valueOf(db.dbValor("count(*)", "carts_products", "product_id=? AND cart_id=?", bind));
+                    if (qtdValidador == 0) {
+                        db.dbGrava("INSERT INTO carts_products (product_id,cart_id,quantity) VALUES (?,?,1)", bind);
+                        session.setAttribute("msg", "Produto inserido no carrinho com sucesso!");
+                    } else {
+                        session.setAttribute("msg", "Produto já inserido no carrinho!");
+                    }
+                } catch (SQLException ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
-
-            if ("mudaQtd".equals(action)) {
-                // muda qtd d produtos no carrinho
-                // define msg a ser mostrada
-                request.setAttribute("msg", "Quantidade de Produtos alterada com sucesso!");
-            } else if ("removeProdutoId".equals(action)) {
-                // remove produtoId do carrinho de sessao id
-                // define msg a ser mostrada
-                request.setAttribute("msg", "Produto removido do carrinho com sucesso!");
-            } else if ("finalizaCompra".equals(action)) {
-                // manda atributos para a pagina definida, no caso compra-pagamento.jsp
-                request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
-            } else if ("continuaCompra".equals(action)) {
-                // redireciona p controller de ProdutosController
-                response.sendRedirect("ProdutosController");
+            String action = "";
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
             }
 
-            // manda atributos para a pagina definida, no caso carrinho.jsp
+            switch (action) {
+                case "finalizaCompra": {
+                    request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
+                    return;
+                }
+                case "continuaCompra": {
+                    // redireciona p controller de ProdutosController
+                    response.sendRedirect("ProdutosController");
+                    return;
+                }
+                case "removeProduto": {
+                    MySql db = null;
+                    String produtoId = request.getParameter("produtoId");
+                    try {
+                        db = new MySql();
+                        String[] bind = {produtoId, carrinhoId};
+                        db.dbGrava("DELETE FROM carts_products WHERE product_id=? AND cart_id=?", bind);
+                        session.setAttribute("msg", "Produto removido do carrinho com sucesso!");
+                    } catch (SQLException ed) {
+                        throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
+                case "mudaQtd": {
+                    MySql db = null;
+                    String produtoId = request.getParameter("produtoId");
+                    String qtdProduto = request.getParameter("qtdProduto");
+                    try {
+                        db = new MySql();
+                        String[] bind = {qtdProduto, produtoId, carrinhoId};
+                        db.dbGrava("UPDATE carts_products SET quantity=? WHERE product_id=? AND cart_id=?", bind);
+                        session.setAttribute("msg", "Quantidade do produto alterada com sucesso!");
+                    } catch (SQLException ed) {
+                        throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    break;
+                }
+            }
+
+            // manda atributos para a pag do carrinho
             request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");

@@ -8,31 +8,14 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Carrinho"/>
 </jsp:include>
-<!-- <p><%= request.getAttribute("sessionId")%> | ${sessionId}</p>
-<hr>
-<div style="display: flex;">
-    <div style="align-items: flex-start">
-        <img src="https://images-submarino.b2w.io/produtos/01/00/item/120739/9/120739985_1GG.jpg" width="150" height="150">
-    </div>
-    <div style="align-items:center;width: 100%">
-        <p>Far Cry 3</p>
-        <p>R$ 399,00</p>
-        <form method="post" action="CarrinhoController?produtoId=1">
-            <p>Qtd:&nbsp;<input type="number" name="qtd" value="1"><button type="submit" value="mudaQtd" name="action">Mudar Qtd</button></p>
-        </form>
-    </div>
-    <div style="align-items:flex-end">
-        <form>
-            <button type="submit" style="height: 100%">Tirar do Carrinho</button>
-        </form>
-    </div>
-</div>
-<hr>
-<form method="post" action="CarrinhoController">
-    <button name="action" type="submit" value="finaliza">Finaliza Compra</button>
-    <button name="action" type="submit" value="continua">Continuar Comprando</button>
-</form> -->
-
+<%
+    // mostra se tiver msg
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
+    }
+%>
 <!-- Título da página -->
 <h1 class="cart-title">Carrinho</h1>
 
@@ -48,46 +31,23 @@
 
 <!-- Produto no carrinho -->
 <div class="cart-product">
-    <div class="cart-img"><img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg"></div>
+    <div class="cart-img">
+        <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+    </div>
     <div class="cart-details">
         <div class="cart-name">FIFA 20 - PS4</div>
         <p class="cart-desc">Ea Sports Fifa 20 para PlayStation 4, Xbox One e Pc traz os dois lados do Maior Jogo do Mundo - o prestígio do nível profissional e uma nova experiência de autêntico futebol de rua com Ea Sports Volta. Fifa 20 inova no jogo inteiro, o sistema de Inteligência de Futebol libera uma plataforma sem precedentes para o realismo da jogabilidade, Fifa Ultimate Team? oferece mais maneiras de montar o seu time dos sonhos, e Ea Sports Volta leva o jogo de volta para as ruas, com uma forma autêntica de futebol com poucos jogadores.</p>
     </div>
     <div class="cart-price">R$250,00</div>
     <div class="cart-qnt">
-        <select>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+        <form action="CarrinhoController?produtoId=1&action=mudaQtd" method="post" id="mudaQtdForm1">
+            <input style="width:50px;" type="number" min="1" max="10" name="qtdProduto" onchange="mudaQtd('mudaQtdForm1')"/>
+        </form>
     </div>
     <div class="cart-remove">
-        <button class="cart-remove-btn">Remover</button>
-    </div>
-    <div class="cart-total">R$250,00</div>
-</div>
-
-<!-- Produto no carrinho -->
-<div class="cart-product">
-    <div class="cart-img"><img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg"></div>
-    <div class="cart-details">
-        <div class="cart-name">FIFA 20 - PS4</div>
-        <p class="cart-desc">Ea Sports Fifa 20 para PlayStation 4, Xbox One e Pc traz os dois lados do Maior Jogo do Mundo - o prestígio do nível profissional e uma nova experiência de autêntico futebol de rua com Ea Sports Volta. Fifa 20 inova no jogo inteiro, o sistema de Inteligência de Futebol libera uma plataforma sem precedentes para o realismo da jogabilidade, Fifa Ultimate Team? oferece mais maneiras de montar o seu time dos sonhos, e Ea Sports Volta leva o jogo de volta para as ruas, com uma forma autêntica de futebol com poucos jogadores.</p>
-    </div>
-    <div class="cart-price">R$250,00</div>
-    <div class="cart-qnt">
-        <select>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-    </div>
-    <div class="cart-remove">
-        <button class="cart-remove-btn">Remover</button>
+        <form action="CarrinhoController?produtoId=1" method="post">
+            <button class="cart-remove-btn" name="action" value="removeProduto">Remover</button>
+        </form>
     </div>
     <div class="cart-total">R$250,00</div>
 </div>
@@ -108,10 +68,23 @@
         <div class="total-total">R$250,00</div>
     </div>
     <div class="total-item">
-        <button class="total-keep">Continuar Comprando</button>
-        <button class="total-checkout" onclick="location.href='carrinho-confirma.jsp';">Finalizar Compra</button>
+        <form method="post" action="CarrinhoController">
+            <button class="total-keep" name="action" value="continuaCompra" type="submit">Continuar Comprando</button>
+            <button class="total-checkout" name="action" value="finalizaCompra" type="submit">Finalizar Compra</button>
+        </form>
     </div>
 </div>
-
+<script>
+    function mudaQtd(formId) {
+        var form = document.getElementById(formId);
+        var isValidForm = form.checkValidity();
+        if (isValidForm) {
+            form.submit();
+        } else {
+            alert("Por favor insira uma quantidade válida! A quantidade atual está acima da quantidade do produto em estoque ou abaixo da quantidade mínima.");
+            return false;
+        }
+    }
+</script>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
