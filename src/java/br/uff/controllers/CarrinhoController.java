@@ -8,10 +8,12 @@ package br.uff.controllers;
 import br.uff.dao.MySql;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -229,6 +231,46 @@ public class CarrinhoController extends HttpServlet {
                     }
                     break;
                 }
+            }
+
+            // define avaliacoes
+            MySql dbCarrinho = null;
+            try {
+                String consulta = "SELECT\n"
+                        + "	p.id,\n"
+                        + "	p.`name`,\n"
+                        + "	p.description,\n"
+                        + "	p.img,\n"
+                        + "	p.price,\n"
+                        + "	p.quantity max,\n"
+                        + "	c.quantity\n"
+                        + "FROM\n"
+                        + "	carts_products c\n"
+                        + "LEFT JOIN products p ON (c.product_id = p.id)\n"
+                        + "WHERE\n"
+                        + "	c.cart_id = ?";
+                String[] bind = {carrinhoId};
+                dbCarrinho = new MySql();
+                ArrayList<ArrayList> itens = new ArrayList<>();
+                ResultSet ret = dbCarrinho.dbCarrega(consulta, bind);
+                while (ret.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(ret.getString("id"));
+                    row.add(ret.getString("name"));
+                    row.add(ret.getString("description"));
+                    row.add(ret.getString("img"));
+                    row.add(ret.getString("price"));
+                    row.add(ret.getString("quantity"));
+                    row.add(ret.getString("max"));
+                    // add row no grid
+                    itens.add(row);
+                }
+                request.setAttribute("itens", itens);
+            } catch (SQLException ex) {
+                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbCarrinho.destroyDb();
             }
 
             // manda atributos para a pag do carrinho
