@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : local
 Source Server Version : 50505
 Source Host           : localhost:3306
-Source Database       : cart
+Source Database       : test
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-10-10 14:32:38
+Date: 2019-10-15 02:05:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,6 +44,8 @@ DROP TABLE IF EXISTS `carts`;
 CREATE TABLE `carts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
+  `ip` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `carts_fk0` (`user_id`),
   CONSTRAINT `carts_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -196,12 +198,13 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `users_fk0` (`role_id`),
   CONSTRAINT `users_fk0` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES ('1', 'Igor Lisboa', 'igor.lisboa@icraft.com.br', 'JAVAeh(h@t0', '1');
+INSERT INTO `users` VALUES ('2', 'teste', 'igor@outlook.com', '123', '2');
 
 -- ----------------------------
 -- Table structure for user_produts_rating

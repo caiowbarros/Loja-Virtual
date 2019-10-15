@@ -86,8 +86,11 @@ public class UserController extends HttpServlet {
                 }
                 case "logout": {
                     // invalida sessao
-                    session.invalidate();
-                    //session.setAttribute("msg", "Usuário deslogado com sucesso!");
+                    //session.invalidate();
+                    // define variaveis de sessao d usuario como null
+                    session.setAttribute("userId", null);
+                    session.setAttribute("userRole", null);
+                    session.setAttribute("msg", "Usuário deslogado com sucesso!");
                     break;
                 }
                 case "login": {
@@ -165,80 +168,78 @@ public class UserController extends HttpServlet {
                 redirect = null;
             }
 
-            try {
-                // se tem usuario logado manda p conta caso contrario p login
-                if (session.getAttribute("userId") != null) {
-                    //recupera userId da sessao
-                    String userId = session.getAttribute("userId").toString();
-                    // define redirect se n foi passado
-                    if (redirect == null || "null".equals(redirect)) {
-                        if (selUser != null) {
-                            User usuario;
-                            usuario = new User("", "", "", 2);
-                            // define endereco
-                            MySql dbEnd = null;
-                            try {
-                                dbEnd = new MySql();
-                                String[] bindSel = {selUser};
-                                ResultSet ret = dbEnd.dbCarrega("SELECT * FROM users WHERE id=?", bindSel);
-                                if (ret.next()) {
-                                    // preenche endereco
-                                    usuario.setId(ret.getInt("id"));
-                                    usuario.setName(ret.getString("name"));
-                                    usuario.setPassword(ret.getString("password"));
-                                    usuario.setEmail(ret.getString("email"));
-                                    usuario.setRoleId(ret.getInt("role_id"));
-                                }
-                            } catch (SQLException ex) {
-                                throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
-                            } finally {
-                                dbEnd.destroyDb();
-                            }
-                            // define atributo de produto
-                            request.setAttribute("usuario", usuario);
-                            redirect = "usuario-cadastro.jsp";
-                        } else {
-                            // define grid
-                            MySql dbUsuarios = null;
-                            try {
-                                dbUsuarios = new MySql();
-                                String consulta = "SELECT id,name,email FROM users";
-                                String[] bind = {userId};
-                                // se for adm n insere filtro e define bind como null
-                                if (session.getAttribute("userRole").equals("1")) {
-                                    bind = null;
-                                } else {
-                                    consulta += " WHERE id=?";
-                                }
-                                ArrayList<ArrayList> usuarios = new ArrayList<>();
-                                ResultSet ret = dbUsuarios.dbCarrega(consulta, bind);
-                                while (ret.next()) {
-                                    ArrayList<String> row = new ArrayList<>();
-                                    // preenche row
-                                    row.add(ret.getString("id"));
-                                    row.add(ret.getString("name"));
-                                    row.add(ret.getString("email"));
-                                    // add row no grid
-                                    usuarios.add(row);
-                                }
-                                request.setAttribute("usuarios", usuarios);
-                            } catch (SQLException ed) {
-                                throw new Exception("Erro ao recuperar registros do banco: " + ed.getMessage());
-                            } finally {
-                                dbUsuarios.destroyDb();
-                            }
-                            redirect = "usuario-grid.jsp";
+            // se tem usuario logado manda p conta caso contrario p login
+            if (session.getAttribute("userId") != null) {
+                //recupera userId da sessao
+                String userId = session.getAttribute("userId").toString();
+                // define redirect se n foi passado
+                if (redirect == null || "null".equals(redirect)) {
+                    if (selUser != null) {
+                        if (!selUser.equals(userId) && !session.getAttribute("userRole").toString().equals("1")) {
+                            session.setAttribute("selUser", null);
+                            throw new Exception("Acesso não permitido!");
                         }
+                        User usuario;
+                        usuario = new User("", "", "", 2);
+                        // define endereco
+                        MySql dbEnd = null;
+                        try {
+                            dbEnd = new MySql();
+                            String[] bindSel = {selUser};
+                            ResultSet ret = dbEnd.dbCarrega("SELECT * FROM users WHERE id=?", bindSel);
+                            if (ret.next()) {
+                                // preenche endereco
+                                usuario.setId(ret.getInt("id"));
+                                usuario.setName(ret.getString("name"));
+                                usuario.setPassword(ret.getString("password"));
+                                usuario.setEmail(ret.getString("email"));
+                                usuario.setRoleId(ret.getInt("role_id"));
+                            }
+                        } catch (SQLException ex) {
+                            throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                        } finally {
+                            dbEnd.destroyDb();
+                        }
+                        // define atributo de produto
+                        request.setAttribute("usuario", usuario);
+                        redirect = "usuario-cadastro.jsp";
                     } else {
-                        response.sendRedirect(redirect);
-                        return;
+                        // define grid
+                        MySql dbUsuarios = null;
+                        try {
+                            dbUsuarios = new MySql();
+                            String consulta = "SELECT id,name,email FROM users";
+                            String[] bind = {userId};
+                            // se for adm n insere filtro e define bind como null
+                            if (session.getAttribute("userRole").equals("1")) {
+                                bind = null;
+                            } else {
+                                consulta += " WHERE id=?";
+                            }
+                            ArrayList<ArrayList> usuarios = new ArrayList<>();
+                            ResultSet ret = dbUsuarios.dbCarrega(consulta, bind);
+                            while (ret.next()) {
+                                ArrayList<String> row = new ArrayList<>();
+                                // preenche row
+                                row.add(ret.getString("id"));
+                                row.add(ret.getString("name"));
+                                row.add(ret.getString("email"));
+                                // add row no grid
+                                usuarios.add(row);
+                            }
+                            request.setAttribute("usuarios", usuarios);
+                        } catch (SQLException ed) {
+                            throw new Exception("Erro ao recuperar registros do banco: " + ed.getMessage());
+                        } finally {
+                            dbUsuarios.destroyDb();
+                        }
+                        redirect = "usuario-grid.jsp";
                     }
                 } else {
-                    // define redirect q sera passado p pag d login
-                    request.setAttribute("redirect", redirect);
-                    redirect = "login.jsp";
+                    response.sendRedirect(redirect);
+                    return;
                 }
-            } catch (Exception ex) {
+            } else {
                 // define redirect q sera passado p pag d login
                 request.setAttribute("redirect", redirect);
                 redirect = "login.jsp";
@@ -248,7 +249,7 @@ public class UserController extends HttpServlet {
             return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
-            response.sendRedirect("UserController");
+            response.sendRedirect("");
         }
     }
 
