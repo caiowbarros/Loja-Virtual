@@ -5,8 +5,10 @@
  */
 package br.uff.sql;
 
+import br.uff.models.BaseModel;
 import br.uff.mutators.Inflector;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,6 +26,16 @@ public class SqlManager {
         destroyer = new Destroyer(tableName);
     }
     
+    public ArrayList<BaseModel> all() throws SQLException {
+        return select().run();
+    }
+
+    public BaseModel find(int id) throws SQLException {
+        ArrayList<BaseModel> result = select().where("id = " + id).run();
+        if(result.isEmpty()) return null;
+        return result.get(0);
+    }
+
     public Selector select() {
         return getter.select();
     }
