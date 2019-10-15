@@ -173,7 +173,7 @@ CREATE TABLE `sales` (
   `address_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `sales_fk0` (`cart_id`),
+  UNIQUE KEY `sales_fk0` (`cart_id`) USING BTREE,
   KEY `sales_fk1` (`address_id`),
   KEY `sales_fk2` (`user_id`),
   CONSTRAINT `sales_fk0` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`),
