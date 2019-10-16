@@ -18,7 +18,10 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    double totalPrice = 0.00;
+    double totalPrice = 0;
+    if (request.getAttribute("totalPrice") != null) {
+        totalPrice = Double.parseDouble(request.getAttribute("totalPrice").toString());
+    }
 
     ArrayList<ArrayList<String>> itens = null;
     if (request.getAttribute("itens") != null) {
@@ -46,13 +49,6 @@
 <%
 } else {
     for (int i = 0; i < itens.size(); i++) {
-        double totalProduto = 0.00;
-        if (itens.get(i).get(4) != null) {
-            if (itens.get(i).get(5) != null) {
-                totalProduto = Double.parseDouble(itens.get(i).get(4)) * Integer.valueOf(itens.get(i).get(5));
-            }
-            totalPrice += totalProduto;
-        }
 %>
 <!-- Produto no carrinho -->
 <div class="cart-product">
@@ -74,7 +70,7 @@
             <button class="cart-remove-btn" name="action" value="removeProduto">Remover</button>
         </form>
     </div>
-    <div class="cart-total">R$<%= String.format("%.2f", totalProduto)%></div>
+    <div class="cart-total">R$<%= itens.get(i).get(7)%></div>
 </div>
 <%
         }

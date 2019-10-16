@@ -48,7 +48,7 @@ public class CarrinhoController extends HttpServlet {
                     Cookie cookie = cookies[i];
                     if (cookie.getName().equals("carrinhoId")) {
                         carrinhoId = cookie.getValue().toString();
-                        continue;
+                        break;
                     }
                 }
             }
@@ -122,9 +122,15 @@ public class CarrinhoController extends HttpServlet {
                 try {
                     db = new MySql();
                     String[] bind = {carrinhoId};
-                    int verificaCarrinho = Integer.valueOf(db.dbValor("count(*)", "carts", "id=? AND id in (SELECT cart_id FROM sales)", bind));
-                    //se encontrou carrinho vendido define carrinhoId como null
-                    if (verificaCarrinho > 0) {
+                    int verificaCarrinhoExiste = Integer.valueOf(db.dbValor("count(*)", "carts", "id=?", bind));
+                    if (verificaCarrinhoExiste > 0) {
+                        int verificaCarrinhoVendido = Integer.valueOf(db.dbValor("count(*)", "carts", "id=? AND id in (SELECT cart_id FROM sales)", bind));
+                        //se encontrou carrinho vendido define carrinhoId como null
+                        if (verificaCarrinhoVendido > 0) {
+                            carrinhoId = null;
+                        }
+                    } else {
+                        // se n tem carrinho no bd define como null
                         carrinhoId = null;
                     }
                 } catch (Exception ed) {
@@ -299,7 +305,8 @@ public class CarrinhoController extends HttpServlet {
                         + "	p.img,\n"
                         + "	p.price,\n"
                         + "	p.quantity max,\n"
-                        + "	c.quantity\n"
+                        + "	c.quantity,\n"
+                        + "	p.price * c.quantity total_price_product\n"
                         + "FROM\n"
                         + "	carts_products c\n"
                         + "LEFT JOIN products p ON (c.product_id = p.id)\n"
@@ -319,9 +326,12 @@ public class CarrinhoController extends HttpServlet {
                     row.add(ret.getString("price"));
                     row.add(ret.getString("quantity"));
                     row.add(ret.getString("max"));
+                    row.add(ret.getString("total_price_product"));
                     // add row no grid
                     itens.add(row);
                 }
+                String totalPrice = dbCarrinho.dbValor("total_price", "SELECT c.cart_id, sum(p.price * c.quantity) total_price FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ? GROUP BY c.cart_id", "", bind);
+                request.setAttribute("totalPrice", totalPrice);
                 request.setAttribute("itens", itens);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
