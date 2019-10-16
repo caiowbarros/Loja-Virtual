@@ -48,6 +48,20 @@ public class ProdutosController extends HttpServlet {
             String limit = " LIMIT " + qtdMaxProdutosPag + " ";
             String offset = "";
             String userId = null;
+            String pesquisa = null;
+
+            if (request.getParameter("pesquisa") != null) {
+                pesquisa = request.getParameter("pesquisa").toString();
+                session.setAttribute("pesquisa", pesquisa);
+            }
+
+            if (session.getAttribute("pesquisa") != null) {
+                pesquisa = session.getAttribute("pesquisa").toString();
+                pesquisa = "%" + pesquisa + "%";
+                bindItens.add(pesquisa);
+                bindItens.add(pesquisa);
+                filtro += (filtro.equals("") ? " WHERE " : " AND ") + " (p.name LIKE ? OR p.description LIKE ?)";
+            }
 
             //recupera apenas produtos que tem no estoque
             filtro += (filtro.equals("") ? " WHERE " : " AND ") + "p.quantity>0";

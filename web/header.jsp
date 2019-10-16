@@ -58,7 +58,7 @@
                 <!-- Pesquisa -->
                 <div class="consulta-header">
                     <form id="pesquisa" method="POST" action="ProdutosController">
-                        <input type="search" placeholder="Search" required>
+                        <input name="pesquisa" type="search" placeholder="Buscar..." required>
                     </form>
                 </div>
                 <!-- Minha Conta -->

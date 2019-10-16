@@ -5,8 +5,12 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,36 +35,62 @@ public class CompraController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // pega sessao
+        HttpSession session = request.getSession();
         try {
-            // pega sessao
-            HttpSession session = request.getSession();
-
             // se n tem usuario logado manda p controller de user
             if (session.getAttribute("userId") == null) {
-                response.sendRedirect("UserController?redirect=CompraController");
+                response.sendRedirect("UserController?redirect=CarrinhoController");
                 return;
             }
-            
-            if (request.getParameter("paypal_pag") != null) {
-                // REGISTRA SALE NO BD
-            } else if (request.getParameter("paypal_cancela") != null) {
-                response.sendRedirect("CarrinhoController");
-            } else if (request.getParameter("paypal_erro") != null) {
-                // define msg a ser mostrada
-                request.setAttribute("msg", "Um erro ocorreu no processamento do seu pagamento, por favor tente novamente!");
+
+            String end = null;
+            if (request.getAttribute("end") != null) {
+                end = request.getAttribute("end").toString();
+            }
+
+            if (end != null) {
+                String consultaEnd = "SELECT\n"
+                        + "	u.`name`,\n"
+                        + "	a.address,\n"
+                        + "	a.zipcode,\n"
+                        + "	a.city,\n"
+                        + "	a.state,\n"
+                        + "	a.country\n"
+                        + "FROM\n"
+                        + "	address a\n"
+                        + "LEFT JOIN users u ON (a.user_id = u.id)\n"
+                        + "WHERE\n"
+                        + "	a.id = ?";
+                String[] bindEnd = {end};
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    ArrayList<String> endereco = new ArrayList<>();
+                    ResultSet retorno = db.dbCarrega(consultaEnd, bindEnd);
+                    if (retorno.next()) {
+                        endereco.add(retorno.getString("name"));
+                        endereco.add(retorno.getString("address"));
+                        endereco.add(retorno.getString("zipcode"));
+                        endereco.add(retorno.getString("city"));
+                        endereco.add(retorno.getString("state"));
+                        endereco.add(retorno.getString("country"));
+                    }
+                    request.setAttribute("endereco", endereco);
+                } catch (SQLException ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
             }
 
             // recupera acao solicitada se existir
             String action = request.getParameter("action");
 
-            if ("continuaCompra".equals(action)) {
-                // redireciona p controller de ProdutosController
-                response.sendRedirect("ProdutosController");
-            }
-
             // manda atributos para a pagina definida, no caso carrinho.jsp
             request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);
         } catch (Exception ex) {
+            session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("CarrinhoController");
             return;
         }

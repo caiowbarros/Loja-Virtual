@@ -104,6 +104,7 @@
     %>
     <div class="total-item">
         <form method="post" action="CarrinhoController">
+            <input type="number" style="display:none;" name="totalPrice" value="<%= totalPrice%>"/>
             <button class="total-keep" name="action" value="continuaCompra" type="submit">Continuar Comprando</button>
             <%
                 if (itens.size() > 0) {

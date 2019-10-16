@@ -26,8 +26,11 @@
 
         <!-- Container dos filtros -->
         <div class="products-filter">
-            <!--<h2>Filtrar por</h2>-->
             <!-- Filtro das categorias -->
+            <div class="products-item-filter">
+                <p>Nome ou Descrição</p>
+                <input name="pesquisa" value="${pesquisa}" type="search" placeholder="Buscar..." onchange="document.getElementById('frmProdutos').submit()">
+            </div>
             <div class="products-item-filter">
                 <p>Categorias</p>
                 <input ${playstation} onchange="document.getElementById('frmProdutos').submit()" name="category" id="playstation" type="checkbox" value="playstation"><label for="playstation">Playstation</label><br>

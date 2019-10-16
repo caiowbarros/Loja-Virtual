@@ -192,6 +192,49 @@ public class CarrinhoController extends HttpServlet {
 
             switch (action) {
                 case "finalizaCompra": {
+                    String totalPrice = request.getParameter("totalPrice");
+                    request.setAttribute("totalPrice", totalPrice);
+                    String consultaEndereco = "SELECT id, `name` FROM address";
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        ArrayList<ArrayList> enderecos = new ArrayList<>();
+                        ResultSet ret = db.dbCarrega(consultaEndereco, null);
+                        while (ret.next()) {
+                            ArrayList<String> row = new ArrayList<>();
+                            row.add(ret.getString("id"));
+                            row.add(ret.getString("name"));
+                            enderecos.add(row);
+                        }
+                        request.setAttribute("enderecos", enderecos);
+
+                        String consulta = "SELECT\n"
+                                + "	p.`name`,\n"
+                                + "	p.img,\n"
+                                + "	p.id,\n"
+                                + "	c.quantity\n"
+                                + "FROM\n"
+                                + "	carts_products c\n"
+                                + "LEFT JOIN products p ON (c.product_id = p.id)\n"
+                                + "WHERE\n"
+                                + "	c.cart_id = ?";
+                        String[] bind = {carrinhoId};
+                        ArrayList<ArrayList> produtos = new ArrayList<>();
+                        ResultSet retono = db.dbCarrega(consulta, bind);
+                        while (retono.next()) {
+                            ArrayList<String> row = new ArrayList<>();
+                            row.add(retono.getString("name"));
+                            row.add(retono.getString("img"));
+                            row.add(retono.getString("id"));
+                            row.add(retono.getString("quantity"));
+                            produtos.add(row);
+                        }
+                        session.setAttribute("produtos", produtos);
+                    } catch (SQLException ex) {
+                        throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
                     request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
                     return;
                 }
@@ -230,6 +273,19 @@ public class CarrinhoController extends HttpServlet {
                         db.destroyDb();
                     }
                     break;
+                }
+                case "continuaPagamento": {
+                    String end = request.getParameter("end");
+                    if (end == null) {
+                        session.setAttribute("msg", "Por favor selecione um endereço!");
+                        response.sendRedirect("CarrinhoController");
+                        return;
+                    }
+                    request.setAttribute("end", end);
+                    String totalPrice = request.getParameter("totalPrice");
+                    request.setAttribute("totalPrice", totalPrice);
+                    request.getRequestDispatcher("CompraController").forward(request, response);
+                    return;
                 }
             }
 
