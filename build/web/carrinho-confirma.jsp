@@ -6,11 +6,14 @@
 <%
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CarrinhoController
     if (session.getAttribute("userId") == null) {
-        //response.sendRedirect("UserController?redirect=CarrinhoController");
+        session.setAttribute("msg", "Realize seu login para prosseguir.");
+        response.sendRedirect("UserController?redirect=CarrinhoController");
     }
-    // mostra msg se existir
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    // mostra se tiver msg
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
 %>
 <!-- Header -->
@@ -18,18 +21,8 @@
     <jsp:param name="title" value="Carrinho"/>
 </jsp:include>
 
-<!--
-Aqui tem que ter:
--um radio contendo os endereços
--produtos escolhidos, qtd e preco
--preco total
--opcao p ir p pag p editar enderecos
--botao p ir p pag de produtos p continuar comprando
--botao p voltar p carrinho p remover produtos ou mudar qtd dos produtos
--->
-
 <main class="confirma-container">
-    
+
     <div class="left-confirma">
         <h2>Detalhes da entrega</h2>
         <div class="confirma-end">
@@ -49,7 +42,7 @@ Aqui tem que ter:
                 <a href="">Inserir novo endereço</a>
             </div>
         </div>
-        
+
         <h2>Método de entrega</h2>
         <div class="confirma-frete">
             <div class="confirma-radio">
@@ -59,9 +52,9 @@ Aqui tem que ter:
                 </div>
             </div>
         </div>
-        <button class="confirma-compra" onclick="location.href='compra-pagamento.jsp';">Continuar Pagamento</button>
+        <button class="confirma-compra" onclick="location.href = 'compra-pagamento.jsp';">Continuar Pagamento</button>
     </div>
-    
+
     <div class="right-confirma">
         <h2>Resumo do pedido</h2>
         <div class="detalhe-carrinho">
@@ -79,7 +72,9 @@ Aqui tem que ter:
                     <div class="detalhe-total">R$250,00</div>
                 </div>
                 <div class="detalhe-produto">
-                    <div class="detalhe-img"><img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg"></div>
+                    <div class="detalhe-img">
+                        <img src="https://images-americanas.b2w.io/produtos/01/00/img/471961/8/471961879_1GG.jpg">
+                    </div>
                     <div class="detalhe-info">
                         <div class="detalhe-nome">Fifa 20 - ps4</div>
                         <div class="detalhe-id">69420</div>
@@ -91,7 +86,7 @@ Aqui tem que ter:
             </div>
         </div>
     </div>
-    
+
 </main>
 
 <!-- Footer -->

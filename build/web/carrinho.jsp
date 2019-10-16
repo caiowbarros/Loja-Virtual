@@ -4,6 +4,7 @@
     Author     : Caio
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.ArrayList"%>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -39,16 +40,18 @@
 <%
     if (itens.size() < 1) {
 %>
-<h2>Seu carrinho está vazio por enquanto!</h2>
+<div class="cart-product">
+    <h2>Seu carrinho está vazio por enquanto!</h2>
+</div>
 <%
 } else {
     for (int i = 0; i < itens.size(); i++) {
         double totalProduto = 0.00;
         if (itens.get(i).get(4) != null) {
-            totalPrice += Double.parseDouble(itens.get(i).get(4));
             if (itens.get(i).get(5) != null) {
                 totalProduto = Double.parseDouble(itens.get(i).get(4)) * Integer.valueOf(itens.get(i).get(5));
             }
+            totalPrice += totalProduto;
         }
 %>
 <!-- Produto no carrinho -->
@@ -62,8 +65,8 @@
     </div>
     <div class="cart-price">R$<%= itens.get(i).get(4)%></div>
     <div class="cart-qnt">
-        <form action="CarrinhoController?produtoId=<%= itens.get(i).get(0)%>&action=mudaQtd" method="post" id="mudaQtdForm1">
-            <input style="width:50px;" type="number" min="1" max="<%= itens.get(i).get(6)%>" name="qtdProduto" onchange="mudaQtd('mudaQtdForm1')"/>
+        <form action="CarrinhoController?produtoId=<%= itens.get(i).get(0)%>&action=mudaQtd" method="post" id="mudaQtdForm<%= itens.get(i).get(0)%>">
+            <input style="width:50px;" type="number" min="1" max="<%= itens.get(i).get(6)%>" value="<%= itens.get(i).get(5)%>" name="qtdProduto" onchange="mudaQtd('mudaQtdForm<%= itens.get(i).get(0)%>')"/>
         </form>
     </div>
     <div class="cart-remove">
@@ -71,7 +74,7 @@
             <button class="cart-remove-btn" name="action" value="removeProduto">Remover</button>
         </form>
     </div>
-    <div class="cart-total">R$<%= totalProduto%></div>
+    <div class="cart-total">R$<%= String.format("%.2f", totalProduto)%></div>
 </div>
 <%
         }
@@ -80,10 +83,13 @@
 
 <!-- Checkout -->
 <div class="total-finalize">
+    <%
+        if (itens.size() > 0) {
+    %>
     <div class="total-item">
         <p>Frete grátis para todo Brasil!</p>
         <label>Subtotal</label>
-        <div class="total-subtotal">R$<%= totalPrice%></div>
+        <div class="total-subtotal">R$<%= String.format("%.2f", totalPrice)%></div>
     </div>
     <div class="total-item">
         <label>Frete</label>
@@ -91,8 +97,11 @@
     </div>
     <div class="total-item">
         <label>Total</label>
-        <div class="total-total">R$<%= totalPrice%></div>
+        <div class="total-total">R$<%= String.format("%.2f", totalPrice)%></div>
     </div>
+    <%
+        }
+    %>
     <div class="total-item">
         <form method="post" action="CarrinhoController">
             <button class="total-keep" name="action" value="continuaCompra" type="submit">Continuar Comprando</button>
