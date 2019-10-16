@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-10-15 02:05:51
+Date: 2019-10-16 13:42:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -139,7 +139,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`),
   KEY `products_fk0` (`category_id`),
   CONSTRAINT `products_fk0` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of products
@@ -243,3 +243,16 @@ LEFT JOIN category pai ON (
 )
 WHERE
 	c.father_category_id IS NOT NULL ;
+DROP TRIGGER IF EXISTS `check_quantity`;
+DELIMITER ;;
+CREATE TRIGGER `check_quantity` AFTER UPDATE ON `products` FOR EACH ROW BEGIN
+
+IF NEW.quantity < 0 THEN
+	SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT = 'QUANTIDADE EM ESTOQUE NÃO PODE SER NEGATIVA!';
+
+
+END IF;
+END
+;;
+DELIMITER ;
