@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 00:50:48
     Author     : HP
 --%>
+<%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CompraController
     if (session.getAttribute("userId") == null) {
@@ -14,13 +15,21 @@
         session.setAttribute("msg", null);
         out.println("<script>alert('" + msg + "');</script>");
     }
+
+    ArrayList<ArrayList> vendas = null;
+    if (request.getAttribute("vendas") != null) {
+        vendas = (ArrayList<ArrayList>) request.getAttribute("vendas");
+    }
 %>
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
+<%
+    for (int i = 0; i < vendas.size(); i++) {
+%>
 <table witdh="100%" border="1">
     <thead>
-        <tr>Compra - 1</tr>
+        <tr>Compra - <%= vendas.get(i).get(0)%></tr>
         <tr>
             <td>Total</td>
             <td>Momento da Compra</td>
@@ -28,8 +37,8 @@
     </thead>
     <tbody>
         <tr>
-            <td>R$300,00</td>
-            <td>25/03/2019 15:54</td>
+            <td>R$<%= vendas.get(i).get(3)%></td>
+            <td><%= vendas.get(i).get(4)%></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -69,30 +78,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <%
+                            ArrayList<ArrayList> produtos = (ArrayList<ArrayList>) vendas.get(i).get(1);
+                            for (int z = 0; z < produtos.size(); z++) {
+                        %>
                         <tr>
                             <td><a href="AvaliaController">Avaliar Produto</a></td>
-                            <td>GTA V</td>
-                            <td>1</td>
-                            <td>R$199,99</td>
+                            <td><%= produtos.get(z).get(1)%></td>
+                            <td><%= produtos.get(z).get(3)%></td>
+                            <td>R$<%= produtos.get(z).get(2)%></td>
                         </tr>
-                        <tr>
-                            <td><a href="AvaliaController">Avaliar Produto</a></td>
-                            <td>Mario Bros</td>
-                            <td>1</td>
-                            <td>R$10,01</td>
-                        </tr>
-                        <tr>
-                            <td><a href="AvaliaController">Avaliar Produto</a></td>
-                            <td>Wii Sports</td>
-                            <td>2</td>
-                            <td>R$40,00</td>
-                        </tr>
+                        <%
+                            }
+                        %>
                     </tbody>
                 </table>
             </td>
         </tr>
     </tbody>
 </table>
-
+<%
+    }
+%>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
