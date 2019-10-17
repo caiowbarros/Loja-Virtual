@@ -55,11 +55,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>24230-320</td>
-                            <td>Av. Alm. Ary Parreiras, 6</td>
-                            <td>Niterói</td>
-                            <td>RJ</td>
-                            <td>BRASIL</td>
+                            <%
+                                ArrayList endereco = (ArrayList) vendas.get(i).get(2);
+                            %>
+                            <td><%= endereco.get(0)%></td>
+                            <td><%= endereco.get(1)%></td>
+                            <td><%= endereco.get(2)%></td>
+                            <td><%= endereco.get(3)%></td>
+                            <td><%= endereco.get(4)%></td>
                         </tr>
                     </tbody>
                 </table>
@@ -75,6 +78,7 @@
                             <td>Nome</td>
                             <td>Número de Unidades</td>
                             <td>Preço por Unidade</td>
+                            <td>Preço total do Produto</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,10 +87,11 @@
                             for (int z = 0; z < produtos.size(); z++) {
                         %>
                         <tr>
-                            <td><a href="AvaliaController">Avaliar Produto</a></td>
-                            <td><%= produtos.get(z).get(1)%></td>
+                            <td><a href="AvaliacaoController?produtoId=<%= produtos.get(z).get(0)%>">Avaliar Produto</a></td>
+                            <td><a href="ProdutoController?produtoId=<%= produtos.get(z).get(0)%>"><%= produtos.get(z).get(1)%></a></td>
                             <td><%= produtos.get(z).get(3)%></td>
                             <td>R$<%= produtos.get(z).get(2)%></td>
+                            <td>R$<%= produtos.get(z).get(4)%></td>
                         </tr>
                         <%
                             }
@@ -97,6 +102,12 @@
         </tr>
     </tbody>
 </table>
+<hr>
+<%
+    }
+    if (vendas.size() == 0) {
+%>
+<h2>Nenhuma compra foi realizada ainda, corra faça uma compra para ela aparecer aqui!</h2>
 <%
     }
 %>
