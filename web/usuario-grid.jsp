@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <th colspan="5">
-                <a href="compras.jsp">Suas Compras</a>
+                <a href="CompraController?historico">Suas Compras</a>
             </th>
         </tr>
         <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->

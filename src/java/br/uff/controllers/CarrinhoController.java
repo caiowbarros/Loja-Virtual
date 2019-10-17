@@ -73,9 +73,12 @@ public class CarrinhoController extends HttpServlet {
                     }
                     // pega id de carrinho se n estiver vendido, se user id bater e se n for null
                     String[] bindCarrinhoUser = {userId};
-                    String CarrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
-                    if (CarrinhoUser != null) {
-                        carrinhoId = CarrinhoUser;
+                    String carrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
+                    if (carrinhoUser != null) {
+                        if (!carrinhoId.equals(carrinhoUser)) {
+                            session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
+                        }
+                        carrinhoId = carrinhoUser;
                     }
                     // se carrinho id n for null, define usuario se n tiver
                     if (carrinhoId != null) {
@@ -169,6 +172,8 @@ public class CarrinhoController extends HttpServlet {
             Cookie ckCarrinhoId = new Cookie("carrinhoId", carrinhoId);
             ckCarrinhoId.setMaxAge(durMes);
             response.addCookie(ckCarrinhoId);
+            // define variavel de sessao p ser recuperado
+            session.setAttribute("carrinhoId", carrinhoId);
 
             if (request.getParameter("addProdutoId") != null) {
                 MySql db = null;
@@ -200,12 +205,13 @@ public class CarrinhoController extends HttpServlet {
                 case "finalizaCompra": {
                     String totalPrice = request.getParameter("totalPrice");
                     request.setAttribute("totalPrice", totalPrice);
-                    String consultaEndereco = "SELECT id, `name` FROM address";
+                    String[] bindEndereco = {userId};
+                    String consultaEndereco = "SELECT id, `name` FROM address WHERE user_id=?";
                     MySql db = null;
                     try {
                         db = new MySql();
                         ArrayList<ArrayList> enderecos = new ArrayList<>();
-                        ResultSet ret = db.dbCarrega(consultaEndereco, null);
+                        ResultSet ret = db.dbCarrega(consultaEndereco, bindEndereco);
                         while (ret.next()) {
                             ArrayList<String> row = new ArrayList<>();
                             row.add(ret.getString("id"));
@@ -284,12 +290,15 @@ public class CarrinhoController extends HttpServlet {
                     String end = request.getParameter("end");
                     if (end == null) {
                         session.setAttribute("msg", "Por favor selecione um endereço!");
+                        session.setAttribute("enderecoId", null);
+                        request.setAttribute("totalPrice", null);
                         response.sendRedirect("CarrinhoController");
                         return;
+                    } else {
+                        session.setAttribute("enderecoId", end);
+                        String totalPrice = request.getParameter("totalPrice");
+                        session.setAttribute("totalPrice", totalPrice);
                     }
-                    request.setAttribute("end", end);
-                    String totalPrice = request.getParameter("totalPrice");
-                    request.setAttribute("totalPrice", totalPrice);
                     request.getRequestDispatcher("CompraController").forward(request, response);
                     return;
                 }

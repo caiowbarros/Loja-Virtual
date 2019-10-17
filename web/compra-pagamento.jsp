@@ -27,7 +27,7 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    double totalPrice = Double.parseDouble(request.getAttribute("totalPrice").toString());
+    double totalPrice = Double.parseDouble(session.getAttribute("totalPrice").toString());
 
 %>
 <!-- Header -->
@@ -41,6 +41,10 @@
         <h2>Método de pagamento</h2>
         <div class="confirma-end">
             <div id="paypal-button"></div>
+            <hr>
+            <form action="CompraController">
+                <button onclick="return confirm('Deseja realizar essa compra?');false;" name="action" value="pagamentoOk">Comprar</button>
+            </form>
         </div>
 
     </div>

@@ -6,6 +6,8 @@
 package br.uff.controllers;
 
 import br.uff.dao.MySql;
+import br.uff.models.Address;
+import br.uff.models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -39,14 +41,101 @@ public class CompraController extends HttpServlet {
         HttpSession session = request.getSession();
         try {
             // se n tem usuario logado manda p controller de user
+            String userId = null;
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("UserController?redirect=CarrinhoController");
+                return;
+            } else {
+                userId = session.getAttribute("userId").toString();
+            }
+
+            // se solicitar historico manda p pag d compras realizadas
+            if (request.getParameter("historico") != null) {
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    ArrayList<ArrayList> vendas = new ArrayList<>();
+                    String[] bindVendas = {userId};
+                    ResultSet vendasRet = db.dbCarrega("SELECT * FROM sales WHERE user_id=?", bindVendas);
+                    while (vendasRet.next()) {
+                        ArrayList venda = new ArrayList<>();
+                        venda.add(vendasRet.getString("id"));
+                        //pega produtos
+                        String[] bindProdutos = {vendasRet.getString("cart_id")};
+                        ArrayList<ArrayList> produtos = new ArrayList<>();
+                        ResultSet produtosRet = db.dbCarrega("SELECT p.id, p.`name`, p.price, c.quantity, p.price * c.quantity total_price_product FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ?", bindProdutos);
+                        while (produtosRet.next()) {
+                            ArrayList produto = new ArrayList<>();
+                            produto.add(produtosRet.getString("id"));
+                            produto.add(produtosRet.getString("name"));
+                            produto.add(produtosRet.getString("price"));
+                            produto.add(produtosRet.getString("quantity"));
+                            produto.add(produtosRet.getString("total_price_product"));
+                            produtos.add(produto);
+                        }
+                        venda.add(produtos);
+                        // pega endereco
+                        String[] bindEndereco = {vendasRet.getString("address_id")};
+                        ArrayList endereco = new ArrayList<>();
+                        ResultSet enderecoRet = db.dbCarrega("SELECT * FROM address WHERE id=?", bindEndereco);
+                        if (enderecoRet.next()) {
+                            endereco.add(enderecoRet.getString("zipcode"));
+                            endereco.add(enderecoRet.getString("address"));
+                            endereco.add(enderecoRet.getString("city"));
+                            endereco.add(enderecoRet.getString("state"));
+                            endereco.add(enderecoRet.getString("country"));
+                        }
+                        venda.add(endereco);
+                        venda.add(vendasRet.getString("total_price"));
+                        venda.add(vendasRet.getString("created_at"));
+                        vendas.add(venda);
+                    }
+                    request.setAttribute("vendas", vendas);
+                } catch (SQLException ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
+                request.getRequestDispatcher("compras.jsp").forward(request, response);
                 return;
             }
 
             String end = null;
-            if (request.getAttribute("end") != null) {
-                end = request.getAttribute("end").toString();
+            if (session.getAttribute("enderecoId") != null) {
+                end = session.getAttribute("enderecoId").toString();
+            }
+
+            String carrinhoId = null;
+            if (session.getAttribute("carrinhoId") != null) {
+                carrinhoId = session.getAttribute("carrinhoId").toString();
+            }
+
+            // recupera acao solicitada se existir
+            String action = "";
+            if (request.getParameter("action") != null) {
+                action = request.getParameter("action");
+            }
+
+            switch (action) {
+                case "pagamentoOk": {
+                    MySql db = null;
+                    try {
+                        db = new MySql();
+                        String[] comandos = {"CALL buy_cart_itens(?, ?)"};
+                        String[][] bind = {{carrinhoId, end}};
+                        db.dbTransaction(comandos, bind);
+                        session.setAttribute("msg", "Compra realizada com sucesso!");
+                    } catch (Exception ed) {
+                        throw new Exception("Compra não foi realizada devido ao seguinte erro: " + ed.getMessage());
+                    } finally {
+                        db.destroyDb();
+                    }
+                    response.sendRedirect("CompraController?historico");
+                    return;
+                }
+                case "pagamentoErr": {
+                    throw new Exception("Houve um erro durante sua compra, realize o procedimento de confirmação de carrinho novamente.");
+                }
             }
 
             if (end != null) {
@@ -82,10 +171,9 @@ public class CompraController extends HttpServlet {
                 } finally {
                     db.destroyDb();
                 }
+            } else {
+                throw new Exception("Por favor selecione um endereço!");
             }
-
-            // recupera acao solicitada se existir
-            String action = request.getParameter("action");
 
             // manda atributos para a pagina definida, no caso carrinho.jsp
             request.getRequestDispatcher("compra-pagamento.jsp").forward(request, response);

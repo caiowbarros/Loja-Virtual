@@ -8,9 +8,11 @@
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("UserController?redirect=CompraController");
     }
-    // mostra msg se existir
-    if (request.getAttribute("msg") != null) {
-        out.println("<script>alert('" + request.getAttribute("msg") + "');</script>");
+    // mostra se tiver msg
+    if (session.getAttribute("msg") != null) {
+        String msg = session.getAttribute("msg").toString();
+        session.setAttribute("msg", null);
+        out.println("<script>alert('" + msg + "');</script>");
     }
 %>
 <jsp:include page="header.jsp">
