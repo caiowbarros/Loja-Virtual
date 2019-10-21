@@ -56,7 +56,7 @@
                     <a href="EnderecoController?sel">Inserir novo endereço</a>
                 </div>
             </div>
-
+                
             <h2>Método de entrega</h2>
             <div class="confirma-frete">
                 <div class="confirma-radio">

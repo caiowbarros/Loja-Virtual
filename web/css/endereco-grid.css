@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 21/10/2019, 14:56:17
+    Author     : Caio
+*/
+
+.end-grid {
+    border: 0;
+    width: 80%;
+    margin: 0px 10%;
+    border-collapse: collapse;
+}
+
+.end-grid h2 {
+    padding-top: 20px;
+}
+
+.end-title-container {
+    border-bottom: 1px solid #E1E8EE;
+    text-align-last: center;
+}
+
+.end-title {
+    color: #aaa;
+    padding-bottom: 10px;
+    padding-top: 25px;
+}
+
+.end-data-container {
+    border-bottom: 1px solid #E1E8EE;
+    text-align-last: center;
+}
+
+.end-data {
+    padding: 10px 0px;
+}
+
+.end-link {
+    text-decoration: none;
+    color: #226EBB;
+}
+
+.end-link:hover {
+    color: #358ED7;
+}
+
+.end-add-new {
+    text-align-last: center;
+    padding: 15px 0px;
+}
+
+/* endereço-cadastro*/
+.end-add-container {
+    width: 60%;
+    margin: 50px 20%;
+    text-align: -webkit-center;
+}
+
+.end-group-container {
+    width: 42.5%;
+}
+
+.standard-btn {
+    background-color: #358ED7;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 8px 20px;
+    border: none;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.standard-btn:hover {
+    background-color: #64af3d;
+}

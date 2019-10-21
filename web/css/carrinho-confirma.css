@@ -70,6 +70,7 @@ and open the template in the editor.
     font-size: 14px;
     text-decoration: none;
     color: #226EBB;
+    margin-right: 10px;
 }
 
 .radio-label {
@@ -143,6 +144,10 @@ and open the template in the editor.
     text-transform: uppercase;
 }
 
+.detalhe-id {
+    font-size: 15px;
+}
+
 .detalhe-voltar {
     text-align: center;
 }
@@ -164,19 +169,10 @@ and open the template in the editor.
     padding-bottom: 5px;
 }
 
-.detalhe-endereco-info {
-    border-bottom: 1px solid #E1E8EE;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
 .detalhe-endereco-info p {
     font-size: 15px;
 }
 
 .detalhe-entrega {
     font-size: 15px;
-    border-bottom: 1px solid #E1E8EE;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
 }

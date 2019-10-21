@@ -25,31 +25,31 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-<table width="100%" border="1" cellspacing="10">
+<table class="end-grid" cellspacing="10">
     <thead>
         <tr>
-            <th colspan="5"><h2>Endereços</h2></th>
+            <th colspan="5"><h2>Meus Endereços</h2></th>
         </tr>
-        <tr>
-            <th>Operações</th>
-            <th>Descrição do Endereço</th>
-            <th>Rua</th>
-            <th>Cidade</th>
-            <th>Estado</th>
+        <tr class="end-title-container">
+            <td class="end-title">Operações</td>
+            <td class="end-title">Descrição do Endereço</td>
+            <td class="end-title">Endereço</td>
+            <td class="end-title">Cidade</td>
+            <td class="end-title">Estado</td>
         </tr>
     </thead>
     <tbody>
         <%
             for (int i = 0; i < grid.size(); i++) {
         %>
-        <tr>
-            <th>
-                <a href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Selecionar</a>             
-            </th>
-            <th><%= grid.get(i).get(1)%></th>
-            <th><%= grid.get(i).get(2)%></th>
-            <th><%= grid.get(i).get(3)%></th>
-            <th><%= grid.get(i).get(4)%></th>
+        <tr class="end-data-container">
+            <td class="end-data">
+                <a class="end-link" href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+            </td>
+            <td class="end-data"><%= grid.get(i).get(1)%></td>
+            <td class="end-data"><%= grid.get(i).get(2)%></td>
+            <td class="end-data"><%= grid.get(i).get(3)%></td>
+            <td class="end-data"><%= grid.get(i).get(4)%></td>
         </tr>
         <%
             }
@@ -57,9 +57,9 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="5">
-                <a href="EnderecoController?sel">Incluir</a>
-            </th>
+            <td class="end-add-new" colspan="5">
+                <a class="end-link" href="EnderecoController?sel">Inserir Novo Endereço</a>
+            </td>
         </tr>
     </tfoot>
 </table>

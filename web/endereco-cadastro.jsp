@@ -30,23 +30,64 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-<form action="EnderecoController" method="post">
-    <button name="action" formnovalidate value="unsel">Voltar</button>
-    <fieldset>
-        <legend>Endereço</legend>
-        <!--onblur ocorre qnd o objeto perde o foco-->
-        <input value="${endereco.getZipcode()}" name="zipcode" required type="number" placeholder="CEP" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
-        <input value="${endereco.getName()}" name="name" required type="text" placeholder="Apelido Curto para o Endereço" maxlength="255" />
-        <input value="${endereco.getAddress()}" name="address" required type="text" id="rua" placeholder="Endereço" maxlength="255" />
-        <input value="${endereco.getCity()}" name="city" required type="text" id="cidade"  placeholder="Cidade" maxlength="255" />
-        <input value="${endereco.getState()}" name="state" required type="text" id="uf" placeholder="Estado" maxlength="255" />
-        <input name="country" required type="text" placeholder="País" readonly value="Brasil" maxlength="255" />
+    
+<div class="end-add-container">    
+    <form action="EnderecoController" method="post">
+          
+        <div class="end-group-container">
+            <div class="group">      
+                <input value="${endereco.getName()}" name="name" required type="text" maxlength="255" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Descrição do endereço</label>
+            </div>
+            
+            <div class="group">      
+                <input value="${endereco.getZipcode()}" name="zipcode" required type="number" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>CEP</label>
+            </div>
+                
+            <div class="group">      
+                <input value="${endereco.getAddress()}" name="address" required type="text" id="rua" maxlength="255" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Endereço</label>
+            </div>
+                
+            <div class="group">      
+                <input value="${endereco.getCity()}" name="city" required type="text" id="cidade"  maxlength="255" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Cidade</label>
+            </div>
+                
+            <div class="group">      
+                <input value="${endereco.getState()}" name="state" required type="text" id="uf" maxlength="255" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Estado</label>
+            </div>
+                
+            <div class="group">      
+                <input name="country" required type="text" readonly value="Brasil" maxlength="255" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label></label>
+            </div>
+        </div>
+            
+        <button class="standard-btn" name="action" formnovalidate value="unsel">Voltar</button>
+        <button class="standard-btn" name="action" value="grava" type="submit">Salvar</button>   
         <% if (!sel.equals("")) { %>
-        <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
+        <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
         <% }%>
-        <button name="action" value="grava" type="submit">Salvar</button>
-    </fieldset>
-</form>
+            
+    </form>
+</div>
+        
+        
 <script type="text/javascript" >
 
     function limpa_formulário_cep() {

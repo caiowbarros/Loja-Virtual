@@ -41,7 +41,6 @@
         <h2>Método de pagamento</h2>
         <div class="confirma-end">
             <div id="paypal-button"></div>
-            <hr>
             <form action="CompraController">
                 <button onclick="return confirm('Deseja realizar essa compra?');false;" name="action" value="pagamentoOk">Comprar</button>
             </form>
