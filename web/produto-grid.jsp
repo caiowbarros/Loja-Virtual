@@ -25,43 +25,45 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Grid de Produtos"/>
 </jsp:include>
-<table width="100%" border="1" cellspacing="10">
+
+<table class="product-grid" cellspacing="10">
     <thead>
         <tr>
             <th colspan="5"><h2>Produtos</h2></th>
         </tr>
-        <tr>
-            <th>Operações</th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Categoria</th>
-            <th>Quantidade no Estoque</th>
+        <tr class="product-grid-title">
+            <td>Operações</td>
+            <td>Nome</td>
+            <td>Preço</td>
+            <td>Categoria</td>
+            <td>Quantidade no Estoque</td>
         </tr>
     </thead>
     <tbody>
         <%
             for (int i = 0; i < grid.size(); i++) {
         %>
-        <tr>
-            <th>
-                <a href="ProdutoAdmController?sel=<%= grid.get(i).get(0)%>">Selecionar</a>             
-            </th>
-            <th><%= grid.get(i).get(1)%></th>
-            <th>R$<%= grid.get(i).get(2)%></th>
-            <th><%= grid.get(i).get(3)%></th>
-            <th><%= grid.get(i).get(4)%></th>
+        <tr class="product-data">
+            <td>
+                <a href="ProdutoAdmController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+            </td>
+            <td><%= grid.get(i).get(1)%></td>
+            <td>R$<%= grid.get(i).get(2)%></td>
+            <td><%= grid.get(i).get(3)%></td>
+            <td><%= grid.get(i).get(4)%></td>
         </tr>
         <%
             }
         %>
     </tbody>
     <tfoot>
-        <tr>
-            <th colspan="5">
-                <a href="ProdutoAdmController?sel">Incluir</a>
-            </th>
+        <tr class="product-data-add">
+            <td colspan="5">
+                <a class="end-link" href="ProdutoAdmController?sel">Inserir Novo Produto</a>
+            </td>
         </tr>
     </tfoot>
 </table>
+    
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

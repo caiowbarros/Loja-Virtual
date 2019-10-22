@@ -80,3 +80,47 @@ and open the template in the editor.
 .standard-btn:hover {
     background-color: #64af3d;
 }
+
+/* Produto-grid */
+.product-grid {
+    width: 90%;
+    margin: 20px 5%;
+    border-collapse: collapse;
+}
+
+.product-grid-title {
+    text-align-last: center;
+    border-bottom: 1px solid #E1E8EE;
+}
+
+.product-grid-title td {
+    color: #aaa;
+    padding-bottom: 10px;
+    padding-top: 25px;
+}
+
+.product-data {
+    border-bottom: 1px solid #E1E8EE;
+    text-align-last: center;
+}
+
+.product-data td {
+    padding: 10px 0px;
+}
+
+.product-data td a {
+    text-decoration: none;
+    color: #226EBB;
+}
+
+.product-data td a:hover {
+    color: #358ED7;
+}
+
+.product-data-add {
+    text-align-last: center;
+}
+
+.product-data-add td {
+    padding: 15px 0px;
+}
