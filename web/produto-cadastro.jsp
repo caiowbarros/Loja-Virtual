@@ -39,7 +39,10 @@
         <form method="post" action="ProdutoAdmController">
             
             <ul class="form-style-1">
-                <li><label>Nome </label><input value="${produto.getName()}" class="field-long" name="name" required type="text" maxlength="255" /></li>
+                <li>
+                    <label>Nome </label>
+                    <input value="${produto.getName()}" class="field-long" name="name" required type="text" maxlength="255" />
+                </li>
                 <li>
                     <label>Preço </label>
                     <input value="${produto.getPrice()}" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />

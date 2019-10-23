@@ -139,7 +139,7 @@ and open the template in the editor.
 .previa-img {
     width: 320px;
     height: 320px;
-    border: 1px solid #E1E8EE;
+    border: 1px solid #BEBEBE;
     margin-left: 50px;
 }
 
@@ -258,4 +258,21 @@ select{
 
 .center {
     text-align-last: center;
+}
+
+.center a {
+    background-color: #358ED7;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 3px 8px;
+    border: none;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.center a:hover {
+    background-color: #64af3d;
 }

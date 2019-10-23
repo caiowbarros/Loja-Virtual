@@ -29,27 +29,43 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Avalia Produto"/>
 </jsp:include>
-<a href="ProdutoController">Voltar</a>
+
 <form action="AvaliacaoController" method="post">
-    <fieldset>
-        <legend>Avaliação</legend>
+    
+    <ul class="form-style-1">
         <!-- Avaliação do produto (em estrelas) -->
-        <div class="rate">
-            <input <%= rating.equals("5") ? "checked" : ""%> type="radio" id="star5" name="rating" value="5" />
-            <label for="star5" title="text"></label>
-            <input <%= rating.equals("4") ? "checked" : ""%> type="radio" id="star4" name="rating" value="4" />
-            <label for="star4" title="text"></label>
-            <input <%= rating.equals("3") ? "checked" : ""%> type="radio" id="star3" name="rating" value="3" />
-            <label for="star3" title="text"></label>
-            <input <%= rating.equals("2") ? "checked" : ""%> type="radio" id="star2" name="rating" value="2" />
-            <label for="star2" title="text"></label>
-            <input <%= rating.equals("1") ? "checked" : ""%> type="radio" id="star1" name="rating" value="1" />
-            <label for="star1" title="text"></label>
-        </div>
-        <input name="title" required type="text" placeholder="Título da Avaliação" maxlength="255" />
-        <input name="description" required type="text" placeholder="Descricao da Avaliação" maxlength="255" />
-        <button name="action" value="avalia" type="submit">Salvar</button>
-    </fieldset>
+        <li>
+            <label>Avaliação </label>
+            <div class="rate">
+                <input <%= rating.equals("5") ? "checked" : ""%> type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="text"></label>
+                <input <%= rating.equals("4") ? "checked" : ""%> type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="text"></label>
+                <input <%= rating.equals("3") ? "checked" : ""%> type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="text"></label>
+                <input <%= rating.equals("2") ? "checked" : ""%> type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="text"></label>
+                <input <%= rating.equals("1") ? "checked" : ""%> type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="text"></label>
+            </div>
+            <br>
+        </li>
+        <li>
+            <br>
+            <label>Título </label>
+            <input class="field-long" name="title" required type="text" maxlength="255" />
+        </li>
+        <li>
+            <label>Descrição </label>
+            <textarea class="field-long field-textarea" name="description" required type="text" maxlength="255"></textarea>
+        </li>
+        <li class="center">
+            <a href="ProdutoController">Voltar</a>
+            <button name="action" value="avalia" type="submit">Salvar</button>
+        </li>
+    </ul>
+            
 </form>
+            
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
