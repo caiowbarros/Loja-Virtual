@@ -31,7 +31,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Carrinho"/>
+    <jsp:param name="title" value="Checkout"/>
 </jsp:include>
 
 <main class="confirma-container">

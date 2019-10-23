@@ -27,7 +27,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Avalia Produto"/>
+    <jsp:param name="title" value="Avaliação do Produto"/>
 </jsp:include>
 
 <form action="AvaliacaoController" method="post">

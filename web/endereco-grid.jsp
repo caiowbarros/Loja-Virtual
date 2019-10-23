@@ -23,7 +23,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Cadastro de Endereços"/>
+    <jsp:param name="title" value="Meus Endereços"/>
 </jsp:include>
 <table class="end-grid" cellspacing="10">
     <thead>

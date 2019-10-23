@@ -276,3 +276,10 @@ select{
 .center a:hover {
     background-color: #64af3d;
 }
+
+/* Compras */
+.compras-container {
+    border: 1px solid #BEBEBE;
+    margin: 35px 5%;
+    padding-bottom: 20px;
+}

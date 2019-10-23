@@ -23,7 +23,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Menu Usuário"/>
+    <jsp:param name="title" value="Minha Conta"/>
 </jsp:include>
 <table width="100%" border="1" cellspacing="10">
     <thead>
@@ -54,17 +54,17 @@
     <tfoot>
         <tr>
             <th colspan="5">
-                <a href="EnderecoController">Seus Endereços</a>
+                <a href="EnderecoController">Lista de Endereços</a>
             </th>
         </tr>
         <tr>
             <th colspan="5">
-                <a href="ProdutosController?esp=favoritos">Seus Produtos Favoritos</a>
+                <a href="ProdutosController?esp=favoritos">Favoritos</a>
             </th>
         </tr>
         <tr>
             <th colspan="5">
-                <a href="CompraController?historico">Suas Compras</a>
+                <a href="CompraController?historico">Histórico de Pedidos</a>
             </th>
         </tr>
         <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
