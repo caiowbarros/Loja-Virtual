@@ -60,8 +60,8 @@
             </div>
             <!-- Filtros Especiais -->
             <div class="products-item-filter">
-                <input ${favoritos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="favoritos" id="favs"><label for="favs">Apenas Favoritos</label><br>
-                <input ${lancamentos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="lancamentos" id="lancs"><label for="lancs">Apenas Lançamentos</label><br>
+                <input ${favoritos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="favoritos" id="favs"><label for="favs">Favoritos</label><br>
+                <input ${lancamentos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="lancamentos" id="lancs"><label for="lancs">Lançamentos</label><br>
             </div>
         </div>
 

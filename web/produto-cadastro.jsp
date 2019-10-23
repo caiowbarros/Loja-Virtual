@@ -30,45 +30,77 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Produtos"/>
 </jsp:include>
-<form method="post" action="ProdutoAdmController">
-    <button name="action" formnovalidate value="unsel">Voltar</button>
-    <fieldset>
-        <legend>Produto</legend>
-        <label>Nome:&nbsp;</label><input value="${produto.getName()}" name="name" required type="text" placeholder="name" maxlength="255"/>
-        <br>
-        <label>Preço:&nbsp;</label><input value="${produto.getPrice()}" name="price" required type="number" max="5000" min="0.01" step="0.01" placeholder="price" maxlength="255" />
-        <br>
-        <label>Descrição:&nbsp;</label><textarea name="description" required placeholder="description" maxlength="255">${produto.getDescription()}</textarea>
-        <br>
-        <label>Categoria:&nbsp;</label><jsp:include page="partials/components/select.jsp">
-            <jsp:param name="nameSelect" value="categoryId"/>
-            <jsp:param name="required" value="1"/>
-            <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
-            <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
-        </jsp:include>
-        <br>
-        <label>Imagem:&nbsp;</label><input name="img" id="img" accept="image/*" <% if (sel.equals("")) { %>required<% }%> type="file"/>
-        <br>
-        <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
-        <button type="submit" name="action" value="grava">Gravar</button>
+
+<div class="produto-main-container">
+    
+    <div class="produto-left-container">
+        
+        <h2>Produto</h2>
+        <form method="post" action="ProdutoAdmController">
+            
+            <ul class="form-style-1">
+                <li><label>Nome </label><input value="${produto.getName()}" class="field-long" name="name" required type="text" maxlength="255" /></li>
+                <li>
+                    <label>Preço </label>
+                    <input value="${produto.getPrice()}" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />
+                </li>
+                <li>
+                    <label>Descrição </label>
+                    <textarea class="field-long field-textarea" name="description" required maxlength="255">${produto.getDescription()}</textarea>
+                </li>
+                <li>
+                    <label>Categoria </label><jsp:include page="partials/components/select.jsp">
+                        <jsp:param name="nameSelect" value="categoryId"/>
+                        <jsp:param name="required" value="1"/>
+                        <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
+                        <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
+                    </jsp:include>
+                </li>
+                <li>
+                    <label>Imagem </label><input name="img" id="img" accept="image/*" <% if (sel.equals("")) { %>required<% }%> type="file"/>
+                    <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
+                </li>
+                <li class="center">
+                    <button name="action" formnovalidate value="unsel">Voltar</button>
+                    <button type="submit" name="action" value="grava">Gravar</button>
+                    <% if (!sel.equals("")) { %>
+                    <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;">Apagar</button>
+                    <% }%>
+                </li>
+            </ul>
+            
+        </form>
+        
+    </div>
+    
+    <div class="produto-right-container">
+        
+        <h2>Prévia da Imagem</h2>
+        <div class="previa-img">
+            <img id="prev"/>
+        </div>
+        
         <% if (!sel.equals("")) { %>
-        <button type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse produto?');false;">Apagar</button>
+        <form action="ProdutoAdmController" method="post">
+            <ul class="form-style-1" style="margin-left: 31px;">
+                <li>
+                    <label>Quantidade a entrar no estoque </label>
+                    <input name="quantity" min="1" required type="number" maxlength="11" class="field-divided">
+                </li>
+                <li class="center">
+                    <button type="submit" name="action" value="estoqueInsere">Inserir</button>
+                </li>
+            </ul>
+        </form>
         <% }%>
-    </fieldset>
-</form>
-<fieldset>
-    <legend>Previa da Imagem</legend>
-    <img style="width: 100px;height:auto" id="prev"/>
-</fieldset>
-<% if (!sel.equals("")) { %>
-<form action="ProdutoAdmController" method="post">
-    <fieldset>
-        <legend>Incrementar Unidades do Produto no Estoque</legend>
-        <label>Quantidade a entrar no estoque:&nbsp;</label><input name="quantity" min="1" required type="number" placeholder="Quantidade a entrar no estoque" maxlength="11">
-        <button type="submit" name="action" value="estoqueInsere">Inserir</button>
-    </fieldset>
-</form>
-<% }%>
+        
+    </div>
+    
+</div>
+
+
+
+
 <script>
     window.onload = function () {
         // qnd a pag esta carregada set prev

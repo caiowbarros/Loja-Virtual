@@ -17,7 +17,7 @@ public class Components {
     public String mostraSelect(String nameSelect, boolean required, String consulta, String[] bind, String selectedValue, String cssclass, String style) throws SQLException {
         MySql db = null;
         String html = null;
-        html = "<select style=\"" + style + "\" class=\"" + nameSelect + "\" name=\"" + nameSelect + "\" " + (required == true ? " required " : "") + ">";
+        html = "<select style=width:100%;\"" + style + "\" class=\"" + cssclass + "\" name=\"" + nameSelect + "\" " + (required == true ? " required " : "") + ">";
         try {
             db = new MySql();
             ResultSet ret = db.dbCarrega(consulta, bind);
