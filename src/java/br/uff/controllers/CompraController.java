@@ -63,7 +63,7 @@ public class CompraController extends HttpServlet {
                         //pega produtos
                         String[] bindProdutos = {vendasRet.getString("cart_id")};
                         ArrayList<ArrayList> produtos = new ArrayList<>();
-                        ResultSet produtosRet = db.dbCarrega("SELECT p.id, p.`name`, p.price, c.quantity, p.price * c.quantity total_price_product FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ?", bindProdutos);
+                        ResultSet produtosRet = db.dbCarrega("SELECT p.id, p.`name`, p.price, p.img, c.quantity, p.price * c.quantity total_price_product FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ?", bindProdutos);
                         while (produtosRet.next()) {
                             ArrayList produto = new ArrayList<>();
                             produto.add(produtosRet.getString("id"));
@@ -71,6 +71,7 @@ public class CompraController extends HttpServlet {
                             produto.add(produtosRet.getString("price"));
                             produto.add(produtosRet.getString("quantity"));
                             produto.add(produtosRet.getString("total_price_product"));
+                            produto.add(produtosRet.getString("img"));
                             produtos.add(produto);
                         }
                         venda.add(produtos);
