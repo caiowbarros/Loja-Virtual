@@ -41,7 +41,7 @@ public class ProdutosController extends HttpServlet {
         HttpSession session = request.getSession();
 
         try {
-            String qtdMaxProdutosPag = "8";
+            String qtdMaxProdutosPag = "5";
             String consulta = "SELECT p.id,p.name,p.price,p.img,c.category_name,p.category_id FROM products p LEFT JOIN vw_category c on(p.category_id=c.id)";
             String filtro = "";
             ArrayList<String> bindItens = new ArrayList<>();
