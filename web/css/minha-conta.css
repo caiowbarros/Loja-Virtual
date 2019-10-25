@@ -39,6 +39,11 @@ and open the template in the editor.
     padding: 10px 0px;
 }
 
+.end-data img {
+    width: 75px;
+    height: 75px;
+}
+
 .end-link {
     text-decoration: none;
     color: #226EBB;
@@ -146,6 +151,7 @@ and open the template in the editor.
 .previa-img img {
     width: 300px;
     height: auto;
+    max-height: 300px;
     padding: 10px;
 }
 
@@ -181,6 +187,7 @@ and open the template in the editor.
 .form-style-1 input[type=time],
 .form-style-1 input[type=url],
 .form-style-1 input[type=email],
+.form-style-1 input[type=password],
 textarea, 
 select{
 	box-sizing: border-box;
@@ -203,6 +210,7 @@ select{
 .form-style-1 input[type=time]:focus,
 .form-style-1 input[type=url]:focus,
 .form-style-1 input[type=email]:focus,
+.form-style-1 input[type=password]:focus,
 .form-style-1 textarea:focus, 
 .form-style-1 select:focus{
 	-moz-box-shadow: 0 0 8px #88D5E9;
@@ -282,4 +290,19 @@ select{
     border: 1px solid #BEBEBE;
     margin: 35px 5%;
     padding-bottom: 20px;
+}
+
+.meus-pedidos {
+    text-align-last: center;
+    margin-top: 25px;
+}
+
+/* Usuario cadastro */
+.user-cadastro-container {
+    width: 60%;
+    margin: 20px 20%;
+}
+
+.user-cadastro-container h2 {
+    text-align-last: center;
 }

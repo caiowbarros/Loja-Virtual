@@ -25,6 +25,7 @@
     <jsp:param name="title" value="Meus Pedidos"/>
 </jsp:include>
 
+<h2 class="meus-pedidos">Meus Pedidos</h2>
 <%
     for (int i = 0; i < vendas.size(); i++) {
 %>
@@ -90,7 +91,7 @@
     }
     if (vendas.size() == 0) {
 %>
-<h2>Nenhuma compra foi realizada ainda, corra e faça uma compra para ela aparecer aqui!</h2>
+<h2 class="meus-pedidos">Nenhuma compra foi realizada ainda, corra e faça uma compra para ela aparecer aqui!</h2>
 <%
     }
 %>
