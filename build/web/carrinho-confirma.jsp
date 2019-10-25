@@ -43,12 +43,20 @@
                 <%
                     for (int i = 0; i < enderecos.size(); i++) {
                 %>
-                <div class="confirma-radio">
+                <div class="confirma-radio" id="check<%= enderecos.get(i).get(0)%>" onclick="radioCheck(<%=enderecos.get(i).get(0)%>)">
                     <div class="radio-container">
                         <input required type="radio" name="end" id="end<%= enderecos.get(i).get(0)%>" value="<%= enderecos.get(i).get(0)%>"><label for="end<%= enderecos.get(i).get(0)%>">&nbsp;<%= enderecos.get(i).get(1)%></label><br>
                     </div>
                     <a href="EnderecoController?sel=<%= enderecos.get(i).get(0)%>">Editar</a>
                 </div>
+                <script>
+                function radioCheck(id) {
+                    document.getElementById("end" + id).checked=true;
+                    //var backgroundRadio = document.getElementById("check" + id);
+                    //backgroundRadio.classList.add("background-radio");
+                    //document.getElementById("check" + id).style.textCss='background-color: #EBEBEB;';
+                }
+                </script>
                 <%
                     }
                 %>
@@ -59,7 +67,7 @@
                 
             <h2>Método de entrega</h2>
             <div class="confirma-frete">
-                <div class="confirma-radio">
+                <div class="confirma-radio background-radio">
                     <div class="radio-container">
                         <input type="radio" name="frete" checked>
                         <div class="radio-label">Normal - 5 dias úteis (Frete grátis)</div>

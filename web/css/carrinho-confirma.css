@@ -48,6 +48,11 @@ and open the template in the editor.
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
+}
+
+.background-radio {
+    background-color: #EBEBEB;
 }
 
 .radio-container {
