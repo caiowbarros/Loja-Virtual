@@ -222,6 +222,10 @@ select{
 	width: 320px;
 }
 
+.form-style-1 .field-half {
+        width: 49%;
+}
+
 .form-style-1 .field-long{
 	width: 100%;
 }
@@ -262,6 +266,13 @@ select{
 
 .form-style-1 li button:hover {
     background-color: #64af3d;
+}
+
+.form-style-1 li p {
+    font-weight: bold;
+    font-size: 17px;
+    margin-top: -20px;
+    margin-bottom: 30px;
 }
 
 .center {

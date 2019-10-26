@@ -52,9 +52,6 @@
                 <script>
                 function radioCheck(id) {
                     document.getElementById("end" + id).checked=true;
-                    //var backgroundRadio = document.getElementById("check" + id);
-                    //backgroundRadio.classList.add("background-radio");
-                    //document.getElementById("check" + id).style.textCss='background-color: #EBEBEB;';
                 }
                 </script>
                 <%

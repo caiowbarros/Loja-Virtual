@@ -38,12 +38,76 @@
 <main class="confirma-container">
 
     <div class="left-confirma">
+        
         <h2>Método de pagamento</h2>
-        <div class="confirma-end">
-            <div id="paypal-button"></div>
+        <div class="confirma-forma-pag">
             <form action="CompraController">
-                <button onclick="return confirm('Deseja realizar essa compra?');false;" name="action" value="pagamentoOk">Comprar</button>
+                
+                <ul class="form-style-1">
+                    <li>
+                        <label>Nome do Titular do Cartão </label>
+                        <input class="field-long" name="name" required type="text" maxlength="255">
+                    </li>
+                    <li>
+                        <label>Número do Cartão </label>
+                        <input class="field-long" name="number" required type="text" maxlength="16">
+                    </li>
+                    <li>
+                        <label>Data de Expiração </label>
+                        <select class="field-half">
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                        <select class="field-half" style="float: right;">
+                            <option value="19">2019</option>
+                            <option value="20">2020</option>
+                            <option value="21">2021</option>
+                            <option value="21">2022</option>
+                            <option value="21">2023</option>
+                            <option value="21">2024</option>
+                            <option value="21">2025</option>
+                            <option value="21">2026</option>
+                            <option value="21">2027</option>
+                            <option value="21">2028</option>
+                            <option value="21">2029</option>
+                        </select>
+                        <!--<input class="field-half" name="month" required type="text" placeholder="Mês" maxlength="2">
+                        <input class="field-half" name="year" required type="text" placeholder="Ano" maxlength="2">-->
+                    </li>
+                    <li>
+                        <label>CVV </label>
+                        <input class="field-half" name="cvv" required type="number" maxlength="3">
+                        <img class="credit-card-img" src="https://i.imgur.com/fc0e1ow.png">
+                    </li>
+                    <li class="center">
+                        <div>
+                            <button onclick="return confirm('Deseja realizar essa compra?');false;" name="action" value="pagamentoOk" style="font-size: 15px; padding: 10px 24px;">Efetuar Compra</button>
+                        </div>
+                    </li>
+                </ul>
+                    
             </form>
+        </div>
+        
+        <div class="confirma-forma-pag">
+            <ul class="form-style-1">
+                <li class="center">
+                    <p>OU</p>
+                </li>
+                <li>
+                    <div id="paypal-button"></div>
+                </li>
+            </ul>
         </div>
 
     </div>

@@ -181,3 +181,14 @@ and open the template in the editor.
 .detalhe-entrega {
     font-size: 15px;
 }
+
+/* Compra pagamento */
+.confirma-forma-pag {
+    margin-bottom: 20px;
+}
+
+.credit-card-img {
+    width: 100px;
+    vertical-align: middle;
+    float: right;
+}
