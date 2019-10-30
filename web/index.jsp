@@ -16,14 +16,70 @@ and open the template in the editor.
         out.println("<script>alert('" + msg + "');</script>");
     }
 %>
-<div class="main-img">
-    <figure>
-        <img src="https://media.playstation.com/is/image/SCEA/playstation-plus-online-multiplayer-desktop-banner-01-us-22jan19?$native_nt$">
-        <figcaption>
-            <a href="ProdutosController?esp=lancamentos">Lançamentos</a>
-        </figcaption>
-    </figure>
+
+<!-- Slideshow container -->
+<div class="slideshow-container">
+
+    <!-- Full-width images with caption text -->
+    <div class="mySlides fade">
+        <img src="https://i.imgur.com/mtVBaXd.jpg" style="width:100%">
+        <div class="text" onclick="location.href='';">Adquira o Jogo</div>
+    </div>
+
+    <div class="mySlides fade">
+        <img src="https://i.imgur.com/fmXx201.jpg" style="width:100%">
+        <div class="text" onclick="location.href='';">Compre na Pré-Venda</div>
+    </div>
+
+    <div class="mySlides fade">
+        <img src="https://i.imgur.com/hiVx61r.jpg" style="width:100%">
+        <div class="text" onclick="location.href='';">Adquira o Jogo</div>
+    </div>
+
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
 </div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+</div>
+
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+}    
+</script>
+
 
 <div class="sec-container">
     <div class="sec-img">
