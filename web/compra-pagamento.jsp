@@ -55,6 +55,9 @@
                 <li>
                     <div class="paypal-sub">Pagamento 100% seguro</div>
                 </li>
+                <li class="center">
+                    <button style="display:none" onclick="return confirm('Deseja realizar essa compra?');false;" name="action" value="pagamentoOk">Comprar</button>
+                </li>
             </ul>
         </div>
 
