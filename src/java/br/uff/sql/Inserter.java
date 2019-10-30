@@ -11,7 +11,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class Inserter {
     
     public Inserter(String tableName, Class klass) {
         this.reload();
-        this.insert = "insert into" + tableName;
+        this.insert = "insert into " + tableName;
         this.klass = klass;
         this.connection = ConnectionManager.getConnection();
     }
@@ -42,9 +44,9 @@ public class Inserter {
     }
     
     public BaseModel run() throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        PreparedStatement statement = connection.prepareStatement(this.build());
-        if(statement.executeUpdate() != 1) throw new SQLException();
-        this.reload();
+        PreparedStatement statement = connection.prepareStatement(this.build(), Statement.RETURN_GENERATED_KEYS);
+        int id = statement.executeUpdate();
+        this.attrs.put("id", id);
         return model();
     }
     

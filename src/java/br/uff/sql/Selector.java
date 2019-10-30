@@ -72,6 +72,52 @@ public class Selector {
         return models;
     }
     
+    public int count() {
+        try {
+            this.select = "count(*)";
+            PreparedStatement statement = connection.prepareStatement(this.build());
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {
+                return result.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int count(boolean distinct) {
+        try {
+            if(distinct) {
+                this.select = "count(distinct *)";
+            } else {
+                this.select = "count(*)";
+            }
+            PreparedStatement statement = connection.prepareStatement(this.build());
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {
+                return result.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public boolean exists() {
+        try {
+            this.select = "count(distinct *)";
+            PreparedStatement statement = connection.prepareStatement(this.build());
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {
+                return result.getBoolean(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     protected String build() {
         StringBuilder sb = new StringBuilder();
         if(select.isEmpty()) sb.append("select *"); else sb.append(select);

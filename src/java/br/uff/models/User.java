@@ -12,6 +12,8 @@ import java.util.Map;
  * @author felipe
  */
 public class User extends BaseModel {
+    public static final int CUSTOMER_ROLE_ID = 2;
+    
     private int id;
     private String name;
     private String email;

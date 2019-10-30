@@ -5,24 +5,15 @@
  */
 package br.uff.sql;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 /**
  *
  * @author felipe
  */
 public class Getter {
     private final Selector selector;
-    private final Counter counter;
     
     public Getter(String tableName, Class klass) {
         this.selector = new Selector(tableName, klass);
-        this.counter = new Counter(tableName, klass);
-    }
-    
-    public int count() throws SQLException {
-        return counter.count();
     }
     
     public Selector select() {

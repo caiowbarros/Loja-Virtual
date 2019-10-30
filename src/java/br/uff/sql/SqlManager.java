@@ -35,6 +35,12 @@ public class SqlManager {
         if(result.isEmpty()) return null;
         return result.get(0);
     }
+    
+    public BaseModel findBy(String condition) throws SQLException {
+        ArrayList<BaseModel> result = select().where(condition).run();
+        if(result.isEmpty()) return null;
+        return result.get(0);
+    }
 
     public Selector select() {
         return getter.select();
@@ -42,10 +48,6 @@ public class SqlManager {
     
     public Selector select(String str) {
         return getter.select(str);
-    }
-    
-    public int count() throws SQLException {
-        return getter.count();
     }
     
     public Inserter insert() {
