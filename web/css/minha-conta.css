@@ -275,6 +275,19 @@ select{
     margin-bottom: 30px;
 }
 
+.form-style-1 li fieldset {
+    text-align: center;
+    border-radius: 6px;
+    width: 55%;
+    border: 1.5px solid #7E7E7E;
+    margin-top: 50px;
+}
+
+.form-style-1 li legend img {
+    width: 100px;
+    margin-left: 5px;
+}
+
 .center {
     text-align-last: center;
 }

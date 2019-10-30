@@ -51,10 +51,6 @@ and open the template in the editor.
     cursor: pointer;
 }
 
-.background-radio {
-    background-color: #EBEBEB;
-}
-
 .radio-container {
     align-items: center;
     display: flex;
@@ -188,7 +184,12 @@ and open the template in the editor.
 }
 
 .credit-card-img {
-    width: 100px;
-    vertical-align: middle;
-    float: right;
+    width: 150px;
+    padding: 5px 10px;
+}
+
+.paypal-sub {
+    color: #7E7E7E;
+    text-align-last: center;
+    text-transform: uppercase;
 }

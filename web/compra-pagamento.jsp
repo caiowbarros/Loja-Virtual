@@ -107,6 +107,15 @@
                 <li>
                     <div id="paypal-button"></div>
                 </li>
+                <li style="text-align: -webkit-center;">
+                    <fieldset>
+                        <legend><img src="https://logodownload.org/wp-content/uploads/2014/10/paypal-logo-3.png"></legend>
+                        <img class="credit-card-img" src="https://i.imgur.com/fc0e1ow.png">
+                    </fieldset>
+                </li>
+                <li>
+                    <div class="paypal-sub">Pagamento 100% seguro</div>
+                </li>
             </ul>
         </div>
 
