@@ -22,18 +22,18 @@ and open the template in the editor.
 
     <!-- Full-width images with caption text -->
     <div class="mySlides fade">
-        <img src="https://i.imgur.com/mtVBaXd.jpg" style="width:100%">
-        <div class="text" onclick="location.href='';">Adquira o Jogo</div>
+        <img src="img/banner-rdr2.jpg" style="width:100%">
+        <div class="text" onclick="location.href='ProdutoController?produtoId=9';">Adquira o Jogo</div>
     </div>
 
     <div class="mySlides fade">
-        <img src="https://i.imgur.com/fmXx201.jpg" style="width:100%">
-        <div class="text" onclick="location.href='';">Compre na Pré-Venda</div>
+        <img src="img/banner-swjfo.jpg" style="width:100%">
+        <div class="text" onclick="location.href='ProdutoController?produtoId=7';">Adquira o Jogo</div>
     </div>
 
     <div class="mySlides fade">
-        <img src="https://i.imgur.com/hiVx61r.jpg" style="width:100%">
-        <div class="text" onclick="location.href='';">Adquira o Jogo</div>
+        <img src="img/banner-gow.jpg" style="width:100%">
+        <div class="text" onclick="location.href='ProdutoController?produtoId=10';">Adquira o Jogo</div>
     </div>
 
     <!-- Next and previous buttons -->
@@ -83,17 +83,17 @@ function showSlides(n) {
 
 <div class="sec-container">
     <div class="sec-img">
-        <img src="https://icdn2.digitaltrends.com/image/digitaltrends/playstation-4-problems-header.jpg">
+        <img src="img/ps4.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=1">Playstation</a></div>
     </div>
 
     <div class="sec-img">
-        <img src="https://media.wired.com/photos/5b22c58811196626aaeb168b/master/w_1536,c_limit/xbox-FA.jpg">
+        <img src="img/xone.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=2">Xbox</a></div>
     </div>
 
     <div class="sec-img">
-        <img src="https://www.blogcdn.com/www.engadget.com/media/2009/06/black-kuro-wii-juni-4,-2009.jpg">
+        <img src="img/wii.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=3">Wii</a></div>
     </div>
 </div>

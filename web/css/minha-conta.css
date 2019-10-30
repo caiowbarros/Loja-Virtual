@@ -286,6 +286,7 @@ select{
 .form-style-1 li legend img {
     width: 100px;
     margin-left: 5px;
+    margin-right: 5px;
 }
 
 .center {
