@@ -25,6 +25,62 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Minha Conta"/>
 </jsp:include>
+
+<h2 class="meus-pedidos">Minha Conta</h2>
+<div class="main-user-container">
+    
+    <div class="user-info">
+        <div class="user-info-middle" onclick="location.href='EnderecoController';">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Lista de Endereços</p>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="user-info-middle" onclick="location.href='ProdutosController?esp=favoritos';">
+            <i class="fas fa-heart"></i>
+            <p>Favoritos</p>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="user-info-middle" onclick="location.href='CompraController?historico';">
+            <i class="fas fa-shopping-bag"></i>
+            <p>Histórico de Pedidos</p>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="user-info-middle" onclick="">
+            <i class="fas fa-user-alt"></i>
+            <p><%= (session.getAttribute("userRole").equals("1") ? "Lista de Cadastros" : "Meus Dados")%></p>
+        </div>
+    </div>
+</div>
+    
+<div class="main-user-container">
+    <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
+    <% if (session.getAttribute("userRole").equals("1")) { %>
+    <div class="user-info">
+        <div class="user-info-middle" onclick="location.href='ProdutoAdmController';">
+            <i class="fas fa-barcode"></i>
+            <p>Cadastro de Produtos</p>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="user-info-middle" onclick="Logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <p>
+                <form method="post" action="UserController">
+                    <button onclick="return confirm('Tem certeza que deseja fazer o LOGOUT?');false;" type="submit" id="logout-btn" name="action" value="logout" formnovalidate>Logout</button>
+                </form>
+            </p>
+        </div>
+        <script>
+        function Logout() {
+            document.getElementById("logout-btn").click();
+        }
+        </script>
+    </div>
+</div>
+
 <table width="100%" border="1" cellspacing="10">
     <thead>
         <tr>
@@ -68,7 +124,7 @@
             </th>
         </tr>
         <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
-        <% if (session.getAttribute("userRole").equals("1")) { %>
+        <% //if (session.getAttribute("userRole").equals("1")) { %>
         <tr>
             <th colspan="5">
                 <a href="ProdutoAdmController">Cadastro de Produtos</a>
@@ -84,5 +140,6 @@
         </tr>    
     </tfoot>
 </table>
+        
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

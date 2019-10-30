@@ -44,7 +44,7 @@
     if (itens.size() < 1) {
 %>
 <div class="cart-product">
-    <h2>Seu carrinho está vazio por enquanto!</h2>
+    <h2>Seu carrinho está vazio por enquanto.</h2>
 </div>
 <%
 } else {

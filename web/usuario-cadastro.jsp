@@ -49,7 +49,7 @@
             </li>
             <% if (session.getAttribute("userRole").equals("1")) { %>
             <li>
-                <label>ID </label>
+                <label>Papel </label>
                 <jsp:include page="partials/components/select.jsp">
                     <jsp:param name="nameSelect" value="roleId"/>
                     <jsp:param name="required" value="1"/>

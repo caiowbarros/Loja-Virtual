@@ -317,3 +317,41 @@ select{
 .user-cadastro-container h2 {
     text-align-last: center;
 }
+
+/* Usuario Grid */
+.main-user-container {
+    width: 70%;
+    display: flex;
+    margin: 50px 15%;
+    justify-content: space-evenly;
+}
+
+.user-info {
+    border: 1px solid #D4D4D4;
+    width: 250px;
+    height: 200px;
+    display: table;
+    cursor: pointer;
+}
+
+.user-info:hover {
+    border-color: black;
+}
+
+.user-info-middle {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.user-info-middle i {
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.user-info-middle button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}

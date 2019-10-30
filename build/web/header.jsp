@@ -20,6 +20,7 @@
         <link href="css/produtos.css" type="text/css" rel="stylesheet">
         <link href="css/home.css" type="text/css" rel="stylesheet">
         <link href="css/minha-conta.css" type="text/css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/24de11fb10.js" crossorigin="anonymous"></script>
     </head>
 
     <body>
