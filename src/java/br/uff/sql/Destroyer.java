@@ -21,7 +21,7 @@ public class Destroyer {
     public Destroyer(String tableName) {
         this.reload();
         this.connection = ConnectionManager.getConnection();
-        this.delete = "delete from" + tableName;
+        this.delete = "delete from " + tableName;
     }
     
     private void reload() {
@@ -38,7 +38,7 @@ public class Destroyer {
     }
     
     public Destroyer where(String str) {
-        this.where = str;
+        this.where = " where "+str;
         return this;
     }
 }
