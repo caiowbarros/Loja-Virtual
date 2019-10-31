@@ -5,6 +5,7 @@
  */
 package br.uff.controllers;
 
+import br.uff.sql.ConnectionManager;
 import br.uff.sql.SqlManager;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -12,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +28,23 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProdutosController", urlPatterns = {"/ProdutosController"})
 public class ProdutosController extends HttpServlet {
-
+    @Override
+    public void init() {
+        try {
+            ConnectionManager.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ProdutosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            ConnectionManager.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -294,7 +313,7 @@ public class ProdutosController extends HttpServlet {
             String maxP = null;
             try {
                 String field = "ceil(count(*)/" + qtdMaxProdutosPag + ")";
-                String subquery = "select * from " + consulta + filtro;
+                String subquery = consulta + " " + filtro;
                 String query = "select " + field + " from (" + subquery + ") _x2";
                 ResultSet rs = SqlManager.bruteExecute(query, bind);
                 maxP = rs.next() == true ? rs.getString(field) : "1";

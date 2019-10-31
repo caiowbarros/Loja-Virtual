@@ -33,7 +33,7 @@ public class ProdutoController extends HttpServlet {
         try {
             ConnectionManager.connect();
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -42,7 +42,7 @@ public class ProdutoController extends HttpServlet {
         try {
             ConnectionManager.close();
         } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

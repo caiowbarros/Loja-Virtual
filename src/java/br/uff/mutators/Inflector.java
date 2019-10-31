@@ -81,6 +81,7 @@ public class Inflector {
     }
     
     public static PreparedStatement bind(PreparedStatement statement, String[] bind) throws SQLException {
+        if(bind == null) return statement;
         for(int i = 1; i <= bind.length; i++)
             statement.setString(i, bind[i-1]);
         return statement;
