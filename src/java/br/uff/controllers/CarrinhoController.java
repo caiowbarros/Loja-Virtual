@@ -185,7 +185,7 @@ public class CarrinhoController extends HttpServlet {
                 String addProdutoId = request.getParameter("addProdutoId");
                 try {
                     int qtdValidador = sqlCartsProducts.select()
-                                                       .where("product_id=" + addProdutoId + " AND cart_id=" + carrinhoId)
+                                                       .where("product_id=" + Integer.parseInt(addProdutoId) + " AND cart_id=" + Integer.parseInt(carrinhoId))
                                                        .count();
                     if (qtdValidador == 0) {
                         HashMap<String, Object> attrs = new HashMap() {{
@@ -333,7 +333,7 @@ public class CarrinhoController extends HttpServlet {
                     itens.add(row);
                 }
                 ResultSet rs = SqlManager.bruteExecute("SELECT c.cart_id, sum(p.price * c.quantity) total_price FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ? GROUP BY c.cart_id", bind);
-                String totalPrice = "";
+                String totalPrice = null;
                 if (rs.next()) totalPrice = rs.getString("total_price");
                 request.setAttribute("totalPrice", totalPrice);
                 request.setAttribute("itens", itens);
@@ -343,6 +343,7 @@ public class CarrinhoController extends HttpServlet {
 
             // manda atributos para a pag do carrinho
             request.getRequestDispatcher("carrinho.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");

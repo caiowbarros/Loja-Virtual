@@ -106,12 +106,11 @@ public class Selector {
     
     public boolean exists() {
         try {
-            this.select = "count(distinct *)";
+            this.select = "select *";
+            this.limit = "limit 1";
             PreparedStatement statement = connection.prepareStatement(this.build());
             ResultSet result = statement.executeQuery();
-            while(result.next()) {
-                return result.getBoolean(1);
-            }
+            return result.next();
         } catch (SQLException ex) {
             Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
         }
