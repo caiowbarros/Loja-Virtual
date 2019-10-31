@@ -6,13 +6,12 @@
 package br.uff.controllers;
 
 import br.uff.models.Product;
-import br.uff.sql.ConnectionManager;
 import br.uff.sql.SqlManager;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -28,23 +27,6 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProdutoAdmController", urlPatterns = {"/ProdutoAdmController"})
 public class ProdutoAdmController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,7 +41,6 @@ public class ProdutoAdmController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         // pega sessao
         HttpSession session = request.getSession();
-        SqlManager sql = new SqlManager(Product.class);
 
         try {
             // opcoes restritas a usuario ADM
@@ -72,7 +53,19 @@ public class ProdutoAdmController extends HttpServlet {
                     if (!selParameter.equals("")) {
                         // define produto
                         try {
-                            produto = (Product) sql.find(Integer.parseInt(selParameter));
+                            String[] bindSel = {selParameter};
+                            ResultSet ret = SqlManager.bruteExecute("SELECT * FROM products WHERE id=?", bindSel);
+                            if (ret.next()) {
+                                // preenche row
+                                produto.setId(ret.getInt("id"));
+                                produto.setName(ret.getString("name"));
+                                produto.setPrice(ret.getString("price"));
+                                produto.setDescription(ret.getString("description"));
+                                produto.setImg(ret.getString("img"));
+                                produto.setCategoryId(ret.getInt("category_id"));
+                                produto.setQuantity(ret.getInt("quantity"));
+                                produto.setCreatedAt(ret.getString("created_at"));
+                            }
                         } catch (SQLException ex) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
                         }
@@ -107,19 +100,12 @@ public class ProdutoAdmController extends HttpServlet {
                         String categoryId = request.getParameter("categoryId");
 
                         try {
-                            HashMap<String, Object> attrs = new HashMap() {{
-                                put("name", name);
-                                put("price", price);
-                                put("description", description);
-                                put("img", img);
-                                put("category_id", categoryId);                                
-                            }};
                             if (sel.equals("")) {
-                                attrs.put("created_at", "SYSDATE()");
-                                attrs.put("quantity", 0);
-                                sql.insert().values(attrs).run();
+                                String[] bind = {name, price, description, img, categoryId};
+                                SqlManager.bruteExecute("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
                             } else {
-                                sql.update().where("id="+sel).set(attrs);
+                                String[] bind = {name, price, description, img, categoryId, sel};
+                                SqlManager.bruteExecute("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
                             }
                             session.setAttribute("msg", "Produto gravado com sucesso!");
                         } catch (SQLException e) {
@@ -130,10 +116,8 @@ public class ProdutoAdmController extends HttpServlet {
                     case "estoqueInsere": {
                         try {
                             String quantity = request.getParameter("quantity");
-                            HashMap<String, Object> attrs = new HashMap() {{
-                                put("quantity", quantity);
-                            }};
-                            sql.update().where("id="+sel).set(attrs);
+                            String[] bindIncrease = {quantity, sel};
+                            SqlManager.bruteExecute("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
                             session.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
@@ -142,7 +126,8 @@ public class ProdutoAdmController extends HttpServlet {
                     }
                     case "del": {
                         try {
-                            sql.delete().where("id="+sel);
+                            String[] bindDel = {sel};
+                            SqlManager.bruteExecute("DELETE FROM products WHERE id=?", bindDel);
                             session.setAttribute("msg", "Produto deletado com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
@@ -181,9 +166,11 @@ public class ProdutoAdmController extends HttpServlet {
 
             // manda p pag de grid de produtos
             request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
+            return;
         } catch (Exception e) {
             session.setAttribute("msg", e.getMessage());
             response.sendRedirect("UserController");
+            return;
         }
 
     }

@@ -136,9 +136,9 @@ public class CarrinhoController extends HttpServlet {
                     boolean cartExists = sql.select().where("id="+carrinhoId).exists();
                     
                     if (cartExists) {
-                        int carts = sql.select().where("id in (SELECT cart_id FROM sales) and id=" + carrinhoId).count();
+                        boolean valid = sql.select().where("id in (SELECT cart_id FROM sales) and id=" + carrinhoId).exists();
                         //se encontrou carrinho vendido define carrinhoId como null
-                        if (carts > 0) carrinhoId = null;
+                        if (valid) carrinhoId = null;
                     } else {
                         // se n tem carrinho no bd define como null
                         carrinhoId = null;
