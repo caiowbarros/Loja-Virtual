@@ -66,6 +66,13 @@ public class SqlManager {
         return destroyer;
     }
     
+    public static int bruteUpdate(String query, String[] bind) throws SQLException {
+        Connection connection = ConnectionManager.getConnection();
+        PreparedStatement cleanStatement = connection.prepareStatement(query);
+        PreparedStatement bindedStatement = Inflector.bind(cleanStatement, bind);
+        return bindedStatement.executeUpdate();
+    }
+    
     public static ResultSet bruteExecute(String query, String[] bind) throws SQLException {
         Connection connection = ConnectionManager.getConnection();
         PreparedStatement cleanStatement = connection.prepareStatement(query);

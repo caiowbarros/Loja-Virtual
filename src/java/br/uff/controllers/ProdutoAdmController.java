@@ -117,7 +117,7 @@ public class ProdutoAdmController extends HttpServlet {
                         try {
                             String quantity = request.getParameter("quantity");
                             String[] bindIncrease = {quantity, sel};
-                            SqlManager.bruteExecute("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
+                            SqlManager.bruteUpdate("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
                             session.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
