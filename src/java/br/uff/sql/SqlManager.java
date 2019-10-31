@@ -72,4 +72,24 @@ public class SqlManager {
         PreparedStatement bindedStatement = Inflector.bind(cleanStatement, bind);
         return bindedStatement.executeQuery();
     }
+    
+    public static void bruteExecute(String[] queries, String[][] bind, boolean autoCommit) throws SQLException {
+        Connection connection = ConnectionManager.getConnection();
+        try {
+            connection.setAutoCommit(autoCommit);
+            Integer aux = 0;
+            for (String query : queries) {
+                // pega comando e verifica se index existe e pega bind
+                bruteExecute(query, aux < bind.length ? bind[aux] : null);
+                // incrementa aux
+                aux += 1;
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+            connection.rollback();
+            throw new SQLException(ex.getMessage());
+        } finally {
+            connection.setAutoCommit(true);
+        }
+    }
 }

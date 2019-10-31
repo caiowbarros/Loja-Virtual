@@ -5,13 +5,14 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
 import br.uff.models.Product;
+import br.uff.sql.ConnectionManager;
+import br.uff.sql.SqlManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -27,6 +28,23 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProdutoAdmController", urlPatterns = {"/ProdutoAdmController"})
 public class ProdutoAdmController extends HttpServlet {
+    @Override
+    public void init() {
+        try {
+            ConnectionManager.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            ConnectionManager.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,6 +59,7 @@ public class ProdutoAdmController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         // pega sessao
         HttpSession session = request.getSession();
+        SqlManager sql = new SqlManager(Product.class);
 
         try {
             // opcoes restritas a usuario ADM
@@ -52,26 +71,10 @@ public class ProdutoAdmController extends HttpServlet {
                     produto = new Product("", "", "", "", 0, 0, "SYSDATE()");
                     if (!selParameter.equals("")) {
                         // define produto
-                        MySql dbProd = null;
                         try {
-                            dbProd = new MySql();
-                            String[] bindSel = {selParameter};
-                            ResultSet ret = dbProd.dbCarrega("SELECT * FROM products WHERE id=?", bindSel);
-                            if (ret.next()) {
-                                // preenche row
-                                produto.setId(ret.getInt("id"));
-                                produto.setName(ret.getString("name"));
-                                produto.setPrice(ret.getString("price"));
-                                produto.setDescription(ret.getString("description"));
-                                produto.setImg(ret.getString("img"));
-                                produto.setCategoryId(ret.getInt("category_id"));
-                                produto.setQuantity(ret.getInt("quantity"));
-                                produto.setCreatedAt(ret.getString("created_at"));
-                            }
+                            produto = (Product) sql.find(Integer.parseInt(selParameter));
                         } catch (SQLException ex) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
-                        } finally {
-                            dbProd.destroyDb();
                         }
                     }
                     // define atributo de produto
@@ -103,50 +106,46 @@ public class ProdutoAdmController extends HttpServlet {
                         String img = request.getParameter("src");
                         String categoryId = request.getParameter("categoryId");
 
-                        MySql db = null;
                         try {
-                            db = new MySql();
+                            HashMap<String, Object> attrs = new HashMap() {{
+                                put("name", name);
+                                put("price", price);
+                                put("description", description);
+                                put("img", img);
+                                put("category_id", categoryId);                                
+                            }};
                             if (sel.equals("")) {
-                                String[] bind = {name, price, description, img, categoryId};
-                                db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
+                                attrs.put("created_at", "SYSDATE()");
+                                attrs.put("quantity", 0);
+                                sql.insert().values(attrs).run();
                             } else {
-                                String[] bind = {name, price, description, img, categoryId, sel};
-                                db.dbGrava("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
+                                sql.update().where("id="+sel).set(attrs);
                             }
                             session.setAttribute("msg", "Produto gravado com sucesso!");
-                        } catch (ClassNotFoundException | SQLException e) {
+                        } catch (SQLException e) {
                             throw new Exception("Falha ao gravar produto: " + e.getMessage());
-                        } finally {
-                            db.destroyDb();
                         }
                         break;
                     }
                     case "estoqueInsere": {
-                        MySql db = null;
                         try {
-                            db = new MySql();
                             String quantity = request.getParameter("quantity");
-                            String[] bindIncrease = {quantity, sel};
-                            db.dbGrava("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
+                            HashMap<String, Object> attrs = new HashMap() {{
+                                put("quantity", quantity);
+                            }};
+                            sql.update().where("id="+sel).set(attrs);
                             session.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
-                        } finally {
-                            db.destroyDb();
                         }
                         break;
                     }
                     case "del": {
-                        MySql db = null;
                         try {
-                            db = new MySql();
-                            String[] bindDel = {sel};
-                            db.dbGrava("DELETE FROM products WHERE id=?", bindDel);
+                            sql.delete().where("id="+sel);
                             session.setAttribute("msg", "Produto deletado com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
-                        } finally {
-                            db.destroyDb();
                         }
                         break;
                     }
@@ -161,11 +160,9 @@ public class ProdutoAdmController extends HttpServlet {
             }
 
             // define grid
-            MySql dbGrid = null;
             try {
-                dbGrid = new MySql();
                 ArrayList<ArrayList> grid = new ArrayList<>();
-                ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
+                ResultSet ret = SqlManager.bruteExecute("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -180,17 +177,13 @@ public class ProdutoAdmController extends HttpServlet {
                 request.setAttribute("grid", grid);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
-            } finally {
-                dbGrid.destroyDb();
             }
 
             // manda p pag de grid de produtos
             request.getRequestDispatcher("produto-grid.jsp").forward(request, response);
-            return;
         } catch (Exception e) {
             session.setAttribute("msg", e.getMessage());
             response.sendRedirect("UserController");
-            return;
         }
 
     }

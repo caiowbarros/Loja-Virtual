@@ -5,9 +5,8 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
+import br.uff.sql.SqlManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -292,19 +291,16 @@ public class ProdutosController extends HttpServlet {
             }
 
             // joga numero max de pags p sessao
-            MySql dbMaxPag = null;
             String maxP = null;
             try {
-                dbMaxPag = new MySql();
-                maxP = dbMaxPag.dbValor("ceil(count(*)/" + qtdMaxProdutosPag + ")", consulta + filtro, "", bind);
-                if (Integer.valueOf(maxP) < 1) {
-                    maxP = "1";
-                }
+                String field = "ceil(count(*)/" + qtdMaxProdutosPag + ")";
+                String subquery = "select * from " + consulta + filtro;
+                String query = "select " + field + " from (" + subquery + ") _x2";
+                ResultSet rs = SqlManager.bruteExecute(query, bind);
+                maxP = rs.next() == true ? rs.getString(field) : "1";
                 session.setAttribute("maxPag", maxP);
             } catch (Exception ed) {
                 throw new Exception(ed.getMessage());
-            } finally {
-                dbMaxPag.destroyDb();
             }
 
             // define pag atual
@@ -359,11 +355,9 @@ public class ProdutosController extends HttpServlet {
             }
 
             // define grid
-            MySql dbProdutos = null;
             try {
-                dbProdutos = new MySql();
                 ArrayList<ArrayList> produtos = new ArrayList<>();
-                ResultSet ret = dbProdutos.dbCarrega(consulta + filtro + limit + offset, bind);
+                ResultSet ret = SqlManager.bruteExecute(consulta + filtro + limit + offset, bind);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -378,12 +372,9 @@ public class ProdutosController extends HttpServlet {
                 request.setAttribute("produtos", produtos);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
-            } finally {
-                dbProdutos.destroyDb();
             }
 
             request.getRequestDispatcher("produtos.jsp").forward(request, response);
-            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("");

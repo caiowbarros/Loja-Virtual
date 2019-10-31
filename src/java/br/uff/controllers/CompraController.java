@@ -5,14 +5,14 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
-import br.uff.models.Address;
-import br.uff.models.Product;
+import br.uff.sql.ConnectionManager;
+import br.uff.sql.SqlManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +26,23 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "CompraController", urlPatterns = {"/CompraController"})
 public class CompraController extends HttpServlet {
+    @Override
+    public void init() {
+        try {
+            ConnectionManager.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(CompraController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            ConnectionManager.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CompraController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,19 +68,17 @@ public class CompraController extends HttpServlet {
 
             // se solicitar historico manda p pag d compras realizadas
             if (request.getParameter("historico") != null) {
-                MySql db = null;
                 try {
-                    db = new MySql();
                     ArrayList<ArrayList> vendas = new ArrayList<>();
                     String[] bindVendas = {userId};
-                    ResultSet vendasRet = db.dbCarrega("SELECT * FROM sales WHERE user_id=?", bindVendas);
+                    ResultSet vendasRet = SqlManager.bruteExecute("SELECT * FROM sales WHERE user_id=?", bindVendas);
                     while (vendasRet.next()) {
                         ArrayList venda = new ArrayList<>();
                         venda.add(vendasRet.getString("id"));
                         //pega produtos
                         String[] bindProdutos = {vendasRet.getString("cart_id")};
                         ArrayList<ArrayList> produtos = new ArrayList<>();
-                        ResultSet produtosRet = db.dbCarrega("SELECT p.id, p.`name`, p.price, p.img, c.quantity, p.price * c.quantity total_price_product FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ?", bindProdutos);
+                        ResultSet produtosRet = SqlManager.bruteExecute("SELECT p.id, p.`name`, p.price, p.img, c.quantity, p.price * c.quantity total_price_product FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ?", bindProdutos);
                         while (produtosRet.next()) {
                             ArrayList produto = new ArrayList<>();
                             produto.add(produtosRet.getString("id"));
@@ -78,7 +93,7 @@ public class CompraController extends HttpServlet {
                         // pega endereco
                         String[] bindEndereco = {vendasRet.getString("address_id")};
                         ArrayList endereco = new ArrayList<>();
-                        ResultSet enderecoRet = db.dbCarrega("SELECT * FROM address WHERE id=?", bindEndereco);
+                        ResultSet enderecoRet = SqlManager.bruteExecute("SELECT * FROM address WHERE id=?", bindEndereco);
                         if (enderecoRet.next()) {
                             endereco.add(enderecoRet.getString("zipcode"));
                             endereco.add(enderecoRet.getString("address"));
@@ -94,8 +109,6 @@ public class CompraController extends HttpServlet {
                     request.setAttribute("vendas", vendas);
                 } catch (SQLException ed) {
                     throw new Exception(ed.getMessage());
-                } finally {
-                    db.destroyDb();
                 }
                 request.getRequestDispatcher("compras.jsp").forward(request, response);
                 return;
@@ -119,17 +132,13 @@ public class CompraController extends HttpServlet {
 
             switch (action) {
                 case "pagamentoOk": {
-                    MySql db = null;
                     try {
-                        db = new MySql();
                         String[] comandos = {"CALL buy_cart_itens(?, ?)"};
                         String[][] bind = {{carrinhoId, end}};
-                        db.dbTransaction(comandos, bind);
+                        SqlManager.bruteExecute(comandos, bind, false);
                         session.setAttribute("msg", "Compra realizada com sucesso!");
-                    } catch (Exception ed) {
+                    } catch (SQLException ed) {
                         throw new Exception("Compra não foi realizada devido ao seguinte erro: " + ed.getMessage());
-                    } finally {
-                        db.destroyDb();
                     }
                     response.sendRedirect("CompraController?historico");
                     return;
@@ -153,11 +162,9 @@ public class CompraController extends HttpServlet {
                         + "WHERE\n"
                         + "	a.id = ?";
                 String[] bindEnd = {end};
-                MySql db = null;
                 try {
-                    db = new MySql();
                     ArrayList<String> endereco = new ArrayList<>();
-                    ResultSet retorno = db.dbCarrega(consultaEnd, bindEnd);
+                    ResultSet retorno = SqlManager.bruteExecute(consultaEnd, bindEnd);
                     if (retorno.next()) {
                         endereco.add(retorno.getString("name"));
                         endereco.add(retorno.getString("address"));
@@ -169,8 +176,6 @@ public class CompraController extends HttpServlet {
                     request.setAttribute("endereco", endereco);
                 } catch (SQLException ed) {
                     throw new Exception(ed.getMessage());
-                } finally {
-                    db.destroyDb();
                 }
             } else {
                 throw new Exception("Por favor selecione um endereço!");
