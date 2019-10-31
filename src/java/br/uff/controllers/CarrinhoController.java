@@ -164,7 +164,11 @@ public class CarrinhoController extends HttpServlet {
                         put("ip", ip);
                         put("created_at", createdAt);
                     }};
-                    attrs.put("user_id", Integer.parseInt((String) userId));
+					if (userId == null) {
+						attrs.put("user_id", "null");
+					} else {
+						attrs.put("user_id", Integer.parseInt((String) userId));
+					}
                     BaseModel cart = sql.insert().values(attrs).run();
                     carrinhoId = String.valueOf((int) cart.getAttribute("id"));
                 } catch (SQLException ed) {
