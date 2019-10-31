@@ -45,7 +45,11 @@ public class Inserter {
     
     public BaseModel run() throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         PreparedStatement statement = connection.prepareStatement(this.build(), Statement.RETURN_GENERATED_KEYS);
-        int id = statement.executeUpdate();
+        statement.executeUpdate();
+        int id = -1;
+        ResultSet rs = statement.getGeneratedKeys();
+        if(rs.next()) id = rs.getInt(1);
+        if(id < 0) throw new SQLException();
         this.attrs.put("id", id);
         return model();
     }
