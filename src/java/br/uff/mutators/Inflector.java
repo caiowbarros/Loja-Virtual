@@ -21,7 +21,7 @@ public class Inflector {
     public static String downsize(String str) {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
-    
+        
     public static String toSetter(String str) {
         String[] splited = str.split("_");
         String response = "";

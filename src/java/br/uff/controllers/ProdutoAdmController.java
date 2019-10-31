@@ -102,10 +102,10 @@ public class ProdutoAdmController extends HttpServlet {
                         try {
                             if (sel.equals("")) {
                                 String[] bind = {name, price, description, img, categoryId};
-                                SqlManager.bruteExecute("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
+                                SqlManager.bruteUpdate("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
                             } else {
                                 String[] bind = {name, price, description, img, categoryId, sel};
-                                SqlManager.bruteExecute("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
+                                SqlManager.bruteUpdate("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
                             }
                             session.setAttribute("msg", "Produto gravado com sucesso!");
                         } catch (SQLException e) {
@@ -127,7 +127,7 @@ public class ProdutoAdmController extends HttpServlet {
                     case "del": {
                         try {
                             String[] bindDel = {sel};
-                            SqlManager.bruteExecute("DELETE FROM products WHERE id=?", bindDel);
+                            SqlManager.bruteUpdate("DELETE FROM products WHERE id=?", bindDel);
                             session.setAttribute("msg", "Produto deletado com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
