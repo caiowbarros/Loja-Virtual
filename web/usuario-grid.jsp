@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%@page import="br.uff.models.User"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado retorna p userController
@@ -16,9 +17,9 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    ArrayList<ArrayList<String>> grid = null;
+    ArrayList<User> users = null;
     if (request.getAttribute("usuarios") != null) {
-        grid = (ArrayList<ArrayList<String>>) request.getAttribute("usuarios");
+        users = (ArrayList<User>) request.getAttribute("usuarios");
     }
 %>
 <!-- Header -->
@@ -38,14 +39,14 @@
     </thead>
     <tbody>
         <%
-            for (int i = 0; i < grid.size(); i++) {
+            for (int i = 0; i < users.size(); i++) {
         %>
         <tr>
             <th>
-                <a href="UserController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+                <a href="UserController?sel=<%= users.get(i).getId()%>">Editar</a>             
             </th>
-            <th><%= grid.get(i).get(1)%></th>
-            <th><%= grid.get(i).get(2)%></th>
+            <th><%= users.get(i).getName()%></th>
+            <th><%= users.get(i).getEmail()%></th>
         </tr>
         <%
             }

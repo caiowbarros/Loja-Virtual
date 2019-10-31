@@ -3,6 +3,7 @@
     Created on : 29/09/2019, 00:45:25
     Author     : HP
 --%>
+<%@page import="br.uff.models.Address"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado retorna p controller com redirect p EnderecoController
@@ -16,9 +17,9 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    ArrayList<ArrayList<String>> grid = null;
-    if (request.getAttribute("grid") != null) {
-        grid = (ArrayList<ArrayList<String>>) request.getAttribute("grid");
+    ArrayList<Address> adresses = null;
+    if (request.getAttribute("adresses") != null) {
+        adresses = (ArrayList<Address>) request.getAttribute("adresses");
     }
 %>
 <!-- Header -->
@@ -40,16 +41,17 @@
     </thead>
     <tbody>
         <%
-            for (int i = 0; i < grid.size(); i++) {
+            for (int i = 0; i < adresses.size(); i++) {
         %>
         <tr class="end-data-container">
+            <% Address a = adresses.get(i); %>
             <td class="end-data">
-                <a class="end-link" href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+                <a class="end-link" href="EnderecoController?sel=<%= adresses.get(i).getId()%>">Editar</a>             
             </td>
-            <td class="end-data"><%= grid.get(i).get(1)%></td>
-            <td class="end-data"><%= grid.get(i).get(2)%></td>
-            <td class="end-data"><%= grid.get(i).get(3)%></td>
-            <td class="end-data"><%= grid.get(i).get(4)%></td>
+            <td class="end-data"><%= adresses.get(i).getName()%></td>
+            <td class="end-data"><%= adresses.get(i).getAddress()%></td>
+            <td class="end-data"><%= adresses.get(i).getCity()%></td>
+            <td class="end-data"><%= adresses.get(i).getState()%></td>
         </tr>
         <%
             }

@@ -71,7 +71,7 @@ public class EnderecoController extends HttpServlet {
             if (request.getParameter("sel") != null) {
                 String selParameter = request.getParameter("sel");
                 Address endereco;
-                endereco = new Address("", "", "", "", "", "");
+                endereco = new Address("", 0, "", "", "", "", 0);
                 if (!selParameter.equals("")) {
                     // define endereco
                     endereco = (Address) sql.find(Integer.parseInt(selParameter));
@@ -102,7 +102,7 @@ public class EnderecoController extends HttpServlet {
                     HashMap<String, Object> attrs = new HashMap() {{
                         put("name", request.getParameter("name"));
                         put("address", request.getParameter("address"));
-                        put("zipcode", request.getParameter("zipcode"));
+                        put("zipcode", Integer.parseInt(request.getParameter("zipcode")));
                         put("city", request.getParameter("city"));
                         put("state", request.getParameter("state"));
                         put("country", request.getParameter("country"));
@@ -110,7 +110,7 @@ public class EnderecoController extends HttpServlet {
 
                     try {
                         if (sel.equals("")) {
-                            attrs.put("user_id", userId);
+                            attrs.put("user_id", Integer.parseInt(userId));
                             sql.insert().values(attrs).run();
                         } else {
                             sql.update().where("id="+sel).set(attrs).run();
@@ -143,7 +143,7 @@ public class EnderecoController extends HttpServlet {
                 sql.select().where("user_id="+userId).run().forEach((r) -> {
                     addresses.add((Address) r);
                 });
-                request.setAttribute("grid", addresses);
+                request.setAttribute("adresses", addresses);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
             }

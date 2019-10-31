@@ -14,21 +14,23 @@ import java.util.Map;
 public class Address extends BaseModel {
     public static final String TABLE_NAME = "address";
 
-    private int id = 0;
-    private String name = "";
-    private String zipcode = "";
-    private String address = "";
-    private String city = "";
-    private String state = "";
-    private String country = "";
+    private int id;
+    private String name;
+    private int zipcode;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private int userId;
 
-    public Address(String name, String zipcode, String address, String city, String state, String country) {
+    public Address(String name, int zipcode, String address, String city, String state, String country, int userId) {
         this.name = name;
         this.zipcode = zipcode;
         this.address = address;
         this.city = city;
         this.state = state;
         this.country = country;
+        this.userId = userId;
     }
 
     public Address(Map<String, Object> attrs) {
@@ -51,11 +53,11 @@ public class Address extends BaseModel {
         this.name = name;
     }
 
-    public String getZipcode() {
+    public int getZipcode() {
         return this.zipcode;
     }
 
-    public void setZipcode(String zipcode) {
+    public void setZipcode(int zipcode) {
         this.zipcode = zipcode;
     }
 
@@ -89,5 +91,13 @@ public class Address extends BaseModel {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
