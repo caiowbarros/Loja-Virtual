@@ -89,10 +89,10 @@ public class UserController extends HttpServlet {
                             put("role_id", roleId);
                             put("name", name);
                         }};
-                        if (selUser.equals("")) {
+                        if (selUser.isEmpty()) {
                             user = (User) sql.insert().values(attrs).run();
                         } else {
-                            sql.update().where("id = " + selUser).run();
+                            sql.update().set(attrs).where("id = " + selUser).run();
                         }
                         session.setAttribute("msg", "Usuário gravado com sucesso!");
                     } catch (Exception ec) {

@@ -92,7 +92,8 @@ public class Updater {
             sb.append(entry.getValue());
             sb.append(",");
         }
-        sb.deleteCharAt(sb.lastIndexOf(","));
+        if(sb.toString().contains(","))
+            sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append(" ");
         sb.append(this.where);
         return sb.toString();
