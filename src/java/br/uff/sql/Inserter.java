@@ -83,9 +83,9 @@ public class Inserter {
     private void addAttr(Map.Entry<String, Object> attr) {
         columns.add(attr.getKey());
         Object value = attr.getValue();
-        if (value instanceof String && !value.equals("SYSDATE()")) {
+        if (value instanceof String && !value.equals("SYSDATE()") && !value.equals("null")) {
             values.add(Inflector.toQuotedString(String.valueOf(value)));
-        } else if (value == null) {
+        } else if (value == null || value.equals("null")) {
             values.add("NULL");
         } else {
             values.add(String.valueOf(value));
