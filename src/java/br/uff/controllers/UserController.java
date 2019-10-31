@@ -92,8 +92,7 @@ public class UserController extends HttpServlet {
                         if (selUser.equals("")) {
                             user = (User) sql.insert().values(attrs).run();
                         } else {
-                            if(sql.update().where("id = " + selUser).run() > 0)
-                                user = new User(attrs);
+                            sql.update().where("id = " + selUser).run();
                         }
                         session.setAttribute("msg", "Usuário gravado com sucesso!");
                     } catch (Exception ec) {
@@ -115,7 +114,7 @@ public class UserController extends HttpServlet {
                         // pega variaveis
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-                        user = (User) sql.findBy("email = " + email + " and password = " + password);
+                        user = (User) sql.findBy("email = '" + email + "' and password = '" + password + "'");
                         if (user != null) {
                             session.setAttribute("userId", user.getId());
                             session.setAttribute("userRole", user.getRoleId());
@@ -177,7 +176,7 @@ public class UserController extends HttpServlet {
             }
 
             // se tem usuario logado manda p conta caso contrario p login
-            if (user != null) {
+            if (session.getAttribute("userId") != null) {
                 //recupera userId da sessao
                 String userId = session.getAttribute("userId").toString();
                 // define redirect se n foi passado
