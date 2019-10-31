@@ -103,12 +103,13 @@ public class AvaliacaoController extends HttpServlet {
             switch (action) {
                 case "avalia": {
                     HashMap<String, Object> attrs = new HashMap() {{
-                        put("rating", session.getAttribute("rating"));
-                        put("description", session.getAttribute("description"));
-                        put("title", session.getAttribute("title"));
+                        put("rating", Integer.parseInt((String) session.getAttribute("rating")));
+                        put("description", request.getParameter("description"));
+                        put("title", request.getParameter("title"));
+                        put("created_at", "SYSDATE()");
                     }};
-                    attrs.put("user_id", userId);
-                    attrs.put("product_id", produtoId);
+                    attrs.put("user_id", Integer.parseInt((String) userId));
+                    attrs.put("product_id", Integer.parseInt((String) produtoId));
                     try {
                         if (sql.insert().values(attrs).run() instanceof BaseModel)
                             session.setAttribute("msg", "Produto avaliado com sucesso!");
