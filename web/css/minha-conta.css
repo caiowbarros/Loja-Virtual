@@ -275,6 +275,20 @@ select{
     margin-bottom: 30px;
 }
 
+.form-style-1 li fieldset {
+    text-align: center;
+    border-radius: 6px;
+    width: 55%;
+    border: 1.5px solid #7E7E7E;
+    margin-top: 50px;
+}
+
+.form-style-1 li legend img {
+    width: 100px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .center {
     text-align-last: center;
 }
@@ -316,4 +330,83 @@ select{
 
 .user-cadastro-container h2 {
     text-align-last: center;
+}
+
+/* Usuario Grid */
+.main-user-container {
+    width: 75%;
+    display: flex;
+    margin: 50px 12.5%;
+}
+
+.left-user-container {
+    width: 30%;
+    border-top: 1px solid #D4D4D4;
+    border-right: 1px solid #D4D4D4;
+}
+
+.left-row {
+    width: 100%;
+    border-bottom: 1px solid #D4D4D4;
+    padding: 15px 0px;
+}
+
+.left-row p {
+    padding-left: 5px;
+}
+
+.editar-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editar-row a {
+    margin-right: 7.5px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #226EBB;
+}
+
+.editar-row a:hover {
+    color: #358ED7;
+}
+
+.right-user-container {
+    width: 70%;
+}
+
+.right-row {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.user-info {
+    border: 1px solid #D4D4D4;
+    width: 250px;
+    height: 200px;
+    display: table;
+    cursor: pointer;
+    margin-bottom: 12.5px;
+}
+
+.user-info:hover {
+    border-color: black;
+}
+
+.user-info-middle {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.user-info-middle i {
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.user-info-middle button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
 }

@@ -65,7 +65,7 @@
                 
             <h2>Método de entrega</h2>
             <div class="confirma-frete">
-                <div class="confirma-radio background-radio">
+                <div class="confirma-radio">
                     <div class="radio-container">
                         <input type="radio" name="frete" checked>
                         <div class="radio-label">Normal - 5 dias úteis (Frete grátis)</div>

@@ -35,6 +35,10 @@ and open the template in the editor.
     justify-content: space-between;
 }
 
+.cart-product h2 {
+    margin: 50px 0px;
+}
+
 .cart-img {
     margin-top: 15px;
     width: 100px;

@@ -49,19 +49,14 @@
                 <p>Preços</p>
                 <label>Valor Mínimo (R$)</label>
                 <div class="products-range">
-                    <input value="${priceMin}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_min.value=value" onchange="display_min.value = value">
+                    <input value="${priceMin}" onchange="verifica_precos()" type="range" min="0" max="5000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
                     <input value="${priceMin}" name="price_min" type="number" readonly id="display_min"/>
                 </div>
                 <label>Valor Máximo (R$)</label>
                 <div  class="products-range">
-                    <input value="${priceMax}" onchange="verifica_precos()" type="range" min="0" max="5000" step="500" oninput="display_max.value=value" onchange="display_max.value = value">
+                    <input value="${priceMax}" onchange="verifica_precos()" type="range" min="0" max="5000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
                     <input value="${priceMax}" name="price_max" type="number" readonly id="display_max"/>
                 </div>
-            </div>
-            <!-- Filtros Especiais -->
-            <div class="products-item-filter">
-                <input ${favoritos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="favoritos" id="favs"><label for="favs">Favoritos</label><br>
-                <input ${lancamentos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="lancamentos" id="lancs"><label for="lancs">Lançamentos</label><br>
             </div>
         </div>
 
