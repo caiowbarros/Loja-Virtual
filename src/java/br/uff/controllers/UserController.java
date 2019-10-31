@@ -5,13 +5,11 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
+import br.uff.models.BaseModel;
 import br.uff.models.User;
 import br.uff.sql.ConnectionManager;
 import br.uff.sql.SqlManager;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,9 +77,7 @@ public class UserController extends HttpServlet {
             switch (action) {
                 case "grava": {
                     // grava alteracoes no cadastro d usuario feito na pag de usuario-cadastro
-                    MySql db = null;
                     try {
-                        db = new MySql();
                         // pega variaveis
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
@@ -115,9 +111,7 @@ public class UserController extends HttpServlet {
                     break;
                 }
                 case "login": {
-                    MySql db = null;
                     try {
-                        db = new MySql();
                         // pega variaveis
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
@@ -193,59 +187,33 @@ public class UserController extends HttpServlet {
                             session.setAttribute("selUser", null);
                             throw new Exception("Acesso não permitido!");
                         }
-                        User usuario;
-                        usuario = new User("", "", "", 2);
+                        User usuario = new User("", "", "", 2);
                         // define endereco
-                        MySql dbEnd = null;
                         try {
-                            dbEnd = new MySql();
-                            String[] bindSel = {selUser};
-                            ResultSet ret = dbEnd.dbCarrega("SELECT * FROM users WHERE id=?", bindSel);
-                            if (ret.next()) {
-                                // preenche endereco
-                                usuario.setId(ret.getInt("id"));
-                                usuario.setName(ret.getString("name"));
-                                usuario.setPassword(ret.getString("password"));
-                                usuario.setEmail(ret.getString("email"));
-                                usuario.setRoleId(ret.getInt("role_id"));
-                            }
+                            usuario = (User) sql.find(Integer.parseInt(selUser));
                         } catch (SQLException ex) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
-                        } finally {
-                            dbEnd.destroyDb();
                         }
                         // define atributo de produto
                         request.setAttribute("usuario", usuario);
                         redirect = "usuario-cadastro.jsp";
                     } else {
                         // define grid
-                        MySql dbUsuarios = null;
+                        ArrayList<User> users = new ArrayList();
                         try {
-                            dbUsuarios = new MySql();
-                            String consulta = "SELECT id,name,email FROM users";
-                            String[] bind = {userId};
+                            ArrayList<BaseModel> result;
                             // se for adm n insere filtro e define bind como null
                             if (session.getAttribute("userRole").equals("1")) {
-                                bind = null;
+                                result = sql.all();
                             } else {
-                                consulta += " WHERE id=?";
+                                result = sql.select().where("id=" + userId).run();
                             }
-                            ArrayList<ArrayList> usuarios = new ArrayList<>();
-                            ResultSet ret = dbUsuarios.dbCarrega(consulta, bind);
-                            while (ret.next()) {
-                                ArrayList<String> row = new ArrayList<>();
-                                // preenche row
-                                row.add(ret.getString("id"));
-                                row.add(ret.getString("name"));
-                                row.add(ret.getString("email"));
-                                // add row no grid
-                                usuarios.add(row);
-                            }
-                            request.setAttribute("usuarios", usuarios);
+                            result.forEach((u) -> {
+                                users.add((User) u);
+                            });
+                            request.setAttribute("usuarios", users);
                         } catch (SQLException ed) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ed.getMessage());
-                        } finally {
-                            dbUsuarios.destroyDb();
                         }
                         redirect = "usuario-grid.jsp";
                     }
@@ -260,7 +228,6 @@ public class UserController extends HttpServlet {
             }
 
             request.getRequestDispatcher(redirect).forward(request, response);
-            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
 //            response.sendRedirect("");

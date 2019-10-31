@@ -5,13 +5,15 @@
  */
 package br.uff.controllers;
 
-import br.uff.dao.MySql;
 import br.uff.models.BaseModel;
 import br.uff.models.UserProductsRating;
+import br.uff.sql.ConnectionManager;
 import br.uff.sql.SqlManager;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +27,23 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AvaliacaoController", urlPatterns = {"/AvaliacaoController"})
 public class AvaliacaoController extends HttpServlet {
+    @Override
+    public void init() {
+        try {
+            ConnectionManager.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AvaliacaoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            ConnectionManager.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AvaliacaoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,6 +58,7 @@ public class AvaliacaoController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
+            SqlManager sql = new SqlManager(UserProductsRating.class);
 
             // seta produtoId na sessao se estiver passado por parametro antes de verificar login
             if (request.getParameter("produtoId") != null) {
@@ -63,7 +83,7 @@ public class AvaliacaoController extends HttpServlet {
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
                 String condition = "user_id = " + userId + " and product_id" + produtoId;
-                boolean isRated = new SqlManager(UserProductsRating.class).select().where(condition).exists();
+                boolean isRated = sql.select().where(condition).exists();
                 if (isRated) {
                     session.setAttribute("rating", null);
                     throw new Exception("Produto já avaliado!");
@@ -90,7 +110,6 @@ public class AvaliacaoController extends HttpServlet {
                     attrs.put("user_id", userId);
                     attrs.put("product_id", produtoId);
                     try {
-                        SqlManager sql = new SqlManager(UserProductsRating.class);
                         if (sql.insert().values(attrs).run() instanceof BaseModel)
                             session.setAttribute("msg", "Produto avaliado com sucesso!");
                     } catch (SQLException e) {
