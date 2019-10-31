@@ -6,7 +6,11 @@
 package br.uff.sql;
 
 import br.uff.models.BaseModel;
+import br.uff.mutators.Evaluator;
 import br.uff.mutators.Inflector;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,7 +24,7 @@ public class SqlManager {
     private final Destroyer destroyer;
     
     public SqlManager(Class klass) {
-        String tableName = Inflector.classToTable(klass);
+        String tableName = Evaluator.getConstant(klass, "TABLE_NAME");
         getter = new Getter(tableName, klass);
         setter = new Setter(tableName, klass);
         destroyer = new Destroyer(tableName);
@@ -60,5 +64,12 @@ public class SqlManager {
     
     public Destroyer delete() {
         return destroyer;
+    }
+    
+    public static ResultSet bruteExecute(String query, String[] bind) throws SQLException {
+        Connection connection = ConnectionManager.getConnection();
+        PreparedStatement cleanStatement = connection.prepareStatement(query);
+        PreparedStatement bindedStatement = Inflector.bind(cleanStatement, bind);
+        return bindedStatement.executeQuery();
     }
 }

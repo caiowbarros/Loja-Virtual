@@ -38,6 +38,15 @@ public class Evaluator {
         });
     }
     
+    public static String getConstant(Class klass, String constant) {
+        try {
+            return (String) klass.getDeclaredField(constant).get(klass);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            Logger.getLogger(Evaluator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
     public Method getMethod(String name) throws NoSuchMethodException {
         Method method;
         try {
