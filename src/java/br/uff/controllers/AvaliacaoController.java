@@ -82,7 +82,7 @@ public class AvaliacaoController extends HttpServlet {
             String produtoId = null;
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
-                String condition = "user_id = " + userId + " and product_id" + produtoId;
+                String condition = "user_id = " + userId + " and product_id = " + produtoId;
                 boolean isRated = sql.select().where(condition).exists();
                 if (isRated) {
                     session.setAttribute("rating", null);
