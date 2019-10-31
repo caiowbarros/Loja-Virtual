@@ -107,7 +107,8 @@ public class CarrinhoController extends HttpServlet {
                     }
                     if (id >= 0) {
                         if (String.valueOf(id).equals(carrinhoId)) {
-                            session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
+                            // define aviso de recuperaçao de carrinho existente
+                            // session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
                         } else {
                             HashMap<String, Object> attrs = new HashMap();
                             attrs.put("user_id", Integer.parseInt(userId));
