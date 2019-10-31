@@ -19,7 +19,7 @@ public class ConnectionManager {
     public static void connect() throws ClassNotFoundException, SQLException {
         if(connection == null) {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devweb", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "");
         }
     }
     
