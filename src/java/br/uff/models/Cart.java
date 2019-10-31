@@ -5,6 +5,8 @@
  */
 package br.uff.models;
 
+import java.util.Map;
+
 /**
  *
  * @author felipe
@@ -16,9 +18,15 @@ public class Cart extends BaseModel {
     private String ip;
     private String createdAt;
     
-    public Cart(int id, int userId) {
+    public Cart(int id, int userId, String ip, String createdAt) {
         this.id = id;
         this.userId = userId;
+        this.ip = ip;
+        this.createdAt = createdAt;
+    }
+    
+    public Cart(Map<String, Object> attrs) {
+        super(attrs);
     }
 
     public int getId() {

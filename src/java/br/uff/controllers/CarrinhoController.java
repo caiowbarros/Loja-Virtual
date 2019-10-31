@@ -96,37 +96,30 @@ public class CarrinhoController extends HttpServlet {
                     // pega id de carrinho se n estiver vendido, se user id bater e se n for null
                     // String[] bindCarrinhoUser = {userId};
                     // String carrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
-                    ArrayList<BaseModel> carts = sql.select("id")
+                    ArrayList<BaseModel> carts = sql.select("carts.id")
                                                     .addJoins("left join sales s on s.cart_id = carts.id")
                                                     .where("s.id is null and carts.user_id=" + userId)
                                                     .run();
-                    String id = "";
-                    if (carts.size() > 0) id = (String) carts.get(0).getAttribute("id");
-                    if (!id.isEmpty()) {
-                        if (!carrinhoId.equals(id)) {
+                    int id = -1;
+                    if (carts.size() > 0){
+                        Cart cart = (Cart) carts.get(0);
+                        id = (int) cart.getAttribute("id");
+                    }
+                    if (id >= 0) {
+                        if (String.valueOf(id).equals(carrinhoId)) {
                             session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
                         } else {
                             HashMap<String, Object> attrs = new HashMap();
-                            attrs.put("user_id", userId);
-                            sql.update().set(attrs).where("id=" + carrinhoId + "and user_id is null").run();
+                            attrs.put("user_id", Integer.parseInt(userId));
+                            sql.update().set(attrs).where("id=" + carrinhoId + " and user_id is null").run();
                         }
                     }
                 } catch (Exception ed) {
                     throw new Exception(ed.getMessage());
                 }
             } else {
-                try {
-                    // verifica se carrinhoId pertence a algum usuario
-                    if (carrinhoId != null) {
-                        BaseModel cart = sql.find(Integer.parseInt(carrinhoId));
-                        if (cart.getAttribute("id") != null) {
-                            // define carrinhoId como null pois pertence a um usuario
-                            carrinhoId = null;
-                        }
-                    }
-                } catch (Exception ed) {
-                    throw new Exception(ed.getMessage());
-                }
+                response.sendRedirect("UserController");
+                return;
             }
 
             //verifica se carrinhoId eh um numero
@@ -141,7 +134,6 @@ public class CarrinhoController extends HttpServlet {
             // verifica se carrinhoId ja esta vendido
             if (carrinhoId != null) {
                 try {
-                    String[] bind = {carrinhoId};
                     boolean cartExists = sql.select().where("id="+carrinhoId).exists();
                     
                     if (cartExists) {
@@ -173,9 +165,9 @@ public class CarrinhoController extends HttpServlet {
                         put("ip", ip);
                         put("created_at", createdAt);
                     }};
-                    attrs.put("user_id", userId);
+                    attrs.put("user_id", Integer.parseInt((String) userId));
                     BaseModel cart = sql.insert().values(attrs).run();
-                    carrinhoId = (String) cart.getAttribute("id");
+                    carrinhoId = String.valueOf((int) cart.getAttribute("id"));
                 } catch (SQLException ed) {
                     throw new Exception(ed.getMessage());
                 }
@@ -351,11 +343,9 @@ public class CarrinhoController extends HttpServlet {
 
             // manda atributos para a pag do carrinho
             request.getRequestDispatcher("carrinho.jsp").forward(request, response);
-            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");
-            return;
         }
     }
 

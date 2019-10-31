@@ -124,9 +124,9 @@ public class Selector {
         sb.append(" ");
         sb.append(from);
         sb.append(" ");
-        sb.append(where);
-        sb.append(" ");
         sb.append(Inflector.joins(this.joins));
+        sb.append(" ");
+        sb.append(where);
         sb.append(" ");
         sb.append(limit);
         sb.append(" ");
