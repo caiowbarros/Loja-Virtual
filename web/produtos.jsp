@@ -28,7 +28,7 @@
         <div class="products-filter">
             <!-- Filtro das categorias -->
             <div class="products-item-filter">
-                <p>Nome ou Descri��o</p>
+                <p>Nome ou Descrição</p>
                 <input name="pesquisa" value="${pesquisa}" type="search" placeholder="Buscar..." onchange="document.getElementById('frmProdutos').submit()">
             </div>
             <div class="products-item-filter">
@@ -42,28 +42,33 @@
                 <p>Subcategorias</p>
                 <input ${consoles} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" value="consoles" id="consoles"><label for="consoles">Consoles</label><br>
                 <input ${jogos} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" value="jogos" id="jogos"><label for="jogos">Jogos</label><br>
-                <input ${acessorios} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" id="acessorios" value="acessorios"><label for="acessorios">Acess�rios</label><br>
+                <input ${acessorios} onchange="document.getElementById('frmProdutos').submit()" name="subCategory" type="checkbox" id="acessorios" value="acessorios"><label for="acessorios">Acessórios</label><br>
             </div>
-            <!-- Filtro dos pre�os -->
+            <!-- Filtro dos preços -->
             <div class="products-item-filter">
-                <p>Pre�os</p>
-                <label>Valor M�nimo (R$)</label>
+                <p>Preços</p>
+                <label>Valor Mínimo (R$)</label>
                 <div class="products-range">
                     <input value="${priceMin}" onchange="verifica_precos()" type="range" min="0" max="5000" step="100" oninput="display_min.value=value" onchange="display_min.value = value">
                     <input value="${priceMin}" name="price_min" type="number" readonly id="display_min"/>
                 </div>
-                <label>Valor M�ximo (R$)</label>
+                <label>Valor Máximo (R$)</label>
                 <div  class="products-range">
                     <input value="${priceMax}" onchange="verifica_precos()" type="range" min="0" max="5000" step="100" oninput="display_max.value=value" onchange="display_max.value = value">
                     <input value="${priceMax}" name="price_max" type="number" readonly id="display_max"/>
                 </div>
+            </div>
+            <!-- Filtros Especiais -->
+            <div class="products-item-filter">
+                <input ${favoritos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="favoritos" id="favs"><label for="favs">Apenas Favoritos</label><br>
+                <input ${lancamentos} onchange="document.getElementById('frmProdutos').submit()" name="esp" type="checkbox" value="lancamentos" id="lancs"><label for="lancs">Apenas Lançamentos</label><br>
             </div>
         </div>
 
         <!-- Container dos produtos -->
         <div class="products-page">
             <% if (produtos.size() < 1) { %>
-            <h3>O filtro escolhido n�o retornou nenhum produto. Mas n�o desista, tente com outro.</h3>
+            <h3>O filtro escolhido não retornou nenhum produto. Mas não desista, tente com outro.</h3>
             <%
             } else {
             %>
@@ -84,7 +89,7 @@
                     }
                 %>
             </div>
-            <!-- P�ginas -->
+            <!-- Páginas -->
             <div class="products-paging">
                 <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) > 1) {%>
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
@@ -105,7 +110,7 @@
         var price_min = document.getElementById('display_min').value;
         var price_max = document.getElementById('display_max').value;
         if (parseInt(price_min) >= parseInt(price_max)) {
-            alert("Valor m�nimo(R$" + price_min + ") n�o pode ser igual ou maior que o valor m�ximo(R$" + price_max + ")!");
+            alert("Valor mínimo(R$" + price_min + ") não pode ser igual ou maior que o valor máximo(R$" + price_max + ")!");
             return false;
         } else {
             document.getElementById('frmProdutos').submit();
