@@ -1,4 +1,4 @@
-﻿/*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -83,16 +83,6 @@ public class CarrinhoController extends HttpServlet {
             if (session.getAttribute("userId") != null) {
                 userId = session.getAttribute("userId").toString();
                 try {
-                    // verifica se carrinhoId recuperado pertence a outro usuario
-                    if (carrinhoId != null) {
-                        Cart cart = (Cart) sql.find(Integer.parseInt(carrinhoId));
-                        if (cart != null) {
-                            if (!String.valueOf(cart.getUserId()).equals(userId)) {
-                                // define carrinhoId como null pois pertence a outro usuario
-                                carrinhoId = null;
-                            }
-                        }
-                    }
                     // pega id de carrinho se n estiver vendido, se user id bater e se n for null
                     // String[] bindCarrinhoUser = {userId};
                     // String carrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
@@ -118,10 +108,18 @@ public class CarrinhoController extends HttpServlet {
                 } catch (Exception ed) {
                     throw new Exception(ed.getMessage());
                 }
-            } else {
-                response.sendRedirect("UserController");
-                return;
             }
+			
+			// verifica se carrinhoId recuperado pertence a outro usuario
+			if (carrinhoId != null) {
+				Cart cart = (Cart) sql.find(Integer.parseInt(carrinhoId));
+				if (cart != null) {
+					if (!String.valueOf(cart.getUserId()).equals(userId)) {
+						// define carrinhoId como null pois pertence a outro usuario
+						carrinhoId = null;
+					}
+				}
+			}
 
             //verifica se carrinhoId eh um numero
             if (carrinhoId != null) {
