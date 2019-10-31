@@ -117,7 +117,7 @@ public class UserController extends HttpServlet {
                         user = (User) sql.findBy("email = '" + email + "' and password = '" + password + "'");
                         if (user != null) {
                             session.setAttribute("userId", user.getId());
-                            session.setAttribute("userRole", user.getRoleId());
+                            session.setAttribute("userRole", String.valueOf(user.getRoleId()));
                             session.setAttribute("msg", "Seja bem vindo " + user.getName() + "!");
                             // seta cookie se solicitar para lembrar login
                             if (request.getParameter("remember") != null) {
@@ -151,7 +151,7 @@ public class UserController extends HttpServlet {
                         }};
                         user = (User) sql.insert().values(attrs).run();
                         session.setAttribute("userId", user.getId());
-                        session.setAttribute("userRole", user.getRoleId());
+                        session.setAttribute("userRole", String.valueOf(user.getRoleId()));
                         session.setAttribute("msg", "Seja bem vindo " + name + "!");
                     } catch (Exception ex) {
                         throw new Exception(ex.getMessage());
@@ -229,7 +229,7 @@ public class UserController extends HttpServlet {
             request.getRequestDispatcher(redirect).forward(request, response);
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
-//            response.sendRedirect("");
+            response.sendRedirect("");
         }
     }
 
