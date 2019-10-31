@@ -38,10 +38,10 @@
             for (int i = 0; i < users.size(); i++) {
         %>
         <div class="left-row">
-            <p style="padding-bottom: 5px;"><%= grid.get(i).getName()%></p>
+            <p style="padding-bottom: 5px;"><%= users.get(i).getName()%></p>
             <div class="editar-row">
-                <p><%= grid.get(i).getEmail()%></p>
-                <a href="UserController?sel=<%= grid.get(i).getId()%>">Editar</a>
+                <p><%= users.get(i).getEmail()%></p>
+                <a href="UserController?sel=<%= users.get(i).getId()%>">Editar</a>
             </div>
         </div>
         <%
