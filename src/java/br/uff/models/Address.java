@@ -12,6 +12,7 @@ import java.util.Map;
  * @author felipe
  */
 public class Address extends BaseModel {
+    public static final String TABLE_NAME = "address";
 
     private int id = 0;
     private String name = "";

@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class User extends BaseModel {
     public static final int CUSTOMER_ROLE_ID = 2;
+    public static final String TABLE_NAME = "users";
     
     private int id;
     private String name;

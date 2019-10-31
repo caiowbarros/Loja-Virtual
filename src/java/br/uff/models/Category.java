@@ -11,33 +11,45 @@ import java.util.Map;
  *
  * @author felipe
  */
-public class Role extends BaseModel {
-    public static final String TABLE_NAME = "roles";
+public class Category extends BaseModel {
+    public static final String TABLE_NAME = "category";
     private int id;
     private String name;
-    
-    public Role(int id, String name) {
+    private int fatherCategoryId;
+
+    public Category(int id, String name, int fatherCategoryId) {
         this.id = id;
         this.name = name;
+        this.fatherCategoryId = fatherCategoryId;
     }
     
-    public Role(Map<String, Object> attrs) {
+    public Category(Map<String, Object> attrs) {
         super(attrs);
     }
-    
+
     public int getId() {
-        return this.id;
+        return id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getName() {
-        return this.name;
+        return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getFatherCategoryId() {
+        return fatherCategoryId;
+    }
+
+    public void setFatherCategoryId(int fatherCategoryId) {
+        this.fatherCategoryId = fatherCategoryId;
+    }
+    
+    
 }
