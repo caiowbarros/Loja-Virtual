@@ -5,16 +5,14 @@
  */
 package br.uff.controllers;
 
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
+import br.uff.dao.MySql;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,23 +26,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProdutosController", urlPatterns = {"/ProdutosController"})
 public class ProdutosController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ProdutosController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProdutosController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -310,16 +292,19 @@ public class ProdutosController extends HttpServlet {
             }
 
             // joga numero max de pags p sessao
+            MySql dbMaxPag = null;
             String maxP = null;
             try {
-                String field = "ceil(count(*)/" + qtdMaxProdutosPag + ")";
-                String subquery = consulta + " " + filtro;
-                String query = "select " + field + " from (" + subquery + ") _x2";
-                ResultSet rs = SqlManager.bruteExecute(query, bind);
-                maxP = rs.next() == true ? rs.getString(field) : "1";
+                dbMaxPag = new MySql();
+                maxP = dbMaxPag.dbValor("ceil(count(*)/" + qtdMaxProdutosPag + ")", consulta + filtro, "", bind);
+                if (Integer.valueOf(maxP) < 1) {
+                    maxP = "1";
+                }
                 session.setAttribute("maxPag", maxP);
             } catch (Exception ed) {
                 throw new Exception(ed.getMessage());
+            } finally {
+                dbMaxPag.destroyDb();
             }
 
             // define pag atual
@@ -374,9 +359,11 @@ public class ProdutosController extends HttpServlet {
             }
 
             // define grid
+            MySql dbProdutos = null;
             try {
+                dbProdutos = new MySql();
                 ArrayList<ArrayList> produtos = new ArrayList<>();
-                ResultSet ret = SqlManager.bruteExecute(consulta + filtro + limit + offset, bind);
+                ResultSet ret = dbProdutos.dbCarrega(consulta + filtro + limit + offset, bind);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -391,9 +378,12 @@ public class ProdutosController extends HttpServlet {
                 request.setAttribute("produtos", produtos);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbProdutos.destroyDb();
             }
 
             request.getRequestDispatcher("produtos.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("");

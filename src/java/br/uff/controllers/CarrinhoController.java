@@ -5,13 +5,9 @@
  */
 package br.uff.controllers;
 
-import br.uff.models.Address;
-import br.uff.models.BaseModel;
-import br.uff.models.Cart;
-import br.uff.models.CartsProducts;
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
+import br.uff.dao.MySql;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -19,9 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -32,23 +25,6 @@ import javax.servlet.http.*;
  */
 @WebServlet(name = "CarrinhoController", urlPatterns = {"/CarrinhoController"})
 public class CarrinhoController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(CarrinhoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(CarrinhoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -63,8 +39,7 @@ public class CarrinhoController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
-            SqlManager sql = new SqlManager(Cart.class);
-            SqlManager sqlCartsProducts = new SqlManager(CartsProducts.class);
+
             String carrinhoId = null;
             Cookie[] cookies = request.getCookies();
             // procura carrinhoId nos cookies setados
@@ -82,44 +57,58 @@ public class CarrinhoController extends HttpServlet {
             // recupera userId e se tiver carrinhoId como cookie mas n tiver userId cadastrado p esse carrinho id cadastra user
             if (session.getAttribute("userId") != null) {
                 userId = session.getAttribute("userId").toString();
+                MySql db = null;
                 try {
-                    // pega id de carrinho se n estiver vendido, se user id bater e se n for null
-                    // String[] bindCarrinhoUser = {userId};
-                    // String carrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
-                    ArrayList<BaseModel> carts = sql.select("carts.id")
-                                                    .addJoins("left join sales s on s.cart_id = carts.id")
-                                                    .where("s.id is null and carts.user_id=" + userId)
-                                                    .run();
-                    int id = -1;
-                    if (carts.size() > 0){
-                        Cart cart = (Cart) carts.get(0);
-                        id = (int) cart.getAttribute("id");
+                    db = new MySql();
+                    // verifica se carrinhoId recuperado pertence a outro usuario
+                    if (carrinhoId != null) {
+                        String[] bindVerifica = {carrinhoId};
+                        String carrinhoIdVerificaUser = db.dbValor("user_id", "carts", "id=?", bindVerifica);
+                        if (carrinhoIdVerificaUser != null) {
+                            if (!carrinhoIdVerificaUser.equals(userId)) {
+                                // define carrinhoId como null pois pertence a outro usuario
+                                carrinhoId = null;
+                            }
+                        }
                     }
-                    if (id >= 0) {
-                        if (String.valueOf(id).equals(carrinhoId)) {
-                            // define aviso de recuperaçao de carrinho existente
-                            // session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
-                        } else {
-                            HashMap<String, Object> attrs = new HashMap();
-                            attrs.put("user_id", Integer.parseInt(userId));
-                            sql.update().set(attrs).where("id=" + carrinhoId + " and user_id is null").run();
+                    // pega id de carrinho se n estiver vendido, se user id bater e se n for null
+                    String[] bindCarrinhoUser = {userId};
+                    String carrinhoUser = db.dbValor("id", "carts", "user_id=? AND id not in (SELECT cart_id FROM sales)", bindCarrinhoUser);
+                    if (carrinhoUser != null) {
+                        if (!carrinhoId.equals(carrinhoUser)) {
+                            session.setAttribute("msg", "Um carrinho cadastrado anteriormente para seu usuário foi recuperado!");
+                        }
+                        carrinhoId = carrinhoUser;
+                    }
+                    // se carrinho id n for null, define usuario se n tiver
+                    if (carrinhoId != null) {
+                        String[] bind = {userId, carrinhoId};
+                        db.dbGrava("UPDATE carts set user_id=? WHERE id=? AND user_id IS NULL", bind);
+                    }
+                } catch (Exception ed) {
+                    throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
+                }
+            } else {
+                MySql db = null;
+                try {
+                    db = new MySql();
+                    // verifica se carrinhoId pertence a algum usuario
+                    if (carrinhoId != null) {
+                        String[] bindVerifica = {carrinhoId};
+                        String carrinhoIdVerificaUser = db.dbValor("user_id", "carts", "id=?", bindVerifica);
+                        if (carrinhoIdVerificaUser != null) {
+                            // define carrinhoId como null pois pertence a um usuario
+                            carrinhoId = null;
                         }
                     }
                 } catch (Exception ed) {
                     throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
                 }
             }
-			
-			// verifica se carrinhoId recuperado pertence a outro usuario
-			if (carrinhoId != null) {
-				Cart cart = (Cart) sql.find(Integer.parseInt(carrinhoId));
-				if (cart != null) {
-					if (!String.valueOf(cart.getUserId()).equals(userId)) {
-						// define carrinhoId como null pois pertence a outro usuario
-						carrinhoId = null;
-					}
-				}
-			}
 
             //verifica se carrinhoId eh um numero
             if (carrinhoId != null) {
@@ -132,19 +121,25 @@ public class CarrinhoController extends HttpServlet {
 
             // verifica se carrinhoId ja esta vendido
             if (carrinhoId != null) {
+                MySql db = null;
                 try {
-                    boolean cartExists = sql.select().where("id="+carrinhoId).exists();
-                    
-                    if (cartExists) {
-                        boolean valid = sql.select().where("id in (SELECT cart_id FROM sales) and id=" + carrinhoId).exists();
+                    db = new MySql();
+                    String[] bind = {carrinhoId};
+                    int verificaCarrinhoExiste = Integer.valueOf(db.dbValor("count(*)", "carts", "id=?", bind));
+                    if (verificaCarrinhoExiste > 0) {
+                        int verificaCarrinhoVendido = Integer.valueOf(db.dbValor("count(*)", "carts", "id=? AND id in (SELECT cart_id FROM sales)", bind));
                         //se encontrou carrinho vendido define carrinhoId como null
-                        if (valid) carrinhoId = null;
+                        if (verificaCarrinhoVendido > 0) {
+                            carrinhoId = null;
+                        }
                     } else {
                         // se n tem carrinho no bd define como null
                         carrinhoId = null;
                     }
                 } catch (Exception ed) {
                     throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
                 }
             }
 
@@ -159,20 +154,16 @@ public class CarrinhoController extends HttpServlet {
                 // monta string createdAt
                 String createdAt = df.format(data);
                 String ip = request.getRemoteAddr().toString();
+                String[] bind = {ip, createdAt, userId};
+                MySql db = null;
                 try {
-                    HashMap<String, Object> attrs = new HashMap() {{
-                        put("ip", ip);
-                        put("created_at", createdAt);
-                    }};
-					if (userId == null) {
-						attrs.put("user_id", "null");
-					} else {
-						attrs.put("user_id", Integer.parseInt((String) userId));
-					}
-                    BaseModel cart = sql.insert().values(attrs).run();
-                    carrinhoId = String.valueOf((int) cart.getAttribute("id"));
+                    db = new MySql();
+                    db.dbGrava("INSERT INTO carts (ip,created_at,user_id) VALUES (?,?,?)", bind);
+                    carrinhoId = db.dbValor("max(id)", "carts", "ip=? AND created_at=? AND user_id " + (userId == null ? " IS " : " = ") + " ?", bind);
                 } catch (SQLException ed) {
                     throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
                 }
             }
 
@@ -185,24 +176,22 @@ public class CarrinhoController extends HttpServlet {
             session.setAttribute("carrinhoId", carrinhoId);
 
             if (request.getParameter("addProdutoId") != null) {
+                MySql db = null;
                 String addProdutoId = request.getParameter("addProdutoId");
                 try {
-                    int qtdValidador = sqlCartsProducts.select()
-                                                       .where("product_id=" + Integer.parseInt(addProdutoId) + " AND cart_id=" + Integer.parseInt(carrinhoId))
-                                                       .count();
+                    db = new MySql();
+                    String[] bind = {addProdutoId, carrinhoId};
+                    int qtdValidador = Integer.valueOf(db.dbValor("count(*)", "carts_products", "product_id=? AND cart_id=?", bind));
                     if (qtdValidador == 0) {
-                        HashMap<String, Object> attrs = new HashMap() {{
-                            put("product_id", addProdutoId);
-                            put("quantity", 1);
-                        }};
-                        attrs.put("cart_id", carrinhoId);
-                        sqlCartsProducts.insert().values(attrs).run();
+                        db.dbGrava("INSERT INTO carts_products (product_id,cart_id,quantity) VALUES (?,?,1)", bind);
                         session.setAttribute("msg", "Produto inserido no carrinho com sucesso!");
                     } else {
                         session.setAttribute("msg", "Produto já inserido no carrinho!");
                     }
                 } catch (SQLException ed) {
                     throw new Exception(ed.getMessage());
+                } finally {
+                    db.destroyDb();
                 }
             }
 
@@ -216,14 +205,19 @@ public class CarrinhoController extends HttpServlet {
                 case "finalizaCompra": {
                     String totalPrice = request.getParameter("totalPrice");
                     request.setAttribute("totalPrice", totalPrice);
+                    String[] bindEndereco = {userId};
+                    String consultaEndereco = "SELECT id, `name` FROM address WHERE user_id=?";
+                    MySql db = null;
                     try {
-                        ArrayList<Address> enderecos = new ArrayList<>();
-                        ArrayList<BaseModel> result = new SqlManager(Address.class).select()
-                                                                                   .where("user_id="+userId)
-                                                                                   .run();
-                        result.forEach((r) -> {
-                            enderecos.add((Address) r);
-                        });
+                        db = new MySql();
+                        ArrayList<ArrayList> enderecos = new ArrayList<>();
+                        ResultSet ret = db.dbCarrega(consultaEndereco, bindEndereco);
+                        while (ret.next()) {
+                            ArrayList<String> row = new ArrayList<>();
+                            row.add(ret.getString("id"));
+                            row.add(ret.getString("name"));
+                            enderecos.add(row);
+                        }
                         request.setAttribute("enderecos", enderecos);
 
                         String consulta = "SELECT\n"
@@ -238,7 +232,7 @@ public class CarrinhoController extends HttpServlet {
                                 + "	c.cart_id = ?";
                         String[] bind = {carrinhoId};
                         ArrayList<ArrayList> produtos = new ArrayList<>();
-                        ResultSet retono = SqlManager.bruteExecute(consulta, bind);
+                        ResultSet retono = db.dbCarrega(consulta, bind);
                         while (retono.next()) {
                             ArrayList<String> row = new ArrayList<>();
                             row.add(retono.getString("name"));
@@ -250,6 +244,8 @@ public class CarrinhoController extends HttpServlet {
                         session.setAttribute("produtos", produtos);
                     } catch (SQLException ex) {
                         throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     request.getRequestDispatcher("carrinho-confirma.jsp").forward(request, response);
                     return;
@@ -260,27 +256,33 @@ public class CarrinhoController extends HttpServlet {
                     return;
                 }
                 case "removeProduto": {
+                    MySql db = null;
                     String produtoId = request.getParameter("produtoId");
                     try {
+                        db = new MySql();
                         String[] bind = {produtoId, carrinhoId};
-                        sqlCartsProducts.delete().where("product_id=" + produtoId + " AND cart_id=" + carrinhoId).run();
+                        db.dbGrava("DELETE FROM carts_products WHERE product_id=? AND cart_id=?", bind);
                         session.setAttribute("msg", "Produto removido do carrinho com sucesso!");
                     } catch (SQLException ed) {
                         throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
                 case "mudaQtd": {
+                    MySql db = null;
                     String produtoId = request.getParameter("produtoId");
                     String qtdProduto = request.getParameter("qtdProduto");
                     try {
-                        HashMap<String, Object> attrs = new HashMap() {{
-                            put("quantity", qtdProduto);
-                        }};
-                        sqlCartsProducts.update().set(attrs).where("product_id=" + produtoId + " AND cart_id=" + carrinhoId).run();
+                        db = new MySql();
+                        String[] bind = {qtdProduto, produtoId, carrinhoId};
+                        db.dbGrava("UPDATE carts_products SET quantity=? WHERE product_id=? AND cart_id=?", bind);
                         session.setAttribute("msg", "Quantidade do produto alterada com sucesso!");
                     } catch (SQLException ed) {
                         throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
@@ -303,6 +305,7 @@ public class CarrinhoController extends HttpServlet {
             }
 
             // define avaliacoes
+            MySql dbCarrinho = null;
             try {
                 String consulta = "SELECT\n"
                         + "	p.id,\n"
@@ -319,8 +322,9 @@ public class CarrinhoController extends HttpServlet {
                         + "WHERE\n"
                         + "	c.cart_id = ?";
                 String[] bind = {carrinhoId};
+                dbCarrinho = new MySql();
                 ArrayList<ArrayList> itens = new ArrayList<>();
-                ResultSet ret = SqlManager.bruteExecute(consulta, bind);
+                ResultSet ret = dbCarrinho.dbCarrega(consulta, bind);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -335,13 +339,13 @@ public class CarrinhoController extends HttpServlet {
                     // add row no grid
                     itens.add(row);
                 }
-                ResultSet rs = SqlManager.bruteExecute("SELECT c.cart_id, sum(p.price * c.quantity) total_price FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ? GROUP BY c.cart_id", bind);
-                String totalPrice = null;
-                if (rs.next()) totalPrice = rs.getString("total_price");
+                String totalPrice = dbCarrinho.dbValor("total_price", "SELECT c.cart_id, sum(p.price * c.quantity) total_price FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id = ? GROUP BY c.cart_id", "", bind);
                 request.setAttribute("totalPrice", totalPrice);
                 request.setAttribute("itens", itens);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbCarrinho.destroyDb();
             }
 
             // manda atributos para a pag do carrinho
@@ -350,6 +354,7 @@ public class CarrinhoController extends HttpServlet {
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");
+            return;
         }
     }
 

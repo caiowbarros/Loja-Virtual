@@ -11,9 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +30,7 @@ public class Inserter {
     
     public Inserter(String tableName, Class klass) {
         this.reload();
-        this.insert = "insert into " + tableName;
+        this.insert = "insert into" + tableName;
         this.klass = klass;
         this.connection = ConnectionManager.getConnection();
     }
@@ -44,13 +42,9 @@ public class Inserter {
     }
     
     public BaseModel run() throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        PreparedStatement statement = connection.prepareStatement(this.build(), Statement.RETURN_GENERATED_KEYS);
-        statement.executeUpdate();
-        int id = -1;
-        ResultSet rs = statement.getGeneratedKeys();
-        if(rs.next()) id = rs.getInt(1);
-        if(id < 0) throw new SQLException();
-        this.attrs.put("id", id);
+        PreparedStatement statement = connection.prepareStatement(this.build());
+        if(statement.executeUpdate() != 1) throw new SQLException();
+        this.reload();
         return model();
     }
     
@@ -83,9 +77,9 @@ public class Inserter {
     private void addAttr(Map.Entry<String, Object> attr) {
         columns.add(attr.getKey());
         Object value = attr.getValue();
-        if (value instanceof String && !value.equals("SYSDATE()") && !value.equals("null")) {
+        if (value instanceof String) {
             values.add(Inflector.toQuotedString(String.valueOf(value)));
-        } else if (value == null || value.equals("null")) {
+        } else if (value == null) {
             values.add("NULL");
         } else {
             values.add(String.valueOf(value));

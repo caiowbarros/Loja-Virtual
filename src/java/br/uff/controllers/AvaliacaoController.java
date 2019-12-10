@@ -5,15 +5,10 @@
  */
 package br.uff.controllers;
 
-import br.uff.models.BaseModel;
-import br.uff.models.UserProductsRating;
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
+import br.uff.dao.MySql;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,23 +22,6 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AvaliacaoController", urlPatterns = {"/AvaliacaoController"})
 public class AvaliacaoController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AvaliacaoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(AvaliacaoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,7 +36,6 @@ public class AvaliacaoController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
-            SqlManager sql = new SqlManager(UserProductsRating.class);
 
             // seta produtoId na sessao se estiver passado por parametro antes de verificar login
             if (request.getParameter("produtoId") != null) {
@@ -82,9 +59,18 @@ public class AvaliacaoController extends HttpServlet {
             String produtoId = null;
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
-                String condition = "user_id = " + userId + " and product_id = " + produtoId;
-                boolean isRated = sql.select().where(condition).exists();
-                if (isRated) {
+                int qtdAvaliacoes;
+                MySql validador = null;
+                try {
+                    validador = new MySql();
+                    String[] bindValidador = {userId, produtoId};
+                    qtdAvaliacoes = Integer.valueOf(validador.dbValor("count(*)", "user_produts_rating", "user_id=? AND product_id=?", bindValidador));
+                } catch (ClassNotFoundException | SQLException e) {
+                    throw new Exception("Falha ao recuperar quantidade de avaliacoes do usuário para o produto: " + e.getMessage());
+                } finally {
+                    validador.destroyDb();
+                }
+                if (qtdAvaliacoes > 0) {
                     session.setAttribute("rating", null);
                     throw new Exception("Produto já avaliado!");
                 }
@@ -102,20 +88,23 @@ public class AvaliacaoController extends HttpServlet {
 
             switch (action) {
                 case "avalia": {
-                    HashMap<String, Object> attrs = new HashMap() {{
-                        put("rating", Integer.parseInt((String) session.getAttribute("rating")));
-                        put("description", request.getParameter("description"));
-                        put("title", request.getParameter("title"));
-                        put("created_at", "SYSDATE()");
-                    }};
-                    attrs.put("user_id", Integer.parseInt((String) userId));
-                    attrs.put("product_id", Integer.parseInt((String) produtoId));
+                    // grava avaliacao do produto
+                    MySql db = null;
                     try {
-                        if (sql.insert().values(attrs).run() instanceof BaseModel)
-                            session.setAttribute("msg", "Produto avaliado com sucesso!");
-                    } catch (SQLException e) {
+                        db = new MySql();
+                        //RECUPERA VALUES
+                        String rating = session.getAttribute("rating").toString();
+                        String description = request.getParameter("description").toString();
+                        String title = request.getParameter("title").toString();
+                        String[] bind = {userId, produtoId, rating, description, title};
+                        db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
+                        // define msg a ser mostrada
+                        session.setAttribute("msg", "Produto avaliado com sucesso!");
+
+                    } catch (ClassNotFoundException | SQLException e) {
                         throw new Exception("Falha ao avaliar produto: " + e.getMessage());
                     } finally {
+                        db.destroyDb();
                         session.setAttribute("rating", null);
                     }
                     response.sendRedirect("ProdutoController");
@@ -124,10 +113,12 @@ public class AvaliacaoController extends HttpServlet {
             }
 
             request.getRequestDispatcher("produto-avalia.jsp").forward(request, response);
+            return;
             // se der erro vai p ControllerProdutos
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutoController");
+            return;
         }
     }
 

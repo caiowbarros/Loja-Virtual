@@ -5,8 +5,6 @@
  */
 package br.uff.mutators;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +19,7 @@ public class Inflector {
     public static String downsize(String str) {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
-        
+    
     public static String toSetter(String str) {
         String[] splited = str.split("_");
         String response = "";
@@ -78,12 +76,5 @@ public class Inflector {
         String table = klass.getSimpleName();
         table = downsize(table);
         return pluralize(table);
-    }
-    
-    public static PreparedStatement bind(PreparedStatement statement, String[] bind) throws SQLException {
-        if(bind == null) return statement;
-        for(int i = 1; i <= bind.length; i++)
-            statement.setString(i, bind[i-1]);
-        return statement;
     }
 }

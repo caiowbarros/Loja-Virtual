@@ -13,8 +13,7 @@ import java.util.HashMap;
  */
 public class Inflections {
     private static final HashMap<String, String> pluralizations = new HashMap() {{
-        put("address", "address");
-        put("category", "category");
+        put("test", "tests");
     }};
     
     public static String fetchPlural(String key) {

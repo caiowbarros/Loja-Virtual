@@ -5,8 +5,8 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import br.uff.models.Product;
-import br.uff.sql.SqlManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -52,9 +52,11 @@ public class ProdutoAdmController extends HttpServlet {
                     produto = new Product("", "", "", "", 0, 0, "SYSDATE()");
                     if (!selParameter.equals("")) {
                         // define produto
+                        MySql dbProd = null;
                         try {
+                            dbProd = new MySql();
                             String[] bindSel = {selParameter};
-                            ResultSet ret = SqlManager.bruteExecute("SELECT * FROM products WHERE id=?", bindSel);
+                            ResultSet ret = dbProd.dbCarrega("SELECT * FROM products WHERE id=?", bindSel);
                             if (ret.next()) {
                                 // preenche row
                                 produto.setId(ret.getInt("id"));
@@ -68,6 +70,8 @@ public class ProdutoAdmController extends HttpServlet {
                             }
                         } catch (SQLException ex) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                        } finally {
+                            dbProd.destroyDb();
                         }
                     }
                     // define atributo de produto
@@ -99,38 +103,50 @@ public class ProdutoAdmController extends HttpServlet {
                         String img = request.getParameter("src");
                         String categoryId = request.getParameter("categoryId");
 
+                        MySql db = null;
                         try {
+                            db = new MySql();
                             if (sel.equals("")) {
                                 String[] bind = {name, price, description, img, categoryId};
-                                SqlManager.bruteUpdate("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
+                                db.dbGrava("INSERT INTO products (name,price,description,img,category_id,created_at,quantity) VALUES (?,?,?,?,?,SYSDATE(),0)", bind);
                             } else {
                                 String[] bind = {name, price, description, img, categoryId, sel};
-                                SqlManager.bruteUpdate("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
+                                db.dbGrava("UPDATE products set name=?,price=?,description=?,img=?,category_id=? WHERE id=?", bind);
                             }
                             session.setAttribute("msg", "Produto gravado com sucesso!");
-                        } catch (SQLException e) {
+                        } catch (ClassNotFoundException | SQLException e) {
                             throw new Exception("Falha ao gravar produto: " + e.getMessage());
+                        } finally {
+                            db.destroyDb();
                         }
                         break;
                     }
                     case "estoqueInsere": {
+                        MySql db = null;
                         try {
+                            db = new MySql();
                             String quantity = request.getParameter("quantity");
                             String[] bindIncrease = {quantity, sel};
-                            SqlManager.bruteUpdate("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
+                            db.dbGrava("UPDATE products SET quantity = quantity + ? WHERE id=?", bindIncrease);
                             session.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
+                        } finally {
+                            db.destroyDb();
                         }
                         break;
                     }
                     case "del": {
+                        MySql db = null;
                         try {
+                            db = new MySql();
                             String[] bindDel = {sel};
-                            SqlManager.bruteUpdate("DELETE FROM products WHERE id=?", bindDel);
+                            db.dbGrava("DELETE FROM products WHERE id=?", bindDel);
                             session.setAttribute("msg", "Produto deletado com sucesso!");
                         } catch (Exception ed) {
                             throw new Exception(ed.getMessage());
+                        } finally {
+                            db.destroyDb();
                         }
                         break;
                     }
@@ -145,9 +161,11 @@ public class ProdutoAdmController extends HttpServlet {
             }
 
             // define grid
+            MySql dbGrid = null;
             try {
+                dbGrid = new MySql();
                 ArrayList<ArrayList> grid = new ArrayList<>();
-                ResultSet ret = SqlManager.bruteExecute("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
+                ResultSet ret = dbGrid.dbCarrega("SELECT p.id,p.name,p.price,c.category_name,p.quantity FROM products p left join vw_category c on (p.category_id=c.id)", null);
                 while (ret.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -162,6 +180,8 @@ public class ProdutoAdmController extends HttpServlet {
                 request.setAttribute("grid", grid);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbGrid.destroyDb();
             }
 
             // manda p pag de grid de produtos

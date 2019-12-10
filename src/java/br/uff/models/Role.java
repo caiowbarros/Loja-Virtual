@@ -12,7 +12,6 @@ import java.util.Map;
  * @author felipe
  */
 public class Role extends BaseModel {
-    public static final String TABLE_NAME = "roles";
     private int id;
     private String name;
     

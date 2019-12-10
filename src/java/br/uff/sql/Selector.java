@@ -72,60 +72,15 @@ public class Selector {
         return models;
     }
     
-    public int count() {
-        try {
-            this.select = "count(*)";
-            PreparedStatement statement = connection.prepareStatement(this.build());
-            ResultSet result = statement.executeQuery();
-            while(result.next()) {
-                return result.getInt(1);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-    
-    public int count(boolean distinct) {
-        try {
-            if(distinct) {
-                this.select = "count(distinct *)";
-            } else {
-                this.select = "count(*)";
-            }
-            PreparedStatement statement = connection.prepareStatement(this.build());
-            ResultSet result = statement.executeQuery();
-            while(result.next()) {
-                return result.getInt(1);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-    
-    public boolean exists() {
-        try {
-            this.select = "select *";
-            this.limit = "limit 1";
-            PreparedStatement statement = connection.prepareStatement(this.build());
-            ResultSet result = statement.executeQuery();
-            return result.next();
-        } catch (SQLException ex) {
-            Logger.getLogger(Selector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-    
     protected String build() {
         StringBuilder sb = new StringBuilder();
         if(select.isEmpty()) sb.append("select *"); else sb.append(select);
         sb.append(" ");
         sb.append(from);
         sb.append(" ");
-        sb.append(Inflector.joins(this.joins));
-        sb.append(" ");
         sb.append(where);
+        sb.append(" ");
+        sb.append(Inflector.joins(this.joins));
         sb.append(" ");
         sb.append(limit);
         sb.append(" ");

@@ -9,7 +9,6 @@ import br.uff.mutators.Inflector;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,8 +91,7 @@ public class Updater {
             sb.append(entry.getValue());
             sb.append(",");
         }
-        if(sb.toString().contains(","))
-            sb.deleteCharAt(sb.lastIndexOf(","));
+        sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append(" ");
         sb.append(this.where);
         return sb.toString();

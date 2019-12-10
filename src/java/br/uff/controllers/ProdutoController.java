@@ -5,16 +5,11 @@
  */
 package br.uff.controllers;
 
-import br.uff.models.FavoriteProducts;
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
+import br.uff.dao.MySql;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,23 +23,6 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProdutoController", urlPatterns = {"/ProdutoController"})
 public class ProdutoController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProdutoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,7 +37,6 @@ public class ProdutoController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
-            SqlManager sql = new SqlManager(FavoriteProducts.class);
 
             // se tem produto selecionado por parametro passa p sessao
             String produtoId = null;
@@ -101,23 +78,24 @@ public class ProdutoController extends HttpServlet {
                     response.sendRedirect("UserController?redirect=ProdutoController");
                     return;
                 } else {
+                    MySql db = null;
                     try {
-                        String condition = "product_id=" + produtoId + " AND user_id=" + userId;
-                        int count = sql.select().where(condition).count();
+                        db = new MySql();
+                        String[] bindFav = {produtoId, userId};
+                        String count = "0";
+                        count = db.dbValor("count(*)", "favorite_products", "product_id=? AND user_id=?", bindFav);
                         // se ja tiver registro, remove, se nao tiver insere
-                        if (count > 0) {
-                            sql.delete().where(condition).run();
+                        if (!count.equals("0")) {
+                            db.dbGrava("DELETE FROM favorite_products WHERE product_id=? AND user_id=?", bindFav);
                             session.setAttribute("msg", "Produto desfavoritado com sucesso!");
                         } else {
-                            HashMap<String, Object> attrs = new HashMap();
-                            attrs.put("product_id", produtoId);
-                            attrs.put("user_id", userId);
-                            sql.insert().values(attrs).run();
+                            db.dbGrava("INSERT INTO favorite_products (product_id,user_id) VALUES (?,?)", bindFav);
                             session.setAttribute("msg", "Produto favoritado com sucesso!");
                         }
                     } catch (Exception ex) {
                         throw new Exception(ex.getMessage());
                     } finally {
+                        db.destroyDb();
                         // define fav como null
                         session.setAttribute("fav", null);
                     }
@@ -153,9 +131,11 @@ public class ProdutoController extends HttpServlet {
                     + "	p.id=?";
 
             // define produto
+            MySql dbProduto = null;
             try {
+                dbProduto = new MySql();
                 ArrayList<String> produto = new ArrayList<>();
-                ResultSet ret = SqlManager.bruteExecute(consulta, bind);
+                ResultSet ret = dbProduto.dbCarrega(consulta, bind);
                 if (ret.next()) {
                     // preenche row
                     produto.add(ret.getString("id"));
@@ -178,6 +158,8 @@ public class ProdutoController extends HttpServlet {
                 request.setAttribute("produto", produto);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbProduto.destroyDb();
             }
 
             String consultaAvaliacao = "SELECT\n"
@@ -197,9 +179,11 @@ public class ProdutoController extends HttpServlet {
             String[] bindAvaliacao = {produtoId};
             
             // define avaliacoes
+            MySql dbAvaliacoes = null;
             try {
+                dbAvaliacoes = new MySql();
                 ArrayList<ArrayList> avaliacoes = new ArrayList<>();
-                ResultSet aval = SqlManager.bruteExecute(consultaAvaliacao, bindAvaliacao);
+                ResultSet aval = dbAvaliacoes.dbCarrega(consultaAvaliacao, bindAvaliacao);
                 while (aval.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     // preenche row
@@ -215,12 +199,16 @@ public class ProdutoController extends HttpServlet {
                 request.setAttribute("avaliacoes", avaliacoes);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbAvaliacoes.destroyDb();
             }
 
             request.getRequestDispatcher("produto.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("ProdutosController");
+            return;
         }
     }
 
