@@ -5,17 +5,14 @@
  */
 package br.uff.controllers;
 
+import br.uff.dao.MySql;
 import br.uff.models.Address;
-import br.uff.models.BaseModel;
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
+import br.uff.models.Product;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -26,23 +23,6 @@ import javax.servlet.http.*;
  */
 @WebServlet(name = "EnderecoController", urlPatterns = {"/EnderecoController"})
 public class EnderecoController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(EnderecoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(EnderecoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,7 +36,6 @@ public class EnderecoController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // pega sessao
         HttpSession session = request.getSession();
-        SqlManager sql = new SqlManager(Address.class);
 
         try {
             // recupera usuario logado
@@ -71,10 +50,29 @@ public class EnderecoController extends HttpServlet {
             if (request.getParameter("sel") != null) {
                 String selParameter = request.getParameter("sel");
                 Address endereco;
-                endereco = new Address("", 0, "", "", "", "", 0);
+                endereco = new Address("", "", "", "", "", "");
                 if (!selParameter.equals("")) {
                     // define endereco
-                    endereco = (Address) sql.find(Integer.parseInt(selParameter));
+                    MySql dbEnd = null;
+                    try {
+                        dbEnd = new MySql();
+                        String[] bindSel = {selParameter};
+                        ResultSet ret = dbEnd.dbCarrega("SELECT * FROM address WHERE id=?", bindSel);
+                        if (ret.next()) {
+                            // preenche endereco
+                            endereco.setId(ret.getInt("id"));
+                            endereco.setName(ret.getString("name"));
+                            endereco.setAddress(ret.getString("address"));
+                            endereco.setCity(ret.getString("city"));
+                            endereco.setCountry(ret.getString("country"));
+                            endereco.setState(ret.getString("state"));
+                            endereco.setZipcode(ret.getString("zipcode"));
+                        }
+                    } catch (SQLException ex) {
+                        throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                    } finally {
+                        dbEnd.destroyDb();
+                    }
                 }
                 // define atributo de produto
                 request.setAttribute("endereco", endereco);
@@ -99,34 +97,42 @@ public class EnderecoController extends HttpServlet {
             switch (action) {
                 case "grava": {
                     // grava alteracoes do session.getAttribute("produtoId")
-                    HashMap<String, Object> attrs = new HashMap() {{
-                        put("name", request.getParameter("name"));
-                        put("address", request.getParameter("address"));
-                        put("zipcode", Integer.parseInt(request.getParameter("zipcode")));
-                        put("city", request.getParameter("city"));
-                        put("state", request.getParameter("state"));
-                        put("country", request.getParameter("country"));
-                    }};
+                    String name = request.getParameter("name");
+                    String address = request.getParameter("address");
+                    String zipcode = request.getParameter("zipcode");
+                    String city = request.getParameter("city");
+                    String state = request.getParameter("state");
+                    String country = request.getParameter("country");
 
+                    MySql db = null;
                     try {
+                        db = new MySql();
                         if (sel.equals("")) {
-                            attrs.put("user_id", Integer.parseInt(userId));
-                            sql.insert().values(attrs).run();
+                            String[] bind = {name, address, zipcode, city, state, country, userId};
+                            db.dbGrava("INSERT INTO address (name, address, zipcode, city, state, country, user_id) VALUES (?,?,?,?,?,?,?)", bind);
                         } else {
-                            sql.update().where("id="+sel).set(attrs).run();
+                            String[] bind = {name, address, zipcode, city, state, country, sel};
+                            db.dbGrava("UPDATE address set name=?, address=?, zipcode=?, city=?, state=?, country=? WHERE id=?", bind);
                         }
                         session.setAttribute("msg", "Endereço gravado com sucesso!");
-                    } catch (SQLException e) {
+                    } catch (ClassNotFoundException | SQLException e) {
                         throw new Exception("Falha ao gravar endereço: " + e.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
                 case "del": {
+                    MySql db = null;
                     try {
-                        sql.delete().where("id="+sel).run();
+                        db = new MySql();
+                        String[] bindDel = {sel};
+                        db.dbGrava("DELETE FROM address WHERE id=?", bindDel);
                         session.setAttribute("msg", "Endereço deletado com sucesso!");
-                    } catch (SQLException ed) {
+                    } catch (Exception ed) {
                         throw new Exception(ed.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
@@ -138,21 +144,37 @@ public class EnderecoController extends HttpServlet {
             }
 
             // define grid
+            MySql dbGrid = null;
             try {
-                ArrayList<Address> addresses = new ArrayList();
-                sql.select().where("user_id="+userId).run().forEach((r) -> {
-                    addresses.add((Address) r);
-                });
-                request.setAttribute("adresses", addresses);
+                dbGrid = new MySql();
+                ArrayList<ArrayList> grid = new ArrayList<>();
+                String[] bindAddress = {userId};
+                ResultSet ret = dbGrid.dbCarrega("SELECT id,name,address,city,state FROM address WHERE user_id=?", bindAddress);
+                while (ret.next()) {
+                    ArrayList<String> row = new ArrayList<>();
+                    // preenche row
+                    row.add(ret.getString("id"));
+                    row.add(ret.getString("name"));
+                    row.add(ret.getString("address"));
+                    row.add(ret.getString("city"));
+                    row.add(ret.getString("state"));
+                    // add row no grid
+                    grid.add(row);
+                }
+                request.setAttribute("grid", grid);
             } catch (SQLException ex) {
                 throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+            } finally {
+                dbGrid.destroyDb();
             }
 
             // manda p pag de grid de produtos
             request.getRequestDispatcher("endereco-grid.jsp").forward(request, response);
+            return;
         } catch (Exception e) {
             session.setAttribute("msg", e.getMessage());
             response.sendRedirect("UserController");
+            return;
         }
     }
 

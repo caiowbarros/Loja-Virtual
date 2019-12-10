@@ -12,7 +12,6 @@ import java.util.Map;
  * @author felipe
  */
 public class Product extends BaseModel {
-    public static final String TABLE_NAME = "products";
 
     private int id = 0;
     private String name = "";

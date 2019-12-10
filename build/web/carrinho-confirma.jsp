@@ -3,7 +3,6 @@
     Created on : 02/10/2019, 11:42:33
     Author     : HP
 --%>
-<%@page import="br.uff.models.Address"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CarrinhoController
@@ -18,9 +17,9 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    ArrayList<Address> enderecos = null;
+    ArrayList<ArrayList<String>> enderecos = null;
     if (request.getAttribute("enderecos") != null) {
-        enderecos = (ArrayList<Address>) request.getAttribute("enderecos");
+        enderecos = (ArrayList<ArrayList<String>>) request.getAttribute("enderecos");
     }
 
     ArrayList<ArrayList<String>> produtos = null;
@@ -44,11 +43,11 @@
                 <%
                     for (int i = 0; i < enderecos.size(); i++) {
                 %>
-                <div class="confirma-radio" id="check<%= enderecos.get(i).getId()%>" onclick="radioCheck(<%=enderecos.get(i).getId()%>)">
+                <div class="confirma-radio" id="check<%= enderecos.get(i).get(0)%>" onclick="radioCheck(<%=enderecos.get(i).get(0)%>)">
                     <div class="radio-container">
-                        <input required type="radio" name="end" id="end<%= enderecos.get(i).getId()%>" value="<%= enderecos.get(i).getId()%>"><label for="end<%= enderecos.get(i).getId()%>">&nbsp;<%= enderecos.get(i).getName()%></label><br>
+                        <input required type="radio" name="end" id="end<%= enderecos.get(i).get(0)%>" value="<%= enderecos.get(i).get(0)%>"><label for="end<%= enderecos.get(i).get(0)%>">&nbsp;<%= enderecos.get(i).get(1)%></label><br>
                     </div>
-                    <a href="EnderecoController?sel=<%= enderecos.get(i).getId()%>">Editar</a>
+                    <a href="EnderecoController?sel=<%= enderecos.get(i).get(0)%>">Editar</a>
                 </div>
                 <script>
                 function radioCheck(id) {

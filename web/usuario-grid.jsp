@@ -3,7 +3,6 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
-<%@page import="br.uff.models.User"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado retorna p userController
@@ -17,9 +16,9 @@
         out.println("<script>alert('" + msg + "');</script>");
     }
 
-    ArrayList<User> users = null;
+    ArrayList<ArrayList<String>> grid = null;
     if (request.getAttribute("usuarios") != null) {
-        users = (ArrayList<User>) request.getAttribute("usuarios");
+        grid = (ArrayList<ArrayList<String>>) request.getAttribute("usuarios");
     }
 %>
 <!-- Header -->
@@ -35,13 +34,13 @@
             <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals("1") ? "Lista de Cadastros" : "Meus Dados")%></p>
         </div>
         <%
-            for (int i = 0; i < users.size(); i++) {
+            for (int i = 0; i < grid.size(); i++) {
         %>
         <div class="left-row">
-            <p style="padding-bottom: 5px;"><%= users.get(i).getName()%></p>
+            <p style="padding-bottom: 5px;"><%= grid.get(i).get(1)%></p>
             <div class="editar-row">
-                <p><%= users.get(i).getEmail()%></p>
-                <a href="UserController?sel=<%= users.get(i).getId()%>">Editar</a>
+                <p><%= grid.get(i).get(2)%></p>
+                <a href="UserController?sel=<%= grid.get(i).get(0)%>">Editar</a>
             </div>
         </div>
         <%

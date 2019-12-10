@@ -5,14 +5,13 @@
  */
 package br.uff.controllers;
 
-import br.uff.models.BaseModel;
+import br.uff.dao.MySql;
 import br.uff.models.User;
-import br.uff.sql.ConnectionManager;
-import br.uff.sql.SqlManager;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -25,23 +24,6 @@ import javax.servlet.http.*;
  */
 @WebServlet(name = "UserController", urlPatterns = {"/UserController"})
 public class UserController extends HttpServlet {
-    @Override
-    public void init() {
-        try {
-            ConnectionManager.connect();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Override
-    public void destroy() {
-        try {
-            ConnectionManager.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,8 +38,6 @@ public class UserController extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
-            User user = null;
-            SqlManager sql = new SqlManager(User.class);
 
             if (request.getParameter("sel") != null) {
                 session.setAttribute("selUser", request.getParameter("sel"));
@@ -77,26 +57,31 @@ public class UserController extends HttpServlet {
             switch (action) {
                 case "grava": {
                     // grava alteracoes no cadastro d usuario feito na pag de usuario-cadastro
+                    MySql db = null;
                     try {
+                        db = new MySql();
                         // pega variaveis
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
                         String roleId = request.getParameter("roleId");
                         String name = request.getParameter("name");
-                        HashMap<String, Object> attrs = new HashMap() {{
-                            put("email", email);
-                            put("password", password);
-                            put("role_id", roleId);
-                            put("name", name);
-                        }};
-                        if (selUser.isEmpty()) {
-                            user = (User) sql.insert().values(attrs).run();
+                        String[] bind = null;
+                        String comando = "";
+                        if (selUser.equals("")) {
+                            String[] bindUpdate = {email, password, roleId, name};
+                            bind = bindUpdate;
+                            comando = "INSERT INTO users (email,password,role_id,name) VALUES (?,?,?,?)";
                         } else {
-                            sql.update().set(attrs).where("id = " + selUser).run();
+                            String[] bindInsert = {email, password, roleId, name, selUser};
+                            bind = bindInsert;
+                            comando = "UPDATE users set email=?,password=?,role_id=?,name=? WHERE id=?";
                         }
+                        db.dbGrava(comando, bind);
                         session.setAttribute("msg", "Usuário gravado com sucesso!");
                     } catch (Exception ec) {
                         throw new Exception(ec.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
@@ -110,15 +95,19 @@ public class UserController extends HttpServlet {
                     break;
                 }
                 case "login": {
+                    MySql db = null;
                     try {
+                        db = new MySql();
                         // pega variaveis
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-                        user = (User) sql.findBy("email = '" + email + "' and password = '" + password + "'");
-                        if (user != null) {
-                            session.setAttribute("userId", user.getId());
-                            session.setAttribute("userRole", String.valueOf(user.getRoleId()));
-                            session.setAttribute("msg", "Seja bem vindo " + user.getName() + "!");
+                        String[] bind = {email, password};
+                        // inserindo com role = 2 (cliente)
+                        ResultSet ret = db.dbCarrega("SELECT id,name,role_id FROM users WHERE email=? AND password=?", bind);
+                        if (ret.next()) {
+                            session.setAttribute("userId", ret.getString("id"));
+                            session.setAttribute("userRole", ret.getString("role_id"));
+                            session.setAttribute("msg", "Seja bem vindo " + ret.getString("name") + "!");
                             // seta cookie se solicitar para lembrar login
                             if (request.getParameter("remember") != null) {
                                 int durMes = 2592000;
@@ -134,27 +123,32 @@ public class UserController extends HttpServlet {
                         }
                     } catch (Exception ec) {
                         throw new Exception(ec.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
                 case "insere": {
+                    MySql db = null;
                     try {
+                        db = new MySql();
                         // pega variaveis
                         String name = request.getParameter("nome");
                         String email = request.getParameter("email");
                         String password = request.getParameter("senha");
-                        HashMap<String, Object> attrs = new HashMap() {{
-                            put("name", name);
-                            put("email", email);
-                            put("password", password);
-                            put("role_id", User.CUSTOMER_ROLE_ID);
-                        }};
-                        user = (User) sql.insert().values(attrs).run();
-                        session.setAttribute("userId", user.getId());
-                        session.setAttribute("userRole", String.valueOf(user.getRoleId()));
+                        String role = "2";
+                        String[] bind = {name, email, password, role};
+                        // inserindo com role = 2 (cliente)
+                        db.dbGrava("INSERT INTO users (name,email,password,role_id) VALUES (?,?,?,?)", bind);
+                        String id = null;
+                        id = db.dbValor("id", "users", "name=? AND email=? AND password=? AND role_id=?", bind);
+                        session.setAttribute("userId", id);
+                        session.setAttribute("userRole", role);
                         session.setAttribute("msg", "Seja bem vindo " + name + "!");
                     } catch (Exception ex) {
                         throw new Exception(ex.getMessage());
+                    } finally {
+                        db.destroyDb();
                     }
                     break;
                 }
@@ -186,33 +180,59 @@ public class UserController extends HttpServlet {
                             session.setAttribute("selUser", null);
                             throw new Exception("Acesso não permitido!");
                         }
-                        User usuario = new User("", "", "", 2);
+                        User usuario;
+                        usuario = new User("", "", "", 2);
                         // define endereco
+                        MySql dbEnd = null;
                         try {
-                            usuario = (User) sql.find(Integer.parseInt(selUser));
+                            dbEnd = new MySql();
+                            String[] bindSel = {selUser};
+                            ResultSet ret = dbEnd.dbCarrega("SELECT * FROM users WHERE id=?", bindSel);
+                            if (ret.next()) {
+                                // preenche endereco
+                                usuario.setId(ret.getInt("id"));
+                                usuario.setName(ret.getString("name"));
+                                usuario.setPassword(ret.getString("password"));
+                                usuario.setEmail(ret.getString("email"));
+                                usuario.setRoleId(ret.getInt("role_id"));
+                            }
                         } catch (SQLException ex) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
+                        } finally {
+                            dbEnd.destroyDb();
                         }
                         // define atributo de produto
                         request.setAttribute("usuario", usuario);
                         redirect = "usuario-cadastro.jsp";
                     } else {
                         // define grid
-                        ArrayList<User> users = new ArrayList();
+                        MySql dbUsuarios = null;
                         try {
-                            ArrayList<BaseModel> result;
+                            dbUsuarios = new MySql();
+                            String consulta = "SELECT id,name,email FROM users";
+                            String[] bind = {userId};
                             // se for adm n insere filtro e define bind como null
                             if (session.getAttribute("userRole").equals("1")) {
-                                result = sql.all();
+                                bind = null;
                             } else {
-                                result = sql.select().where("id=" + userId).run();
+                                consulta += " WHERE id=?";
                             }
-                            result.forEach((u) -> {
-                                users.add((User) u);
-                            });
-                            request.setAttribute("usuarios", users);
+                            ArrayList<ArrayList> usuarios = new ArrayList<>();
+                            ResultSet ret = dbUsuarios.dbCarrega(consulta, bind);
+                            while (ret.next()) {
+                                ArrayList<String> row = new ArrayList<>();
+                                // preenche row
+                                row.add(ret.getString("id"));
+                                row.add(ret.getString("name"));
+                                row.add(ret.getString("email"));
+                                // add row no grid
+                                usuarios.add(row);
+                            }
+                            request.setAttribute("usuarios", usuarios);
                         } catch (SQLException ed) {
                             throw new Exception("Erro ao recuperar registros do banco: " + ed.getMessage());
+                        } finally {
+                            dbUsuarios.destroyDb();
                         }
                         redirect = "usuario-grid.jsp";
                     }
@@ -227,6 +247,7 @@ public class UserController extends HttpServlet {
             }
 
             request.getRequestDispatcher(redirect).forward(request, response);
+            return;
         } catch (Exception ex) {
             session.setAttribute("msg", ex.getMessage());
             response.sendRedirect("");
