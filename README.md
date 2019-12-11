@@ -20,8 +20,11 @@ UFF - Trabalho de Desenvolvimento Web (feito correndo devido ao pouco tempo para
 # Problemas
 ## Muito If
 * devido a pressa e a falta de necessidade de suporte ao longo do tempo optamos por encher os controllers de If`s ao invés de tratar cada necessidade de forma distinta a fim de modularizar mais nosso projeto
-## links quebrados
+## Links quebrados
 * o banco de dados foi abastecido por @caiowbarros , com isso, as imagens do banner da tela inicial não te leva a lugar algum
+## Mvc não está sendo respeitado
+* cada models devem ser criados para serem usados para atualizar, extrair e deletar dados do banco de dados
+* Atualizações estão sendo feitas direto nos controllers
 
 # Requisitos do Professor
 * Fazer uma loja virtual completa com carrinho de compras usando APENAS as tecnologias estudadas durante o curso (HTML, CSS, Javascript, JSP, Servlets, MVC, MySQL, XAMPP, Netbeans 8.2)
