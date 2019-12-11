@@ -19,7 +19,8 @@ UFF - Trabalho de Desenvolvimento Web (feito correndo devido ao pouco tempo para
 
 # Problemas
 ## Muito If
-* devido a pressa e a falta de necessidade de suporte ao longo do tempo optamos por encher os controllers de If`s ao invés de tratar cada necessidade de forma distinta a fim de modularizar mais nosso projeto
+* devido a pressa e a falta de necessidade de suporte ao longo do tempo optamos por encher os controllers de If`s
+ * tratar cada necessidade de forma distinta (modularizando mais nosso projeto) seria o ideal
 ## Links quebrados
 * o banco de dados foi abastecido por @caiowbarros , com isso, as imagens do banner da tela inicial não te leva a lugar algum
 ## Mvc não está sendo respeitado
