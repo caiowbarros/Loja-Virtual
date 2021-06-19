@@ -1,21 +1,12 @@
 # e-store
 UFF - Trabalho de Desenvolvimento Web (feito correndo devido ao pouco tempo para o desenvolvimento)
 
-# Requisito
-## Banco de Dados MySql
-* caso as credenciais estejam corretas, rode o script bd.sql na raiz do projeto para carregar as tabelas, procedures e triggers do nosso projeto
-### Com a configuração abaixo
-* nome
-  * test
-* usuario para acesso
-  * root
-* senha para acesso
-  * [STRING VAZIA]
-* host
-  * 127.0.0.1
-### Ou altere as credenciais de acesso ao Banco de Dados
-* localizada no arquivo
-  * /src/java/br/uff/dao/MySql.java
+# Como testar
+1. Configure seu banco de dados mysql no arquivo https://github.com/igor-lisboa/e-store/blob/master/src/main/java/br/uff/dao/MySql.java#L23
+2. Restaure o dump .sql no seu banco de dados escolhido presente em https://github.com/igor-lisboa/e-store/blob/master/bd.sql
+3. Rode `mvn package` para buildar o projeto
+4. Rode `java -jar target/endorsed/webapp-runner.jar --port 3005 target/loja-1.0-SNAPSHOT.war` para testar seu projeto, podendo trocar o `3005` pela porta que desejar
+5. Acesse http://localhost:3005/ e verifique se está funcionando
 
 # Problemas
 ## Muito If

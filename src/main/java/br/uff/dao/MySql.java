@@ -20,7 +20,7 @@ public class MySql {
     private Connection conn = null;
 
     public MySql() throws SQLException, ClassNotFoundException {
-        this.initDbMySql("test", "root", "");
+        this.initDbMySql("test", "root", "A123456");
     }
 
     public void dbTransaction(String[] comandos, String[][] bind) throws SQLException {
