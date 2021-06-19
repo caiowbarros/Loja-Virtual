@@ -1,16 +1,16 @@
 # Loja Virtual
 UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web (feito correndo devido ao pouco tempo para o desenvolvimento)
 
-# Instruções
-- Fazer uma loja virtual completa com carrinho de compras usando APENAS as seguintes tecnologias:
-  - HTML, CSS, JavaScript, JSP, Servlets, MVC, MySQL, XAMPP, Netbeans 8.2
-- A loja deve conter: 
-  - Usuários e gerenciamento de suas contas
-  - Cadastro de produtos
-  - Navegação de produtos
-  - Carrinho de compras (com a necessidade de login apenas na hora da finalização)
-  - Notas e avaliações para os produtos
-  - Lista de favoritos do usuário
+# Requisitos do Professor
+* Fazer uma loja virtual completa com carrinho de compras usando APENAS as tecnologias estudadas durante o curso (HTML, CSS, Javascript, JSP, Servlets, MVC, MySQL, XAMPP, Netbeans 8.2)
+* Com as características
+  * Usuários e gerenciamento de suas contas
+  * Cadastro de produtos (um usuário administrador pode inserir, alterar ou remover produtos)
+  * Navegação de produtos (5 produtos por página com paginação)
+  * Carrinho de compras com usuário requerido apenas no fechamento da compra
+  * Ranking ou estrelas para os produtos
+  * Avaliações dos usuários desses produtos
+  * Lista de produtos favoritos por usuário
 
 # Como testar
 1. Configure seu banco de dados mysql no arquivo https://github.com/igor-lisboa/e-store/blob/master/src/main/java/br/uff/dao/MySql.java#L23
@@ -28,14 +28,3 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web (feito corr
 ## Mvc não está sendo respeitado
 * cada models devem ser criados para serem usados para atualizar, extrair e deletar dados do banco de dados
 * Atualizações estão sendo feitas direto nos controllers
-
-# Requisitos do Professor
-* Fazer uma loja virtual completa com carrinho de compras usando APENAS as tecnologias estudadas durante o curso (HTML, CSS, Javascript, JSP, Servlets, MVC, MySQL, XAMPP, Netbeans 8.2)
-* Com as características
-  * Usuários e gerenciamento de suas contas
-  * Cadastro de produtos (um usuário administrador pode inserir, alterar ou remover produtos)
-  * Navegação de produtos (5 produtos por página com paginação)
-  * Carrinho de compras com usuário requerido apenas no fechamento da compra
-  * Ranking ou estrelas para os produtos
-  * Avaliações dos usuários desses produtos
-  * Lista de produtos favoritos por usuário
