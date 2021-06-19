@@ -1,5 +1,16 @@
-# e-store
-UFF - Trabalho de Desenvolvimento Web (feito correndo devido ao pouco tempo para o desenvolvimento)
+# Loja Virtual
+UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web (feito correndo devido ao pouco tempo para o desenvolvimento)
+
+# Instruções
+- Fazer uma loja virtual completa com carrinho de compras usando APENAS as seguintes tecnologias:
+  - HTML, CSS, JavaScript, JSP, Servlets, MVC, MySQL, XAMPP, Netbeans 8.2
+- A loja deve conter: 
+  - Usuários e gerenciamento de suas contas
+  - Cadastro de produtos
+  - Navegação de produtos
+  - Carrinho de compras (com a necessidade de login apenas na hora da finalização)
+  - Notas e avaliações para os produtos
+  - Lista de favoritos do usuário
 
 # Como testar
 1. Configure seu banco de dados mysql no arquivo https://github.com/igor-lisboa/e-store/blob/master/src/main/java/br/uff/dao/MySql.java#L23
