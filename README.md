@@ -5,8 +5,8 @@ UFF - Trabalho de Desenvolvimento Web (feito correndo devido ao pouco tempo para
 1. Configure seu banco de dados mysql no arquivo https://github.com/igor-lisboa/e-store/blob/master/src/main/java/br/uff/dao/MySql.java#L23
 2. Restaure o dump .sql no seu banco de dados escolhido presente em https://github.com/igor-lisboa/e-store/blob/master/bd.sql
 3. Rode `mvn package` para buildar o projeto
-4. Rode `java -jar target/endorsed/webapp-runner.jar --port 3005 target/loja-1.0-SNAPSHOT.war` para testar seu projeto, podendo trocar o `3005` pela porta que desejar
-5. Acesse http://localhost:3005/ e verifique se está funcionando
+4. Rode `java -jar target/endorsed/webapp-runner.jar --port $PORT target/loja-1.0-SNAPSHOT.war` para testar seu projeto, trocando o `$PORT` pela porta que desejar
+5. Acesse http://localhost:`$PORT` e verifique se está funcionando
 
 # Problemas
 ## Muito If
