@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+    e_store:
+        image: maven:3.6-openjdk-8
+        container_name: e_store_mvn
+        environment:
+            - PORT=8181
+        volumes:
+          - ./:/var/app
+        working_dir: /var/app
+        ports:
+          - 8181:8181
