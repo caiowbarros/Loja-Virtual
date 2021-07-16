@@ -12,6 +12,8 @@ File Encoding         : 65001
 
 Date: 2019-10-16 18:35:32
 */
+CREATE DATABASE IF NOT EXISTS e_store;
+USE e_store;
 
 SET FOREIGN_KEY_CHECKS=0;
 

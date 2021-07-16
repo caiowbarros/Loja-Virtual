@@ -20,7 +20,7 @@ public class MySql {
     private Connection conn = null;
 
     public MySql() throws SQLException, ClassNotFoundException {
-        this.initDbMySql("test", "root", "A123456");
+        this.initDbMySql("e_store_mysql", "3306", "e_store", "e_store", "123456");
     }
 
     public void dbTransaction(String[] comandos, String[][] bind) throws SQLException {
@@ -73,10 +73,10 @@ public class MySql {
         return rs;
     }
 
-    private void initDbMySql(String dataBase, String nomeUsuario, String senhaUsuario)
+    private void initDbMySql(String host, String port, String dataBase, String nomeUsuario, String senhaUsuario)
             throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dataBase, nomeUsuario, senhaUsuario);
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        this.conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dataBase, nomeUsuario, senhaUsuario);
     }
 
     public void destroyDb() throws SQLException {

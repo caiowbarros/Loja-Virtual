@@ -1,12 +1,28 @@
 version: "3.5"
 services:
-    e_store:
-        image: maven:3.6-openjdk-8
-        container_name: e_store_mvn
-        environment:
-            - PORT=8181
-        volumes:
-          - ./:/var/app
-        working_dir: /var/app
-        ports:
-          - 8181:8181
+  e_store_mvn:
+    image: maven:3.6-jdk-8
+    container_name: e_store_mvn
+    environment:
+      - PORT=8181
+    command: /bin/sh -c "rm -R target -f && mvn package && java -jar target/endorsed/webapp-runner.jar --port 8181 target/loja-1.0.war"
+    volumes:
+      - ./:/var/app
+    working_dir: /var/app
+    ports:
+      - 8181:8181
+    depends_on: 
+      - e_store_mysql
+  e_store_mysql:
+    image: mysql:5.6
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+    container_name: e_store_mysql
+    environment:
+      - MYSQL_DATABASE=e_store
+      - MYSQL_USER=e_store
+      - MYSQL_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=123456
+    
