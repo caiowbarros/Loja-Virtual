@@ -49,3 +49,5 @@ buildtools/globalization/default.rpxconfig
 derby.log
 
 .recommenders
+
+.vscode
