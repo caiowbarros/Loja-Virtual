@@ -1,4 +1,4 @@
-package br.uff.infrastructure.database;
+package br.uff.loja.infrastructure.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,13 +12,9 @@ import java.util.HashMap;
 public class MySQLDAO {
     private Connection conn = null;
 
-    public MySQLDAO()
-            throws SQLException {
-        this.conn = DriverManager.getConnection(dataSourceUrl, dataSourceUsername, dataSourcePassword);
-    }
-
     public void dbTransaction(String[] comandos, Object[][] bind) throws SQLException {
         try {
+            this.abreConexao();
             this.conn.setAutoCommit(false);
             Integer aux = 0;
             for (String comando : comandos) {
@@ -38,15 +34,17 @@ public class MySQLDAO {
     }
 
     public void dbGrava(String comando, Object[] bind, Boolean ehTransacao) throws SQLException {
+        this.abreConexao();
         PreparedStatement sql = this.montaComando(comando, bind);
         sql.executeUpdate();
         this.fechaComando(sql);
-        if (ehTransacao) {
+        if (!Boolean.TRUE.equals(ehTransacao)) {
             this.fechaConexao();
         }
     }
 
     public Object dbValor(String campo, String tabela, String filtro, Object[] bind) throws SQLException {
+        this.abreConexao();
         if (!tabela.toUpperCase().startsWith("SELECT")) {
             tabela = "SELECT * FROM " + tabela;
         }
@@ -60,7 +58,7 @@ public class MySQLDAO {
         ResultSet resultado = sql.executeQuery();
         ArrayList<HashMap<String, Object>> ret = this.transformResultSetInArrayListHashMap(resultado);
         this.fechaComando(sql);
-        if (ret.size() > 0) {
+        if (!ret.isEmpty()) {
             HashMap<String, Object> row = ret.get(0);
             // pega primeira coluna da primeira row
             return row.values().toArray()[0];
@@ -70,6 +68,7 @@ public class MySQLDAO {
     }
 
     public ArrayList<HashMap<String, Object>> dbCarrega(String consulta, Object[] bind) throws SQLException {
+        this.abreConexao();
         PreparedStatement sql = this.montaComando(consulta, bind);
         ResultSet rs = sql.executeQuery();
         ArrayList<HashMap<String, Object>> ret = this.transformResultSetInArrayListHashMap(rs);
@@ -98,6 +97,13 @@ public class MySQLDAO {
             comando = this.setBind(comando, bind);
         }
         return comando;
+    }
+
+    public void abreConexao() throws SQLException {
+        if (this.conn != null && !this.conn.isClosed()) {
+            return;
+        }
+        this.conn = DriverManager.getConnection("mysql://<username>:<password>@<host>:<port>/<db_name>");
     }
 
     public void fechaConexao() throws SQLException {

@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.uff.application.controllers;
+package br.uff.loja.application.controllers;
 
-import br.uff.dao.MySql;
+import br.uff.loja.infrastructure.database.MySQLDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,7 +59,7 @@ public class AvaliacaoController extends HttpServlet {
             if (session.getAttribute("produtoId") != null) {
                 produtoId = session.getAttribute("produtoId").toString();
                 int qtdAvaliacoes;
-                MySql validador = null;
+                MySQLDAO validador = null;
                 try {
                     validador = new MySql();
                     String[] bindValidador = {userId, produtoId};
@@ -89,14 +88,14 @@ public class AvaliacaoController extends HttpServlet {
             switch (action) {
                 case "avalia": {
                     // grava avaliacao do produto
-                    MySql db = null;
+                    MySQLDAO db = null;
                     try {
-                        db = new MySql();
+                        db = new MySQLDAO();
                         //RECUPERA VALUES
                         String rating = session.getAttribute("rating").toString();
                         String description = request.getParameter("description").toString();
                         String title = request.getParameter("title").toString();
-                        String[] bind = {userId, produtoId, rating, description, title};
+                        Object[] bind = {userId, produtoId, rating, description, title};
                         db.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind);
                         // define msg a ser mostrada
                         session.setAttribute("msg", "Produto avaliado com sucesso!");
