@@ -3,14 +3,20 @@ package br.uff.loja.core.services;
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.interfaces.data.IAvaliacaoProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
+import br.uff.loja.infrastructure.data.AvaliacaoProdutoData;
 
 public class AvaliacaoService implements IAvaliacaoService {
     private IAvaliacaoProdutoData avaliacaoProdutoData;
 
+    public AvaliacaoService() {
+        avaliacaoProdutoData = new AvaliacaoProdutoData();
+    }
+
     @Override
-    public void avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
+    public Integer avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
         if(!avaliacaoProdutoData.jaFoiAvaliado(avaliacaoProdutoInsertDTO.usuarioId, avaliacaoProdutoInsertDTO.produtoId)) {
-            avaliacaoProdutoData.insereAvaliacaoDoProduto(avaliacaoProdutoInsertDTO);
+            return avaliacaoProdutoData.insereAvaliacaoDoProduto(avaliacaoProdutoInsertDTO);
         }
+        throw new Exception("O produto de id: " + avaliacaoProdutoInsertDTO.produtoId + " já foi avaliado!");
     }
 }

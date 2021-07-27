@@ -33,14 +33,15 @@ public class MySQLDAO {
         }
     }
 
-    public void dbGrava(String comando, Object[] bind, Boolean ehTransacao) throws SQLException {
+    public Integer dbGrava(String comando, Object[] bind, Boolean ehTransacao) throws SQLException {
         this.abreConexao();
         PreparedStatement sql = this.montaComando(comando, bind);
-        sql.executeUpdate();
+        Integer retorno = sql.executeUpdate();
         this.fechaComando(sql);
         if (!Boolean.TRUE.equals(ehTransacao)) {
             this.fechaConexao();
         }
+        return retorno;
     }
 
     public Object dbValor(String campo, String tabela, String filtro, Object[] bind) throws SQLException {
@@ -103,7 +104,7 @@ public class MySQLDAO {
         if (this.conn != null && !this.conn.isClosed()) {
             return;
         }
-        this.conn = DriverManager.getConnection("mysql://<username>:<password>@<host>:<port>/<db_name>");
+        this.conn = DriverManager.getConnection("jdbc:mysql://e_store:123456@localhost:3306/e_store");
     }
 
     public void fechaConexao() throws SQLException {

@@ -30,10 +30,10 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
     }
 
     @Override
-    public void insereAvaliacaoDoProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
+    public Integer insereAvaliacaoDoProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
         try {
             Object[] bind = {avaliacaoProdutoInsertDTO.usuarioId, avaliacaoProdutoInsertDTO.produtoId, avaliacaoProdutoInsertDTO.rating, avaliacaoProdutoInsertDTO.description, avaliacaoProdutoInsertDTO.title};
-            this.mysqlDAO.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind, false);
+            return this.mysqlDAO.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind, false);
         } catch (SQLException e) {
             throw new Exception("Falha ao Inserir a Avaliação do usuário de id: " + avaliacaoProdutoInsertDTO.usuarioId + " para o Produto de id: " + avaliacaoProdutoInsertDTO.produtoId + ". (" + e.getMessage() + ")");
         } finally {
