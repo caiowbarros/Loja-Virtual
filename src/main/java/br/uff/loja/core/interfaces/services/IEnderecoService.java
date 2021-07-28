@@ -5,9 +5,9 @@ import java.util.List;
 import br.uff.loja.core.dtos.EnderecoDTO;
 
 public interface IEnderecoService {
-    public EnderecoDTO encontraEnderecoPorId(Integer id);
-    public Integer excluiEnderecoPorId(Integer id);
-    public Integer atualizaEnderecoPorId(Integer id, EnderecoDTO endereco);
-    public Integer insereEndereco(EnderecoDTO endereco);
-    public List<EnderecoDTO> listaEnderecosPorUsuarioId(Integer usuarioId);
+    public EnderecoDTO encontraEnderecoPorId(Integer id) throws Exception;
+    public Integer excluiEnderecoPorId(Integer id) throws Exception;
+    public Integer atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws Exception;
+    public Integer insereEndereco(EnderecoDTO endereco) throws Exception;
+    public List<EnderecoDTO> listaEnderecosPorUsuarioId(Integer usuarioId) throws Exception;
 }

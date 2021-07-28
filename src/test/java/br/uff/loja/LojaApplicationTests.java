@@ -11,6 +11,7 @@ import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.services.AvaliacaoService;
+import br.uff.loja.core.services.EnderecoService;
 
 public class LojaApplicationTests {
     @Test
@@ -34,7 +35,8 @@ public class LojaApplicationTests {
         assertEquals("O produto de id: 3 já foi avaliado!", exMessage);
     }
 
-    public void testaInclusaoEndereco() {
+    @Test
+    public void testaInclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
 
         EnderecoDTO endereco = new EnderecoDTO();
@@ -49,7 +51,8 @@ public class LojaApplicationTests {
         enderecoService.insereEndereco(endereco);
     }
 
-    public void testaUpdateEndereco() {
+    @Test
+    public void testaUpdateEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
 
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
@@ -59,7 +62,8 @@ public class LojaApplicationTests {
         enderecoService.atualizaEnderecoPorId(primeiroEndereco.id, primeiroEndereco);
     }
 
-    public void testaExclusaoEndereco() {
+    @Test
+    public void testaExclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
