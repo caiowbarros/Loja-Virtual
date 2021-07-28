@@ -16,10 +16,10 @@ public class LojaApplicationTests {
             IAvaliacaoService avaliacaoService = new AvaliacaoService();
             AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO();
             avaliacaoProdutoInsertDTO.usuarioId = 1;
-            avaliacaoProdutoInsertDTO.description = "Testando descrição!";
+            avaliacaoProdutoInsertDTO.descricao = "Testando descrição!";
             avaliacaoProdutoInsertDTO.produtoId = 3;
-            avaliacaoProdutoInsertDTO.rating = "4";
-            avaliacaoProdutoInsertDTO.title = "Tô testando pois se gravar 2 vezes deu merda!";
+            avaliacaoProdutoInsertDTO.avaliacao = "4";
+            avaliacaoProdutoInsertDTO.titulo = "Tô testando pois se gravar 2 vezes deu merda!";
             
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
