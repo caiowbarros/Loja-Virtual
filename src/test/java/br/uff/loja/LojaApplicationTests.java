@@ -25,7 +25,7 @@ public class LojaApplicationTests {
             avaliacaoProdutoInsertDTO.descricao = "Testando descrição!";
             avaliacaoProdutoInsertDTO.produtoId = 3;
             avaliacaoProdutoInsertDTO.avaliacao = "4";
-            avaliacaoProdutoInsertDTO.titulo = "Tô testando pois se gravar 2 vezes deu merda!";
+            avaliacaoProdutoInsertDTO.titulo = "Tô testando pois se gravar 2 vezes deu ruim!";
             
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
