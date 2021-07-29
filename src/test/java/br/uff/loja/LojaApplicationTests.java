@@ -42,13 +42,15 @@ public class LojaApplicationTests {
         EnderecoDTO endereco = new EnderecoDTO();
         endereco.nome = "Casa";
         endereco.logradouro = "Avenida Almirante Ary Parreiras, 6";
-        endereco.cep = "24230-322";
+        endereco.cep = 24230322;
         endereco.cidade = "Niterói";
         endereco.estado = "RJ";
         endereco.pais = "Brasil";
         endereco.usuarioId = 1;
 
-        enderecoService.insereEndereco(endereco);
+        Integer retorno = enderecoService.insereEndereco(endereco);
+
+        assertEquals("1", String.valueOf(retorno));
     }
 
     @Test
@@ -60,6 +62,8 @@ public class LojaApplicationTests {
         primeiroEndereco.nome += "x";
 
         enderecoService.atualizaEnderecoPorId(primeiroEndereco.id, primeiroEndereco);
+        
+        assertEquals(primeiroEndereco.toJson(), enderecoService.encontraEnderecoPorId(primeiroEndereco.id).toJson());
     }
 
     @Test
@@ -68,8 +72,8 @@ public class LojaApplicationTests {
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
 
-        enderecoService.excluiEnderecoPorId(primeiroEndereco.id);
+        Integer retorno = enderecoService.excluiEnderecoPorId(primeiroEndereco.id);
 
-        enderecoService.encontraEnderecoPorId(primeiroEndereco.id);
+        assertEquals("1", String.valueOf(retorno));
     }
 }

@@ -1,6 +1,5 @@
 package br.uff.loja.infrastructure.data;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,7 +21,7 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
             Object[] bind = {usuarioId, produtoId};
             Integer qtdAvaliacoes = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "user_produts_rating", "user_id=? AND product_id=?", bind)));
             return qtdAvaliacoes > 0;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new Exception("Falha ao recuperar quantidade de avaliacoes do usuário para o produto: " + e.getMessage());
         } finally {
             this.mysqlDAO.destroyDb();
@@ -34,7 +33,7 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
         try {
             Object[] bind = {avaliacaoProdutoInsertDTO.usuarioId, avaliacaoProdutoInsertDTO.produtoId, avaliacaoProdutoInsertDTO.avaliacao, avaliacaoProdutoInsertDTO.descricao, avaliacaoProdutoInsertDTO.titulo};
             return this.mysqlDAO.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind, false);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new Exception("Falha ao Inserir a Avaliação do usuário de id: " + avaliacaoProdutoInsertDTO.usuarioId + " para o Produto de id: " + avaliacaoProdutoInsertDTO.produtoId + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
@@ -58,7 +57,7 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
                 retornoFormatado.add(novaAvaliacao);
             });
             return retornoFormatado;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());
         } finally {
             this.mysqlDAO.destroyDb();
