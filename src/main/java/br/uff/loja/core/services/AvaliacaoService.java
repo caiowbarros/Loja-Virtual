@@ -1,6 +1,9 @@
 package br.uff.loja.core.services;
 
+import java.util.List;
+
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
+import br.uff.loja.core.dtos.AvaliacaoProdutoListDTO;
 import br.uff.loja.core.interfaces.data.IAvaliacaoProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.infrastructure.data.AvaliacaoProdutoData;
@@ -18,5 +21,10 @@ public class AvaliacaoService implements IAvaliacaoService {
             return avaliacaoProdutoData.insereAvaliacaoDoProduto(avaliacaoProdutoInsertDTO);
         }
         throw new Exception("O produto de id: " + avaliacaoProdutoInsertDTO.produtoId + " já foi avaliado!");
+    }
+
+    @Override
+    public List<AvaliacaoProdutoListDTO> recuperaAvaliacoesDeUmProduto(Integer produtoId) throws Exception {
+        return avaliacaoProdutoData.recuperaAvaliacoesDeUmProduto(produtoId);
     }
 }

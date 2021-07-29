@@ -48,10 +48,10 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
             ArrayList<AvaliacaoProdutoListDTO> retornoFormatado = new ArrayList<AvaliacaoProdutoListDTO>();
             retornoDesformatado.forEach((avaliacao) -> {
                 AvaliacaoProdutoListDTO novaAvaliacao = new AvaliacaoProdutoListDTO();
-                novaAvaliacao.avaliador = String.valueOf(avaliacao.get("avaliador"));
-                novaAvaliacao.avaliacaoTitulo = String.valueOf(avaliacao.get("avaliacaoTitulo"));
-                novaAvaliacao.avaliacao = Integer.valueOf(String.valueOf(avaliacao.get("avaliacao")));
-                novaAvaliacao.avaliacaoDescricao = String.valueOf(avaliacao.get("avaliacaoDescricao"));
+                novaAvaliacao.avaliador = String.valueOf(avaliacao.get("name"));
+                novaAvaliacao.avaliacaoTitulo = String.valueOf(avaliacao.get("title"));
+                novaAvaliacao.avaliacao = String.valueOf(avaliacao.get("rating"));
+                novaAvaliacao.avaliacaoDescricao = String.valueOf(avaliacao.get("description"));
                 novaAvaliacao.avaliacaoData = String.valueOf(avaliacao.get("avaliacaoData"));
                 novaAvaliacao.avaliacaoDataSimples = String.valueOf(avaliacao.get("avaliacaoDataSimples"));
                 retornoFormatado.add(novaAvaliacao);

@@ -17,13 +17,15 @@ public class LojaApplicationTests {
     @Test
     public void testaAvaliacaoDuplicada() throws Exception {
         String exMessage = "";
-        try {
-            IAvaliacaoService avaliacaoService = new AvaliacaoService();
+        IAvaliacaoService avaliacaoService = new AvaliacaoService();
+        Integer produtoId = 3;
+        Integer usuarioId = 1;
 
+        try {
             AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO();
-            avaliacaoProdutoInsertDTO.usuarioId = 1;
+            avaliacaoProdutoInsertDTO.usuarioId = usuarioId;
             avaliacaoProdutoInsertDTO.descricao = "Testando descrição!";
-            avaliacaoProdutoInsertDTO.produtoId = 3;
+            avaliacaoProdutoInsertDTO.produtoId = produtoId;
             avaliacaoProdutoInsertDTO.avaliacao = "4";
             avaliacaoProdutoInsertDTO.titulo = "Tô testando pois se gravar 2 vezes deu ruim!";
             
@@ -32,6 +34,11 @@ public class LojaApplicationTests {
         } catch (Exception ex) {
             exMessage = ex.getMessage();
         }
+
+        if(avaliacaoService.recuperaAvaliacoesDeUmProduto(produtoId).isEmpty()) {
+            throw new Exception("A avaliação para o produto de id: " + produtoId + ", não foi realizada!");
+        }
+
         assertEquals("O produto de id: 3 já foi avaliado!", exMessage);
     }
 
