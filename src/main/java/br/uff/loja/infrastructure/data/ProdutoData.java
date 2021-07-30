@@ -16,27 +16,27 @@ public class ProdutoData implements IProdutoData {
     }
 
     @Override
-    public Integer excluiProdutoPorId(Integer id) throws LojaException {
+    public void excluiProdutoPorId(Integer id) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
-    public Integer atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException {
+    public void atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
-    public Integer insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException {
+    public void insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
-    public Integer insereProduto(ProdutoDTO produto) throws LojaException {
+    public void insereProduto(ProdutoDTO produto) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
@@ -65,15 +65,16 @@ public class ProdutoData implements IProdutoData {
     }
 
     @Override
-    public Integer removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
+    public void removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
-    public Integer adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
+    public void adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
         // TODO Auto-generated method stub
-        return null;
+        
     }
-    
+
+
 }

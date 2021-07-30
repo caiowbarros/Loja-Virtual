@@ -11,48 +11,56 @@ public class ProdutoService implements IProdutoService {
 
     @Override
     public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException {
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Integer excluiProdutoPorId(Integer id) throws LojaException {
+    public void excluiProdutoPorId(Integer id) throws LojaException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public ProdutoDTO atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException {
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Integer atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException {
-        return null;
+    public void insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public Integer insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException {
-        return null;
+    public void insereProduto(ProdutoDTO produto) throws LojaException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public Integer insereProduto(ProdutoDTO produto) throws LojaException {
-        return null;
-    }
-
-    @Override
-    public Integer usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException {
-        return null;
+    public void usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException {
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<ProdutoDTO> listaProdutosVitrine() throws LojaException {
+    public List<ProdutoVitrineUsuarioDTO> listaProdutosVitrine() throws LojaException {
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId)
             throws LojaException {
+        // TODO Auto-generated method stub
         return null;
     }
-    
 }

@@ -8,14 +8,14 @@ import br.uff.loja.core.exceptions.LojaException;
 
 public interface IProdutoData {
     public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException;
-    public Integer excluiProdutoPorId(Integer id) throws LojaException;
-    public Integer atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException;
-    public Integer insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException;
-    public Integer insereProduto(ProdutoDTO produto) throws LojaException;
+    public void excluiProdutoPorId(Integer id) throws LojaException;
+    public void atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException;
+    public void insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException;
+    public void insereProduto(ProdutoDTO produto) throws LojaException;
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException;
     public List<ProdutoDTO> listaProdutosVitrine() throws LojaException;
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException;
     public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
-    public Integer removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
-    public Integer adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
+    public void removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
+    public void adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
 }
