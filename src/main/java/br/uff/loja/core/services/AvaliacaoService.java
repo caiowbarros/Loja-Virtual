@@ -17,10 +17,10 @@ public class AvaliacaoService implements IAvaliacaoService {
 
     @Override
     public Integer avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
-        if(Boolean.FALSE.equals(avaliacaoProdutoData.jaFoiAvaliado(avaliacaoProdutoInsertDTO.usuarioId, avaliacaoProdutoInsertDTO.produtoId))) {
+        if(Boolean.FALSE.equals(avaliacaoProdutoData.jaFoiAvaliado(avaliacaoProdutoInsertDTO.getUsuarioId(), avaliacaoProdutoInsertDTO.getProdutoId()))) {
             return avaliacaoProdutoData.insereAvaliacaoDoProduto(avaliacaoProdutoInsertDTO);
         }
-        throw new Exception("O produto de id: " + avaliacaoProdutoInsertDTO.produtoId + " já foi avaliado!");
+        throw new Exception("O produto de id: " + avaliacaoProdutoInsertDTO.getProdutoId() + " já foi avaliado!");
     }
 
     @Override

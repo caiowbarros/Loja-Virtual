@@ -31,10 +31,10 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
     @Override
     public Integer insereAvaliacaoDoProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception {
         try {
-            Object[] bind = {avaliacaoProdutoInsertDTO.usuarioId, avaliacaoProdutoInsertDTO.produtoId, avaliacaoProdutoInsertDTO.avaliacao, avaliacaoProdutoInsertDTO.descricao, avaliacaoProdutoInsertDTO.titulo};
+            Object[] bind = {avaliacaoProdutoInsertDTO.getUsuarioId(), avaliacaoProdutoInsertDTO.getProdutoId(), avaliacaoProdutoInsertDTO.getAvaliacao(), avaliacaoProdutoInsertDTO.getDescricao(), avaliacaoProdutoInsertDTO.getTitulo()};
             return this.mysqlDAO.dbGrava("INSERT INTO user_produts_rating (user_id,product_id,rating,description,title,created_at) VALUES (?,?,?,?,?,SYSDATE())", bind, false);
         } catch (Exception e) {
-            throw new Exception("Falha ao Inserir a Avaliação do usuário de id: " + avaliacaoProdutoInsertDTO.usuarioId + " para o Produto de id: " + avaliacaoProdutoInsertDTO.produtoId + ". (" + e.getMessage() + ")");
+            throw new Exception("Falha ao Inserir a Avaliação do usuário de id: " + avaliacaoProdutoInsertDTO.getUsuarioId() + " para o Produto de id: " + avaliacaoProdutoInsertDTO.getProdutoId() + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
@@ -46,16 +46,7 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
             Object[] bind = {produtoId};
             ArrayList<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT  u.`name` AS avaliador,  r.title AS avaliacaoTitulo,  r.rating AS avaliacao,  r.description AS avaliacaoDescricao,  DATE_FORMAT(r.created_at, '%M %d, %Y') AS avaliacaoData,  DATE_FORMAT(r.created_at, '%d/%m/%Y') AS avaliacaoDataSimples  FROM  user_produts_rating r  LEFT JOIN users u ON (r.user_id = u.id)  WHERE  r.product_id = ?  ORDER BY  r.created_at", bind);
             ArrayList<AvaliacaoProdutoListDTO> retornoFormatado = new ArrayList<>();
-            retornoDesformatado.forEach(avaliacao -> {
-                AvaliacaoProdutoListDTO novaAvaliacao = new AvaliacaoProdutoListDTO();
-                novaAvaliacao.avaliador = String.valueOf(avaliacao.get("name"));
-                novaAvaliacao.avaliacaoTitulo = String.valueOf(avaliacao.get("title"));
-                novaAvaliacao.avaliacao = String.valueOf(avaliacao.get("rating"));
-                novaAvaliacao.avaliacaoDescricao = String.valueOf(avaliacao.get("description"));
-                novaAvaliacao.avaliacaoData = String.valueOf(avaliacao.get("avaliacaoData"));
-                novaAvaliacao.avaliacaoDataSimples = String.valueOf(avaliacao.get("avaliacaoDataSimples"));
-                retornoFormatado.add(novaAvaliacao);
-            });
+            retornoDesformatado.forEach(avaliacao -> retornoFormatado.add(new AvaliacaoProdutoListDTO(avaliacao)));
             return retornoFormatado;
         } catch (Exception ex) {
             throw new Exception("Erro ao recuperar registros do banco: " + ex.getMessage());

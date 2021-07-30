@@ -43,7 +43,7 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public Integer atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws Exception {
         try {
-            Object[] bind = {endereco.nome,endereco.cep,endereco.logradouro,endereco.cidade,endereco.estado,endereco.cidade,endereco.id};
+            Object[] bind = {endereco.getNome(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade(),endereco.getId()};
             return this.mysqlDAO.dbGrava("UPDATE address SET name=?, zipcode=?, address=?, city=?, state=?, country=? WHERE id=?", bind, false);
         } catch (Exception e) {
             throw new Exception("Falha ao Atualizar o Endereço de id: " + id + ". (" + e.getMessage() + ")");
@@ -55,10 +55,10 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public Integer insereEndereco(EnderecoDTO endereco) throws Exception {
         try {
-            Object[] bind = {endereco.nome,endereco.usuarioId,endereco.cep,endereco.logradouro,endereco.cidade,endereco.estado,endereco.cidade};
+            Object[] bind = {endereco.getNome(),endereco.getUsuarioId(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade()};
             return this.mysqlDAO.dbGrava("INSERT INTO address (name,user_id,zipcode,address,city,state,country) VALUES (?,?,?,?,?,?,?)", bind, false);
         } catch (Exception e) {
-            throw new Exception("Falha ao Inserir o Endereço de para o Usuário de id: " + endereco.usuarioId + ". (" + e.getMessage() + ")");
+            throw new Exception("Falha ao Inserir o Endereço de para o Usuário de id: " + endereco.getUsuarioId() + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
@@ -69,11 +69,8 @@ public class EnderecoData implements IEnderecoData {
         try {
             Object[] bind = {usuarioId};
             ArrayList<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, user_id AS usuarioId, zipcode AS cep, address AS logradouro, city AS cidade, state AS estado, country AS pais FROM address WHERE user_id=?", bind);
-            ArrayList<EnderecoDTO> retornoFormatado = new ArrayList<EnderecoDTO>();
-            retornoDesformatado.forEach((endereco) -> {
-                retornoFormatado.add(new EnderecoDTO(endereco));
-            });
-            
+            ArrayList<EnderecoDTO> retornoFormatado = new ArrayList<>();
+            retornoDesformatado.forEach(endereco -> retornoFormatado.add(new EnderecoDTO(endereco)));
             return retornoFormatado;
         } catch (Exception e) {
             throw new Exception("Falha a Lista de Endereços para o usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
