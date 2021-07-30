@@ -1,6 +1,6 @@
 package br.uff.loja.core.dtos;
 
-public class ProdutoDTO extends BaseDTO {
+public class ProdutoDTO extends BaseDTO {    
     private Integer id;
     private String nome;
     private Double preco;

@@ -1,6 +1,7 @@
 package br.uff.loja;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 
@@ -8,10 +9,15 @@ import org.junit.Test;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.dtos.EnderecoDTO;
+import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
+import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.core.services.AvaliacaoService;
 import br.uff.loja.core.services.EnderecoService;
+import br.uff.loja.core.services.ProdutoService;
+import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class LojaApplicationTests {
     @Test
@@ -43,10 +49,10 @@ public class LojaApplicationTests {
 
         Integer usuarioId = 1;
 
-        Integer qtdEnderecosEsperadosDoUser = enderecoService.listaEnderecosPorUsuarioId(usuarioId).size();
+        Integer qtdEnderecosAntesInsercao = enderecoService.listaEnderecosPorUsuarioId(usuarioId).size();
         enderecoService.insereEndereco(new EnderecoDTO("Casa",usuarioId,24230322,"Avenida Almirante Ary Parreiras, 6","Niterói","RJ","Brasil"));
 
-        assertEquals(String.valueOf(qtdEnderecosEsperadosDoUser + 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
+        assertEquals(String.valueOf(qtdEnderecosAntesInsercao + 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
     }
 
     @Test
@@ -65,11 +71,75 @@ public class LojaApplicationTests {
     @Test
     public void testaExclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
-        List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
+        Integer usuarioId = 1;
+        List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
 
-        Integer retorno = enderecoService.excluiEnderecoPorId(primeiroEndereco.getId());
+        enderecoService.excluiEnderecoPorId(primeiroEndereco.getId());
 
-        assertEquals("1", String.valueOf(retorno));
+        assertEquals(String.valueOf(enderecosDoUsuario.size() - 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
+    }
+
+
+    @Test
+    public void testaInclusaoProduto() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+
+        Integer qtdProdutosAntesInsercao = produtoService.listaProdutosAdm().size();
+        produtoService.insereProduto(new ProdutoDTO());
+
+        assertEquals(String.valueOf(qtdProdutosAntesInsercao + 1), String.valueOf(produtoService.listaProdutosAdm().size()));
+    }
+
+    @Test
+    public void testaUpdateProduto() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+
+        ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+        primeiroProduto.setNome(primeiroProduto.getNome() + "x");
+
+        produtoService.atualizaProdutoPorId(primeiroProduto.getId(), primeiroProduto);
+        
+        assertEquals(primeiroProduto.toJson(), produtoService.encontraProdutoPorId(primeiroProduto.getId()).toJson());
+    }
+
+    @Test
+    public void testaIncrementoDaQuantidadeDeEstoque() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+
+        Integer quantidadeIncremento = 2;
+
+        ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+        produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), quantidadeIncremento);
+
+        assertEquals(String.valueOf(primeiroProduto.getQuantidade() + quantidadeIncremento), String.valueOf(produtoService.encontraProdutoPorId(primeiroProduto.getId()).getQuantidade()));
+    }
+
+    @Test
+    public void testaToogleFavoritaProduto() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+        IProdutoData produtoData = new ProdutoData();
+
+        Integer usuarioId = 1;
+        Integer produtoId = 2;
+
+        Boolean antes = produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
+        ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+        
+        produtoService.usuarioToogleFavoritaProdutoPorId(primeiroProduto.getId(), usuarioId);
+        Boolean depois = produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
+
+        assertNotEquals(String.valueOf(antes), String.valueOf(depois));
+    }
+
+    @Test
+    public void testaExclusaoProduto() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+        List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
+        ProdutoDTO primeiroProduto = produtos.get(0);
+
+        produtoService.excluiProdutoPorId(primeiroProduto.getId());
+
+        assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(produtoService.listaProdutosAdm().size()));
     }
 }
