@@ -4,15 +4,16 @@ import java.util.List;
 
 import br.uff.loja.core.dtos.ProdutoDTO;
 import br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO;
+import br.uff.loja.core.exceptions.LojaException;
 
 public interface IProdutoData {
-    public ProdutoDTO encontraProdutoPorId(Integer id) throws Exception;
-    public Integer excluiProdutoPorId(Integer id) throws Exception;
-    public Integer atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws Exception;
-    public Integer insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws Exception;
-    public Integer insereProduto(ProdutoDTO produto) throws Exception;
-    public Integer usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws Exception;
-    public List<ProdutoDTO> listaProdutosAdm() throws Exception;
-    public List<ProdutoDTO> listaProdutosVitrine() throws Exception;
-    public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws Exception;
+    public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException;
+    public Integer excluiProdutoPorId(Integer id) throws LojaException;
+    public Integer atualizaProdutoPorId(Integer id, ProdutoDTO produto) throws LojaException;
+    public Integer insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException;
+    public Integer insereProduto(ProdutoDTO produto) throws LojaException;
+    public Integer usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException;
+    public List<ProdutoDTO> listaProdutosAdm() throws LojaException;
+    public List<ProdutoDTO> listaProdutosVitrine() throws LojaException;
+    public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException;
 }

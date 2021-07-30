@@ -8,6 +8,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import br.uff.loja.core.exceptions.LojaException;
 
 public class MySQLDAO {
     private Connection conn = null;
@@ -45,7 +48,6 @@ public class MySQLDAO {
     }
 
     public Object dbValor(String campo, String tabela, String filtro, Object[] bind) throws SQLException {
-        this.abreConexao();
         if (!tabela.toUpperCase().startsWith("SELECT")) {
             tabela = "SELECT * FROM " + tabela;
         }
@@ -54,32 +56,30 @@ public class MySQLDAO {
         }
         String consulta = "SELECT " + campo + " FROM (" + tabela + ") _x2";
 
-        PreparedStatement sql;
-        sql = this.montaComando(consulta, bind);
-        ResultSet resultado = sql.executeQuery();
-        ArrayList<HashMap<String, Object>> ret = this.transformResultSetInArrayListHashMap(resultado);
-        this.fechaComando(sql);
+        List<HashMap<String, Object>> ret = this.dbCarrega(consulta, bind);
         if (!ret.isEmpty()) {
-            HashMap<String, Object> row = ret.get(0);
             // pega primeira coluna da primeira row
-            return row.values().toArray()[0];
-
+            return ret.get(0).values().toArray()[0];
         }
         return null;
     }
 
-    public ArrayList<HashMap<String, Object>> dbCarrega(String consulta, Object[] bind) throws SQLException {
+    public List<HashMap<String, Object>> dbCarrega(String consulta, Object[] bind) throws SQLException {
         this.abreConexao();
         PreparedStatement sql = this.montaComando(consulta, bind);
         ResultSet rs = sql.executeQuery();
-        ArrayList<HashMap<String, Object>> ret = this.transformResultSetInArrayListHashMap(rs);
+        List<HashMap<String, Object>> ret = this.transformResultSetInArrayListHashMap(rs);
         this.fechaComando(sql);
         this.fechaConexao();
         return ret;
     }
 
-    public void destroyDb() throws SQLException {
-        this.conn.close();
+    public void destroyDb() throws LojaException {
+        try {
+            this.conn.close();
+        } catch (Exception e){
+            throw new LojaException("Não foi possível fechar a conexão com o banco de dados.");
+        }
     }
 
     /**
@@ -136,10 +136,10 @@ public class MySQLDAO {
         return comando;
     }
 
-    public ArrayList<HashMap<String, Object>> transformResultSetInArrayListHashMap(ResultSet rs) throws SQLException {
+    public List<HashMap<String, Object>> transformResultSetInArrayListHashMap(ResultSet rs) throws SQLException {
         ResultSetMetaData md = rs.getMetaData();
         int columns = md.getColumnCount();
-        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        List<HashMap<String, Object>> list = new ArrayList<>();
         while (rs.next()) {
             HashMap<String, Object> row = new HashMap<>(columns);
             for (int i = 1; i <= columns; ++i) {

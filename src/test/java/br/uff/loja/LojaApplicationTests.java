@@ -41,19 +41,12 @@ public class LojaApplicationTests {
     public void testaInclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
 
-        EnderecoDTO endereco = new EnderecoDTO(
-            "Casa",
-            1,
-            24230322,
-            "Avenida Almirante Ary Parreiras, 6",
-            "Niterói",
-            "RJ",
-            "Brasil"
-        );
+        Integer usuarioId = 1;
 
-        Integer retorno = enderecoService.insereEndereco(endereco);
+        Integer qtdEnderecosEsperadosDoUser = enderecoService.listaEnderecosPorUsuarioId(usuarioId).size();
+        enderecoService.insereEndereco(new EnderecoDTO("Casa",usuarioId,24230322,"Avenida Almirante Ary Parreiras, 6","Niterói","RJ","Brasil"));
 
-        assertEquals("1", String.valueOf(retorno));
+        assertEquals(String.valueOf(qtdEnderecosEsperadosDoUser + 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
     }
 
     @Test

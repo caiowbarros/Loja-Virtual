@@ -4,8 +4,9 @@ import java.util.List;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.dtos.AvaliacaoProdutoListDTO;
+import br.uff.loja.core.exceptions.LojaException;
 
 public interface IAvaliacaoService {
-    public Integer avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws Exception;
-    public List<AvaliacaoProdutoListDTO> recuperaAvaliacoesDeUmProduto(Integer produtoId) throws Exception;
+    public Integer avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException;
+    public List<AvaliacaoProdutoListDTO> recuperaAvaliacoesDeUmProduto(Integer produtoId) throws LojaException;
 }
