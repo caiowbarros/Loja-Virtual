@@ -45,7 +45,7 @@ public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
         try {
             Object[] bind = {produtoId};
             ArrayList<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT  u.`name` AS avaliador,  r.title AS avaliacaoTitulo,  r.rating AS avaliacao,  r.description AS avaliacaoDescricao,  DATE_FORMAT(r.created_at, '%M %d, %Y') AS avaliacaoData,  DATE_FORMAT(r.created_at, '%d/%m/%Y') AS avaliacaoDataSimples  FROM  user_produts_rating r  LEFT JOIN users u ON (r.user_id = u.id)  WHERE  r.product_id = ?  ORDER BY  r.created_at", bind);
-            ArrayList<AvaliacaoProdutoListDTO> retornoFormatado = new ArrayList<AvaliacaoProdutoListDTO>();
+            ArrayList<AvaliacaoProdutoListDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach((avaliacao) -> {
                 AvaliacaoProdutoListDTO novaAvaliacao = new AvaliacaoProdutoListDTO();
                 novaAvaliacao.avaliador = String.valueOf(avaliacao.get("name"));
