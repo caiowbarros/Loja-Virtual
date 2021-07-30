@@ -21,18 +21,19 @@ public class EnderecoService implements IEnderecoService {
     }
 
     @Override
-    public Integer excluiEnderecoPorId(Integer id) throws LojaException {
-        return enderecoData.excluiEnderecoPorId(id);
+    public void excluiEnderecoPorId(Integer id) throws LojaException {
+        enderecoData.excluiEnderecoPorId(id);
     }
 
     @Override
-    public Integer atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
-        return enderecoData.atualizaEnderecoPorId(id, endereco);
+    public EnderecoDTO atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
+        enderecoData.atualizaEnderecoPorId(id, endereco);
+        return this.encontraEnderecoPorId(id);
     }
 
     @Override
-    public Integer insereEndereco(EnderecoDTO endereco) throws LojaException {
-        return enderecoData.insereEndereco(endereco);
+    public void insereEndereco(EnderecoDTO endereco) throws LojaException {
+        enderecoData.insereEndereco(endereco);
     }
 
     @Override

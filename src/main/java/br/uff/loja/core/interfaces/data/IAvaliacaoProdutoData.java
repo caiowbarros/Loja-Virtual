@@ -9,6 +9,6 @@ import br.uff.loja.core.exceptions.LojaException;
 
 public interface IAvaliacaoProdutoData {
     public Boolean jaFoiAvaliado(Integer usuarioId, Integer produtoId) throws LojaException;
-    public Integer insereAvaliacaoDoProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException;
+    public void insereAvaliacaoDoProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException;
     public List<AvaliacaoProdutoListDTO> recuperaAvaliacoesDeUmProduto(Integer produtoId) throws LojaException;
 }

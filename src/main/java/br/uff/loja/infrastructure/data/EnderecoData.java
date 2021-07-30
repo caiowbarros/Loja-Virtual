@@ -30,10 +30,10 @@ public class EnderecoData implements IEnderecoData {
     }
 
     @Override
-    public Integer excluiEnderecoPorId(Integer id) throws LojaException {
+    public void excluiEnderecoPorId(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            return this.mysqlDAO.dbGrava("DELETE FROM address WHERE id=?", bind, false);
+            this.mysqlDAO.dbGrava("DELETE FROM address WHERE id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Excluir o Endereço de id: " + id + ". (" + e.getMessage() + ")");
         } finally {
@@ -42,10 +42,10 @@ public class EnderecoData implements IEnderecoData {
     }
 
     @Override
-    public Integer atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
+    public void atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
         try {
             Object[] bind = {endereco.getNome(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade(),endereco.getId()};
-            return this.mysqlDAO.dbGrava("UPDATE address SET name=?, zipcode=?, address=?, city=?, state=?, country=? WHERE id=?", bind, false);
+            this.mysqlDAO.dbGrava("UPDATE address SET name=?, zipcode=?, address=?, city=?, state=?, country=? WHERE id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar o Endereço de id: " + id + ". (" + e.getMessage() + ")");
         } finally {
@@ -54,10 +54,10 @@ public class EnderecoData implements IEnderecoData {
     }
 
     @Override
-    public Integer insereEndereco(EnderecoDTO endereco) throws LojaException {
+    public void insereEndereco(EnderecoDTO endereco) throws LojaException {
         try {
             Object[] bind = {endereco.getNome(),endereco.getUsuarioId(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade()};
-            return this.mysqlDAO.dbGrava("INSERT INTO address (name,user_id,zipcode,address,city,state,country) VALUES (?,?,?,?,?,?,?)", bind, false);
+            this.mysqlDAO.dbGrava("INSERT INTO address (name,user_id,zipcode,address,city,state,country) VALUES (?,?,?,?,?,?,?)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Inserir o Endereço de para o Usuário de id: " + endereco.getUsuarioId() + ". (" + e.getMessage() + ")");
         } finally {

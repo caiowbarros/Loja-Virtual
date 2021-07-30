@@ -7,6 +7,6 @@ import br.uff.loja.core.dtos.AvaliacaoProdutoListDTO;
 import br.uff.loja.core.exceptions.LojaException;
 
 public interface IAvaliacaoService {
-    public Integer avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException;
+    public void avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException;
     public List<AvaliacaoProdutoListDTO> recuperaAvaliacoesDeUmProduto(Integer produtoId) throws LojaException;
 }
