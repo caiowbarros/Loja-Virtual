@@ -165,8 +165,9 @@ public class ProdutoData implements IProdutoData {
             }
 
             if (pesquisa != null) {
-                bind.add("%" + pesquisa + "%");
-                filtro += (filtro.equals("") ? whereTxt : andTXT) + " (p.name LIKE ? OR p.description LIKE ?) ";
+                bind.add("%" + pesquisa.toUpperCase() + "%");
+                bind.add("%" + pesquisa.toUpperCase() + "%");
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + " (UPPER(p.name) LIKE ? OR UPPER(p.description) LIKE ?) ";
             }
 
             //recupera apenas produtos que tem no estoque
