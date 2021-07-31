@@ -2,22 +2,13 @@ package br.uff.loja.core.dtos;
 
 import java.util.Map;
 
-public class ProdutoDTO extends BaseDTO {    
+public class ProdutoListaDTO extends BaseDTO {    
     private Integer id;
     private String nome;
     private Double preco;
     private String descricao;
     private String imagem;
-    private Integer categoriaId;
-    private Integer quantidade;
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
+    private String categoria;
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
@@ -35,12 +26,12 @@ public class ProdutoDTO extends BaseDTO {
         return imagem;
     }
 
-    public void setCategoriaId(Integer categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
-    public Integer getCategoriaId() {
-        return categoriaId;
+    public String getCategoria() {
+        return categoria;
     }
 
     public void setNome(String nome) {
@@ -67,33 +58,30 @@ public class ProdutoDTO extends BaseDTO {
         return id;
     }
 
-    public ProdutoDTO() {}
+    public ProdutoListaDTO() {}
 
-    public ProdutoDTO(Map<String,Object> produto) {
+    public ProdutoListaDTO(Map<String,Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
         this.setNome(String.valueOf(produto.get("nome")));
         this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
         this.setDescricao(String.valueOf(produto.get("descricao")));
         this.setImagem(String.valueOf(produto.get("imagem")));
-        this.setCategoriaId(Integer.valueOf(String.valueOf(produto.get("categoriaId"))));
-        this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
+        this.setCategoria(String.valueOf(produto.get("categoria")));
     }
 
-    public ProdutoDTO(
+    public ProdutoListaDTO(
         Integer id,
         String nome,
         Double preco,
         String descricao,
         String imagem,
-        Integer categoriaId,
-        Integer quantidade
+        String categoria
     ) {
         this.setId(id);
         this.setNome(nome);
         this.setPreco(preco);
         this.setDescricao(descricao);
         this.setImagem(imagem);
-        this.setCategoriaId(categoriaId);
-        this.setQuantidade(quantidade);
+        this.setCategoria(categoria);
     }
 }

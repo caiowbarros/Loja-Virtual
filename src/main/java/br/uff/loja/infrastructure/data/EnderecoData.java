@@ -44,7 +44,7 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public void atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
         try {
-            Object[] bind = {endereco.getNome(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade(),endereco.getId()};
+            Object[] bind = {endereco.getNome(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getPais(),id};
             this.mysqlDAO.dbGrava("UPDATE address SET name=?, zipcode=?, address=?, city=?, state=?, country=? WHERE id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar o Endereço de id: " + id + ". (" + e.getMessage() + ")");
@@ -74,7 +74,7 @@ public class EnderecoData implements IEnderecoData {
             retornoDesformatado.forEach(endereco -> retornoFormatado.add(new EnderecoDTO(endereco)));
             return retornoFormatado;
         } catch (Exception e) {
-            throw new LojaException("Falha a Lista de Endereços para o usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao Listar os Endereços para o usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }

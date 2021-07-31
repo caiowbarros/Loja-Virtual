@@ -2,7 +2,9 @@ package br.uff.loja.core.services;
 
 import java.util.List;
 
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.services.IProdutoService;
@@ -52,7 +54,7 @@ public class ProdutoService implements IProdutoService {
     }
 
     @Override
-    public List<ProdutoVitrineUsuarioDTO> listaProdutosVitrine() throws LojaException {
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer pagina) throws LojaException {
         // TODO Auto-generated method stub
         return null;
     }
