@@ -138,26 +138,26 @@ public class ProdutoData implements IProdutoData {
 
             // filtra categorias
             if (categorias != null && !categorias.isEmpty()) {
-                String categoriaFiltro = "";
+                StringBuilder categoriaFiltro = new StringBuilder();
                 for (String value : categorias) {
                     bind.add("%" + value.toUpperCase() + "%");
                     bind.add(value);
-                    categoriaFiltro += (categoriaFiltro.equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ";
+                    categoriaFiltro.append((categoriaFiltro.toString().equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ");
                 }
-                categoriaFiltro += (categoriaFiltro.equals("") ? "" : " ) ");
-                filtro += (filtro.equals("") ? whereTxt : andTXT) + categoriaFiltro;
+                categoriaFiltro.append((categoriaFiltro.toString().equals("") ? "" : " ) "));
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + categoriaFiltro.toString();
             }
 
             // filtra sub categorias
             if (subCategorias != null && !subCategorias.isEmpty()) {
-                String subCategoriaFiltro = "";
+                StringBuilder subCategoriaFiltro = new StringBuilder();
                 for (String value : subCategorias) {
                     bind.add("%" + value.toUpperCase() + "%");
                     bind.add(value);
-                    subCategoriaFiltro += (subCategoriaFiltro.equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ";
+                    subCategoriaFiltro.append((subCategoriaFiltro.toString().equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ");
                 }
-                subCategoriaFiltro += (subCategoriaFiltro.equals("") ? "" : " ) ");
-                filtro += (filtro.equals("") ? whereTxt : andTXT) + subCategoriaFiltro;
+                subCategoriaFiltro.append((subCategoriaFiltro.toString().equals("") ? "" : " ) "));
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + subCategoriaFiltro.toString();
             }
             
             if (Boolean.TRUE.equals(apenasLancamentos)) {
