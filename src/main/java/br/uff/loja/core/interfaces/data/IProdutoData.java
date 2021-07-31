@@ -15,7 +15,7 @@ public interface IProdutoData {
     public void insereQuantidadeEmEstoqueDoProdutoPorId(Integer id, Integer quantidade) throws LojaException;
     public void insereProduto(ProdutoDTO produto) throws LojaException;
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException;
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer pagina) throws LojaException;
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer paginaAtual, String pesquisa, Double precoMinimo, Double precoMaximo, Boolean apenasFavoritados, Integer usuarioId, Boolean apenasLancamentos, List<String> categorias, List<String> subCategorias) throws LojaException;
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException;
     public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
     public void removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;

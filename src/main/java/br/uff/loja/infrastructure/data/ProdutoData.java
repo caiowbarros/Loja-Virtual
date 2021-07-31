@@ -112,16 +112,94 @@ public class ProdutoData implements IProdutoData {
     }
 
     @Override
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer paginaAtual) throws LojaException {
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer paginaAtual, String pesquisa, Double precoMinimo, Double precoMaximo, Boolean apenasFavoritados, Integer usuarioId, Boolean apenasLancamentos, List<String> categorias, List<String> subCategorias) throws LojaException {
         try {
-            Object[] bind = {};
-            String consulta = "SELECT p.id AS id,p.name AS nome,p.price AS preco,p.img AS imagem,c.category_name AS categoria FROM products p LEFT JOIN vw_category c on(p.category_id=c.id)";
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(consulta, bind);
+            ArrayList<Object> bind = new ArrayList<>();
+            Integer qtdPorPagina = 5;
+            String consulta = "SELECT p.id AS id,p.name AS nome,p.price AS preco,p.img AS imagem,c.category_name AS categoria FROM products p LEFT JOIN vw_category c on(p.category_id=c.id) ";
+                        
+            String filtro = "";
+            String limit = " LIMIT " + qtdPorPagina + " ";
+
+            String whereTxt = " WHERE ";
+            String andTXT = " AND ";
+            String orTxt = " OR ";
+
+            // filtra favoritos
+            if (Boolean.TRUE.equals(apenasFavoritados)) {
+                // se tem usuario logado mostra filtra produtos por favoritos
+                if (usuarioId != null) {
+                    filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=?) ";
+                    bind.add(usuarioId);
+                } else {
+                    throw new LojaException("Sem usuário logado, para buscar produtos favoritos realize login.");
+                }
+            }
+
+            // filtra categorias
+            if (categorias != null && !categorias.isEmpty()) {
+                String categoriaFiltro = "";
+                for (String value : categorias) {
+                    bind.add("%" + value.toUpperCase() + "%");
+                    bind.add(value);
+                    categoriaFiltro += (categoriaFiltro.equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ";
+                }
+                categoriaFiltro += (categoriaFiltro.equals("") ? "" : " ) ");
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + categoriaFiltro;
+            }
+
+            // filtra sub categorias
+            if (subCategorias != null && !subCategorias.isEmpty()) {
+                String subCategoriaFiltro = "";
+                for (String value : subCategorias) {
+                    bind.add("%" + value.toUpperCase() + "%");
+                    bind.add(value);
+                    subCategoriaFiltro += (subCategoriaFiltro.equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ";
+                }
+                subCategoriaFiltro += (subCategoriaFiltro.equals("") ? "" : " ) ");
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + subCategoriaFiltro;
+            }
+            
+            if (Boolean.TRUE.equals(apenasLancamentos)) {
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
+            }
+
+            if (pesquisa != null) {
+                bind.add("%" + pesquisa + "%");
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + " (p.name LIKE ? OR p.description LIKE ?) ";
+            }
+
+            //recupera apenas produtos que tem no estoque
+            filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.quantity>0 ";
+
+            // filtra menor preco
+            if (precoMinimo != null) {
+                bind.add(precoMinimo);
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.price >= ? ";
+            }
+
+            // filtra maior preco
+            if (precoMaximo != null) {
+                bind.add(precoMaximo);
+                filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.price <= ? ";
+            }
+
+            // define offset
+            String offset = "";
+            if (paginaAtual > 1) {
+                Integer calcOffset = (paginaAtual - 1) * qtdPorPagina;
+                offset = " OFFSET " + calcOffset + " ";
+            }
+
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(consulta + filtro + limit + offset, bind.toArray());
             List<ProdutoListaDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoListaDTO(produto)));
-            
-            // valor colocado pra n deixar em branco por enquanto
-            Integer ultimaPagina = 2;
+        
+            Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + qtdPorPagina + ")", consulta + filtro, "", bind.toArray())));
+
+            if(paginaAtual < 1 || paginaAtual > ultimaPagina) {
+                throw new LojaException("O número da página inválido, a página deve estar entre o intervalo: 1-" + ultimaPagina + ".");
+            }
 
             return new PaginateDTO<>(paginaAtual,retornoFormatado,ultimaPagina);
         } catch (Exception e) {
