@@ -106,7 +106,7 @@ public class ProdutoData implements IProdutoData {
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoDTO(produto)));
             return retornoFormatado;
         } catch (Exception e) {
-            throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao Listar os Produtos para ADMs. (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
@@ -218,7 +218,7 @@ public class ProdutoData implements IProdutoData {
             List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT p.id, p.name AS nome, p.quantity AS quantidade, p.description AS descricao, p.price AS preco, p.img AS imagem, c.category_name AS categoria, (SELECT count(*) FROM favorite_products f WHERE f.product_id = p.id AND f.user_id=?) favoritoDoUsuario, (SELECT f.rating FROM user_produts_rating f WHERE f.product_id = p.id AND f.user_id=?) avaliacaoDadaPeloUsuario, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id) quantidadeAvaliacoes, (SELECT COALESCE(sum(f.rating),0) FROM user_produts_rating f WHERE f.product_id = p.id) somaAvaliacoes, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='1') quantidadeAvaliacoesNota1, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='2') quantidadeAvaliacoesNota2, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='3') quantidadeAvaliacoesNota3, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='4') quantidadeAvaliacoesNota4, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='5') quantidadeAvaliacoesNota5 FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id) WHERE p.id=?", bind);
             return new ProdutoVitrineUsuarioDTO(retorno.get(0));
         } catch (Exception e) {
-            throw new LojaException("Falha ao Listar os Endereços para o usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
@@ -226,20 +226,38 @@ public class ProdutoData implements IProdutoData {
 
     @Override
     public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            Object[] bind = {produtoId,usuarioId};
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "favorite_products", "product_id=? AND user_id=?", bind))) > 0;
+        } catch (Exception e) {
+            throw new LojaException("Falha ao verificar se o produto de id:" + produtoId + " já foi favoritado pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
     }
 
     @Override
     public void removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
-        // TODO Auto-generated method stub
-        
+        try {
+            Object[] bind = {produtoId,usuarioId};
+            this.mysqlDAO.dbGrava("DELETE FROM favorite_products WHERE product_id=? AND user_id=?", bind, false);
+        } catch (Exception e) {
+            throw new LojaException("Falha ao desfavoritar o produto de id:" + produtoId + " pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
     }
 
     @Override
     public void adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
-        // TODO Auto-generated method stub
-        
+        try {
+            Object[] bind = {produtoId,usuarioId};
+            this.mysqlDAO.dbGrava("INSERT INTO favorite_products (product_id,user_id) VALUES (?,?)", bind, false);
+        } catch (Exception e) {
+            throw new LojaException("Falha ao favoritar o produto de id:" + produtoId + " pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
     }
 
 
