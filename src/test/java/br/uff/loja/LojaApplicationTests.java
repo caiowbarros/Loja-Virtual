@@ -105,12 +105,13 @@ public class LojaApplicationTests {
     public void testaUpdateProduto() throws Exception {
         IProdutoService produtoService = new ProdutoService();
 
-        ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
-        primeiroProduto.setNome(primeiroProduto.getNome() + "x");
+        List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
+        ProdutoDTO ultimoProduto = produtos.get(produtos.size() - 1);
+        ultimoProduto.setNome(ultimoProduto.getNome() + "x");
 
-        produtoService.atualizaProdutoPorId(primeiroProduto.getId(), primeiroProduto);
+        produtoService.atualizaProdutoPorId(ultimoProduto.getId(), ultimoProduto);
         
-        assertEquals(primeiroProduto.toJson(), produtoService.encontraProdutoPorId(primeiroProduto.getId()).toJson());
+        assertEquals(ultimoProduto.toJson(), produtoService.encontraProdutoPorId(ultimoProduto.getId()).toJson());
     }
 
     @Test
@@ -145,9 +146,10 @@ public class LojaApplicationTests {
     public void testaExclusaoProduto() throws Exception {
         IProdutoService produtoService = new ProdutoService();
         List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
-        ProdutoDTO primeiroProduto = produtos.get(0);
+        
+        ProdutoDTO ultimoProduto = produtos.get(produtos.size() - 1);
 
-        produtoService.excluiProdutoPorId(primeiroProduto.getId());
+        produtoService.excluiProdutoPorId(ultimoProduto.getId());
 
         assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(produtoService.listaProdutosAdm().size()));
     }
