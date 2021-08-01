@@ -71,12 +71,12 @@ public class ProdutoDTO extends BaseDTO {
 
     public ProdutoDTO(Map<String,Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
-        this.setNome(String.valueOf(produto.get("nome")));
-        this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
-        this.setDescricao(String.valueOf(produto.get("descricao")));
-        this.setImagem(String.valueOf(produto.get("imagem")));
-        this.setCategoriaId(Integer.valueOf(String.valueOf(produto.get("categoriaId"))));
-        this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
+        this.setNome(String.valueOf(produto.get("name")));
+        this.setPreco(Double.valueOf(String.valueOf(produto.get("price"))));
+        this.setDescricao(String.valueOf(produto.get("description")));
+        this.setImagem(String.valueOf(produto.get("img")));
+        this.setCategoriaId(Integer.valueOf(String.valueOf(produto.get("category_id"))));
+        this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantity"))));
     }
 
     public ProdutoDTO(

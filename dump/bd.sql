@@ -70,7 +70,7 @@ CREATE TABLE `carts_products` (
   KEY `carts_products_fk0` (`cart_id`),
   KEY `carts_products_fk1` (`product_id`),
   CONSTRAINT `carts_products_fk0` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`),
-  CONSTRAINT `carts_products_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `carts_products_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -118,7 +118,7 @@ CREATE TABLE `favorite_products` (
   KEY `favorite_products_fk0` (`user_id`),
   KEY `favorite_products_fk1` (`product_id`),
   CONSTRAINT `favorite_products_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `favorite_products_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `favorite_products_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -226,7 +226,7 @@ CREATE TABLE `user_produts_rating` (
   KEY `user_produts_rating_fk0` (`user_id`),
   KEY `user_produts_rating_fk1` (`product_id`),
   CONSTRAINT `user_produts_rating_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `user_produts_rating_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `user_produts_rating_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------

@@ -3,14 +3,14 @@ package br.uff.loja.core.dtos;
 public class AvaliacaoProdutoInsertDTO extends BaseDTO {
     private Integer usuarioId;
     private Integer produtoId;
-    private String avaliacao;
+    private Integer avaliacao;
     private String descricao;
     private String titulo;
 
     public AvaliacaoProdutoInsertDTO() {}
 
     public AvaliacaoProdutoInsertDTO(
-        Integer usuarioId, Integer produtoId, String avaliacao, String descricao, String titulo
+        Integer usuarioId, Integer produtoId, Integer avaliacao, String descricao, String titulo
     ) {
         this.setUsuarioId(usuarioId);
         this.setProdutoId(produtoId);
@@ -43,11 +43,11 @@ public class AvaliacaoProdutoInsertDTO extends BaseDTO {
         this.produtoId = produtoId;
     }
 
-    public String getAvaliacao() {
+    public Integer getAvaliacao() {
         return avaliacao;
     }
 
-    public void setAvaliacao(String avaliacao) {
+    public void setAvaliacao(Integer avaliacao) {
         this.avaliacao = avaliacao;
     }
 

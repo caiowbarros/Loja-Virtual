@@ -24,11 +24,13 @@ public class LojaApplicationTests {
     public void testaAvaliacaoDuplicada() throws Exception {
         String exMessage = "";
         IAvaliacaoService avaliacaoService = new AvaliacaoService();
-        Integer produtoId = 3;
+        IProdutoService produtoService = new ProdutoService();
+
+        Integer produtoId = produtoService.listaProdutosAdm().get(0).getId();
         Integer usuarioId = 1;
 
         try {
-            AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuarioId, produtoId, "4", "Testando descrição!", "Tô testando pois se gravar 2 vezes deu ruim!");
+            AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuarioId, produtoId, 4, "Testando descrição!", "Tô testando pois se gravar 2 vezes deu ruim!");
             
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
@@ -40,7 +42,7 @@ public class LojaApplicationTests {
             throw new Exception("A avaliação para o produto de id: " + produtoId + ", não foi realizada!");
         }
 
-        assertEquals("O produto de id: 3 já foi avaliado!", exMessage);
+        assertEquals("O produto de id: " + produtoId + " já foi avaliado!", exMessage);
     }
 
     @Test
@@ -86,7 +88,15 @@ public class LojaApplicationTests {
         IProdutoService produtoService = new ProdutoService();
 
         Integer qtdProdutosAntesInsercao = produtoService.listaProdutosAdm().size();
-        produtoService.insereProduto(new ProdutoDTO());
+        produtoService.insereProduto(new ProdutoDTO(
+            null,
+            "Playstation 6",
+            2000000.55,
+            "Super caro!",
+            "url de uma imagem",
+            5,
+            1
+        ));
 
         assertEquals(String.valueOf(qtdProdutosAntesInsercao + 1), String.valueOf(produtoService.listaProdutosAdm().size()));
     }
@@ -121,13 +131,12 @@ public class LojaApplicationTests {
         IProdutoData produtoData = new ProdutoData();
 
         Integer usuarioId = 1;
-        Integer produtoId = 2;
-
-        Boolean antes = produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+        Boolean antes = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
         
         produtoService.usuarioToogleFavoritaProdutoPorId(primeiroProduto.getId(), usuarioId);
-        Boolean depois = produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
+        Boolean depois = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
 
         assertNotEquals(String.valueOf(antes), String.valueOf(depois));
     }
