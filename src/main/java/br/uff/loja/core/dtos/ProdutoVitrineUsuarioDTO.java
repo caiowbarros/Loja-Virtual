@@ -30,6 +30,15 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setImagem(String.valueOf(produto.get("imagem")));
         this.setCategoria(String.valueOf(produto.get("categoria")));
         this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
+        this.setFavoritoDoUsuario(Integer.valueOf(String.valueOf(produto.get("favoritoDoUsuario"))) > 0);
+        this.setAvaliacaoDadaPeloUsuario(Integer.valueOf(String.valueOf(produto.get("avaliacaoDadaPeloUsuario"))));
+        this.setQuantidadeAvaliacoes(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoes"))));
+        this.setSomaAvaliacoes(Integer.valueOf(String.valueOf(produto.get("somaAvaliacoes"))));
+        this.setQuantidadeAvaliacoesNota1(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota1"))));
+        this.setQuantidadeAvaliacoesNota2(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota2"))));
+        this.setQuantidadeAvaliacoesNota3(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota3"))));
+        this.setQuantidadeAvaliacoesNota4(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota4"))));
+        this.setQuantidadeAvaliacoesNota5(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota5"))));
     }
 
     public void setImagem(String imagem) {
