@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
@@ -112,7 +113,7 @@ public class ProdutoData implements IProdutoData {
     }
 
     @Override
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer paginaAtual, String pesquisa, Double precoMinimo, Double precoMaximo, Boolean apenasFavoritados, Integer usuarioId, Boolean apenasLancamentos, List<String> categorias, List<String> subCategorias) throws LojaException {
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(FiltraProdutoDTO filtroProduto) throws LojaException {
         try {
             ArrayList<Object> bind = new ArrayList<>();
             Integer qtdPorPagina = 5;
@@ -126,20 +127,20 @@ public class ProdutoData implements IProdutoData {
             String orTxt = " OR ";
 
             // filtra favoritos
-            if (Boolean.TRUE.equals(apenasFavoritados)) {
+            if (Boolean.TRUE.equals(filtroProduto.getApenasFavoritados())) {
                 // se tem usuario logado mostra filtra produtos por favoritos
-                if (usuarioId != null) {
+                if (filtroProduto.getUsuarioId() != null) {
                     filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.id in (SELECT f.product_id FROM favorite_products f WHERE f.user_id=?) ";
-                    bind.add(usuarioId);
+                    bind.add(filtroProduto.getUsuarioId());
                 } else {
                     throw new LojaException("Sem usuário logado, para buscar produtos favoritos realize login.");
                 }
             }
 
             // filtra categorias
-            if (categorias != null && !categorias.isEmpty()) {
+            if (filtroProduto.getCategorias() != null && !filtroProduto.getCategorias().isEmpty()) {
                 StringBuilder categoriaFiltro = new StringBuilder();
-                for (String value : categorias) {
+                for (String value : filtroProduto.getCategorias()) {
                     bind.add("%" + value.toUpperCase() + "%");
                     bind.add(value);
                     categoriaFiltro.append((categoriaFiltro.toString().equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ");
@@ -149,9 +150,9 @@ public class ProdutoData implements IProdutoData {
             }
 
             // filtra sub categorias
-            if (subCategorias != null && !subCategorias.isEmpty()) {
+            if (filtroProduto.getSubCategorias() != null && !filtroProduto.getSubCategorias().isEmpty()) {
                 StringBuilder subCategoriaFiltro = new StringBuilder();
-                for (String value : subCategorias) {
+                for (String value : filtroProduto.getSubCategorias()) {
                     bind.add("%" + value.toUpperCase() + "%");
                     bind.add(value);
                     subCategoriaFiltro.append((subCategoriaFiltro.toString().equals("") ? " ( " : orTxt) + " UPPER(c.category_name) LIKE ? OR c.id = ? ");
@@ -160,13 +161,13 @@ public class ProdutoData implements IProdutoData {
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + subCategoriaFiltro.toString();
             }
             
-            if (Boolean.TRUE.equals(apenasLancamentos)) {
+            if (Boolean.TRUE.equals(filtroProduto.getApenasLancamentos())) {
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
             }
 
-            if (pesquisa != null) {
-                bind.add("%" + pesquisa.toUpperCase() + "%");
-                bind.add("%" + pesquisa.toUpperCase() + "%");
+            if (filtroProduto.getPesquisa() != null) {
+                bind.add("%" + filtroProduto.getPesquisa().toUpperCase() + "%");
+                bind.add("%" + filtroProduto.getPesquisa().toUpperCase() + "%");
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + " (UPPER(p.name) LIKE ? OR UPPER(p.description) LIKE ?) ";
             }
 
@@ -174,21 +175,21 @@ public class ProdutoData implements IProdutoData {
             filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.quantity>0 ";
 
             // filtra menor preco
-            if (precoMinimo != null) {
-                bind.add(precoMinimo);
+            if (filtroProduto.getPrecoMinimo() != null) {
+                bind.add(filtroProduto.getPrecoMinimo());
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.price >= ? ";
             }
 
             // filtra maior preco
-            if (precoMaximo != null) {
-                bind.add(precoMaximo);
+            if (filtroProduto.getPrecoMaximo() != null) {
+                bind.add(filtroProduto.getPrecoMaximo());
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.price <= ? ";
             }
 
             // define offset
             String offset = "";
-            if (paginaAtual > 1) {
-                Integer calcOffset = (paginaAtual - 1) * qtdPorPagina;
+            if (filtroProduto.getPaginaAtual() > 1) {
+                Integer calcOffset = (filtroProduto.getPaginaAtual() - 1) * qtdPorPagina;
                 offset = " OFFSET " + calcOffset + " ";
             }
 
@@ -198,11 +199,11 @@ public class ProdutoData implements IProdutoData {
         
             Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + qtdPorPagina + ")", consulta + filtro, "", bind.toArray())));
 
-            if(paginaAtual < 1 || paginaAtual > ultimaPagina) {
+            if(filtroProduto.getPaginaAtual() < 1 || filtroProduto.getPaginaAtual() > ultimaPagina) {
                 throw new LojaException("O número da página inválido, a página deve estar entre o intervalo: 1-" + ultimaPagina + ".");
             }
 
-            return new PaginateDTO<>(paginaAtual,retornoFormatado,ultimaPagina);
+            return new PaginateDTO<>(filtroProduto.getPaginaAtual(),retornoFormatado,ultimaPagina);
         } catch (Exception e) {
             throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");
         } finally {
@@ -211,10 +212,16 @@ public class ProdutoData implements IProdutoData {
     }
 
     @Override
-    public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId)
-            throws LojaException {
-        // TODO Auto-generated method stub
-        return null;
+    public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException {
+        try {
+            Object[] bind = {usuarioId.toString(),usuarioId.toString(),id};
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT p.id, p.name AS nome, p.quantity AS quantidade, p.description AS descricao, p.price AS preco, p.img AS imagem, c.category_name AS categoria, (SELECT count(*) FROM favorite_products f WHERE f.product_id = p.id AND f.user_id=?) favoritoDoUsuario, (SELECT f.rating FROM user_produts_rating f WHERE f.product_id = p.id AND f.user_id=?) avaliacaoDadaPeloUsuario, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id) quantidadeAvaliacoes, (SELECT COALESCE(sum(f.rating),0) FROM user_produts_rating f WHERE f.product_id = p.id) somaAvaliacoes, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='1') quantidadeAvaliacoesNota1, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='2') quantidadeAvaliacoesNota2, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='3') quantidadeAvaliacoesNota3, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='4') quantidadeAvaliacoesNota4, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='5') quantidadeAvaliacoesNota5 FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id) WHERE p.id=?", bind);
+            return new ProdutoVitrineUsuarioDTO(retorno.get(0));
+        } catch (Exception e) {
+            throw new LojaException("Falha ao Listar os Endereços para o usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
     }
 
     @Override

@@ -1,10 +1,13 @@
 package br.uff.loja.core.dtos;
 
+import java.util.Map;
+
 public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     private Integer id;
     private String nome;
     private Integer quantidade;
     private String descricao;
+    private String imagem;
     private Double preco;
     private String categoria;
     private Boolean favoritoDoUsuario;
@@ -16,6 +19,26 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     private Integer quantidadeAvaliacoesNota3;
     private Integer quantidadeAvaliacoesNota4;
     private Integer quantidadeAvaliacoesNota5;
+
+    public ProdutoVitrineUsuarioDTO() {}
+
+    public ProdutoVitrineUsuarioDTO(Map<String,Object> produto) {
+        this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
+        this.setNome(String.valueOf(produto.get("nome")));
+        this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
+        this.setDescricao(String.valueOf(produto.get("descricao")));
+        this.setImagem(String.valueOf(produto.get("imagem")));
+        this.setCategoria(String.valueOf(produto.get("categoria")));
+        this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
 
     public void setAvaliacaoDadaPeloUsuario(Integer avaliacaoDadaPeloUsuario) {
         this.avaliacaoDadaPeloUsuario = avaliacaoDadaPeloUsuario;
