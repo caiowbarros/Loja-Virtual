@@ -9,4 +9,5 @@ public interface IUsuarioService {
     public UsuarioDTO login(String email, String senha) throws LojaException;
     public UsuarioDTO gravaUsuario(UsuarioDTO usuario) throws LojaException;
     public List<UsuarioDTO> listaUsuarios() throws LojaException;
+    public UsuarioDTO encontraUsuarioPorId(Integer id) throws LojaException;
 }
