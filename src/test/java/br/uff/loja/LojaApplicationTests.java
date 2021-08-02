@@ -10,13 +10,18 @@ import org.junit.Test;
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.UsuarioDTO;
+import br.uff.loja.core.enums.EPermissaoUsuario;
+import br.uff.loja.core.enums.EProdutoCategoria;
 import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
+import br.uff.loja.core.interfaces.services.IUsuarioService;
 import br.uff.loja.core.services.AvaliacaoService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
+import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class LojaApplicationTests {
@@ -25,9 +30,10 @@ public class LojaApplicationTests {
         String exMessage = "";
         IAvaliacaoService avaliacaoService = new AvaliacaoService();
         IProdutoService produtoService = new ProdutoService();
+        IUsuarioService usuarioService = new UsuarioService();
 
         Integer produtoId = produtoService.listaProdutosAdm().get(0).getId();
-        Integer usuarioId = 1;
+        Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
 
         try {
             AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuarioId, produtoId, 4, "Testando descrição!", "Tô testando pois se gravar 2 vezes deu ruim!");
@@ -48,8 +54,9 @@ public class LojaApplicationTests {
     @Test
     public void testaInclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
+        IUsuarioService usuarioService = new UsuarioService();
 
-        Integer usuarioId = 1;
+        Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
 
         Integer qtdEnderecosAntesInsercao = enderecoService.listaEnderecosPorUsuarioId(usuarioId).size();
         enderecoService.insereEndereco(new EnderecoDTO("Casa",usuarioId,24230322,"Avenida Almirante Ary Parreiras, 6","Niterói","RJ","Brasil"));
@@ -73,7 +80,9 @@ public class LojaApplicationTests {
     @Test
     public void testaExclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
-        Integer usuarioId = 1;
+        IUsuarioService usuarioService = new UsuarioService();
+
+        Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
 
@@ -94,7 +103,7 @@ public class LojaApplicationTests {
             2000000.55,
             "Super caro!",
             "url de uma imagem",
-            5,
+            EProdutoCategoria.PLAYSTATIONCONSOLES.getId(),
             1
         ));
 
@@ -131,7 +140,9 @@ public class LojaApplicationTests {
         IProdutoService produtoService = new ProdutoService();
         IProdutoData produtoData = new ProdutoData();
 
-        Integer usuarioId = 1;
+        IUsuarioService usuarioService = new UsuarioService();
+
+        Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
 
         Boolean antes = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
@@ -152,5 +163,61 @@ public class LojaApplicationTests {
         produtoService.excluiProdutoPorId(ultimoProduto.getId());
 
         assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(produtoService.listaProdutosAdm().size()));
+    }
+
+    @Test
+    public void testaLoginErro() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        
+        String msgErr = "";
+        
+        try {
+            usuarioService.login("email@errado.com", "xxx");
+        } catch (Exception e) {
+            msgErr = e.getMessage();
+        }
+
+        assertEquals("Credenciais inválidas, por favor verifique os dados imputados e tente novamente!", msgErr);
+    }
+
+    @Test
+    public void testaLoginSucesso() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+
+        UsuarioDTO usuario = usuarioService.listaUsuarios().get(0);
+
+        UsuarioDTO usuarioLogin = usuarioService.login(usuario.getEmail(), usuario.getSenha());
+
+        assertEquals(usuario.toJson(), usuarioLogin.toJson());
+    }
+
+    @Test
+    public void testaUpdateUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+
+        List<UsuarioDTO> usuarios = usuarioService.listaUsuarios();
+        UsuarioDTO primeiroUsuario = usuarios.get(0);
+        primeiroUsuario.setNome(primeiroUsuario.getNome() + "x");
+
+        UsuarioDTO usuarioAtualizado = usuarioService.gravaUsuario(primeiroUsuario);
+        
+        assertEquals(primeiroUsuario.toJson(), usuarioService.encontraUsuarioPorId(usuarioAtualizado.getId()).toJson());
+    }
+
+    @Test
+    public void testaInsercaoUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+
+        UsuarioDTO novoUsuario = new UsuarioDTO(
+            null,
+            "Teste Insert User",
+            "testando@example.com",
+            "123@SeiQueEhUmaSenhaRuim",
+            EPermissaoUsuario.CLIENTE.getId()
+        );
+
+        UsuarioDTO usuarioGravado = usuarioService.gravaUsuario(novoUsuario);
+        
+        assertEquals(novoUsuario.toJson(), usuarioGravado.toJson());
     }
 }
