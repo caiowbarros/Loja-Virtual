@@ -116,11 +116,10 @@ public class ProdutoData implements IProdutoData {
     public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(FiltraProdutoDTO filtroProduto) throws LojaException {
         try {
             ArrayList<Object> bind = new ArrayList<>();
-            Integer qtdPorPagina = 5;
             String consulta = "SELECT p.id AS id,p.name AS nome,p.price AS preco,p.img AS imagem,c.category_name AS categoria FROM products p LEFT JOIN vw_category c on(p.category_id=c.id) ";
                         
             String filtro = "";
-            String limit = " LIMIT " + qtdPorPagina + " ";
+            String limit = " LIMIT " + filtroProduto.getItensPorPagina() + " ";
 
             String whereTxt = " WHERE ";
             String andTXT = " AND ";
@@ -189,7 +188,7 @@ public class ProdutoData implements IProdutoData {
             // define offset
             String offset = "";
             if (filtroProduto.getPaginaAtual() > 1) {
-                Integer calcOffset = (filtroProduto.getPaginaAtual() - 1) * qtdPorPagina;
+                Integer calcOffset = (filtroProduto.getPaginaAtual() - 1) * filtroProduto.getItensPorPagina();
                 offset = " OFFSET " + calcOffset + " ";
             }
 
@@ -197,7 +196,7 @@ public class ProdutoData implements IProdutoData {
             List<ProdutoListaDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoListaDTO(produto)));
         
-            Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + qtdPorPagina + ")", consulta + filtro, "", bind.toArray())));
+            Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + filtroProduto.getItensPorPagina() + ")", consulta + filtro, "", bind.toArray())));
 
             if(filtroProduto.getPaginaAtual() < 1 || filtroProduto.getPaginaAtual() > ultimaPagina) {
                 throw new LojaException("O número da página inválido, a página deve estar entre o intervalo: 1-" + ultimaPagina + ".");

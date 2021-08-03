@@ -60,8 +60,8 @@ public class ProdutoService implements IProdutoService {
     }
 
     @Override
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer pagina) throws LojaException {
-        return produtoData.listaProdutosVitrine(new FiltraProdutoDTO());
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(FiltraProdutoDTO filtro) throws LojaException {
+        return produtoData.listaProdutosVitrine(filtro);
     }
 
     @Override

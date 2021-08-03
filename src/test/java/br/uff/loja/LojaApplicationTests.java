@@ -3,13 +3,17 @@ package br.uff.loja;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.dtos.EnderecoDTO;
+import br.uff.loja.core.dtos.FiltraProdutoDTO;
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
@@ -234,5 +238,47 @@ public class LojaApplicationTests {
         novoUsuario.setId(usuarioGravado.getId());
         
         assertEquals(novoUsuario.toJson(), usuarioGravado.toJson());
+    }
+
+    @Test
+    public void testaListaProdutosVitrine() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+
+        Integer paginaAtual = 0;
+        Integer ultimaPagina = 1;
+        Integer itensPorPagina = 5;
+
+        Double precoMinimo = 20.1;
+        Double precoMaximo = 28.8;
+
+        List<ProdutoDTO> produtosAdmLista = produtoService.listaProdutosAdm();
+
+        produtosAdmLista.removeIf(filter -> filter.getPreco() < precoMinimo || filter.getPreco() > precoMaximo);
+
+        FiltraProdutoDTO filtro = new FiltraProdutoDTO();
+        filtro.setItensPorPagina(itensPorPagina);
+        filtro.setPrecoMinimo(precoMinimo);
+        filtro.setPrecoMaximo(precoMaximo);
+        filtro.setPaginaAtual(paginaAtual);
+
+        List<ProdutoListaDTO> produtosDoPaginate = new ArrayList<>();
+
+        while (ultimaPagina > paginaAtual) {
+            paginaAtual += 1;
+            filtro.setPaginaAtual(paginaAtual);
+
+            PaginateDTO<List<ProdutoListaDTO>> produtosFiltrado = produtoService.listaProdutosVitrine(filtro);
+            
+            produtosDoPaginate.addAll(produtosFiltrado.getDados());
+            ultimaPagina = produtosFiltrado.getUltimaPagina();
+        }
+        
+        ArrayList<Integer> produtosAdmListaIds = new ArrayList<>();
+        produtosAdmLista.forEach(produto -> produtosAdmListaIds.add(produto.getId()));
+
+        ArrayList<Integer> produtosPaginateIds = new ArrayList<>();
+        produtosDoPaginate.forEach(produto -> produtosPaginateIds.add(produto.getId()));
+
+        assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
     }
 }

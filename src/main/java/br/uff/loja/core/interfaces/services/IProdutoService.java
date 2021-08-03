@@ -2,6 +2,7 @@ package br.uff.loja.core.interfaces.services;
 
 import java.util.List;
 
+import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
@@ -16,6 +17,6 @@ public interface IProdutoService {
     public void insereProduto(ProdutoDTO produto) throws LojaException;
     public void usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException;
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException;
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer pagina) throws LojaException;
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(FiltraProdutoDTO filtro) throws LojaException;
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException;
 }

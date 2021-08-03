@@ -4,6 +4,7 @@ import java.util.List;
 
 public class FiltraProdutoDTO extends BaseDTO {
     private Integer paginaAtual;
+    private Integer itensPorPagina;
     private String pesquisa;
     private Double precoMinimo;
     private Double precoMaximo;
@@ -13,6 +14,12 @@ public class FiltraProdutoDTO extends BaseDTO {
     private List<String> categorias;
     private List<String> subCategorias;
 
+    public Integer getItensPorPagina() {
+        return itensPorPagina;
+    }
+    public void setItensPorPagina(Integer itensPorPagina) {
+        this.itensPorPagina = itensPorPagina;
+    }
     public Boolean getApenasFavoritados() {
         return apenasFavoritados;
     }
