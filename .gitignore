@@ -1,51 +1,37 @@
-#---------------------------
-# Maven
-#---------------------------
-target/
+!.gitignore
+HELP.md
+target
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-#---------------------------
-# Intelij
-#---------------------------
-*.iml
+### STS ###
+.apt_generated
 .classpath
+.factorypath
 .project
-.settings/**
-.idea
-
-
-#---------------------------
-# Eclipse
-#---------------------------
-.metadata
 .settings
+.springBeans
+.sts4-cache
 
-#---------------------------
-# OSX
-#---------------------------
-.DS_Store
-clientdb.xml
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
-#---------------------------
-# Windows
-#---------------------------
-Thumbs.db
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-#---------------------------
-# Editor byproducts (Vim)
-#---------------------------
-*.swp
-*.swo
+### VS Code ###
+.vscode/
 
-#---------------------------
-# MobileFirst specific
-#---------------------------
-
-#adapter schema
-generated-java
-
-# buildtools
-buildtools/globalization/default.rpxconfig
-
-derby.log
-
-.recommenders
+.fake
+.ionide
