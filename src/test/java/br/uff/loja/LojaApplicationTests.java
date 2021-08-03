@@ -246,7 +246,6 @@ public class LojaApplicationTests {
 
         Integer paginaAtual = 0;
         Integer ultimaPagina = 1;
-        Integer itensPorPagina = 5;
 
         Double precoMinimo = 20.1;
         Double precoMaximo = 28.8;
@@ -256,10 +255,9 @@ public class LojaApplicationTests {
         produtosAdmLista.removeIf(filter -> filter.getPreco() < precoMinimo || filter.getPreco() > precoMaximo);
 
         FiltraProdutoDTO filtro = new FiltraProdutoDTO();
-        filtro.setItensPorPagina(itensPorPagina);
+        filtro.setItensPorPagina(5);
         filtro.setPrecoMinimo(precoMinimo);
         filtro.setPrecoMaximo(precoMaximo);
-        filtro.setPaginaAtual(paginaAtual);
 
         List<ProdutoListaDTO> produtosDoPaginate = new ArrayList<>();
 
