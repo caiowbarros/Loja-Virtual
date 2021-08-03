@@ -11,5 +11,6 @@ public interface IUsuarioData {
     public void atualizaUsuarioPorId(Integer id, UsuarioDTO usuario) throws LojaException;
     public Integer encontraUsuarioIdPorEmailESenha(String email, String senha) throws LojaException;
     public void insereUsuario(UsuarioDTO usuario) throws LojaException;
+    public Boolean emailJaUsado(String email, String idPraIgnorar) throws LojaException;
     public Boolean ehAdmin(Integer id) throws LojaException;
 }

@@ -69,6 +69,12 @@ public class LojaApplicationTests {
         IEnderecoService enderecoService = new EnderecoService();
 
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
+        
+        if(enderecosDoUsuario.size() == 0) {
+            this.testaInclusaoEndereco();
+            enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
+        }
+        
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
         primeiroEndereco.setNome(primeiroEndereco.getNome() + "x");
 
@@ -84,6 +90,12 @@ public class LojaApplicationTests {
 
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
+        
+        if(enderecosDoUsuario.size() == 0) {
+            this.testaInclusaoEndereco();
+            enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(1);
+        }
+
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
 
         enderecoService.excluiEnderecoPorId(primeiroEndereco.getId());
@@ -211,12 +223,15 @@ public class LojaApplicationTests {
         UsuarioDTO novoUsuario = new UsuarioDTO(
             null,
             "Teste Insert User",
-            "testando@example.com",
+            "testando@example.com" + Math.random(),
             "123@SeiQueEhUmaSenhaRuim",
             EPermissaoUsuario.CLIENTE.getId()
         );
 
         UsuarioDTO usuarioGravado = usuarioService.gravaUsuario(novoUsuario);
+        
+        // setando id pra bater igualzinho apos insert
+        novoUsuario.setId(usuarioGravado.getId());
         
         assertEquals(novoUsuario.toJson(), usuarioGravado.toJson());
     }

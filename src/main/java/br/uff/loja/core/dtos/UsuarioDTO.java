@@ -27,7 +27,7 @@ public class UsuarioDTO extends BaseDTO {
 
     public UsuarioDTO(Map<String,Object> usuario) {
         this.setId(Integer.valueOf(String.valueOf(usuario.get("id"))));
-        this.setNome(String.valueOf(usuario.get("nome")));
+        this.setNome(String.valueOf(usuario.get("name")));
         this.setEmail(String.valueOf(usuario.get("email")));
         this.setSenha(String.valueOf(usuario.get("password")));
         this.setPermissaoId(Integer.valueOf(String.valueOf(usuario.get("role_id"))));

@@ -26,11 +26,16 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioDTO gravaUsuario(UsuarioDTO usuario) throws LojaException {
+        if(Boolean.TRUE.equals(usuarioData.emailJaUsado(usuario.getEmail(), String.valueOf(usuario.getId())))) {
+            throw new LojaException("O e-mail " + usuario.getEmail() + " já está sendo usado por outro usuário...");
+        }
+
         if(usuario.getId() != null) {
             usuarioData.atualizaUsuarioPorId(usuario.getId(), usuario);
         } else {
             usuarioData.insereUsuario(usuario);
         }
+
         return usuarioData.encontraUsuarioPorId(usuarioData.encontraUsuarioIdPorEmailESenha(usuario.getEmail(), usuario.getSenha()));
     }
 

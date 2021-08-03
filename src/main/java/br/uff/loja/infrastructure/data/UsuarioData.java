@@ -92,5 +92,17 @@ public class UsuarioData implements IUsuarioData {
             this.mysqlDAO.destroyDb();
         }
     }
+
+    @Override
+    public Boolean emailJaUsado(String email, String idPraIgnorar) throws LojaException {
+        try {
+            Object[] bind = {email,idPraIgnorar};
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)","users","email=? AND id<>?", bind))) > 0;
+        } catch (Exception e) {
+            throw new LojaException("Falha ao Verificar se o email: " + email + " está em uso por um id que não seja o id: " + idPraIgnorar.toString() + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
+    }
     
 }
