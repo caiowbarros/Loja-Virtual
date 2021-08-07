@@ -296,7 +296,7 @@ public class LojaApplicationTests {
 
         Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
-        carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+        carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         
         assertEquals(String.valueOf(qtdProdutoNoCarrinho), String.valueOf(qtdProdutoNoCarrinho + 1));
     }
@@ -310,18 +310,18 @@ public class LojaApplicationTests {
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId());
 
-        List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId());
+        List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 
         if (produtos.size() == 0) {
             ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
-            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         }
 
-        produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId());
+        produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 
         CarrinhoProdutoDTO primeiroProduto = produtos.get(0);
-        carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+        carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         
-        assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId()).size()));
+        assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId()).size()));
     }
 }
