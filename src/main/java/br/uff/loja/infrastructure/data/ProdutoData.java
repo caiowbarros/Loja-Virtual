@@ -258,6 +258,18 @@ public class ProdutoData implements IProdutoData {
             this.mysqlDAO.destroyDb();
         }
     }
-
-
+    @Override
+    public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
+        try {
+            Object[] bind = {};
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, description AS descricao, img AS imagem FROM products ORDER BY quantity DESC LIMIT 3", bind);
+            List<ProdutoHomeDTO> retornoFormatado = new ArrayList<>();
+            retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoHomeDTO(produto)));
+            return retornoFormatado;
+        } catch (Exception e) {
+            throw new LojaException("Falha ao listar produtos do banner da Home. (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
+    }
 }
