@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.Test;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
+import br.uff.loja.core.dtos.CarrinhoDTO;
+import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
@@ -17,8 +19,10 @@ import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
+import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
+import br.uff.loja.core.interfaces.services.ICarrinhoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
@@ -278,5 +282,46 @@ public class LojaApplicationTests {
         produtosDoPaginate.forEach(produto -> produtosPaginateIds.add(produto.getId()));
 
         assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
+    }
+    @Test
+    public void TestaInserirProdutoCarrinho() {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        ICarrinhoData carrinhoData = new CarrinhoData();
+        IUsuarioService usuarioService = new UsuarioService();
+        IProdutoService produtoService = new ProdutoService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId());
+
+        Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
+
+        carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+        
+        assertEquals(String.valueOf(qtdProdutoNoCarrinho), String.valueOf(qtdProdutoNoCarrinho + 1));
+    }
+    @Test
+    public void TestaRemoverProdutoCarrinho() {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        ICarrinhoData carrinhoData = new CarrinhoData();
+        IUsuarioService usuarioService = new UsuarioService();
+        IProdutoService produtoService = new ProdutoService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId());
+
+        List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId());
+
+        if (produtos.size() == 0) {
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+        }
+
+        produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId());
+
+        CarrinhoProdutoDTO primeiroProduto = produtos.get(0);
+        carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroUsuario.getId(), primeiroProduto.getId());
+        
+        assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId(), primeiroUsuario.getId()).size()));
     }
 }
