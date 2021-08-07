@@ -27,6 +27,7 @@ import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
 import br.uff.loja.core.services.AvaliacaoService;
+import br.uff.loja.core.services.CarrinhoService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.core.services.UsuarioService;
