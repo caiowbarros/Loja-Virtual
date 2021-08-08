@@ -8,12 +8,14 @@ import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
+import br.uff.loja.infrastructure.data.CarrinhoData;
 
 public class CarrinhoService implements ICarrinhoService {
     private ICarrinhoData carrinhoData;
+    private static final String TEXTOAVISOESPECIFICACARRINHO = " no carrinho de Id: ";
 
     public CarrinhoService() {
-        carrinhoData = CarrinhoData();
+        carrinhoData = new CarrinhoData();
     }
 
     @Override
@@ -54,7 +56,7 @@ public class CarrinhoService implements ICarrinhoService {
                 carrinhoData.atualizaQtdDoProdutoNoCarrinho(carrinhoId, produtoId, qtd + 1);
             }
         }
-        throw new LojaException("Não foi possível inserir o produto de Id: " + produtoId + " no carrinho de Id: " + carrinhoId + ".");
+        throw new LojaException("Não foi possível inserir o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
         
     }
 
@@ -68,7 +70,7 @@ public class CarrinhoService implements ICarrinhoService {
                 throw new LojaException("O produto de id: " + produtoId + " não encontra-se no carrinho de id: " + carrinhoId + ".");
             }
         }
-        throw new LojaException("Não foi possível remover o produto de Id: " + produtoId + " no carrinho de Id: " + carrinhoId + ".");
+        throw new LojaException("Não foi possível remover o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
     }
 
     @Override
@@ -84,7 +86,7 @@ public class CarrinhoService implements ICarrinhoService {
         if(Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
             carrinhoData.atualizaQtdDoProdutoNoCarrinho(carrinhoId, produtoId, quantidade);
         }
-        throw new LojaException("Não foi possível atualizar a quantidade do produto de Id: " + produtoId + " no carrinho de Id: " + carrinhoId + ".");
+        throw new LojaException("Não foi possível atualizar a quantidade do produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
     }
     
 }

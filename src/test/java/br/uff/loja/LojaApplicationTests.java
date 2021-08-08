@@ -31,6 +31,7 @@ import br.uff.loja.core.services.CarrinhoService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.core.services.UsuarioService;
+import br.uff.loja.infrastructure.data.CarrinhoData;
 import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class LojaApplicationTests {
@@ -285,7 +286,7 @@ public class LojaApplicationTests {
         assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
     }
     @Test
-    public void TestaInserirProdutoCarrinho() {
+    public void TestaInserirProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         ICarrinhoData carrinhoData = new CarrinhoData();
         IUsuarioService usuarioService = new UsuarioService();
@@ -293,7 +294,7 @@ public class LojaApplicationTests {
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
-        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId());
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), null);
 
         Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
@@ -302,9 +303,8 @@ public class LojaApplicationTests {
         assertEquals(String.valueOf(qtdProdutoNoCarrinho), String.valueOf(qtdProdutoNoCarrinho + 1));
     }
     @Test
-    public void TestaRemoverProdutoCarrinho() {
+    public void TestaRemoverProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
-        ICarrinhoData carrinhoData = new CarrinhoData();
         IUsuarioService usuarioService = new UsuarioService();
         IProdutoService produtoService = new ProdutoService();
 

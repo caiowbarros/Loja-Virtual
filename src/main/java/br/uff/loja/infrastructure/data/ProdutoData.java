@@ -7,6 +7,7 @@ import java.util.List;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoHomeDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO;
 import br.uff.loja.core.exceptions.LojaException;
