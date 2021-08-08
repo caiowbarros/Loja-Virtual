@@ -309,7 +309,7 @@ public class LojaApplicationTests {
         IProdutoService produtoService = new ProdutoService();
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
-        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId());
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), null);
 
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 

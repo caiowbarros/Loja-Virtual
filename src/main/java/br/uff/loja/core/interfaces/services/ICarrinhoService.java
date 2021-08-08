@@ -7,7 +7,7 @@ import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.exceptions.LojaException;
 
 public interface ICarrinhoService {
-    public CarrinhoDTO recuperaCarrinhoAtivo(Integer carrinhoId, Integer usuarioId) throws LojaException;
+    public CarrinhoDTO recuperaCarrinhoAtivo(Integer carrinhoId, Integer usuarioId, String ip) throws LojaException;
     public void insereProdutoCarrinho(Integer carrinhoId, Integer produtoId) throws LojaException;
     public void removeProdutoCarrinho(Integer carrinhoId, Integer produtoId) throws LojaException;
     public List<CarrinhoProdutoDTO> listaProdutosCarrinho(Integer id) throws LojaException;

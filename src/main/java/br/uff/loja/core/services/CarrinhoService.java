@@ -1,5 +1,6 @@
 package br.uff.loja.core.services;
 
+import java.util.Date;
 import java.util.List;
 
 import br.uff.loja.core.dtos.CarrinhoDTO;
@@ -16,8 +17,31 @@ public class CarrinhoService implements ICarrinhoService {
     }
 
     @Override
-    public CarrinhoDTO recuperaCarrinhoAtivo(Integer carrinhoId, Integer usuarioId) throws LojaException {
-        return new CarrinhoDTO();
+    public CarrinhoDTO recuperaCarrinhoAtivo(Integer carrinhoId, Integer usuarioId, String ip) throws LojaException {
+        if(carrinhoId == null) {
+            if(usuarioId != null) {
+                List<CarrinhoDTO> carrinhosNaoVendidos = carrinhoData.listaCarrinhosDoUsuarioNaoVendidos(usuarioId);
+                if (Boolean.FALSE.equals(carrinhosNaoVendidos.isEmpty())) {
+                    return carrinhosNaoVendidos.get(0);
+                }
+            }
+        } else {
+            if(usuarioId == null) {
+                if(Boolean.TRUE.equals(carrinhoData.carrinhoSemDono(carrinhoId))) {
+                    return carrinhoData.encontraCarrinho(carrinhoId); 
+                }
+            } else {
+                if (Boolean.TRUE.equals(carrinhoData.carrinhoSemDono(carrinhoId))) {
+                    carrinhoData.defineDonoDeUmCarrinhoSemUsuarioNoMomento(carrinhoId, usuarioId);
+                }
+                if (Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(carrinhoId, usuarioId))) {
+                    return carrinhoData.encontraCarrinho(carrinhoId);
+                }
+            }
+        }
+        Date criadoEm = new Date();
+        carrinhoData.criaCarrinho(ip, criadoEm, usuarioId);
+        return carrinhoData.encontraCarrinho(ip, criadoEm, usuarioId);
     }
 
     @Override
