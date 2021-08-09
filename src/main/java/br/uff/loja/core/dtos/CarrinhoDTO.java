@@ -3,7 +3,6 @@ package br.uff.loja.core.dtos;
 import java.util.Date;
 import java.util.Map;
 
-import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.infrastructure.shared.Helper;
 
 public class CarrinhoDTO extends BaseDTO {
@@ -14,7 +13,7 @@ public class CarrinhoDTO extends BaseDTO {
 
     public CarrinhoDTO() {}
 
-    public CarrinhoDTO(Map<String,Object> carrinho) throws LojaException {
+    public CarrinhoDTO(Map<String,Object> carrinho) {
         this.setId(Integer.valueOf(String.valueOf(carrinho.get("id"))));
         this.setIp(String.valueOf(carrinho.get("ip")));
         this.setUsuarioId(Integer.valueOf(String.valueOf(carrinho.get("user_id"))));

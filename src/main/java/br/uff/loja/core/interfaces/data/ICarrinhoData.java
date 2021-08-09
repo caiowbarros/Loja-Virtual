@@ -24,5 +24,5 @@ public interface ICarrinhoData {
     public void adicionaProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException;
     public void removeProdutoDoCarrinho(Integer id, Integer produtoId) throws LojaException;
     public void atualizaQtdDoProdutoNoCarrinho(Integer id, Integer produtoId, Integer novaQtd) throws LojaException;
-    public void recuperaPrecoTotalDeUmCarirnho(Integer id) throws LojaException;
+    public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException;
 }
