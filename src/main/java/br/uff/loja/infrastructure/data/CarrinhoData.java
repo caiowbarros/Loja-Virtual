@@ -128,7 +128,8 @@ public class CarrinhoData implements ICarrinhoData {
     public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
         try {
             Object[] bind = {produtoId,id};
-            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("quantity", CARTSPRODUCTSTABLESTRING, "product_id=? AND cart_id=?", bind)));
+            String quantity = String.valueOf(this.mysqlDAO.dbValor("quantity", CARTSPRODUCTSTABLESTRING, "product_id=? AND cart_id=?", bind));
+            return Integer.valueOf(quantity.equals("null") ? "0" : quantity);
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar a quantidade do produto de id: " + produtoId +  ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
         } finally {
@@ -215,7 +216,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void atualizaQtdDoProdutoNoCarrinho(Integer id, Integer produtoId, Integer novaQtd) throws LojaException {
         try {
-            Object[] bind = {produtoId,id};
+            Object[] bind = {novaQtd,produtoId,id};
             this.mysqlDAO.dbGrava("UPDATE carts_products SET quantity=? WHERE product_id=? AND cart_id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar quantidade do Produto de id: " + produtoId + ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
@@ -228,7 +229,8 @@ public class CarrinhoData implements ICarrinhoData {
     public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            return Double.valueOf(String.valueOf(this.mysqlDAO.dbValor("total_price", "SELECT sum(p.price * c.quantity) AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=? GROUP BY c.cart_id", "", bind)));
+            String totalPrice = String.valueOf(this.mysqlDAO.dbValor("total_price", "SELECT sum(p.price * c.quantity) AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=? GROUP BY c.cart_id", "", bind));
+            return Double.valueOf(totalPrice.equals("null") ? "0" : totalPrice);
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar o valor total do carinho de id: " + id + ". (" + e.getMessage() + ")");
         } finally {

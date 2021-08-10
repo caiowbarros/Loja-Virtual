@@ -12,9 +12,9 @@ public class ProdutoHomeDTO extends BaseDTO {
 
     public ProdutoHomeDTO(Map<String,Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
-        this.setNome(String.valueOf(produto.get("name")));
-        this.setDescricao(String.valueOf(produto.get("description")));
-        this.setImagem(String.valueOf(produto.get("img")));
+        this.setNome(String.valueOf(produto.get("nome")));
+        this.setDescricao(String.valueOf(produto.get("descricao")));
+        this.setImagem(String.valueOf(produto.get("imagem")));
     }
 
     public String getDescricao() {

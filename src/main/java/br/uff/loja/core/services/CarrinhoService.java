@@ -51,10 +51,11 @@ public class CarrinhoService implements ICarrinhoService {
         if(Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
             Integer qtd = carrinhoData.quantidadeProdutoNoCarrinho(carrinhoId, produtoId);
             if(qtd > 0) {
-                carrinhoData.adicionaProdutoNoCarrinho(carrinhoId, produtoId);
-            } else {
                 carrinhoData.atualizaQtdDoProdutoNoCarrinho(carrinhoId, produtoId, qtd + 1);
+            } else {
+                carrinhoData.adicionaProdutoNoCarrinho(carrinhoId, produtoId);
             }
+            return;
         }
         throw new LojaException("Não foi possível inserir o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
         

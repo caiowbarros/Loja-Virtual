@@ -53,10 +53,10 @@ public class ProdutoListaDTO extends BaseDTO {
 
     public ProdutoListaDTO(Map<String,Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
-        this.setNome(String.valueOf(produto.get("name")));
-        this.setPreco(Double.valueOf(String.valueOf(produto.get("price"))));
-        this.setImagem(String.valueOf(produto.get("img")));
-        this.setCategoria(String.valueOf(produto.get("category_name")));
+        this.setNome(String.valueOf(produto.get("nome")));
+        this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
+        this.setImagem(String.valueOf(produto.get("imagem")));
+        this.setCategoria(String.valueOf(produto.get("categoria")));
     }
 
     public ProdutoListaDTO(

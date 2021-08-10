@@ -285,6 +285,7 @@ public class LojaApplicationTests {
 
         assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
     }
+
     @Test
     public void TestaInserirProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
@@ -294,7 +295,7 @@ public class LojaApplicationTests {
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
-        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), null);
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
 
         Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
@@ -302,6 +303,7 @@ public class LojaApplicationTests {
         
         assertEquals(String.valueOf(qtdProdutoNoCarrinho), String.valueOf(qtdProdutoNoCarrinho + 1));
     }
+    
     @Test
     public void TestaRemoverProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
@@ -309,7 +311,7 @@ public class LojaApplicationTests {
         IProdutoService produtoService = new ProdutoService();
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
-        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), null);
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
 
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 

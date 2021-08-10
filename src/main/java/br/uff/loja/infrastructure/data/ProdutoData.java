@@ -25,7 +25,7 @@ public class ProdutoData implements IProdutoData {
     public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoryId, quantity AS quantidade FROM products WHERE id=?", bind);
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products WHERE id=?", bind);
             return new ProdutoDTO(retorno.get(0));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Produto de id: " + id + ". (" + e.getMessage() + ")");
@@ -102,7 +102,7 @@ public class ProdutoData implements IProdutoData {
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException {
         try {
             Object[] bind = {};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoryId, quantity AS quantidade FROM products", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products", bind);
             List<ProdutoDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoDTO(produto)));
             return retornoFormatado;
