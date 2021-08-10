@@ -14,9 +14,9 @@ public class CategoriaService implements ICategoriaService {
     public CategoriaService() {
         categoriaData = new CategoriaData();
     }
+
     @Override
     public List<CategoriaDTO> listaCategorias() throws LojaException {
         return categoriaData.listaCategorias();
     }
-    
 }
