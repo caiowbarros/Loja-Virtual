@@ -301,7 +301,7 @@ public class LojaApplicationTests {
 
         carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         
-        assertEquals(String.valueOf(qtdProdutoNoCarrinho), String.valueOf(qtdProdutoNoCarrinho + 1));
+        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1), String.valueOf(carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
     }
     
     @Test
@@ -323,7 +323,7 @@ public class LojaApplicationTests {
         produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 
         CarrinhoProdutoDTO primeiroProduto = produtos.get(0);
-        carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
+        carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroProduto.getProdutoId());
         
         assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId()).size()));
     }
