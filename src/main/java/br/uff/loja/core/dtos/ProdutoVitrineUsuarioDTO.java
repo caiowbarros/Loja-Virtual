@@ -46,11 +46,11 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setQuantidadeAvaliacoesNota4(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota4"))));
         this.setQuantidadeAvaliacoesNota5(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota5"))));
         // calculos pras barras
-        this.setBarra1Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota1 * 100) / this.quantidadeAvaliacoes));
-        this.setBarra2Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota2 * 100) / this.quantidadeAvaliacoes));
-        this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100) / this.quantidadeAvaliacoes));
-        this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100) / this.quantidadeAvaliacoes));
-        this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100) / this.quantidadeAvaliacoes));
+        this.setBarra1Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota1 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra2Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota2 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100.0) / this.quantidadeAvaliacoes));
     }
 
     public void setBarra1Estrelas(Double barra1Estrelas) {
