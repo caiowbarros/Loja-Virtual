@@ -110,9 +110,9 @@ public class LojaApplicationTests {
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         }
 
-        EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
+        EnderecoDTO ultimoEndereco = enderecosDoUsuario.get(enderecosDoUsuario.size() - 1);
 
-        enderecoService.excluiEnderecoPorId(primeiroEndereco.getId());
+        enderecoService.excluiEnderecoPorId(ultimoEndereco.getId());
 
         assertEquals(String.valueOf(enderecosDoUsuario.size() - 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
     }
@@ -349,7 +349,6 @@ public class LojaApplicationTests {
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
         if (produtos.size() == 0) {
             this.TestaInserirProdutoCarrinho();
-            carrinhoService.insereProdutoCarrinho(carrinho.getId(), carrinhoService.listaProdutosCarrinho(carrinho.getId()).get(0).getId());
         }
 
         Integer qtdVendasDoUsuarioAntes = vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size();
@@ -365,6 +364,7 @@ public class LojaApplicationTests {
         IUsuarioService usuarioService = new UsuarioService();
         IVendaService vendaService = new VendaService();
         IEnderecoService enderecoService = new EnderecoService();
+        IProdutoService produtoService = new ProdutoService();
 
         List<UsuarioDTO> listaUsuarios = usuarioService.listaUsuarios();
 
@@ -381,8 +381,7 @@ public class LojaApplicationTests {
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
         if (produtos.size() == 0) {
-            this.TestaInserirProdutoCarrinho();
-            carrinhoService.insereProdutoCarrinho(carrinho.getId(), carrinhoService.listaProdutosCarrinho(carrinho.getId()).get(0).getId());
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), produtoService.listaProdutosAdm().get(0).getId());
         }
 
         String msgErro = "";

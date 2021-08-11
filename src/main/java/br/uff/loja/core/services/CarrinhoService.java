@@ -9,6 +9,7 @@ import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
 import br.uff.loja.infrastructure.data.CarrinhoData;
+import br.uff.loja.infrastructure.shared.Helper;
 
 public class CarrinhoService implements ICarrinhoService {
     private ICarrinhoData carrinhoData;
@@ -41,7 +42,7 @@ public class CarrinhoService implements ICarrinhoService {
                 }
             }
         }
-        Date criadoEm = new Date();
+        String criadoEm = (new Helper()).convertDateToString("yyyy-MM-dd HH:mm:ss", new Date());
         carrinhoData.criaCarrinho(ip, criadoEm, usuarioId);
         return carrinhoData.encontraCarrinho(ip, criadoEm, usuarioId);
     }

@@ -138,7 +138,7 @@ public class CarrinhoData implements ICarrinhoData {
     }
 
     @Override
-    public void criaCarrinho(String ip, Date criadoEm, Integer usuarioId) throws LojaException {
+    public void criaCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException {
         try {
             Object[] bind = {ip,criadoEm,usuarioId};
             this.mysqlDAO.dbGrava("INSERT INTO carts (ip,created_at,user_id) VALUES (?,?,?)", bind, false);
@@ -150,10 +150,10 @@ public class CarrinhoData implements ICarrinhoData {
     }
 
     @Override
-    public CarrinhoDTO encontraCarrinho(String ip, Date criadoEm, Integer usuarioId) throws LojaException {
+    public CarrinhoDTO encontraCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException {
         try {
             Object[] bind = {ip,criadoEm,usuarioId};
-            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE ip=? AND created_at=? AND user_id=?", bind);
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE ip=? AND created_at=? AND user_id" + (usuarioId == null ? " IS NULL " : "=?") + " ORDER BY id DESC LIMIT 1", bind);
             return new CarrinhoDTO(retorno.get(0));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Carrinho de ip: " + ip + " do usuário de id: " + usuarioId + " que foi criado em " + criadoEm + ". (" + e.getMessage() + ")");

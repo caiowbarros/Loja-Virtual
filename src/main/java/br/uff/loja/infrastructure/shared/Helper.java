@@ -13,4 +13,12 @@ public class Helper implements IHelper {
             return null;
         }
     }
+
+    public String convertDateToString(String format, Date date) { 
+        try {
+            return new SimpleDateFormat(format).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

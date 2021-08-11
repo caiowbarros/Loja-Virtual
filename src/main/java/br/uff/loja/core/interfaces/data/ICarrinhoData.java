@@ -1,6 +1,5 @@
 package br.uff.loja.core.interfaces.data;
 
-import java.util.Date;
 import java.util.List;
 
 import br.uff.loja.core.dtos.CarrinhoDTO;
@@ -17,8 +16,8 @@ public interface ICarrinhoData {
     public Boolean carrinhoExiste(Integer id) throws LojaException;
     public Integer quantidadeProdutosCarrinho(Integer id) throws LojaException;
     public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException;
-    public void criaCarrinho(String ip, Date criadoEm, Integer usuarioId) throws LojaException;
-    public CarrinhoDTO encontraCarrinho(String ip, Date criadoEm, Integer usuarioId) throws LojaException;
+    public void criaCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException;
+    public CarrinhoDTO encontraCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException;
     public List<CarrinhoProdutoDTO> listaProdutosCarrinho(Integer id) throws LojaException;
     public Boolean verificaProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException;
     public void adicionaProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException;
