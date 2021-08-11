@@ -1,7 +1,6 @@
 package br.uff.loja.infrastructure.data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
