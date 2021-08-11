@@ -5,6 +5,7 @@ import java.util.List;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoHomeDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO;
 import br.uff.loja.core.exceptions.LojaException;
@@ -60,12 +61,17 @@ public class ProdutoService implements IProdutoService {
     }
 
     @Override
-    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(Integer pagina) throws LojaException {
-        return produtoData.listaProdutosVitrine(new FiltraProdutoDTO());
+    public PaginateDTO<List<ProdutoListaDTO>> listaProdutosVitrine(FiltraProdutoDTO filtro) throws LojaException {
+        return produtoData.listaProdutosVitrine(filtro);
     }
 
     @Override
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException {
         return produtoData.mostraProdutoVitrineParaUsuario(id, usuarioId);
+    }
+
+    @Override
+    public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
+        return produtoData.listaProdutosBanner();
     }
 }

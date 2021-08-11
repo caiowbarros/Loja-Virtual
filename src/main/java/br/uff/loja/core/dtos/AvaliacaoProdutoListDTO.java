@@ -13,10 +13,10 @@ public class AvaliacaoProdutoListDTO extends BaseDTO {
     public AvaliacaoProdutoListDTO() {}
 
     public AvaliacaoProdutoListDTO(Map<String, Object> avaliacao) {
-        this.setAvaliador(String.valueOf(avaliacao.get("name")));
-        this.setAvaliacaoTitulo(String.valueOf(avaliacao.get("title")));
-        this.setAvaliacao(String.valueOf(avaliacao.get("rating")));
-        this.setAvaliacaoDescricao(String.valueOf(avaliacao.get("description")));
+        this.setAvaliador(String.valueOf(avaliacao.get("avaliador")));
+        this.setAvaliacaoTitulo(String.valueOf(avaliacao.get("avaliacaoTitulo")));
+        this.setAvaliacao(String.valueOf(avaliacao.get("avaliacao")));
+        this.setAvaliacaoDescricao(String.valueOf(avaliacao.get("avaliacaoDescricao")));
         this.setAvaliacaoData(String.valueOf(avaliacao.get("avaliacaoData")));
         this.setAvaliacaoDataSimples(String.valueOf(avaliacao.get("avaliacaoDataSimples")));
     }

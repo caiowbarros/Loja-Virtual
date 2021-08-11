@@ -79,5 +79,17 @@ public class EnderecoData implements IEnderecoData {
             this.mysqlDAO.destroyDb();
         }
     }
+
+    @Override
+    public Boolean verificaEnderecoDoUsuario(Integer id, Integer usuarioId) throws LojaException {
+        try {
+            Object[] bind = {id,usuarioId};
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "address", "id=? AND user_id=?", bind))) > 0;
+        } catch (Exception e) {
+            throw new LojaException("Falha ao verificar se o endereço de id:" + id + " é do usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
+    }
     
 }

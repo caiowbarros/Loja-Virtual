@@ -20,6 +20,12 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     private Integer quantidadeAvaliacoesNota4;
     private Integer quantidadeAvaliacoesNota5;
 
+    private Double barra5Estrelas;
+    private Double barra4Estrelas;
+    private Double barra3Estrelas;
+    private Double barra2Estrelas;
+    private Double barra1Estrelas;
+
     public ProdutoVitrineUsuarioDTO() {}
 
     public ProdutoVitrineUsuarioDTO(Map<String,Object> produto) {
@@ -39,6 +45,48 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setQuantidadeAvaliacoesNota3(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota3"))));
         this.setQuantidadeAvaliacoesNota4(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota4"))));
         this.setQuantidadeAvaliacoesNota5(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota5"))));
+        // calculos pras barras
+        this.setBarra1Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota1 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra2Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota2 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100.0) / this.quantidadeAvaliacoes));
+        this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100.0) / this.quantidadeAvaliacoes));
+    }
+
+    public void setBarra1Estrelas(Double barra1Estrelas) {
+        this.barra1Estrelas = barra1Estrelas;
+    }
+
+    public void setBarra2Estrelas(Double barra2Estrelas) {
+        this.barra2Estrelas = barra2Estrelas;
+    }
+
+    public void setBarra3Estrelas(Double barra3Estrelas) {
+        this.barra3Estrelas = barra3Estrelas;
+    }
+
+    public void setBarra4Estrelas(Double barra4Estrelas) {
+        this.barra4Estrelas = barra4Estrelas;
+    }
+
+    public void setBarra5Estrelas(Double barra5Estrelas) {
+        this.barra5Estrelas = barra5Estrelas;
+    }
+
+    public Double getBarra1Estrelas() {
+        return barra1Estrelas;
+    }
+    public Double getBarra2Estrelas() {
+        return barra2Estrelas;
+    }
+    public Double getBarra3Estrelas() {
+        return barra3Estrelas;
+    }
+    public Double getBarra4Estrelas() {
+        return barra4Estrelas;
+    }
+    public Double getBarra5Estrelas() {
+        return barra5Estrelas;
     }
 
     public void setImagem(String imagem) {

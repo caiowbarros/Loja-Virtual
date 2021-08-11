@@ -12,6 +12,7 @@ import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class UsuarioData implements IUsuarioData {
     private final MySQLDAO mysqlDAO;
+    private String tableUsuarios = "users";
 
     public UsuarioData() {
         this.mysqlDAO = new MySQLDAO();
@@ -61,7 +62,7 @@ public class UsuarioData implements IUsuarioData {
     public Integer encontraUsuarioIdPorEmailESenha(String email, String senha) throws LojaException {
         try {
             Object[] bind = {email,senha};
-            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("id","users","email=? AND password=?", bind)));
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("id",this.tableUsuarios,"email=? AND password=?", bind)));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Usuário de email: " + email + " e senha: " + senha + ". (" + e.getMessage() + ")");
         } finally {
@@ -85,7 +86,7 @@ public class UsuarioData implements IUsuarioData {
     public Boolean ehAdmin(Integer id) throws LojaException {
         try {
             Object[] bind = {id,EPermissaoUsuario.ADM.getId()};
-            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)","users","id=? AND role_id=?", bind))) > 0;
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)",this.tableUsuarios,"id=? AND role_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException("Falha ao Verificar se o Usuário de id: " + id + " é Admin. (" + e.getMessage() + ")");
         } finally {
@@ -97,9 +98,9 @@ public class UsuarioData implements IUsuarioData {
     public Boolean emailJaUsado(String email, String idPraIgnorar) throws LojaException {
         try {
             Object[] bind = {email,idPraIgnorar};
-            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)","users","email=? AND id<>?", bind))) > 0;
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)",this.tableUsuarios,"email=? AND id<>?", bind))) > 0;
         } catch (Exception e) {
-            throw new LojaException("Falha ao Verificar se o email: " + email + " está em uso por um id que não seja o id: " + idPraIgnorar.toString() + ". (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao Verificar se o email: " + email + " está em uso por um id que não seja o id: " + idPraIgnorar + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }

@@ -7,13 +7,13 @@ public class EnderecoDTO extends BaseDTO {
 
     public EnderecoDTO (Map<String, Object> endereco) {
         this.setId(Integer.valueOf(String.valueOf(endereco.get("id"))));
-        this.setUsuarioId(Integer.valueOf(String.valueOf(endereco.get("user_id"))));
-        this.setNome(String.valueOf(endereco.get("name")));
-        this.setCep(Integer.valueOf(String.valueOf(endereco.get("zipcode"))));
-        this.setLogradouro(String.valueOf(endereco.get("address")));
-        this.setEstado(String.valueOf(endereco.get("state")));
-        this.setCidade(String.valueOf(endereco.get("city")));
-        this.setPais(String.valueOf(endereco.get("country")));
+        this.setUsuarioId(Integer.valueOf(String.valueOf(endereco.get("usuarioId"))));
+        this.setNome(String.valueOf(endereco.get("nome")));
+        this.setCep(Integer.valueOf(String.valueOf(endereco.get("cep"))));
+        this.setLogradouro(String.valueOf(endereco.get("logradouro")));
+        this.setEstado(String.valueOf(endereco.get("estado")));
+        this.setCidade(String.valueOf(endereco.get("cidade")));
+        this.setPais(String.valueOf(endereco.get("pais")));
     }
 
     public EnderecoDTO(String nome, Integer usuarioId, Integer cep, String logradouro, String cidade, String estado, String pais) {
