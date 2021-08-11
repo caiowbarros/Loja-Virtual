@@ -40,5 +40,9 @@ public class EnderecoService implements IEnderecoService {
     public List<EnderecoDTO> listaEnderecosPorUsuarioId(Integer usuarioId) throws LojaException {
         return enderecoData.listaEnderecosPorUsuarioId(usuarioId);
     }
-    
+
+    @Override
+    public Boolean verificaEnderecoDoUsuario(Integer id, Integer usuarioId) throws LojaException {
+        return enderecoData.verificaEnderecoDoUsuario(id, usuarioId);
+    }
 }

@@ -11,4 +11,5 @@ public interface IEnderecoService {
     public EnderecoDTO atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException;
     public void insereEndereco(EnderecoDTO endereco) throws LojaException;
     public List<EnderecoDTO> listaEnderecosPorUsuarioId(Integer usuarioId) throws LojaException;
+    public Boolean verificaEnderecoDoUsuario(Integer id, Integer usuarioId) throws LojaException;
 }

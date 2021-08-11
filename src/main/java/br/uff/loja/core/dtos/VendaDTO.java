@@ -5,7 +5,7 @@ import java.util.Map;
 
 import br.uff.loja.infrastructure.shared.Helper;
 
-public class VendaDTO {
+public class VendaDTO extends BaseDTO {
     private Integer id;
     private Integer carrinhoId;
     private Double precoTotal;

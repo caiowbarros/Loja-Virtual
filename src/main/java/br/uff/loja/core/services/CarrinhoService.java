@@ -91,5 +91,9 @@ public class CarrinhoService implements ICarrinhoService {
         }
         throw new LojaException("Não foi possível atualizar a quantidade do produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
     }
-    
+
+    @Override
+    public Boolean carrinhoAtivoValido(Integer id, Integer usuarioId) throws LojaException {
+        return Boolean.TRUE.equals(carrinhoData.carrinhoExiste(id)) && Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(id, usuarioId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(id)) && Boolean.TRUE.equals(carrinhoData.quantidadeProdutosCarrinho(id) > 0);
+    }
 }

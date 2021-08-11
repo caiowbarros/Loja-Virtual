@@ -17,7 +17,6 @@ import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
-import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
@@ -33,6 +32,7 @@ import br.uff.loja.core.services.CarrinhoService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.core.services.UsuarioService;
+import br.uff.loja.core.services.VendaService;
 import br.uff.loja.infrastructure.data.CarrinhoData;
 import br.uff.loja.infrastructure.data.ProdutoData;
 
@@ -333,7 +333,6 @@ public class LojaApplicationTests {
     public void TestaCompra() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
-        IProdutoService produtoService = new ProdutoService();
         IVendaService vendaService = new VendaService();
         IEnderecoService enderecoService = new EnderecoService();
 
@@ -355,7 +354,7 @@ public class LojaApplicationTests {
 
         Integer qtdVendasDoUsuarioAntes = vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size();
         
-        vendaService.gravaVenda(carrinho.getId(), primeiroEndereco.getId());
+        vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
 
         assertEquals(String.valueOf(qtdVendasDoUsuarioAntes + 1), String.valueOf(vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size()));
     }
@@ -364,7 +363,6 @@ public class LojaApplicationTests {
     public void TestaCompraEnderecoOutroUsuario() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
-        IProdutoService produtoService = new ProdutoService();
         IVendaService vendaService = new VendaService();
         IEnderecoService enderecoService = new EnderecoService();
 
@@ -387,13 +385,11 @@ public class LojaApplicationTests {
             carrinhoService.insereProdutoCarrinho(carrinho.getId(), carrinhoService.listaProdutosCarrinho(carrinho.getId()).get(0).getId());
         }
 
-        Integer qtdVendasDoUsuarioAntes = vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size();
-        
         String msgErro = "";
         String erroEsperado = "O endereço escolhido de id:" + primeiroEndereco.getId() + " não pertence ao dono do carrinho (usuário de id: " + carrinho.getUsuarioId() + "), escolha outro endereço.";
         
         try {
-            vendaService.gravaVenda(carrinho.getId(), primeiroEndereco.getId());
+            vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
         } catch (Exception e) {
             msgErro = e.getMessage();
         }
