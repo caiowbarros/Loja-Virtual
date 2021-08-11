@@ -1,5 +1,18 @@
 version: "3.5"
 services:
+  e_store_mvn:
+    image: maven:3.6-jdk-8
+    container_name: e_store_mvn
+    environment:
+      - PORT=8181
+    command: /bin/sh -c "rm -R target -f && mvn package && java -jar target/endorsed/webapp-runner.jar --port 8181 target/loja-1.0-SNAPSHOT.war"
+    volumes:
+      - ./:/var/app
+    working_dir: /var/app
+    ports:
+      - 8181:8181
+    depends_on: 
+      - e_store_mysql
   e_store_mysql:
     image: mysql:5.6
     restart: always
