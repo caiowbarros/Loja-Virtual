@@ -104,7 +104,7 @@ public class MySQLDAO {
         if (this.conn != null && !this.conn.isClosed()) {
             return;
         }
-        this.conn = DriverManager.getConnection("jdbc:mysql://e_store:123456@localhost:3306/e_store");
+        this.conn = DriverManager.getConnection("jdbc:mysql://e_store:123456@e_store_mysql:3306/e_store");
     }
 
     public void fechaConexao() throws SQLException {
