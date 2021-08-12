@@ -105,7 +105,7 @@ public class LojaApplicationTests {
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         
-        if(enderecosDoUsuario.size() == 0) {
+        if(enderecosDoUsuario.size() <= 1) {
             this.testaInclusaoEndereco();
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         }
