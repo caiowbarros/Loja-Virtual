@@ -7,12 +7,6 @@ and open the template in the editor.
 <%@page import="java.util.List"%>
 <%@page import="br.uff.loja.core.dtos.ProdutoHomeDTO"%>
 <%
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
     List<ProdutoHomeDTO> jogosVitrine = new ArrayList<>();
     if (request.getAttribute("jogosVitrine") != null) {
         jogosVitrine = (List<ProdutoHomeDTO>) request.getAttribute("jogosVitrine");
@@ -33,7 +27,7 @@ if(jogosVitrine.size() > 0) {
     %>
         <div class="mySlides fade">
             <div style="width:100%;height:600px;background: url('<%= produto.getImagem() %>') no-repeat center center;background-size: auto;background-size: cover;">&nbsp;</div>
-            <div class="text" onclick="location.href='produto?id=<%= produto.getId() %>';">Adquira o Jogo</div>
+            <div class="text" onclick="location.href='produto?produtoId=<%= produto.getId() %>';">Adquira o Jogo</div>
         </div>
     <%
     }

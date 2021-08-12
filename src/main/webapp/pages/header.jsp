@@ -24,6 +24,14 @@
     </head>
 
     <body>
+        <%
+        // mostra se tiver msg
+        if (session.getAttribute("msg") != null) {
+            String msg = session.getAttribute("msg").toString();
+            session.setAttribute("msg", null);
+            out.println("<script>alert('" + msg + "');</script>");
+        }
+        %>
         <header>
             <!-- Logo -->
             <div class="logo-div">
@@ -36,7 +44,7 @@
                     <div class="dropdown-content">
                         <a href="ProdutosController?categoryId=5">Consoles</a>
                         <a href="ProdutosController?categoryId=6">Jogos</a>
-                        <a href="ProdutosController?categoryId=4">Acessórios</a>
+                        <a href="ProdutosController?categoryId=4">Acessï¿½rios</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -44,7 +52,7 @@
                     <div id="feminino" class="dropdown-content">
                         <a href="ProdutosController?categoryId=8">Consoles</a>
                         <a href="ProdutosController?categoryId=9">Jogos</a>
-                        <a href="ProdutosController?categoryId=7">Acessórios</a>
+                        <a href="ProdutosController?categoryId=7">Acessï¿½rios</a>
                     </div>
                 </div>
                 <div class="dropdown wii">
@@ -52,7 +60,7 @@
                     <div id="infantil" class="dropdown-content">
                         <a href="ProdutosController?categoryId=11">Consoles</a>
                         <a href="ProdutosController?categoryId=12">Jogos</a>
-                        <a href="ProdutosController?categoryId=10">Acessórios</a>
+                        <a href="ProdutosController?categoryId=10">Acessï¿½rios</a>
                     </div>
                 </div>
             </div>
@@ -65,11 +73,11 @@
                 </div>
                 <!-- Minha Conta -->
                 <div class="login-header">
-                    <a href="UserController"><img src="img/my-account.png" width="20" style="vertical-align: middle"></a>
+                    <a href="UserController"><img alt="Minha Conta" src="img/my-account.png" width="20" style="vertical-align: middle"></a>
                 </div>
                 <!-- Carrinho -->
                 <div class="carrinho-header">
-                    <a href="CarrinhoController"><img src="img/cart.png" width="25" style="vertical-align: middle"></a>
+                    <a href="CarrinhoController"><img alt="Meu Carrinho" src="img/cart.png" width="25" style="vertical-align: middle"></a>
                 </div>
             </div>
         </header>
