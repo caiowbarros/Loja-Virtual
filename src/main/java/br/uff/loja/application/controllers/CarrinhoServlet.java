@@ -1,7 +1,6 @@
 package br.uff.loja.application.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.services.CarrinhoService;
@@ -91,11 +89,8 @@ public class CarrinhoServlet extends HttpServlet {
                 action = request.getParameter("action");
             }
 
-            List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinhoId);
-            request.setAttribute(PRODUTOS, produtos);
-
-            Double precoTotalCarrinho = carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinhoId);
-            request.setAttribute(PRECOTOTAL, precoTotalCarrinho);
+            request.setAttribute(PRODUTOS, carrinhoService.listaProdutosCarrinho(carrinhoId));
+            request.setAttribute(PRECOTOTAL, carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinhoId));
 
             Integer produtoId = null;
             // recupera produtoId

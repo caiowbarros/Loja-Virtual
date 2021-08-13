@@ -1,7 +1,6 @@
 package br.uff.loja.application.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,12 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import br.uff.loja.core.dtos.AvaliacaoProdutoListDTO;
-import br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.core.services.AvaliacaoService;
 import br.uff.loja.core.services.ProdutoService;
+import br.uff.loja.infrastructure.shared.Helper;
 
 @WebServlet("/produto")
 public class ProdutoServlet extends HttpServlet {
@@ -42,15 +40,15 @@ public class ProdutoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         try {
             // se tem produto selecionado por parametro passa p sessao
-            String produtoId = null;
+            Integer produtoId = null;
             if (request.getParameter(PRODUTOID) != null) {
-                produtoId = request.getParameter(PRODUTOID);
+                produtoId = new Helper().tryParseInteger(request.getParameter(PRODUTOID));
                 session.setAttribute(PRODUTOID, produtoId);
             }
 
             // se produtoId da sessao for null manda p pag d produtos
             if (session.getAttribute(PRODUTOID) != null) {
-                produtoId = session.getAttribute(PRODUTOID).toString();
+                produtoId = new Helper().tryParseInteger(session.getAttribute(PRODUTOID).toString());
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("produtos");
@@ -69,9 +67,9 @@ public class ProdutoServlet extends HttpServlet {
             }
 
             // recupera user id
-            String userId = null;
+            Integer userId = null;
             if (session.getAttribute("userId") != null) {
-                userId = session.getAttribute("userId").toString();
+                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
             }
 
             // checa se eh para favoritar ou desfavoritar produto
@@ -81,14 +79,11 @@ public class ProdutoServlet extends HttpServlet {
                     response.sendRedirect("usuario?redirect=produto");
                     return;
                 } else {
-                    produtoService.usuarioToogleFavoritaProdutoPorId(Integer.valueOf(produtoId), Integer.valueOf(userId));
+                    produtoService.usuarioToogleFavoritaProdutoPorId(produtoId, userId);
                 }
             }
-            ProdutoVitrineUsuarioDTO produto = produtoService.mostraProdutoVitrineParaUsuario(Integer.valueOf(produtoId), Integer.valueOf(userId));
-            request.setAttribute("produto", produto);
-
-            List<AvaliacaoProdutoListDTO> avaliacoes = avaliacaoService.recuperaAvaliacoesDeUmProduto(Integer.valueOf(produtoId));
-            request.setAttribute("avaliacoes", avaliacoes);
+            request.setAttribute("produto", produtoService.mostraProdutoVitrineParaUsuario(produtoId, userId));
+            request.setAttribute("avaliacoes", avaliacaoService.recuperaAvaliacoesDeUmProduto(produtoId));
 
             request.getRequestDispatcher("pages/produto.jsp").forward(request, response);
         } catch (Exception ex) {

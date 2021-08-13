@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.services.AvaliacaoService;
+import br.uff.loja.infrastructure.shared.Helper;
 
 @WebServlet("/avaliacao")
 public class AvaliacaoServlet extends HttpServlet {
@@ -47,17 +48,17 @@ public class AvaliacaoServlet extends HttpServlet {
             }
 
             // se n tem usuario logado manda p controller de user
-            String userId = null;
+            Integer userId = null;
             if (session.getAttribute("userId") == null) {
                 response.sendRedirect("usuario?redirect=avaliacao");
                 return;
             } else {
-                userId = session.getAttribute("userId").toString();
+                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
             }
 
-            String produtoId = null;
+            Integer produtoId = null;
             if (session.getAttribute(PRODUTOID) != null) {
-                produtoId = session.getAttribute(PRODUTOID).toString();
+                produtoId = new Helper().tryParseInteger(session.getAttribute(PRODUTOID).toString());
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("produtos");
@@ -71,7 +72,7 @@ public class AvaliacaoServlet extends HttpServlet {
             }
 
             if (action.equals("avalia")) {
-                avaliacaoService.avaliaProduto(new AvaliacaoProdutoInsertDTO(Integer.valueOf(userId), Integer.valueOf(produtoId), Integer.valueOf(session.getAttribute(RATING).toString()), request.getParameter("description"), request.getParameter("title")));
+                avaliacaoService.avaliaProduto(new AvaliacaoProdutoInsertDTO(userId, produtoId, Integer.valueOf(session.getAttribute(RATING).toString()), request.getParameter("description"), request.getParameter("title")));
                 response.sendRedirect("produto");
                 return;
             }
