@@ -77,10 +77,22 @@ public class CarrinhoServlet extends HttpServlet {
             response.addCookie(ckCarrinhoId);
             // define variavel de sessao p ser recuperado
             session.setAttribute(CARRINHOID, carrinhoId);
-
+            
+            Integer produtoId = null;
+            // recupera produtoId pra add no carrinho
             if (request.getParameter("addProdutoId") != null) {
-                carrinhoService.insereProdutoCarrinho(carrinhoId, Integer.valueOf(request.getParameter("addProdutoId")));
+                produtoId = new Helper().tryParseInteger(request.getParameter("addProdutoId"));
+            }
+
+            // se produtoId nao for null add
+            if (produtoId != null) {
+                carrinhoService.insereProdutoCarrinho(carrinhoId, produtoId);
                 session.setAttribute("msg", "Produto inserido no carrinho com sucesso!");
+            }
+
+            // recupera produtoId do request parameter
+            if (request.getParameter("produtoId") != null) {
+                produtoId = new Helper().tryParseInteger(request.getParameter("produtoId"));
             }
 
             // recupera acao solicitada se existir
@@ -91,12 +103,6 @@ public class CarrinhoServlet extends HttpServlet {
 
             request.setAttribute(PRODUTOS, carrinhoService.listaProdutosCarrinho(carrinhoId));
             request.setAttribute(PRECOTOTAL, carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinhoId));
-
-            Integer produtoId = null;
-            // recupera produtoId
-            if (request.getParameter("produtoId") != null) {
-                produtoId = new Helper().tryParseInteger(request.getParameter("produtoId"));
-            }
 
             Integer enderecoId = null;
             // recupera enderecoId
