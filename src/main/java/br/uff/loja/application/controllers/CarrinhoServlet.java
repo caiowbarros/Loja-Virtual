@@ -104,18 +104,6 @@ public class CarrinhoServlet extends HttpServlet {
             request.setAttribute(PRODUTOS, carrinhoService.listaProdutosCarrinho(carrinhoId));
             request.setAttribute(PRECOTOTAL, carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinhoId));
 
-            Integer enderecoId = null;
-            // recupera enderecoId
-            if (request.getParameter("end") != null) {
-                enderecoId = new Helper().tryParseInteger(request.getParameter("end"));
-            }
-
-            Integer qtdProduto = null;
-            // recupera qtdProduto
-            if (request.getParameter("qtdProduto") != null) {
-                qtdProduto = new Helper().tryParseInteger(request.getParameter("qtdProduto"));
-            }
-
             switch (action) {
                 case "finalizaCompra": {
                     request.setAttribute("enderecos", enderecoService.listaEnderecosPorUsuarioId(userId));
@@ -132,10 +120,22 @@ public class CarrinhoServlet extends HttpServlet {
                     break;
                 }
                 case "mudaQtd": {
+                    Integer qtdProduto = null;
+                    // recupera qtdProduto
+                    if (request.getParameter("qtdProduto") != null) {
+                        qtdProduto = new Helper().tryParseInteger(request.getParameter("qtdProduto"));
+                    }
+
                     carrinhoService.alteraQuantidadeProdutoCarrinho(carrinhoId, produtoId, qtdProduto);
                     break;
                 }
                 case "continuaPagamento": {
+                    Integer enderecoId = null;
+                    // recupera enderecoId
+                    if (request.getParameter("end") != null) {
+                        enderecoId = new Helper().tryParseInteger(request.getParameter("end"));
+                    }
+                    
                     if (enderecoId == null) {
                         session.setAttribute("msg", "Por favor selecione um endereço!");
                         session.setAttribute("enderecoId", null);
