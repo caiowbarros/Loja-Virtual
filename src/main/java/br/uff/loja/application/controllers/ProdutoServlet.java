@@ -1,6 +1,8 @@
 package br.uff.loja.application.controllers;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -102,9 +104,12 @@ public class ProdutoServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ProdutoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -116,9 +121,12 @@ public class ProdutoServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ProdutoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

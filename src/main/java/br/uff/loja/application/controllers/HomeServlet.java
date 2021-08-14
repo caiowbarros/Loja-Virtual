@@ -3,6 +3,8 @@ package br.uff.loja.application.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -56,9 +58,12 @@ public class HomeServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
