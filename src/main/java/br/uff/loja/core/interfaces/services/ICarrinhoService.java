@@ -13,4 +13,5 @@ public interface ICarrinhoService {
     public List<CarrinhoProdutoDTO> listaProdutosCarrinho(Integer id) throws LojaException;
     public void alteraQuantidadeProdutoCarrinho(Integer carrinhoId, Integer produtoId, Integer quantidade) throws LojaException;
     public Boolean carrinhoAtivoValido(Integer id, Integer usuarioId) throws LojaException;
+    public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException;
 }

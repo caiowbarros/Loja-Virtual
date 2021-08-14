@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.uff.loja.core.exceptions.LojaException;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class MySQLDAO {
     private Connection conn = null;
@@ -104,7 +105,8 @@ public class MySQLDAO {
         if (this.conn != null && !this.conn.isClosed()) {
             return;
         }
-        this.conn = DriverManager.getConnection("jdbc:mysql://e_store:123456@localhost:3306/e_store");
+        Dotenv dotenv = Dotenv.load();
+        this.conn = DriverManager.getConnection(dotenv.get("MYSQL_CONNECTION_STRING"));
     }
 
     public void fechaConexao() throws SQLException {

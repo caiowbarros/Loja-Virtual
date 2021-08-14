@@ -21,4 +21,12 @@ public class Helper implements IHelper {
             return null;
         }
     }
+
+    public Integer tryParseInteger(String intStr) {
+        try {
+            return Integer.valueOf(intStr);
+        } catch (Exception ec) {
+            return null;
+        }
+    }
 }

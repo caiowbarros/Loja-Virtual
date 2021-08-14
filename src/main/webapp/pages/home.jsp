@@ -3,50 +3,49 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.core.dtos.ProdutoHomeDTO"%>
+<%
+    List<ProdutoHomeDTO> jogosVitrine = new ArrayList<>();
+    if (request.getAttribute("jogosVitrine") != null) {
+        jogosVitrine = (List<ProdutoHomeDTO>) request.getAttribute("jogosVitrine");
+    }
+%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Home"/>
 </jsp:include>
 <%
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
+if(jogosVitrine.size() > 0) {
 %>
-
 <!-- Slideshow container -->
 <div class="slideshow-container">
-
     <!-- Full-width images with caption text -->
-    <div class="mySlides fade">
-        <img src="img/banner-rdr2.jpg" style="width:100%">
-        <div class="text" onclick="location.href='ProdutoController?produtoId=9';">Adquira o Jogo</div>
-    </div>
-
-    <div class="mySlides fade">
-        <img src="img/banner-swjfo.jpg" style="width:100%">
-        <div class="text" onclick="location.href='ProdutoController?produtoId=7';">Adquira o Jogo</div>
-    </div>
-
-    <div class="mySlides fade">
-        <img src="img/banner-gow.jpg" style="width:100%">
-        <div class="text" onclick="location.href='ProdutoController?produtoId=10';">Adquira o Jogo</div>
-    </div>
-
+    <%
+    for (ProdutoHomeDTO produto : jogosVitrine) {
+    %>
+        <div class="mySlides fade">
+            <div style="width:100%;height:600px;background: url('<%= produto.getImagem() %>') no-repeat center center;background-size: auto;background-size: cover;">&nbsp;</div>
+            <div class="text" onclick="location.href='produto?produtoId=<%= produto.getId() %>';">Adquira o Jogo</div>
+        </div>
+    <%
+    }
+    %>
     <!-- Next and previous buttons -->
     <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
     <a class="next" onclick="plusSlides(1)">&#10095;</a>
 </div>
 <br>
-
 <!-- The dots/circles -->
 <div style="text-align:center">
-    <span class="dot" onclick="currentSlide(1)"></span>
-    <span class="dot" onclick="currentSlide(2)"></span>
-    <span class="dot" onclick="currentSlide(3)"></span>
+    <%
+    for (int i = 0; i < jogosVitrine.size(); i++) {
+    %>
+    <span class="dot" onclick="currentSlide(<%= i %>)"></span>
+    <%
+    }
+    %>
 </div>
 
 <script>
@@ -79,21 +78,21 @@ function showSlides(n) {
     dots[slideIndex-1].className += " active";
 }    
 </script>
-
+<%
+}
+%>
 
 <div class="sec-container">
     <div class="sec-img">
-        <img src="img/ps4.jpg">
+        <img alt="Playstation" src="img/ps4.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=1">Playstation</a></div>
     </div>
-
     <div class="sec-img">
-        <img src="img/xone.jpg">
+        <img alt="Xbox" src="img/xone.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=2">Xbox</a></div>
     </div>
-
     <div class="sec-img">
-        <img src="img/wii.jpg">
+        <img alt="Wii" src="img/wii.jpg">
         <div class="img-btn"><a href="ProdutosController?categoryId=3">Wii</a></div>
     </div>
 </div>

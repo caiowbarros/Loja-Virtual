@@ -8,4 +8,5 @@ import br.uff.loja.core.exceptions.LojaException;
 public interface IVendaData {
     public List<VendaDTO> listaVendasDoUsuario(Integer usuarioId) throws LojaException;
     public void gravaVenda(Integer carrinhoId, Integer enderecoId) throws LojaException;
+    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException;
 }

@@ -97,4 +97,9 @@ public class CarrinhoService implements ICarrinhoService {
     public Boolean carrinhoAtivoValido(Integer id, Integer usuarioId) throws LojaException {
         return Boolean.TRUE.equals(carrinhoData.carrinhoExiste(id)) && Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(id, usuarioId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(id)) && Boolean.TRUE.equals(carrinhoData.quantidadeProdutosCarrinho(id) > 0);
     }
+
+    @Override
+    public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException {
+        return carrinhoData.recuperaPrecoTotalDeUmCarrinho(id);
+    }
 }
