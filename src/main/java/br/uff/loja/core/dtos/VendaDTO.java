@@ -1,6 +1,7 @@
 package br.uff.loja.core.dtos;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import br.uff.loja.infrastructure.shared.Helper;
@@ -12,6 +13,8 @@ public class VendaDTO extends BaseDTO {
     private Date criadoEm;
     private Integer enderecoId;
     private Integer usuarioId;
+    private List<CarrinhoProdutoDTO> produtosDoCarrinho;
+    private EnderecoDTO endereco;
 
     public VendaDTO() {}
 
@@ -22,6 +25,22 @@ public class VendaDTO extends BaseDTO {
         this.setCriadoEm((new Helper()).convertStringToDate("yyyy-MM-dd HH:mm:ss", String.valueOf(venda.get("criadoEm"))));
         this.setEnderecoId(Integer.valueOf(String.valueOf(venda.get("enderecoId"))));
         this.setUsuarioId(Integer.valueOf(String.valueOf(venda.get("usuarioId"))));
+    }
+
+    public EnderecoDTO getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(EnderecoDTO endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setProdutosDoCarrinho(List<CarrinhoProdutoDTO> produtosDoCarrinho) {
+        this.produtosDoCarrinho = produtosDoCarrinho;
+    }
+
+    public List<CarrinhoProdutoDTO> getProdutosDoCarrinho() {
+        return produtosDoCarrinho;
     }
 
     public Integer getCarrinhoId() {
