@@ -14,7 +14,7 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web e melhorado
 
 # Como testar
 ## Padrão
-1. Configure seu banco de dados mysql no arquivo https://github.com/caiowbarros/Loja-Virtual/blob/master/src/main/java/br/uff/loja/infrastructure/database/MySQLDAO.java#L107
+1. Configure sua configuração de banco de dados mysql, criando o arquivo `.env`
 2. Restaure o dump .sql no seu banco de dados escolhido presente em https://github.com/caiowbarros/Loja-Virtual/blob/master/dump/bd.sql
 3. Rode `mvn package` para buildar o projeto
 4. Rode `java -jar target/endorsed/webapp-runner.jar --port $PORT target/loja-1.0-SNAPSHOT.war` para testar seu projeto, trocando o `$PORT` pela porta que desejar
