@@ -199,10 +199,16 @@ public class ProdutoData implements IProdutoData {
         
             Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + filtroProduto.getItensPorPagina() + ")", consulta + filtro, "", bind.toArray())));
 
-            if(filtroProduto.getPaginaAtual() < 1 || filtroProduto.getPaginaAtual() > ultimaPagina) {
-                throw new LojaException("O número da página inválido, a página deve estar entre o intervalo: 1-" + ultimaPagina + ".");
+            if(filtroProduto.getPaginaAtual() < 1) {
+                filtroProduto.setPaginaAtual(1);
+                return listaProdutosVitrine(filtroProduto);
             }
 
+            if(filtroProduto.getPaginaAtual() > ultimaPagina) {
+                filtroProduto.setPaginaAtual(ultimaPagina);
+                return listaProdutosVitrine(filtroProduto);
+            }
+            
             return new PaginateDTO<>(filtroProduto.getPaginaAtual(),retornoFormatado,ultimaPagina);
         } catch (Exception e) {
             throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");

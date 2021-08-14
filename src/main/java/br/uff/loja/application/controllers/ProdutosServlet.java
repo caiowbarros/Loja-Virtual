@@ -263,24 +263,13 @@ public class ProdutosServlet extends HttpServlet {
 
             switch (action) {
                 case "ant": {
-                    if (produtosPag > 1) {
-                        produtosPag = produtosPag - 1;
-                        session.setAttribute(PRODUTOSPAGSTR, produtosPag);
-                    }
+                    produtosPag = produtosPag - 1;
+                    session.setAttribute(PRODUTOSPAGSTR, produtosPag);
                     break;
                 }
                 case "prox": {
-                    Integer maxPag = 1;
-                    if (session.getAttribute(MAXPAGSTR) != null) {
-                        maxPag = new Helper().tryParseInteger(session.getAttribute(MAXPAGSTR).toString());
-                    } else {
-                        Double maxP = Double.POSITIVE_INFINITY;
-                        maxPag = maxP.intValue();
-                    }
-                    if (maxPag > produtosPag) {
-                        produtosPag = produtosPag + 1;
-                        session.setAttribute(PRODUTOSPAGSTR, produtosPag);
-                    }
+                    produtosPag = produtosPag + 1;
+                    session.setAttribute(PRODUTOSPAGSTR, produtosPag);
                     break;
                 }
                 default: {
@@ -288,7 +277,6 @@ public class ProdutosServlet extends HttpServlet {
                 }
             }
 
-            // define offset
             if (session.getAttribute(PRODUTOSPAGSTR) != null) {
                 filtro.setPaginaAtual(new Helper().tryParseInteger(session.getAttribute(PRODUTOSPAGSTR).toString()));
             }
