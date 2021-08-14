@@ -35,3 +35,5 @@ build/
 
 .fake
 .ionide
+
+.env
