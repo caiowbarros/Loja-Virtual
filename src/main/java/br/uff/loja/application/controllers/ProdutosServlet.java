@@ -249,27 +249,19 @@ public class ProdutosServlet extends HttpServlet {
             // define pag atual
             Integer produtosPag = 1;
             if (session.getAttribute(PRODUTOSPAGSTR) != null) {
-                produtosPag = (Integer) session.getAttribute(PRODUTOSPAGSTR);
+                produtosPag = Integer.valueOf(session.getAttribute(PRODUTOSPAGSTR).toString());
             }
-
-            // joga produtos pag p sessao
-            session.setAttribute(PRODUTOSPAGSTR, produtosPag);
 
             // recupera acao solicitada se existir
-            String action = "";
-            if (request.getParameter("action") != null) {
-                action = request.getParameter("action");
-            }
+            String action = request.getParameter("action");
 
             switch (action) {
                 case "ant": {
                     produtosPag = produtosPag - 1;
-                    session.setAttribute(PRODUTOSPAGSTR, produtosPag);
                     break;
                 }
                 case "prox": {
                     produtosPag = produtosPag + 1;
-                    session.setAttribute(PRODUTOSPAGSTR, produtosPag);
                     break;
                 }
                 default: {
@@ -277,13 +269,12 @@ public class ProdutosServlet extends HttpServlet {
                 }
             }
 
-            if (session.getAttribute(PRODUTOSPAGSTR) != null) {
-                filtro.setPaginaAtual(new Helper().tryParseInteger(session.getAttribute(PRODUTOSPAGSTR).toString()));
-            }
+            filtro.setPaginaAtual(produtosPag);
 
             PaginateDTO<List<ProdutoListaDTO>> produtosPaginados = produtoService.listaProdutosVitrine(filtro);
             
             session.setAttribute(MAXPAGSTR, produtosPaginados.getUltimaPagina());
+            session.setAttribute(PRODUTOSPAGSTR, produtosPaginados.getPaginaAtual());
 
             request.setAttribute("produtos", produtosPaginados);
             request.getRequestDispatcher("pages/produtos.jsp").forward(request, response);
