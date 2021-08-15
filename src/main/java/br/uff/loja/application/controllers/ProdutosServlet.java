@@ -86,7 +86,6 @@ public class ProdutosServlet extends HttpServlet {
             List<String> listaSubCategorias = new ArrayList<>();
             if (subCategorias != null) {
                 listaSubCategorias = Arrays.asList(subCategorias);
-                filtro.setSubCategorias(listaSubCategorias);
             }
 
             // Converte String Array de especiais p Lista

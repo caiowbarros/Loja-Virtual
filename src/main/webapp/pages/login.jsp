@@ -6,13 +6,7 @@
 <%
     // se tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") != null) {
-        response.sendRedirect("UserController");
-    }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuario");
     }
 %>
 <!-- Header -->
@@ -28,7 +22,7 @@
     <div class="login-column">
         <h2>Login</h2>
         <div class="sub-container">
-            <form method="POST" action="UserController">
+            <form method="POST" action="usuario">
 
                 <input name="redirect" style="display:none;" value="<%= request.getAttribute("redirect")%>">
 
@@ -63,7 +57,7 @@
     <div class="register-column">
         <h2>Criar Conta</h2>
         <div class="sub-container">
-            <form method="POST" action="UserController">
+            <form method="POST" action="usuario">
 
                 <input name="redirect" style="display:none;" value="<%= request.getAttribute("redirect")%>">
 

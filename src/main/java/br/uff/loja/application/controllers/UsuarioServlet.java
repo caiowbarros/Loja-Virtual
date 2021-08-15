@@ -17,7 +17,9 @@ import javax.servlet.http.HttpSession;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.exceptions.LojaException;
+import br.uff.loja.core.interfaces.services.IRoleService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
+import br.uff.loja.core.services.RoleService;
 import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.infrastructure.shared.Helper;
 
@@ -30,9 +32,11 @@ public class UsuarioServlet extends HttpServlet {
     private static final String USERROLE = "userRole";
     private static final String REDIRECT = "redirect";
     private final IUsuarioService usuarioService;
+    private final IRoleService roleService;
 
     public UsuarioServlet() {
         usuarioService = new UsuarioService();
+        roleService = new RoleService();
     }
 
     /**
@@ -53,7 +57,10 @@ public class UsuarioServlet extends HttpServlet {
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
+            if(request.getParameter("action")!=null){
+                action = request.getParameter("action");
+            }
 
             Integer usuarioIdSelectionado = null;
             if (session.getAttribute(SELUSER) != null) {
@@ -149,6 +156,7 @@ public class UsuarioServlet extends HttpServlet {
                             throw new LojaException("Acesso não permitido!");
                         }
 
+                        request.setAttribute("permissoes", roleService.listaRoles());
                         request.setAttribute("usuario", usuarioService.encontraUsuarioPorId(usuarioIdSelectionado));
                         redirect = "pages/usuario-cadastro.jsp";
                     } else {

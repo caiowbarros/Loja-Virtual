@@ -73,11 +73,11 @@
                 </div>
                 <!-- Minha Conta -->
                 <div class="login-header">
-                    <a href="UserController"><img alt="Minha Conta" src="img/my-account.png" width="20" style="vertical-align: middle"></a>
+                    <a href="usuario"><img alt="Minha Conta" src="img/my-account.png" width="20" style="vertical-align: middle"></a>
                 </div>
                 <!-- Carrinho -->
                 <div class="carrinho-header">
-                    <a href="CarrinhoController"><img alt="Meu Carrinho" src="img/cart.png" width="25" style="vertical-align: middle"></a>
+                    <a href="carrinho"><img alt="Meu Carrinho" src="img/cart.png" width="25" style="vertical-align: middle"></a>
                 </div>
             </div>
         </header>

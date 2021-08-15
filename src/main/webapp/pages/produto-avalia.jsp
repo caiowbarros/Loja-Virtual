@@ -6,11 +6,11 @@
 <%
     // se n tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=AvaliacaoController");
+        response.sendRedirect("usuario?redirect=AvaliacaoController");
     }
     // se n tiver produto selecionado retorna p pag d produtos
     if (session.getAttribute("produtoId") == null) {
-        response.sendRedirect("ProdutosController");
+        response.sendRedirect("usuario");
     }
     // mostra msg se tiver
     if (session.getAttribute("msg") != null) {

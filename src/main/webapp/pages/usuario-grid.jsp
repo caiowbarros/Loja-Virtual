@@ -3,22 +3,18 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
-<%@page import="java.util.ArrayList"%>
+<%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
+<%@page import="br.uff.loja.core.dtos.UsuarioDTO"%>
+<%@page import="java.util.List"%>
 <%
     // se n tiver um usuario logado retorna p userController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("usuario");
     }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
 
-    ArrayList<ArrayList<String>> grid = null;
+    List<UsuarioDTO> grid = null;
     if (request.getAttribute("usuarios") != null) {
-        grid = (ArrayList<ArrayList<String>>) request.getAttribute("usuarios");
+        grid = (List<UsuarioDTO>) request.getAttribute("usuarios");
     }
 %>
 <!-- Header -->
@@ -34,13 +30,13 @@
             <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals("1") ? "Lista de Cadastros" : "Meus Dados")%></p>
         </div>
         <%
-            for (int i = 0; i < grid.size(); i++) {
+            for (UsuarioDTO usuario :grid) {
         %>
         <div class="left-row">
-            <p style="padding-bottom: 5px;"><%= grid.get(i).get(1)%></p>
+            <p style="padding-bottom: 5px;"><%= usuario.getEmail() %></p>
             <div class="editar-row">
-                <p><%= grid.get(i).get(2)%></p>
-                <a href="UserController?sel=<%= grid.get(i).get(0)%>">Editar</a>
+                <p><%= usuario.getNome() %></p>
+                <a href="usuario?sel=<%= usuario.getId() %>">Editar</a>
             </div>
         </div>
         <%
@@ -71,7 +67,7 @@
         </div>
         <div class="right-row">
             <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
-            <% if (session.getAttribute("userRole").equals("1")) { %>
+            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href='produto-adm';">
                     <i class="fas fa-barcode"></i>

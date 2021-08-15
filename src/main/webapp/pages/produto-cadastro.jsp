@@ -7,7 +7,7 @@
 <%
     // se n usuario n for adm retorna p ProdutosController
     if (!session.getAttribute("userRole").equals("1")) {
-        response.sendRedirect("UserController?redirect=ProdutosController");
+        response.sendRedirect("usuario?redirect=ProdutosController");
     }
 
     if (session.getAttribute("msg") != null) {
