@@ -198,16 +198,6 @@ public class ProdutoData implements IProdutoData {
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoListaDTO(produto)));
         
             Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + filtroProduto.getItensPorPagina() + ")", consulta + filtro, "", bind.toArray())));
-
-            if(filtroProduto.getPaginaAtual() < 1) {
-                filtroProduto.setPaginaAtual(1);
-                return listaProdutosVitrine(filtroProduto);
-            }
-
-            if(filtroProduto.getPaginaAtual() > ultimaPagina) {
-                filtroProduto.setPaginaAtual(ultimaPagina);
-                return listaProdutosVitrine(filtroProduto);
-            }
             
             return new PaginateDTO<>(filtroProduto.getPaginaAtual(),retornoFormatado,ultimaPagina);
         } catch (Exception e) {

@@ -7,7 +7,7 @@ and open the template in the editor.
 <%@page import="java.util.List"%>
 <%@page import="br.uff.loja.core.dtos.ProdutoHomeDTO"%>
 <%
-    List<ProdutoHomeDTO> jogosVitrine = new ArrayList<>();
+    List<ProdutoHomeDTO> jogosVitrine = new ArrayList<ProdutoHomeDTO>();
     if (request.getAttribute("jogosVitrine") != null) {
         jogosVitrine = (List<ProdutoHomeDTO>) request.getAttribute("jogosVitrine");
     }
@@ -85,15 +85,15 @@ function showSlides(n) {
 <div class="sec-container">
     <div class="sec-img">
         <img alt="Playstation" src="img/ps4.jpg">
-        <div class="img-btn"><a href="ProdutosController?categoryId=1">Playstation</a></div>
+        <div class="img-btn"><a href="produtos?categoryId=1">Playstation</a></div>
     </div>
     <div class="sec-img">
         <img alt="Xbox" src="img/xone.jpg">
-        <div class="img-btn"><a href="ProdutosController?categoryId=2">Xbox</a></div>
+        <div class="img-btn"><a href="produtos?categoryId=2">Xbox</a></div>
     </div>
     <div class="sec-img">
         <img alt="Wii" src="img/wii.jpg">
-        <div class="img-btn"><a href="ProdutosController?categoryId=3">Wii</a></div>
+        <div class="img-btn"><a href="produtos?categoryId=3">Wii</a></div>
     </div>
 </div>
 

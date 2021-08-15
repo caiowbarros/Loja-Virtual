@@ -7,7 +7,7 @@
 <%
     // se n tiver um usuario logado retorna p userController
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController");
+        response.sendRedirect("usuario");
     }
     // mostra se tiver msg
     if (session.getAttribute("msg") != null) {
@@ -51,19 +51,19 @@
     <div class="right-user-container">
         <div class="right-row">
             <div class="user-info">
-                <div class="user-info-middle" onclick="location.href='EnderecoController';">
+                <div class="user-info-middle" onclick="location.href='endereco';">
                     <i class="fas fa-map-marker-alt"></i>
                     <p>Lista de Endereços</p>
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-info-middle" onclick="location.href='ProdutosController?esp=favoritos';">
+                <div class="user-info-middle" onclick="location.href='produtos?esp=favoritos';">
                     <i class="fas fa-heart"></i>
                     <p>Favoritos</p>
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-info-middle" onclick="location.href='CompraController?historico';">
+                <div class="user-info-middle" onclick="location.href='compra?historico';">
                     <i class="fas fa-shopping-bag"></i>
                     <p>Histórico de Pedidos</p>
                 </div>
@@ -73,7 +73,7 @@
             <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
             <% if (session.getAttribute("userRole").equals("1")) { %>
             <div class="user-info">
-                <div class="user-info-middle" onclick="location.href='ProdutoAdmController';">
+                <div class="user-info-middle" onclick="location.href='produto-adm';">
                     <i class="fas fa-barcode"></i>
                     <p>Cadastro de Produtos</p>
                 </div>
@@ -85,7 +85,7 @@
                 <div class="user-info-middle" onclick="Logout()">
                     <i class="fas fa-sign-out-alt"></i>
                     <p>
-                        <form method="post" action="UserController">
+                        <form method="post" action="usuario">
                             <button onclick="return confirm('Tem certeza que deseja fazer o LOGOUT?');false;" type="submit" id="logout-btn" name="action" value="logout" formnovalidate>Logout</button>
                         </form>
                     </p>

@@ -29,4 +29,12 @@ public class Helper implements IHelper {
             return null;
         }
     }
+    
+    public Double tryParseDouble(String intStr) {
+        try {
+            return Double.valueOf(intStr);
+        } catch (Exception ec) {
+            return null;
+        }
+    }
 }

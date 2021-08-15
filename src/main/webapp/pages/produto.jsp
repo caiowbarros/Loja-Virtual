@@ -10,7 +10,7 @@
     if (session.getAttribute("produtoId") != null) {
         produtoId = session.getAttribute("produtoId").toString();
     } else {
-        response.sendRedirect("ProdutoController");
+        response.sendRedirect("produto");
     }
 
     // mostra msg se tiver
@@ -27,7 +27,7 @@
         avaliacoes = (ArrayList<ArrayList<String>>) request.getAttribute("avaliacoes");
     } else {
         session.setAttribute("msg", "Por favor selecione um produto!");
-        response.sendRedirect("ProdutosController");
+        response.sendRedirect("produtos");
         return;
     }
 

@@ -3,19 +3,13 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
-    if (!session.getAttribute("userRole").equals("1")) {
-        response.sendRedirect("UserController");
+    if (!session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) {
+        response.sendRedirect("usuario");
     }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
     ArrayList<ArrayList<String>> grid = null;
     if (request.getAttribute("grid") != null) {
         grid = (ArrayList<ArrayList<String>>) request.getAttribute("grid");

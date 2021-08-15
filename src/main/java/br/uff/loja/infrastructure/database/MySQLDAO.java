@@ -105,8 +105,14 @@ public class MySQLDAO {
         if (this.conn != null && !this.conn.isClosed()) {
             return;
         }
-        Dotenv dotenv = Dotenv.load();
-        this.conn = DriverManager.getConnection(dotenv.get("MYSQL_CONNECTION_STRING"));
+        // Dotenv dotenv = Dotenv.load();
+        // this.conn = DriverManager.getConnection(dotenv.get("MYSQL_CONNECTION_STRING"));
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (Exception ex) {
+            // deu merda
+        }
+        this.conn = DriverManager.getConnection("jdbc:mysql://e_store:123456@192.168.0.101:3306/e_store");
     }
 
     public void fechaConexao() throws SQLException {
