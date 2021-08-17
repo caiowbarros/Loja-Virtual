@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
 <%@page import="br.uff.loja.core.dtos.UsuarioDTO"%>
 <%@page import="java.util.List"%>
@@ -12,7 +13,7 @@
         response.sendRedirect("usuario");
     }
 
-    List<UsuarioDTO> grid = null;
+    List<UsuarioDTO> grid = new ArrayList<UsuarioDTO>();
     if (request.getAttribute("usuarios") != null) {
         grid = (List<UsuarioDTO>) request.getAttribute("usuarios");
     }
@@ -27,7 +28,7 @@
     
     <div class="left-user-container">
         <div class="left-row">
-            <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals("1") ? "Lista de Cadastros" : "Meus Dados")%></p>
+            <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString()) ? "Lista de Cadastros" : "Meus Dados")%></p>
         </div>
         <%
             for (UsuarioDTO usuario :grid) {
@@ -67,7 +68,7 @@
         </div>
         <div class="right-row">
             <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
-            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
+            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString())) { %>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href='produto-adm';">
                     <i class="fas fa-barcode"></i>

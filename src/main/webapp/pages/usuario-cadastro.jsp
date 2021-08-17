@@ -12,6 +12,7 @@
     // se n tiver um usuario logado retorna p userController
     if (session.getAttribute("userId") == null) {
         response.sendRedirect("usuario");
+        return;
     }
     
     if (request.getAttribute("usuario") == null) {
@@ -49,7 +50,7 @@
                 <label>Senha </label>
                 <input class="field-long" name="password" required type="password" maxlength="255" value="<%= usuario.getSenha() %>">
             </li>
-            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
+            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString())) { %>
             <li>
                 <label>Papel </label>
                 <select name="roleId" required>
