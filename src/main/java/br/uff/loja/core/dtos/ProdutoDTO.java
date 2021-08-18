@@ -10,7 +10,16 @@ public class ProdutoDTO extends BaseDTO {
     private String imagem;
     private Integer categoriaId;
     private Integer quantidade;
+    private String categoria;
+    
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
+    public String getCategoria() {
+        return categoria;
+    }
+    
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
@@ -75,6 +84,7 @@ public class ProdutoDTO extends BaseDTO {
         this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
         this.setDescricao(String.valueOf(produto.get("descricao")));
         this.setImagem(String.valueOf(produto.get("imagem")));
+        this.setCategoria(String.valueOf(produto.get("categoria")));
         this.setCategoriaId(Integer.valueOf(String.valueOf(produto.get("categoriaId"))));
         this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
     }

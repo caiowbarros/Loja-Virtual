@@ -3,25 +3,28 @@
     Created on : 02/10/2019, 02:09:04
     Author     : HP
 --%>
-<%@page import="br.uff.models.Product"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="br.uff.loja.core.dtos.CategoriaDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.core.dtos.ProdutoDTO"%>
+<%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
-    if (!session.getAttribute("userRole").equals("1")) {
+    if (!session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) {
         response.sendRedirect("usuario?redirect=ProdutosController");
     }
 
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
-    Product produto = null;
+    ProdutoDTO produto = new ProdutoDTO();
     if (request.getAttribute("produto") != null) {
-        produto = (Product) request.getAttribute("produto");
+        produto = (ProdutoDTO) request.getAttribute("produto");
     } else {
-        response.sendRedirect("ProdutoAdmController");
+        response.sendRedirect("produto-adm");
         return;
+    }
+    
+    List<CategoriaDTO> categorias = new ArrayList<CategoriaDTO>();
+    if (request.getAttribute("categorias") != null) {
+        categorias = (List<CategoriaDTO>) request.getAttribute("categorias");
     }
 
     String sel = request.getParameter("sel");
@@ -41,27 +44,27 @@
             <ul class="form-style-1">
                 <li>
                     <label>Nome </label>
-                    <input value="${produto.getName()}" class="field-long" name="name" required type="text" maxlength="255" />
+                    <input value="<%= produto.getNome() %>" class="field-long" name="name" required type="text" maxlength="255" />
                 </li>
                 <li>
                     <label>Preço </label>
-                    <input value="${produto.getPrice()}" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />
+                    <input value="<%= produto.getPreco() %>" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />
                 </li>
                 <li>
                     <label>Descrição </label>
-                    <textarea class="field-long field-textarea" name="description" required maxlength="255">${produto.getDescription()}</textarea>
+                    <textarea class="field-long field-textarea" name="description" required maxlength="255"><%= produto.getDescricao() %></textarea>
                 </li>
                 <li>
-                    <label>Categoria </label><jsp:include page="partials/components/select.jsp">
-                        <jsp:param name="nameSelect" value="categoryId"/>
-                        <jsp:param name="required" value="1"/>
-                        <jsp:param name="consulta" value="SELECT id value,category_name text FROM vw_category ORDER BY 2"/>
-                        <jsp:param name="selectedValue" value="${produto.getCategoryId()}"/>
-                    </jsp:include>
+                    <label>Categoria </label>
+                    <select required name="categoryId">
+                        <% for (CategoriaDTO categoria : categorias) { %>
+                        <option <%= (produto.getCategoriaId() == categoria.getId() ? "selected" : "") %> value="<%= categoria.getId() %>"><%= categoria.getNome() %></option>
+                        <% } %>
+                    </select>
                 </li>
                 <li>
                     <label>Imagem </label><input name="img" id="img" accept="image/*" <% if (sel.equals("")) { %>required<% }%> type="file"/>
-                    <input value="${produto.getImg()}" style="display:none;" name="src" readonly type="text"/>
+                    <input value="<%= produto.getImagem() %>" style="display:none;" name="src" readonly type="text"/>
                 </li>
                 <li class="center">
                     <button name="action" formnovalidate value="unsel">Voltar</button>

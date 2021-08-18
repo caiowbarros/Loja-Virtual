@@ -16,6 +16,8 @@ import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class ProdutoData implements IProdutoData {
     private final MySQLDAO mysqlDAO;
+    private static final String CONSULTAPRODUTO = "SELECT p.id AS id, p.name AS nome, p.price AS preco, p.description AS descricao,p.img AS imagem, p.category_id AS categoriaId, p.quantity AS quantidade, c.category_name AS categoria FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id)";
+
 
     public ProdutoData() {
         this.mysqlDAO = new MySQLDAO();
@@ -25,7 +27,7 @@ public class ProdutoData implements IProdutoData {
     public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products WHERE id=?", bind);
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega(CONSULTAPRODUTO + " WHERE p.id=?", bind);
             return new ProdutoDTO(retorno.get(0));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Produto de id: " + id + ". (" + e.getMessage() + ")");
@@ -102,7 +104,7 @@ public class ProdutoData implements IProdutoData {
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException {
         try {
             Object[] bind = {};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(CONSULTAPRODUTO, bind);
             List<ProdutoDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoDTO(produto)));
             return retornoFormatado;

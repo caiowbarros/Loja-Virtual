@@ -25,8 +25,10 @@ public class CarrinhoServlet extends HttpServlet {
     private static final String CARRINHOID = "carrinhoId";
     private static final String PRECOTOTAL = "totalPrice";
     private static final String PRODUTOS = "produtos";
+    private final Helper helper;
 
     public CarrinhoServlet() {
+        helper = new Helper();
         carrinhoService = new CarrinhoService();
         enderecoService = new EnderecoService();
     }
@@ -60,14 +62,14 @@ public class CarrinhoServlet extends HttpServlet {
             Integer userId = null;
             // recupera userId
             if (session.getAttribute("userId") != null) {
-                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                userId = helper.tryParseInteger(session.getAttribute("userId").toString());
             }
 
             Integer carrinhoId = null;
 
             // verifica se carrinhoIdString eh um numero
             if (carrinhoIdString != null) {
-                carrinhoId = new Helper().tryParseInteger(carrinhoIdString);
+                carrinhoId = helper.tryParseInteger(carrinhoIdString);
             }
 
             carrinhoId = carrinhoService.recuperaCarrinhoAtivo(carrinhoId, userId, request.getRemoteAddr()).getId();
@@ -83,7 +85,7 @@ public class CarrinhoServlet extends HttpServlet {
             Integer produtoId = null;
             // recupera produtoId pra add no carrinho
             if (request.getParameter("addProdutoId") != null) {
-                produtoId = new Helper().tryParseInteger(request.getParameter("addProdutoId"));
+                produtoId = helper.tryParseInteger(request.getParameter("addProdutoId"));
             }
 
             // se produtoId nao for null add
@@ -94,7 +96,7 @@ public class CarrinhoServlet extends HttpServlet {
 
             // recupera produtoId do request parameter
             if (request.getParameter("produtoId") != null) {
-                produtoId = new Helper().tryParseInteger(request.getParameter("produtoId"));
+                produtoId = helper.tryParseInteger(request.getParameter("produtoId"));
             }
 
             // recupera acao solicitada se existir
@@ -125,7 +127,7 @@ public class CarrinhoServlet extends HttpServlet {
                     Integer qtdProduto = null;
                     // recupera qtdProduto
                     if (request.getParameter("qtdProduto") != null) {
-                        qtdProduto = new Helper().tryParseInteger(request.getParameter("qtdProduto"));
+                        qtdProduto = helper.tryParseInteger(request.getParameter("qtdProduto"));
                     }
 
                     carrinhoService.alteraQuantidadeProdutoCarrinho(carrinhoId, produtoId, qtdProduto);
@@ -135,7 +137,7 @@ public class CarrinhoServlet extends HttpServlet {
                     Integer enderecoId = null;
                     // recupera enderecoId
                     if (request.getParameter("end") != null) {
-                        enderecoId = new Helper().tryParseInteger(request.getParameter("end"));
+                        enderecoId = helper.tryParseInteger(request.getParameter("end"));
                     }
                     
                     if (enderecoId == null) {

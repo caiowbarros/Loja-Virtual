@@ -22,8 +22,10 @@ public class ProdutoServlet extends HttpServlet {
     private static final String PRODUTOID = "produtoId";
     private final IProdutoService produtoService;
     private final IAvaliacaoService avaliacaoService;
+    private final Helper helper;
 
     public ProdutoServlet() {
+        helper = new Helper();
         produtoService = new ProdutoService();
         avaliacaoService = new AvaliacaoService();
     }
@@ -44,13 +46,13 @@ public class ProdutoServlet extends HttpServlet {
             // se tem produto selecionado por parametro passa p sessao
             Integer produtoId = null;
             if (request.getParameter(PRODUTOID) != null) {
-                produtoId = new Helper().tryParseInteger(request.getParameter(PRODUTOID));
+                produtoId = helper.tryParseInteger(request.getParameter(PRODUTOID));
                 session.setAttribute(PRODUTOID, produtoId);
             }
 
             // se produtoId da sessao for null manda p pag d produtos
             if (session.getAttribute(PRODUTOID) != null) {
-                produtoId = new Helper().tryParseInteger(session.getAttribute(PRODUTOID).toString());
+                produtoId = helper.tryParseInteger(session.getAttribute(PRODUTOID).toString());
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("produtos");
@@ -71,7 +73,7 @@ public class ProdutoServlet extends HttpServlet {
             // recupera user id
             Integer userId = null;
             if (session.getAttribute("userId") != null) {
-                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                userId = helper.tryParseInteger(session.getAttribute("userId").toString());
             }
 
             // checa se eh para favoritar ou desfavoritar produto

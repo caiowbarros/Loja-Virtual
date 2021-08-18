@@ -12,11 +12,13 @@ import br.uff.loja.infrastructure.data.CarrinhoData;
 import br.uff.loja.infrastructure.shared.Helper;
 
 public class CarrinhoService implements ICarrinhoService {
-    private ICarrinhoData carrinhoData;
+    private final ICarrinhoData carrinhoData;
+    private final Helper helper;
     private static final String TEXTOAVISOESPECIFICACARRINHO = " no carrinho de Id: ";
 
     public CarrinhoService() {
         carrinhoData = new CarrinhoData();
+        helper = new Helper();
     }
 
     @Override
@@ -42,7 +44,7 @@ public class CarrinhoService implements ICarrinhoService {
                 }
             }
         }
-        String criadoEm = (new Helper()).convertDateToString("yyyy-MM-dd HH:mm:ss", new Date());
+        String criadoEm = helper.convertDateToString("yyyy-MM-dd HH:mm:ss", new Date());
         carrinhoData.criaCarrinho(ip, criadoEm, usuarioId);
         return carrinhoData.encontraCarrinho(ip, criadoEm, usuarioId);
     }

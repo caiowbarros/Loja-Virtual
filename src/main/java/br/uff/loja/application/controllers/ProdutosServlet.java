@@ -24,6 +24,7 @@ import br.uff.loja.infrastructure.shared.Helper;
 @WebServlet("/produtos")
 public class ProdutosServlet extends HttpServlet {
     private final IProdutoService produtoService;
+    private final Helper helper;
     private static final String PESQUISASTR = "pesquisa";
     private static final String PLAYSTATIONSTR = "playstation";
     private static final String CHECKEDSTR = "checked";
@@ -38,6 +39,7 @@ public class ProdutosServlet extends HttpServlet {
     private static final String MAXPAGSTR = "maxPag";
 
     public ProdutosServlet() {
+        helper = new Helper();
         produtoService = new ProdutoService();
     }
 
@@ -242,7 +244,7 @@ public class ProdutosServlet extends HttpServlet {
             if (listaEsp.contains(FAVORITOSSTR)) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
-                    filtro.setUsuarioId(new Helper().tryParseInteger(session.getAttribute("userId").toString()));
+                    filtro.setUsuarioId(helper.tryParseInteger(session.getAttribute("userId").toString()));
                     filtro.setApenasFavoritados(true);
                 } else {
                     session.setAttribute("msg", "Realize login para ver seus favoritos!");
@@ -257,7 +259,7 @@ public class ProdutosServlet extends HttpServlet {
 
             // filtra menor preco
             if (request.getParameter("price_min") != null) {
-                Double priceMin = new Helper().tryParseDouble(request.getParameter("price_min"));
+                Double priceMin = helper.tryParseDouble(request.getParameter("price_min"));
                 if (priceMin != null) {
                     session.setAttribute("priceMin", priceMin);
                     filtro.setPrecoMinimo(priceMin);
@@ -266,7 +268,7 @@ public class ProdutosServlet extends HttpServlet {
 
             // filtra maior preco
             if (request.getParameter("price_max") != null) {
-                Double priceMax = new Helper().tryParseDouble(request.getParameter("price_max"));
+                Double priceMax = helper.tryParseDouble(request.getParameter("price_max"));
                 if (priceMax != null) {
                     session.setAttribute("priceMax", priceMax);
                     filtro.setPrecoMaximo(priceMax);

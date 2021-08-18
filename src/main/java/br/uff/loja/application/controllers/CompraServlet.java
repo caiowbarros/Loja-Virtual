@@ -27,11 +27,13 @@ public class CompraServlet extends HttpServlet {
     private final IVendaService vendaService;
     private final ICarrinhoService carrinhoService;
     private final IEnderecoService enderecoService;
+    private final Helper helper;
 
     public CompraServlet() {
         vendaService = new VendaService();
         carrinhoService = new CarrinhoService();
         enderecoService = new EnderecoService();
+        helper = new Helper();
     }
 
     /**
@@ -53,7 +55,7 @@ public class CompraServlet extends HttpServlet {
                 response.sendRedirect("usuario?redirect=carrinho");
                 return;
             } else {
-                usuarioId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                usuarioId = helper.tryParseInteger(session.getAttribute("userId").toString());
             }
 
             // se solicitar historico manda p pag d compras realizadas
@@ -71,12 +73,12 @@ public class CompraServlet extends HttpServlet {
 
             Integer enderecoId = null;
             if (session.getAttribute("enderecoId") != null) {
-                enderecoId = new Helper().tryParseInteger(session.getAttribute("enderecoId").toString());
+                enderecoId = helper.tryParseInteger(session.getAttribute("enderecoId").toString());
             }
 
             Integer carrinhoId = null;
             if (session.getAttribute("carrinhoId") != null) {
-                carrinhoId = new Helper().tryParseInteger(session.getAttribute("carrinhoId").toString());
+                carrinhoId = helper.tryParseInteger(session.getAttribute("carrinhoId").toString());
             }
 
             // recupera acao solicitada se existir

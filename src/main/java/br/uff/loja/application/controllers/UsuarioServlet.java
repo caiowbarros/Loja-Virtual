@@ -33,10 +33,12 @@ public class UsuarioServlet extends HttpServlet {
     private static final String REDIRECT = "redirect";
     private final IUsuarioService usuarioService;
     private final IRoleService roleService;
+    private final Helper helper;
 
     public UsuarioServlet() {
         usuarioService = new UsuarioService();
         roleService = new RoleService();
+        helper = new Helper();
     }
 
     /**
@@ -64,7 +66,7 @@ public class UsuarioServlet extends HttpServlet {
 
             Integer usuarioIdSelectionado = null;
             if (session.getAttribute(SELUSER) != null) {
-                usuarioIdSelectionado = new Helper().tryParseInteger(session.getAttribute(SELUSER).toString());
+                usuarioIdSelectionado = helper.tryParseInteger(session.getAttribute(SELUSER).toString());
             }
 
             String email = request.getParameter(EMAIL);
@@ -78,7 +80,7 @@ public class UsuarioServlet extends HttpServlet {
                         request.getParameter("name"),
                         email,
                         senha,
-                        new Helper().tryParseInteger(request.getParameter("roleId"))
+                        helper.tryParseInteger(request.getParameter("roleId"))
                     ));
                     break;
                 }
@@ -147,11 +149,11 @@ public class UsuarioServlet extends HttpServlet {
             // se tem usuario logado manda p conta caso contrario p login
             if (session.getAttribute(USERID) != null) {
                 //recupera userId da sessao
-                Integer userId = new Helper().tryParseInteger(session.getAttribute(USERID).toString());
+                Integer userId = helper.tryParseInteger(session.getAttribute(USERID).toString());
                 // define redirect se n foi passado
                 if (redirect == null || "null".equals(redirect)) {
                     if (usuarioIdSelectionado != null) {
-                        if (!usuarioIdSelectionado.equals(userId) && !new Helper().tryParseInteger(session.getAttribute(USERROLE).toString()).equals(EPermissaoUsuario.ADM.getId())) {
+                        if (!usuarioIdSelectionado.equals(userId) && !helper.tryParseInteger(session.getAttribute(USERROLE).toString()).equals(EPermissaoUsuario.ADM.getId())) {
                             session.setAttribute(SELUSER, null);
                             throw new LojaException("Acesso não permitido!");
                         }
