@@ -49,11 +49,14 @@ public class EnderecoServlet extends HttpServlet {
             }
 
             if (request.getParameter("sel") != null) {
-                Integer enderecoIdSel = helper.tryParseInteger(request.getParameter("sel"));
+                String enderecoIdSelStr = request.getParameter("sel");
+                Integer enderecoIdSel = helper.tryParseInteger(enderecoIdSelStr);
+                EnderecoDTO endereco = new EnderecoDTO();
                 if(enderecoIdSel != null) {
-                    request.setAttribute("endereco", enderecoService.encontraEnderecoPorId(enderecoIdSel));
+                    endereco = enderecoService.encontraEnderecoPorId(enderecoIdSel);
                 }
-                session.setAttribute("sel", enderecoIdSel);
+                request.setAttribute("endereco", null);
+                session.setAttribute("sel", enderecoIdSelStr);
                 request.getRequestDispatcher("pages/endereco-cadastro.jsp").forward(request, response);
                 return;
             }

@@ -49,12 +49,16 @@ public class ProdutoAdmServlet extends HttpServlet {
             if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) {
 
                 if (request.getParameter("sel") != null) {
-                    Integer selParameter = helper.tryParseInteger(request.getParameter("sel"));
-                    ProdutoDTO produto = produtoService.encontraProdutoPorId(selParameter);
+                    String selParameterStr = request.getParameter("sel");
+                    Integer selParameter = helper.tryParseInteger(selParameterStr);
+                    ProdutoDTO produto = new ProdutoDTO();
+                    if(selParameter != null){
+                        produto = produtoService.encontraProdutoPorId(selParameter);
+                    }
                     // define atributo de produto
                     request.setAttribute("produto", produto);
                     request.setAttribute("categorias", categoriaService.listaCategorias());
-                    session.setAttribute("sel", selParameter);
+                    session.setAttribute("sel", selParameterStr);
                     request.getRequestDispatcher("pages/produto-cadastro.jsp").forward(request, response);
                     return;
                 }

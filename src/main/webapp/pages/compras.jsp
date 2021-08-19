@@ -71,11 +71,11 @@
                         %>
                         <tr class="end-data-container">
                             <td class="end-data"><img src="<%= produtos.get(z).get(5)%>"/></td>
-                            <td class="end-data"><a class="end-link" href="ProdutoController?produtoId=<%= produtos.get(z).get(0)%>"><%= produtos.get(z).get(1)%></a></td>
+                            <td class="end-data"><a class="end-link" href="produto?produtoId=<%= produtos.get(z).get(0)%>"><%= produtos.get(z).get(1)%></a></td>
                             <td class="end-data"><%= produtos.get(z).get(3)%></td>
                             <td class="end-data">R$<%= produtos.get(z).get(2)%></td>
                             <td class="end-data">R$<%= produtos.get(z).get(4)%></td>
-                            <td class="end-data"><a class="end-link" href="AvaliacaoController?produtoId=<%= produtos.get(z).get(0)%>">Avaliar Produto</a></td>
+                            <td class="end-data"><a class="end-link" href="avaliacao?produtoId=<%= produtos.get(z).get(0)%>">Avaliar Produto</a></td>
                         </tr>
                         <%
                             }

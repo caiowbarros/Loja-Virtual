@@ -93,7 +93,7 @@
                         var senha = document.getElementById("criaSENHA");
                         var conf = document.getElementById("criaCONFSENHA");
                         if (senha.value != conf.value) {
-                            alert("senha nao bate com conferencia");
+                            alert("A senha não bate com a conferência");
                             return false;
                         } else {
                             return true;

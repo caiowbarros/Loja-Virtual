@@ -1,5 +1,6 @@
 package br.uff.loja.core.dtos;
 
+import br.uff.loja.infrastructure.shared.Helper;
 import java.util.Map;
 
 public class ProdutoVitrineUsuarioDTO extends BaseDTO {
@@ -25,6 +26,7 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     private Double barra3Estrelas;
     private Double barra2Estrelas;
     private Double barra1Estrelas;
+    private Double resumoAvaliacoes;
 
     public ProdutoVitrineUsuarioDTO() {}
 
@@ -37,7 +39,7 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setCategoria(String.valueOf(produto.get("categoria")));
         this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
         this.setFavoritoDoUsuario(Integer.valueOf(String.valueOf(produto.get("favoritoDoUsuario"))) > 0);
-        this.setAvaliacaoDadaPeloUsuario(Integer.valueOf(String.valueOf(produto.get("avaliacaoDadaPeloUsuario"))));
+        this.setAvaliacaoDadaPeloUsuario((new Helper()).tryParseInteger(String.valueOf(produto.get("avaliacaoDadaPeloUsuario"))));
         this.setQuantidadeAvaliacoes(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoes"))));
         this.setSomaAvaliacoes(Integer.valueOf(String.valueOf(produto.get("somaAvaliacoes"))));
         this.setQuantidadeAvaliacoesNota1(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota1"))));
@@ -51,6 +53,15 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100.0) / this.quantidadeAvaliacoes));
         this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100.0) / this.quantidadeAvaliacoes));
         this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100.0) / this.quantidadeAvaliacoes));
+        this.setResumoAvaliacoes(Double.valueOf(this.somaAvaliacoes)/Double.valueOf(this.quantidadeAvaliacoes));
+    }
+    
+    public void setResumoAvaliacoes(Double resumoAvaliacoes) {
+        this.resumoAvaliacoes = resumoAvaliacoes;
+    }
+    
+    public Double getResumoAvaliacoes() {
+        return this.resumoAvaliacoes;
     }
 
     public void setBarra1Estrelas(Double barra1Estrelas) {

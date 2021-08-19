@@ -7,13 +7,7 @@
 <%
     // se n tiver um usuario logado retorna p controller com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=EnderecoController");
-    }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuario?redirect=endereco");
     }
 
     ArrayList<ArrayList<String>> grid = null;
@@ -58,7 +52,7 @@
     <tfoot>
         <tr>
             <td class="end-add-new" colspan="5">
-                <a class="end-link" href="EnderecoController?sel">Inserir Novo Endereço</a>
+                <a class="end-link" href="endereco?sel">Inserir Novo Endereço</a>
             </td>
         </tr>
     </tfoot>

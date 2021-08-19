@@ -84,6 +84,8 @@ public class ProdutoServlet extends HttpServlet {
                     return;
                 } else {
                     produtoService.usuarioToogleFavoritaProdutoPorId(produtoId, userId);
+                    session.setAttribute("fav", null);
+                    request.removeAttribute("fav");
                 }
             }
             request.setAttribute("produto", produtoService.mostraProdutoVitrineParaUsuario(produtoId, userId));

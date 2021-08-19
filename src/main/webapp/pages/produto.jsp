@@ -26,12 +26,6 @@
         response.sendRedirect("produtos");
         return;
     }
-
-    //calcula resumo das avaliacoes
-    double resumoAvaliacoes = 0;
-    if (produto.getAvaliacaoDadaPeloUsuario() > 0) {
-        resumoAvaliacoes = (double)produto.getSomaAvaliacoes() / (double)produto.getAvaliacaoDadaPeloUsuario();
-    }
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -64,16 +58,16 @@
             <label for="toggle-heart">&#x2764;</label>
         </div>
         <!-- Avaliação do produto (em estrelas) -->
-        <div class="rate" <%= (!produto.getAvaliacaoDadaPeloUsuario().equals("") ? "style='pointer-events:none'" : "")%>>
-            <input <%= (produto.getAvaliacaoDadaPeloUsuario().equals(5) ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=5'" type="radio" id="star5" name="rate" value="5" />
+        <div class="rate" <%= (produto.getAvaliacaoDadaPeloUsuario() != null ? "style='pointer-events:none'" : "")%>>
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("5") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=5'" type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text"></label>
-            <input <%= (produto.getAvaliacaoDadaPeloUsuario().equals(4) ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=4'" type="radio" id="star4" name="rate" value="4" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("4") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=4'" type="radio" id="star4" name="rate" value="4" />
             <label for="star4" title="text"></label>
-            <input <%= (produto.getAvaliacaoDadaPeloUsuario().equals(3) ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=3'" type="radio" id="star3" name="rate" value="3" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("3") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=3'" type="radio" id="star3" name="rate" value="3" />
             <label for="star3" title="text"></label>
-            <input <%= (produto.getAvaliacaoDadaPeloUsuario().equals(2) ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=2'" type="radio" id="star2" name="rate" value="2" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("2") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=2'" type="radio" id="star2" name="rate" value="2" />
             <label for="star2" title="text"></label>
-            <input <%= (produto.getAvaliacaoDadaPeloUsuario().equals(1) ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=1'" type="radio" id="star1" name="rate" value="1" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("1") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId() %>&rating=1'" type="radio" id="star1" name="rate" value="1" />
             <label for="star1" title="text"></label>
         </div>
     </div>
@@ -85,7 +79,7 @@
     <!-- Coluna da esquerda (resumo da avaliação) -->
     <div class="left-rating">
         <div class="review-resume">Resumo das avaliações</div>
-        <div class="review-rate"><%= resumoAvaliacoes%> / 5</div>
+        <div class="review-rate"><%= produto.getResumoAvaliacoes() %> / 5</div>
         <div class="review-list">
             <ul>
                 <li>
@@ -151,7 +145,7 @@
             }
         %>
 
-        <% if (produto.getAvaliacaoDadaPeloUsuario().equals("")) { %>
+        <% if (produto.getAvaliacaoDadaPeloUsuario() == null) { %>
         <!-- Botão para avaliar o produto -->
         <div class="review-btn">
             <a href="avaliacao?produtoId=<%= produto.getId() %>">Adicionar uma avaliação</a>
