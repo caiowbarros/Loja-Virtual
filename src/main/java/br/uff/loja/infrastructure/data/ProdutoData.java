@@ -261,7 +261,7 @@ public class ProdutoData implements IProdutoData {
     public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
         try {
             Object[] bind = {};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, description AS descricao, img AS imagem FROM products ORDER BY quantity DESC LIMIT 3", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, description AS descricao, img AS imagem FROM products WHERE quantity > 0 ORDER BY quantity DESC LIMIT 3", bind);
             List<ProdutoHomeDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoHomeDTO(produto)));
             return retornoFormatado;

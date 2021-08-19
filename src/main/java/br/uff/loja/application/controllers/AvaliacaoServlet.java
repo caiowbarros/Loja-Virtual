@@ -54,6 +54,7 @@ public class AvaliacaoServlet extends HttpServlet {
             // se n tem usuario logado manda p controller de user
             Integer userId = null;
             if (session.getAttribute("userId") == null) {
+                session.setAttribute("msg", "Realize login para avaliar um produto!");
                 response.sendRedirect("usuario?redirect=avaliacao");
                 return;
             } else {

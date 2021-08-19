@@ -59,32 +59,20 @@ public class ProdutoServlet extends HttpServlet {
                 return;
             }
 
-            // se fav esta definido por parametro passa p sessao
-            String fav = null;
-            if (request.getParameter("fav") != null) {
-                fav = request.getParameter("fav");
-                session.setAttribute("fav", fav);
-            }
-            // recupera fav da sessao
-            if (session.getAttribute("fav") != null) {
-                fav = session.getAttribute("fav").toString();
-            }
-
             // recupera user id
             Integer userId = null;
             if (session.getAttribute("userId") != null) {
                 userId = helper.tryParseInteger(session.getAttribute("userId").toString());
-            }
+            }            
 
-            // checa se eh para favoritar ou desfavoritar produto
-            if (fav != null) {
+            if (request.getParameter("fav") != null) {
                 // VERIFICA SE ESTA LOGADO
                 if (userId == null) {
+                    session.setAttribute("msg", "Realize login para favoritar um produto!");
                     response.sendRedirect("usuario?redirect=produto");
                     return;
                 } else {
                     produtoService.usuarioToogleFavoritaProdutoPorId(produtoId, userId);
-                    session.setAttribute("fav", null);
                     request.removeAttribute("fav");
                 }
             }

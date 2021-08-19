@@ -51,11 +51,11 @@ public class EnderecoServlet extends HttpServlet {
             if (request.getParameter("sel") != null) {
                 String enderecoIdSelStr = request.getParameter("sel");
                 Integer enderecoIdSel = helper.tryParseInteger(enderecoIdSelStr);
-                EnderecoDTO endereco = new EnderecoDTO();
+                EnderecoDTO endereco = new EnderecoDTO("", userId, null, "", "", "", "Brasil");
                 if(enderecoIdSel != null) {
                     endereco = enderecoService.encontraEnderecoPorId(enderecoIdSel);
                 }
-                request.setAttribute("endereco", null);
+                request.setAttribute("endereco", endereco);
                 session.setAttribute("sel", enderecoIdSelStr);
                 request.getRequestDispatcher("pages/endereco-cadastro.jsp").forward(request, response);
                 return;
