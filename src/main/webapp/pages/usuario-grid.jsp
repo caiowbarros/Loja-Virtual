@@ -28,7 +28,7 @@
 
     <div class="left-user-container">
         <div class="left-row">
-            <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString()) ? "Lista de Cadastros" : "Meus Dados")%></p>
+            <p style="font-weight: bold;"><%= (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId()) ? "Lista de Cadastros" : "Meus Dados")%></p>
         </div>
         <%
             for (UsuarioDTO usuario : grid) {
@@ -68,7 +68,7 @@
         </div>
         <div class="right-row">
             <!-- SE ROLE_ID DO USUARIO FOR ADM ENTAO MOSTRA CADASTRO DE PRODUTOS -->
-            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString())) { %>
+            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href = 'produto-adm';">
                     <i class="fas fa-barcode"></i>

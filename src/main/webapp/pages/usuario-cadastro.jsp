@@ -50,7 +50,7 @@
                 <label>Senha </label>
                 <input class="field-long" name="password" required type="password" maxlength="255" value="<%= usuario.getSenha()%>">
             </li>
-            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString())) { %>
+            <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
             <li>
                 <label>Papel </label>
                 <select name="roleId" required>

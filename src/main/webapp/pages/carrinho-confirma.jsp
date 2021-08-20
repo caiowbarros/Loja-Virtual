@@ -9,7 +9,7 @@
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CarrinhoController
     if (session.getAttribute("userId") == null) {
         session.setAttribute("msg", "Realize seu login para prosseguir.");
-        response.sendRedirect("usuaario?redirect=carrinho");
+        response.sendRedirect("usuario?redirect=carrinho");
     }
 
     ArrayList<ArrayList<String>> enderecos = null;
