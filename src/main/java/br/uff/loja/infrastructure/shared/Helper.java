@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.uff.loja.core.interfaces.shared.IHelper;
+import java.text.NumberFormat;
 
 public class Helper implements IHelper {
     public Date convertStringToDate(String format, String date) { 
@@ -28,6 +29,11 @@ public class Helper implements IHelper {
         } catch (Exception ec) {
             return null;
         }
+    }
+    
+    public String tryParseMoneyFormat(Object preco) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        return formatter.format(preco);
     }
     
     public Double tryParseDouble(String intStr) {

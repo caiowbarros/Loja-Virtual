@@ -40,7 +40,7 @@
         %>
         <tr class="end-data-container">
             <td class="end-data">
-                <a class="end-link" href="endereco?sel=<%= endereco.getId() %>">Editar</a>             
+                <a class="end-link" href="endereco?sel=<%= endereco.getId()%>">Editar</a>             
             </td>
             <td class="end-data"><%= endereco.getNome()%></td>
             <td class="end-data"><%= endereco.getLogradouro()%></td>

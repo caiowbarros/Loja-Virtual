@@ -14,14 +14,14 @@
         response.sendRedirect("usuario");
         return;
     }
-    
+
     if (request.getAttribute("usuario") == null) {
         response.sendRedirect("usuario");
         return;
     }
 
     UsuarioDTO usuario = (UsuarioDTO) request.getAttribute("usuario");
-    
+
     List<RoleDTO> permissoes = new ArrayList<RoleDTO>();
     if (request.getAttribute("permissoes") != null) {
         permissoes = (List<RoleDTO>) request.getAttribute("permissoes");
@@ -33,33 +33,33 @@
 </jsp:include>
 
 <div class="user-cadastro-container">
-    
+
     <h2>Editar Dados</h2>
     <form method="post" action="usuario">
 
         <ul class="form-style-1">
             <li>
                 <label>Nome Completo </label>
-                <input class="field-long" name="name" required type="text" maxlength="255" value="<%= usuario.getNome() %>">
+                <input class="field-long" name="name" required type="text" maxlength="255" value="<%= usuario.getNome()%>">
             </li>
             <li>
                 <label>E-mail </label>
-                <input class="field-long" name="email" required type="email" maxlength="255" value="<%= usuario.getEmail() %>">
+                <input class="field-long" name="email" required type="email" maxlength="255" value="<%= usuario.getEmail()%>">
             </li>
             <li>
                 <label>Senha </label>
-                <input class="field-long" name="password" required type="password" maxlength="255" value="<%= usuario.getSenha() %>">
+                <input class="field-long" name="password" required type="password" maxlength="255" value="<%= usuario.getSenha()%>">
             </li>
             <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId().toString())) { %>
             <li>
                 <label>Papel </label>
                 <select name="roleId" required>
-                    <% for(RoleDTO permissao : permissoes) { %>
-                    <option value="<%= permissao.getId() %>" <%= (permissao.getId() == usuario.getPermissaoId() ? "selected" : "") %>><%= permissao.getNome() %></option>
+                    <% for (RoleDTO permissao : permissoes) {%>
+                    <option value="<%= permissao.getId()%>" <%= (permissao.getId() == usuario.getPermissaoId() ? "selected" : "")%>><%= permissao.getNome()%></option>
                     <% } %>
                 </select>
-                <% } else { %>
-                <input name="roleId" required type="text" style="display:none;" value="<%= usuario.getPermissaoId() %>">
+                <% } else {%>
+                <input name="roleId" required type="text" style="display:none;" value="<%= usuario.getPermissaoId()%>">
                 <% }%>
             </li>
             <li class="center">
@@ -69,8 +69,8 @@
         </ul>
 
     </form>
-            
+
 </div>
-            
+
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

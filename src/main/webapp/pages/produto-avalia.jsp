@@ -26,7 +26,7 @@
 </jsp:include>
 
 <form action="avaliacao" method="post">
-    
+
     <ul class="form-style-1">
         <!-- Avaliação do produto (em estrelas) -->
         <li>
@@ -59,8 +59,8 @@
             <button name="action" value="avalia" type="submit">Salvar</button>
         </li>
     </ul>
-            
+
 </form>
-            
+
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

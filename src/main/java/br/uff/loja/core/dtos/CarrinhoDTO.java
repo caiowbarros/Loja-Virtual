@@ -16,8 +16,12 @@ public class CarrinhoDTO extends BaseDTO {
     public CarrinhoDTO(Map<String,Object> carrinho) {
         this.setId(Integer.valueOf(String.valueOf(carrinho.get("id"))));
         this.setIp(String.valueOf(carrinho.get("ip")));
-        this.setUsuarioId(Integer.valueOf(String.valueOf(carrinho.get("usuarioId"))));
-        this.setCriadoEm((new Helper()).convertStringToDate("yyyy-MM-dd HH:mm:ss", String.valueOf(carrinho.get("criadoEm"))));
+        if(carrinho.get("usuarioId") == null) {
+            this.setUsuarioId(null);
+        } else {
+            this.setUsuarioId(Integer.valueOf(String.valueOf(carrinho.get("usuarioId"))));
+        }
+        this.setCriadoEm(new Helper().convertStringToDate("yyyy-MM-dd HH:mm:ss", String.valueOf(carrinho.get("criadoEm"))));
     }
 
     public void setCriadoEm(Date criadoEm) {

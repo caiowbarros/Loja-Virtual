@@ -3,22 +3,20 @@
     Created on : 02/10/2019, 00:50:48
     Author     : HP
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
+<%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.core.dtos.VendaDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CompraController
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=CompraController");
-    }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuario?redirect=compra");
     }
 
-    ArrayList<ArrayList> vendas = null;
+    List<VendaDTO> vendas = new ArrayList<VendaDTO>();
     if (request.getAttribute("vendas") != null) {
-        vendas = (ArrayList<ArrayList>) request.getAttribute("vendas");
+        vendas = (List<VendaDTO>) request.getAttribute("vendas");
     }
 %>
 <jsp:include page="header.jsp">
@@ -27,7 +25,7 @@
 
 <h2 class="meus-pedidos">Meus Pedidos</h2>
 <%
-    for (int i = 0; i < vendas.size(); i++) {
+    for (VendaDTO venda : vendas) {
 %>
 
 <div class="compras-container">
@@ -42,47 +40,43 @@
         </thead>
         <tbody>
             <tr class="end-data-container">
-                <td class="end-data">#<%= vendas.get(i).get(0)%></td>
-                <td class="end-data"><%= vendas.get(i).get(4)%></td>
+                <td class="end-data">#<%= venda.getId()%></td>
+                <td class="end-data"><%= venda.getCriadoEm()%></td>
                 <td class="end-data">
-                    <%
-                        ArrayList endereco = (ArrayList) vendas.get(i).get(2);
-                    %>
-                    <%= endereco.get(1)%> - <%= endereco.get(2)%> - <%= endereco.get(3)%> - CEP: <%= endereco.get(0)%>
+                    <%= venda.getEndereco().getLogradouro()%> - <%= venda.getEndereco().getCidade()%> - <%= venda.getEndereco().getEstado()%> - CEP: <%= venda.getEndereco().getCep()%>
                 </td>
-                <td class="end-data">R$<%= vendas.get(i).get(3)%></td>
+                <td class="end-data"><%= new Helper().tryParseMoneyFormat(venda.getPrecoTotal())%></td>
             </tr>
             <tr>
-                <table class="end-grid" style="width: 70%; margin: 0px 15%;">
-                    <thead>
-                        <tr class="end-title-container">
-                            <td class="end-title"></td>
-                            <td class="end-title">Produto</td>
-                            <td class="end-title">Quantidade</td>
-                            <td class="end-title">Preço Unitário</td>
-                            <td class="end-title">Subtotal</td>
-                            <td class="end-title">Avaliação</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            ArrayList<ArrayList> produtos = (ArrayList<ArrayList>) vendas.get(i).get(1);
-                            for (int z = 0; z < produtos.size(); z++) {
-                        %>
-                        <tr class="end-data-container">
-                            <td class="end-data"><img src="<%= produtos.get(z).get(5)%>"/></td>
-                            <td class="end-data"><a class="end-link" href="produto?produtoId=<%= produtos.get(z).get(0)%>"><%= produtos.get(z).get(1)%></a></td>
-                            <td class="end-data"><%= produtos.get(z).get(3)%></td>
-                            <td class="end-data">R$<%= produtos.get(z).get(2)%></td>
-                            <td class="end-data">R$<%= produtos.get(z).get(4)%></td>
-                            <td class="end-data"><a class="end-link" href="avaliacao?produtoId=<%= produtos.get(z).get(0)%>">Avaliar Produto</a></td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                    </tbody>
-                </table>
-            </tr>
+        <table class="end-grid" style="width: 70%; margin: 0px 15%;">
+            <thead>
+                <tr class="end-title-container">
+                    <td class="end-title"></td>
+                    <td class="end-title">Produto</td>
+                    <td class="end-title">Quantidade</td>
+                    <td class="end-title">Preço Unitário</td>
+                    <td class="end-title">Subtotal</td>
+                    <td class="end-title">Avaliação</td>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    for (CarrinhoProdutoDTO produto : venda.getProdutosDoCarrinho()) {
+                %>
+                <tr class="end-data-container">
+                    <td class="end-data"><img src="<%= produto.getImagem()%>"/></td>
+                    <td class="end-data"><a class="end-link" href="produto?produtoId=<%= produto.getProdutoId()%>"><%= produto.getNome()%></a></td>
+                    <td class="end-data"><%= produto.getQuantidade()%></td>
+                    <td class="end-data"><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></td>
+                    <td class="end-data"><%= new Helper().tryParseMoneyFormat(produto.getPrecoTotal())%></td>
+                    <td class="end-data"><a class="end-link" href="avaliacao?produtoId=<%= produto.getProdutoId()%>">Avaliar Produto</a></td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+        </tr>
         </tbody>
     </table>
 </div>                    

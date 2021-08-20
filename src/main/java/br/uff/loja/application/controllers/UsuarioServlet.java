@@ -91,7 +91,8 @@ public class UsuarioServlet extends HttpServlet {
                     session.setAttribute("msg", "Usuário deslogado com sucesso!");
                     // invalida sessao
                     session.invalidate();
-                    break;
+                    response.sendRedirect("");
+                    return;
                 }
                 case "login": {
                     try {

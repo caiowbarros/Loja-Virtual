@@ -24,64 +24,64 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-    
+
 <div class="end-add-container">    
     <form action="endereco" method="post">
-          
+
         <div class="end-group-container">
             <div class="group">      
-                <input value="<%= endereco.getNome() %>" name="name" required type="text" maxlength="255" />
+                <input value="<%= endereco.getNome()%>" name="name" required type="text" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Descrição do endereço</label>
             </div>
-            
+
             <div class="group">      
-                <input value="<%= endereco.getCep() %>" name="zipcode" required type="number" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
+                <input value="<%= endereco.getCep()%>" name="zipcode" required type="number" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>CEP</label>
             </div>
-                
+
             <div class="group">      
-                <input value="<%= endereco.getLogradouro() %>" name="address" required type="text" id="rua" maxlength="255" />
+                <input value="<%= endereco.getLogradouro()%>" name="address" required type="text" id="rua" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Endereço</label>
             </div>
-                
+
             <div class="group">      
-                <input value="<%= endereco.getCidade() %>" name="city" required type="text" id="cidade"  maxlength="255" />
+                <input value="<%= endereco.getCidade()%>" name="city" required type="text" id="cidade"  maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Cidade</label>
             </div>
-                
+
             <div class="group">      
-                <input value="<%= endereco.getEstado() %>" name="state" required type="text" id="uf" maxlength="255" />
+                <input value="<%= endereco.getEstado()%>" name="state" required type="text" id="uf" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Estado</label>
             </div>
-                
+
             <div class="group">      
-                <input name="country" required type="text" readonly value="<%= endereco.getPais() %>" maxlength="255" />
+                <input name="country" required type="text" readonly value="<%= endereco.getPais()%>" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label></label>
             </div>
         </div>
-            
+
         <button class="standard-btn" name="action" formnovalidate value="unsel">Voltar</button>
         <button class="standard-btn" name="action" value="grava" type="submit">Salvar</button>   
         <% if (!sel.equals("")) { %>
         <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
         <% }%>
-            
+
     </form>
 </div>
-        
-        
+
+
 <script type="text/javascript" >
 
     function limpa_form_cep() {

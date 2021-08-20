@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="java.util.List"%>
 <%@page import="br.uff.loja.core.dtos.ProdutoDTO"%>
 <%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
@@ -41,12 +42,12 @@
         %>
         <tr class="product-data">
             <td>
-                <a href="ProdutoAdmController?sel=<%= produto.getId() %>">Editar</a>             
+                <a href="produto-adm?sel=<%= produto.getId()%>">Editar</a>             
             </td>
-            <td><%= produto.getNome() %></td>
-            <td>R$<%= produto.getPreco() %></td>
-            <td><%= produto.getCategoria() %></td>
-            <td><%= produto.getQuantidade() %></td>
+            <td><%= produto.getNome()%></td>
+            <td><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></td>
+            <td><%= produto.getCategoria()%></td>
+            <td><%= produto.getQuantidade()%></td>
         </tr>
         <%
             }
@@ -55,11 +56,11 @@
     <tfoot>
         <tr class="product-data-add">
             <td colspan="5">
-                <a class="end-link" href="ProdutoAdmController?sel">Inserir Novo Produto</a>
+                <a class="end-link" href="produto-adm?sel">Inserir Novo Produto</a>
             </td>
         </tr>
     </tfoot>
 </table>
-    
+
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

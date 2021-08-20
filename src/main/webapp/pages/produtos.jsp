@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 00:11:02
     Author     : HP
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="br.uff.loja.core.dtos.ProdutoListaDTO"%>
 <%@page import="br.uff.loja.core.dtos.PaginateDTO"%>
 <%@page import="java.util.List"%>
@@ -64,15 +65,15 @@
             %>
             <div class="products-container">
                 <%
-                    for(ProdutoListaDTO produto : produtos.getDados()){
+                    for (ProdutoListaDTO produto : produtos.getDados()) {
                 %>
                 <div class="products-item">
-                    <a href="produto?produtoId=<%= produto.getId() %>">
+                    <a href="produto?produtoId=<%= produto.getId()%>">
                         <div class="products-cart">Ver Detalhes</div>
-                        <img src="<%= produto.getImagem() %>">
-                        <div class="products-title"><%= produto.getNome() %></div>
-                        <div class="products-details"><%= produto.getCategoria() %></div>
-                        <div class="products-price">R$<%= produto.getPreco() %></div>
+                        <img src="<%= produto.getImagem()%>">
+                        <div class="products-title"><%= produto.getNome()%></div>
+                        <div class="products-details"><%= produto.getCategoria()%></div>
+                        <div class="products-price"><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></div>
                     </a>
                 </div>
                 <%
@@ -84,7 +85,7 @@
                 <% if (produtos.getPaginaAtual() > 1) {%>
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
                 <% }%>
-                <span><%= produtos.getPaginaAtual() %></span>
+                <span><%= produtos.getPaginaAtual()%></span>
                 <% if (produtos.getPaginaAtual() < produtos.getUltimaPagina()) { %>
                 <button class="products-next" name="action" value="prox">&#8250;</button>
                 <% }%>

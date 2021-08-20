@@ -25,12 +25,12 @@
 
     <body>
         <%
-        // mostra se tiver msg
-        if (session.getAttribute("msg") != null) {
-            String msg = session.getAttribute("msg").toString();
-            session.setAttribute("msg", null);
-            out.println("<script>alert('" + msg + "');</script>");
-        }
+            // mostra se tiver msg
+            if (session.getAttribute("msg") != null) {
+                String msg = session.getAttribute("msg").toString();
+                session.setAttribute("msg", null);
+                out.println("<script>alert('" + msg + "');</script>");
+            }
         %>
         <header>
             <!-- Logo -->
@@ -40,7 +40,7 @@
             <!-- Dropdown -->
             <div class="dropdown-menu">
                 <div class="dropdown ps">
-                    <button class="dropbtn" onclick="location.href='produtos?categoryId=1';">Playstation</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=1';">Playstation</button>
                     <div class="dropdown-content">
                         <a href="produtos?categoryId=5">Consoles</a>
                         <a href="produtos?categoryId=6">Jogos</a>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button class="dropbtn" onclick="location.href='produtos?categoryId=2';">Xbox</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=2';">Xbox</button>
                     <div id="feminino" class="dropdown-content">
                         <a href="produtos?categoryId=8">Consoles</a>
                         <a href="produtos?categoryId=9">Jogos</a>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="dropdown wii">
-                    <button class="dropbtn" onclick="location.href='produtos?categoryId=3';">Wii</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=3';">Wii</button>
                     <div id="infantil" class="dropdown-content">
                         <a href="produtos?categoryId=11">Consoles</a>
                         <a href="produtos?categoryId=12">Jogos</a>

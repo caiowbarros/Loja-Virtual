@@ -38,6 +38,7 @@ public class CarrinhoService implements ICarrinhoService {
             } else {
                 if (Boolean.TRUE.equals(carrinhoData.carrinhoSemDono(carrinhoId))) {
                     carrinhoData.defineDonoDeUmCarrinhoSemUsuarioNoMomento(carrinhoId, usuarioId);
+                    return carrinhoData.encontraCarrinho(carrinhoId);
                 }
                 if (Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(carrinhoId, usuarioId))) {
                     return carrinhoData.encontraCarrinho(carrinhoId);

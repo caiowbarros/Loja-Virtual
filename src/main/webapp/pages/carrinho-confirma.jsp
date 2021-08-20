@@ -3,18 +3,13 @@
     Created on : 02/10/2019, 11:42:33
     Author     : HP
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado chama UserController e configura p redirecionar d volta p CarrinhoController
     if (session.getAttribute("userId") == null) {
         session.setAttribute("msg", "Realize seu login para prosseguir.");
-        response.sendRedirect("UserController?redirect=CarrinhoController");
-    }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuaario?redirect=carrinho");
     }
 
     ArrayList<ArrayList<String>> enderecos = null;
@@ -37,7 +32,7 @@
 <main class="confirma-container">
 
     <div class="left-confirma">
-        <form method="post" action="CarrinhoController">
+        <form method="post" action="carrinho">
             <h2>Detalhes da entrega</h2>
             <div class="confirma-end">
                 <%
@@ -47,21 +42,21 @@
                     <div class="radio-container">
                         <input required type="radio" name="end" id="end<%= enderecos.get(i).get(0)%>" value="<%= enderecos.get(i).get(0)%>"><label for="end<%= enderecos.get(i).get(0)%>">&nbsp;<%= enderecos.get(i).get(1)%></label><br>
                     </div>
-                    <a href="EnderecoController?sel=<%= enderecos.get(i).get(0)%>">Editar</a>
+                    <a href="endereco?sel=<%= enderecos.get(i).get(0)%>">Editar</a>
                 </div>
                 <script>
-                function radioCheck(id) {
-                    document.getElementById("end" + id).checked=true;
-                }
+                    function radioCheck(id) {
+                        document.getElementById("end" + id).checked = true;
+                    }
                 </script>
                 <%
                     }
                 %>
                 <div class="confirma-novoend">
-                    <a href="EnderecoController?sel">Inserir novo endereço</a>
+                    <a href="endereco?sel">Inserir novo endereço</a>
                 </div>
             </div>
-                
+
             <h2>Método de entrega</h2>
             <div class="confirma-frete">
                 <div class="confirma-radio">
@@ -82,7 +77,7 @@
             <div class="detalhe-valor">
                 <div class="detalhe-item">
                     <label>Subtotal</label>
-                    <div class="detalhe-subtotal">R$<%= String.format("%.2f", totalPrice)%></div>
+                    <div class="detalhe-subtotal"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
                 </div>
                 <div class="detalhe-item">
                     <label>Frete</label>
@@ -90,7 +85,7 @@
                 </div>
                 <div class="detalhe-item">
                     <label>Total</label>
-                    <div class="detalhe-total">R$<%= String.format("%.2f", totalPrice)%></div>
+                    <div class="detalhe-total"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
                 </div>
                 <%
                     for (int i = 0; i < produtos.size(); i++) {
@@ -108,7 +103,7 @@
                     }
                 %>
                 <div class="detalhe-voltar">
-                    <a href="CarrinhoController">Editar Carrinho</a>
+                    <a href="carrinho">Editar Carrinho</a>
                 </div>
             </div>
         </div>

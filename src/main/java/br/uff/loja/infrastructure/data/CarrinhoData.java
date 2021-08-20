@@ -151,8 +151,13 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public CarrinhoDTO encontraCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {ip,criadoEm,usuarioId};
-            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE ip=? AND created_at=? AND user_id" + (usuarioId == null ? " IS NULL " : "=?") + " ORDER BY id DESC LIMIT 1", bind);
+            ArrayList<Object> bind = new ArrayList<Object>();
+            bind.add(ip);
+            bind.add(criadoEm);
+            if(usuarioId != null) {
+                bind.add(usuarioId);
+            }
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE ip=? AND created_at=? AND user_id" + (usuarioId == null ? " IS NULL " : "=?") + " ORDER BY id DESC LIMIT 1", bind.toArray());
             return new CarrinhoDTO(retorno.get(0));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Carrinho de ip: " + ip + " do usuário de id: " + usuarioId + " que foi criado em " + criadoEm + ". (" + e.getMessage() + ")");
@@ -228,7 +233,7 @@ public class CarrinhoData implements ICarrinhoData {
     public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            String totalPrice = String.valueOf(this.mysqlDAO.dbValor("total_price", "SELECT sum(p.price * c.quantity) AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=? GROUP BY c.cart_id", "", bind));
+            String totalPrice = String.valueOf(this.mysqlDAO.dbValor("precoTotal", "SELECT sum(p.price * c.quantity) AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=? GROUP BY c.cart_id", "", bind));
             return Double.valueOf(totalPrice.equals("null") ? "0" : totalPrice);
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar o valor total do carinho de id: " + id + ". (" + e.getMessage() + ")");
