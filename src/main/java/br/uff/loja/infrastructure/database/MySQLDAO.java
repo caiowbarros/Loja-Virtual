@@ -14,6 +14,7 @@ import br.uff.loja.core.exceptions.LojaException;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class MySQLDAO {
+
     private Connection conn = null;
 
     public void dbTransaction(String[] comandos, Object[][] bind) throws SQLException {
@@ -78,7 +79,7 @@ public class MySQLDAO {
     public void destroyDb() throws LojaException {
         try {
             this.conn.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new LojaException("Não foi possível fechar a conexão com o banco de dados.");
         }
     }

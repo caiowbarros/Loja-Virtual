@@ -1,16 +1,18 @@
 package br.uff.loja.core.dtos;
 
 public class PaginateDTO<T> {
+
     private Integer paginaAtual;
     private T dados;
     private Integer ultimaPagina;
 
-    public PaginateDTO() {}
+    public PaginateDTO() {
+    }
 
     public PaginateDTO(
-        Integer paginaAtual,
-        T dados,
-        Integer ultimaPagina
+            Integer paginaAtual,
+            T dados,
+            Integer ultimaPagina
     ) {
         this.setPaginaAtual(paginaAtual);
         this.setDados(dados);

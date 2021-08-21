@@ -3,29 +3,23 @@
     Created on : 13/09/2019, 02:33:53
     Author     : Caio
 --%>
-
-<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <!-- Header -->
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Carrinho"/>
 </jsp:include>
 <%
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
     double totalPrice = 0;
     if (request.getAttribute("totalPrice") != null) {
         totalPrice = Double.parseDouble(request.getAttribute("totalPrice").toString());
     }
 
-    ArrayList<ArrayList<String>> itens = null;
-    if (request.getAttribute("itens") != null) {
-        itens = (ArrayList<ArrayList<String>>) request.getAttribute("itens");
+    List<CarrinhoProdutoDTO> itens = new ArrayList<CarrinhoProdutoDTO>();
+    if (request.getAttribute("produtos") != null) {
+        itens = (List<CarrinhoProdutoDTO>) request.getAttribute("produtos");
     }
 %>
 <!-- Título da página -->
@@ -48,29 +42,29 @@
 </div>
 <%
 } else {
-    for (int i = 0; i < itens.size(); i++) {
+    for (CarrinhoProdutoDTO produto : itens) {
 %>
 <!-- Produto no carrinho -->
 <div class="cart-product">
     <div class="cart-img">
-        <img src="<%= itens.get(i).get(3)%>">
+        <img src="<%= produto.getImagem()%>">
     </div>
     <div class="cart-details">
-        <div class="cart-name"><%= itens.get(i).get(1)%></div>
-        <p class="cart-desc"><%= itens.get(i).get(2)%></p>
+        <div class="cart-name"><%= produto.getNome()%></div>
+        <p class="cart-desc"><%= produto.getDescricao()%></p>
     </div>
-    <div class="cart-price">R$<%= itens.get(i).get(4)%></div>
+    <div class="cart-price"><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></div>
     <div class="cart-qnt">
-        <form action="CarrinhoController?produtoId=<%= itens.get(i).get(0)%>&action=mudaQtd" method="post" id="mudaQtdForm<%= itens.get(i).get(0)%>">
-            <input style="width:50px;" type="number" min="1" max="<%= itens.get(i).get(6)%>" value="<%= itens.get(i).get(5)%>" name="qtdProduto" onchange="mudaQtd('mudaQtdForm<%= itens.get(i).get(0)%>')"/>
+        <form action="carrinho?produtoId=<%= produto.getProdutoId()%>&action=mudaQtd" method="post" id="mudaQtdForm<%= produto.getProdutoId()%>">
+            <input style="width:50px;" type="number" min="1" max="<%= produto.getQuantidadeEmEstoque()%>" value="<%= produto.getQuantidade()%>" name="qtdProduto" onchange="mudaQtd('mudaQtdForm<%= produto.getProdutoId()%>')"/>
         </form>
     </div>
     <div class="cart-remove">
-        <form action="CarrinhoController?produtoId=<%= itens.get(i).get(0)%>" method="post">
+        <form action="carrinho?produtoId=<%= produto.getProdutoId()%>" method="post">
             <button class="cart-remove-btn" name="action" value="removeProduto">Remover</button>
         </form>
     </div>
-    <div class="cart-total">R$<%= itens.get(i).get(7)%></div>
+    <div class="cart-total"><%= new Helper().tryParseMoneyFormat(produto.getPrecoTotal())%></div>
 </div>
 <%
         }
@@ -85,7 +79,7 @@
     <div class="total-item">
         <p>Frete grátis para todo Brasil!</p>
         <label>Subtotal</label>
-        <div class="total-subtotal">R$<%= String.format("%.2f", totalPrice)%></div>
+        <div class="total-subtotal"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
     </div>
     <div class="total-item">
         <label>Frete</label>
@@ -93,13 +87,13 @@
     </div>
     <div class="total-item">
         <label>Total</label>
-        <div class="total-total">R$<%= String.format("%.2f", totalPrice)%></div>
+        <div class="total-total"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
     </div>
     <%
         }
     %>
     <div class="total-item">
-        <form method="post" action="CarrinhoController">
+        <form method="post" action="carrinho">
             <input type="number" style="display:none;" name="totalPrice" value="<%= totalPrice%>"/>
             <button class="total-keep" name="action" value="continuaCompra" type="submit">Continuar Comprando</button>
             <%

@@ -3,6 +3,10 @@
     Created on : 13/09/2019, 18:51:42
     Author     : Caio
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.core.dtos.AvaliacaoProdutoListDTO"%>
+<%@page import="br.uff.loja.core.dtos.ProdutoVitrineUsuarioDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // recupera produtoId
@@ -10,104 +14,30 @@
     if (session.getAttribute("produtoId") != null) {
         produtoId = session.getAttribute("produtoId").toString();
     } else {
-        response.sendRedirect("ProdutoController");
+        response.sendRedirect("produto");
     }
 
-    // mostra msg se tiver
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
-    ArrayList<String> produto = null;
-    ArrayList<ArrayList<String>> avaliacoes = null;
+    ProdutoVitrineUsuarioDTO produto = new ProdutoVitrineUsuarioDTO();
+    List<AvaliacaoProdutoListDTO> avaliacoes = new ArrayList<AvaliacaoProdutoListDTO>();
     if (request.getAttribute("produto") != null) {
-        produto = (ArrayList<String>) request.getAttribute("produto");
-        avaliacoes = (ArrayList<ArrayList<String>>) request.getAttribute("avaliacoes");
+        produto = (ProdutoVitrineUsuarioDTO) request.getAttribute("produto");
+        avaliacoes = (List<AvaliacaoProdutoListDTO>) request.getAttribute("avaliacoes");
     } else {
         session.setAttribute("msg", "Por favor selecione um produto!");
-        response.sendRedirect("ProdutosController");
+        response.sendRedirect("produtos");
         return;
     }
-
-    String rateGaveByUser = "";
-    if (produto.get(8) != null) {
-        rateGaveByUser = produto.get(8);
-    }
-
-    int somaAvaliacoes = 0;
-    if (produto.get(10) != null) {
-        somaAvaliacoes = Integer.valueOf(produto.get(10).toString());
-    }
-    int qtdAvaliacoes = 0;
-    if (produto.get(9) != null) {
-        qtdAvaliacoes = Integer.valueOf(produto.get(9).toString());
-    }
-
-    //calcula resumo das avaliacoes
-    double resumoAvaliacoes = 0;
-    if (qtdAvaliacoes > 0) {
-        resumoAvaliacoes = (double)somaAvaliacoes / (double)qtdAvaliacoes;
-    }
-
-//calcula tamanho da barra das avaliacoes
-    int barraUmaEstrela = 0;
-    int qtdUmaEstrela = 0;
-    if (produto.get(11) != null) {
-        qtdUmaEstrela = Integer.valueOf(produto.get(11));
-        if (qtdAvaliacoes > 0) {
-            barraUmaEstrela = (qtdUmaEstrela * 100) / qtdAvaliacoes;
-        }
-    }
-
-    int barraDuasEstrelas = 0;
-    int qtdDuasEstrelas = 0;
-    if (produto.get(12) != null) {
-        qtdDuasEstrelas = Integer.valueOf(produto.get(12));
-        if (qtdAvaliacoes > 0) {
-            barraDuasEstrelas = (qtdDuasEstrelas * 100) / qtdAvaliacoes;
-        }
-    }
-
-    int barraTresEstrelas = 0;
-    int qtdTresEstrelas = 0;
-    if (produto.get(13) != null) {
-        qtdTresEstrelas = Integer.valueOf(produto.get(13));
-        if (qtdAvaliacoes > 0) {
-            barraTresEstrelas = (qtdTresEstrelas * 100) / qtdAvaliacoes;
-        }
-    }
-
-    int barraQuatroEstrelas = 0;
-    int qtdQuatroEstrelas = 0;
-    if (produto.get(14) != null) {
-        qtdQuatroEstrelas = Integer.valueOf(produto.get(14));
-        if (qtdAvaliacoes > 0) {
-            barraQuatroEstrelas = (qtdQuatroEstrelas * 100) / qtdAvaliacoes;
-        }
-    }
-
-    int barraCincoEstrelas = 0;
-    int qtdCincoEstrelas = 0;
-    if (produto.get(15) != null) {
-        qtdCincoEstrelas = Integer.valueOf(produto.get(15));
-        if (qtdAvaliacoes > 0) {
-            barraCincoEstrelas = (qtdCincoEstrelas * 100) / qtdAvaliacoes;
-        }
-    }
-
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="<%= produto.get(1)%>"/>
+    <jsp:param name="title" value="<%= produto.getNome()%>"/>
 </jsp:include>
 
 <main class="container">
 
     <!-- Coluna da esquerda / Imagem do produto -->
     <div class="left-column">
-        <img src="<%= produto.get(5)%>">
+        <img src="<%= produto.getImagem()%>">
     </div>
 
     <!-- Coluna da direita -->
@@ -115,30 +45,30 @@
 
         <!-- Descrição do produto -->
         <div class="product-description">
-            <span><%= produto.get(6)%></span>
-            <h1><%= produto.get(1)%></h1>
-            <p><%= produto.get(3)%></p>
+            <span><%= produto.getCategoria()%></span>
+            <h1><%= produto.getNome()%></h1>
+            <p><%= produto.getDescricao()%></p>
         </div>
 
         <!-- Preço do produto -->
         <div class="product-price">
-            <span>R$<%= produto.get(4)%></span>
-            <a href="CarrinhoController?addProdutoId=<%= produtoId%>" class="cart-btn">+ Carrinho</a>
+            <span><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></span>
+            <a href="carrinho?addProdutoId=<%= produto.getId()%>" class="cart-btn">+ Carrinho</a>
             <!-- Botão de favorito -->
-            <input <%= (Integer.valueOf(produto.get(7).toString()) > 0 ? "checked" : "")%> onchange="window.location.href = 'ProdutoController?fav=<%= produtoId%>'" id="toggle-heart" type="checkbox" />
+            <input <%= (produto.getFavoritoDoUsuario() ? "checked" : "")%> onchange="window.location.href = 'produto?fav=<%= produto.getId()%>'" id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">&#x2764;</label>
         </div>
         <!-- Avaliação do produto (em estrelas) -->
-        <div class="rate" <%= (!rateGaveByUser.equals("") ? "style='pointer-events:none'" : "")%>>
-            <input <%= (rateGaveByUser.equals("5") ? "checked" : "")%> onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=5'" type="radio" id="star5" name="rate" value="5" />
+        <div class="rate" <%= (produto.getAvaliacaoDadaPeloUsuario() != null ? "style='pointer-events:none'" : "")%>>
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("5") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=5'" type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text"></label>
-            <input <%= (rateGaveByUser.equals("4") ? "checked" : "")%> onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=4'" type="radio" id="star4" name="rate" value="4" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("4") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=4'" type="radio" id="star4" name="rate" value="4" />
             <label for="star4" title="text"></label>
-            <input <%= (rateGaveByUser.equals("3") ? "checked" : "")%> onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=3'" type="radio" id="star3" name="rate" value="3" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("3") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=3'" type="radio" id="star3" name="rate" value="3" />
             <label for="star3" title="text"></label>
-            <input <%= (rateGaveByUser.equals("2") ? "checked" : "")%> onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=2'" type="radio" id="star2" name="rate" value="2" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("2") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=2'" type="radio" id="star2" name="rate" value="2" />
             <label for="star2" title="text"></label>
-            <input <%= (rateGaveByUser.equals("1") ? "checked" : "")%> onClick="window.location.href = 'AvaliacaoController?produtoId=<%= produtoId%>&rating=1'" type="radio" id="star1" name="rate" value="1" />
+            <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("1") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=1'" type="radio" id="star1" name="rate" value="1" />
             <label for="star1" title="text"></label>
         </div>
     </div>
@@ -150,43 +80,43 @@
     <!-- Coluna da esquerda (resumo da avaliação) -->
     <div class="left-rating">
         <div class="review-resume">Resumo das avaliações</div>
-        <div class="review-rate"><%= resumoAvaliacoes%> / 5</div>
+        <div class="review-rate"><%= produto.getResumoAvaliacoes()%> / 5</div>
         <div class="review-list">
             <ul>
                 <li>
                     <div>5 ESTRELAS</div>
                     <div class="percentage">
-                        <div class="percentage-full" style="width: <%= barraCincoEstrelas%>%;"></div>
+                        <div class="percentage-full" style="width: <%= produto.getBarra5Estrelas()%>%;"></div>
                     </div>
-                    <div class="count"><%= qtdCincoEstrelas%></div>
+                    <div class="count"><%= produto.getQuantidadeAvaliacoesNota5()%></div>
                 </li>
                 <li>
                     <div>4 ESTRELAS</div>
                     <div class="percentage">
-                        <div class="percentage-full" style="width: <%= barraQuatroEstrelas%>%;"></div>
+                        <div class="percentage-full" style="width: <%= produto.getBarra4Estrelas()%>%;"></div>
                     </div>
-                    <div class="count"><%= qtdQuatroEstrelas%></div>
+                    <div class="count"><%= produto.getQuantidadeAvaliacoesNota4()%></div>
                 </li>
                 <li>
                     <div>3 ESTRELAS</div>
                     <div class="percentage">
-                        <div class="percentage-full" style="width: <%= barraTresEstrelas%>%;"></div>
+                        <div class="percentage-full" style="width: <%= produto.getBarra3Estrelas()%>%;"></div>
                     </div>
-                    <div class="count"><%= qtdTresEstrelas%></div>
+                    <div class="count"><%= produto.getQuantidadeAvaliacoesNota3()%></div>
                 </li>
                 <li>
                     <div>2 ESTRELAS</div>
                     <div class="percentage">
-                        <div class="percentage-full" style="width: <%= barraDuasEstrelas%>%;"></div>
+                        <div class="percentage-full" style="width: <%= produto.getBarra2Estrelas()%>%;"></div>
                     </div>
-                    <div class="count"><%= qtdDuasEstrelas%></div>
+                    <div class="count"><%= produto.getQuantidadeAvaliacoesNota2()%></div>
                 </li>
                 <li>
                     <div>1 ESTRELAS</div>
                     <div class="percentage">
-                        <div class="percentage-full" style="width: <%= barraUmaEstrela%>%;"></div>
+                        <div class="percentage-full" style="width: <%= produto.getBarra1Estrelas()%>%;"></div>
                     </div>
-                    <div class="count"><%= qtdUmaEstrela%></div>
+                    <div class="count"><%= produto.getQuantidadeAvaliacoesNota1()%></div>
                 </li>
             </ul>
         </div>
@@ -196,30 +126,30 @@
     <div class="right-rating">
 
         <%
-            for (int i = 0; i < avaliacoes.size(); i++) {
+            for (AvaliacaoProdutoListDTO avaliacao : avaliacoes) {
         %>
         <!-- Avaliação do cliente -->
         <div class="review-star">
             <%
-                for (int r = 0; r < Integer.valueOf(avaliacoes.get(i).get(2)); r++) {
+                for (int r = 0; r < Integer.valueOf(avaliacao.getAvaliacao()); r++) {
             %>
             &#x2605;
             <%
                 }
             %>
-            <div class="review-date"><%= avaliacoes.get(i).get(5)%></div>
+            <div class="review-date"><%= avaliacao.getAvaliacaoDataSimples()%></div>
         </div>
-        <div class="review-title"><%= avaliacoes.get(i).get(1)%><div class="review-text"><%= avaliacoes.get(i).get(3)%></div>
+        <div class="review-title"><%= avaliacao.getAvaliacaoTitulo()%><div class="review-text"><%= avaliacao.getAvaliacaoDescricao()%></div>
         </div>
-        <div class="review-name"><%= avaliacoes.get(i).get(0)%></div>
+        <div class="review-name"><%= avaliacao.getAvaliador()%></div>
         <%
             }
         %>
 
-        <% if (rateGaveByUser.equals("")) { %>
+        <% if (produto.getAvaliacaoDadaPeloUsuario() == null) {%>
         <!-- Botão para avaliar o produto -->
         <div class="review-btn">
-            <a href="AvaliacaoController?produtoId=<%= produtoId%>">Adicionar uma avaliação</a>
+            <a href="avaliacao?produtoId=<%= produto.getId()%>">Adicionar uma avaliação</a>
         </div>
         <% }%>
     </div>

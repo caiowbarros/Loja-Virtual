@@ -22,8 +22,10 @@ public class ProdutoServlet extends HttpServlet {
     private static final String PRODUTOID = "produtoId";
     private final IProdutoService produtoService;
     private final IAvaliacaoService avaliacaoService;
+    private final Helper helper;
 
     public ProdutoServlet() {
+        helper = new Helper();
         produtoService = new ProdutoService();
         avaliacaoService = new AvaliacaoService();
     }
@@ -44,44 +46,36 @@ public class ProdutoServlet extends HttpServlet {
             // se tem produto selecionado por parametro passa p sessao
             Integer produtoId = null;
             if (request.getParameter(PRODUTOID) != null) {
-                produtoId = new Helper().tryParseInteger(request.getParameter(PRODUTOID));
+                produtoId = helper.tryParseInteger(request.getParameter(PRODUTOID));
                 session.setAttribute(PRODUTOID, produtoId);
             }
 
             // se produtoId da sessao for null manda p pag d produtos
             if (session.getAttribute(PRODUTOID) != null) {
-                produtoId = new Helper().tryParseInteger(session.getAttribute(PRODUTOID).toString());
+                produtoId = helper.tryParseInteger(session.getAttribute(PRODUTOID).toString());
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("produtos");
                 return;
             }
 
-            // se fav esta definido por parametro passa p sessao
-            String fav = null;
-            if (request.getParameter("fav") != null) {
-                fav = request.getParameter("fav");
-                session.setAttribute("fav", fav);
-            }
-            // recupera fav da sessao
-            if (session.getAttribute("fav") != null) {
-                fav = session.getAttribute("fav").toString();
-            }
-
             // recupera user id
             Integer userId = null;
             if (session.getAttribute("userId") != null) {
-                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
-            }
+                userId = helper.tryParseInteger(session.getAttribute("userId").toString());
+            }            
 
-            // checa se eh para favoritar ou desfavoritar produto
-            if (fav != null) {
+            if (request.getParameter("fav") != null) {
                 // VERIFICA SE ESTA LOGADO
                 if (userId == null) {
+                    session.setAttribute("msg", "Realize login para favoritar um produto!");
                     response.sendRedirect("usuario?redirect=produto");
                     return;
                 } else {
                     produtoService.usuarioToogleFavoritaProdutoPorId(produtoId, userId);
+                    request.removeAttribute("fav");
+                    response.sendRedirect("produto");
+                    return;
                 }
             }
             request.setAttribute("produto", produtoService.mostraProdutoVitrineParaUsuario(produtoId, userId));

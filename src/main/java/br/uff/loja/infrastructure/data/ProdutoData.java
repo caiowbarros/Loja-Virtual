@@ -15,7 +15,9 @@ import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class ProdutoData implements IProdutoData {
+
     private final MySQLDAO mysqlDAO;
+    private static final String CONSULTAPRODUTO = "SELECT p.id AS id, p.name AS nome, p.price AS preco, p.description AS descricao,p.img AS imagem, p.category_id AS categoriaId, p.quantity AS quantidade, c.category_name AS categoria FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id)";
 
     public ProdutoData() {
         this.mysqlDAO = new MySQLDAO();
@@ -25,7 +27,7 @@ public class ProdutoData implements IProdutoData {
     public ProdutoDTO encontraProdutoPorId(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products WHERE id=?", bind);
+            List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega(CONSULTAPRODUTO + " WHERE p.id=?", bind);
             return new ProdutoDTO(retorno.get(0));
         } catch (Exception e) {
             throw new LojaException("Falha ao Recuperar o Produto de id: " + id + ". (" + e.getMessage() + ")");
@@ -102,7 +104,7 @@ public class ProdutoData implements IProdutoData {
     public List<ProdutoDTO> listaProdutosAdm() throws LojaException {
         try {
             Object[] bind = {};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, price AS preco, description AS descricao,img AS imagem, category_id AS categoriaId, quantity AS quantidade FROM products", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(CONSULTAPRODUTO, bind);
             List<ProdutoDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoDTO(produto)));
             return retornoFormatado;
@@ -118,7 +120,7 @@ public class ProdutoData implements IProdutoData {
         try {
             ArrayList<Object> bind = new ArrayList<>();
             String consulta = "SELECT p.id AS id,p.name AS nome,p.price AS preco,p.img AS imagem,c.category_name AS categoria FROM products p LEFT JOIN vw_category c on(p.category_id=c.id) ";
-                        
+
             String filtro = "";
             String limit = " LIMIT " + filtroProduto.getItensPorPagina() + " ";
 
@@ -160,7 +162,7 @@ public class ProdutoData implements IProdutoData {
                 subCategoriaFiltro.append((subCategoriaFiltro.toString().equals("") ? "" : " ) "));
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + subCategoriaFiltro.toString();
             }
-            
+
             if (Boolean.TRUE.equals(filtroProduto.getApenasLancamentos())) {
                 filtro += (filtro.equals("") ? whereTxt : andTXT) + " p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
             }
@@ -196,20 +198,10 @@ public class ProdutoData implements IProdutoData {
             List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(consulta + filtro + limit + offset, bind.toArray());
             List<ProdutoListaDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoListaDTO(produto)));
-        
+
             Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + filtroProduto.getItensPorPagina() + ")", consulta + filtro, "", bind.toArray())));
 
-            if(filtroProduto.getPaginaAtual() < 1) {
-                filtroProduto.setPaginaAtual(1);
-                return listaProdutosVitrine(filtroProduto);
-            }
-
-            if(filtroProduto.getPaginaAtual() > ultimaPagina) {
-                filtroProduto.setPaginaAtual(ultimaPagina);
-                return listaProdutosVitrine(filtroProduto);
-            }
-            
-            return new PaginateDTO<>(filtroProduto.getPaginaAtual(),retornoFormatado,ultimaPagina);
+            return new PaginateDTO<>(filtroProduto.getPaginaAtual(), retornoFormatado, ultimaPagina);
         } catch (Exception e) {
             throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");
         } finally {
@@ -220,7 +212,7 @@ public class ProdutoData implements IProdutoData {
     @Override
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {usuarioId.toString(),usuarioId.toString(),id};
+            Object[] bind = {String.valueOf(usuarioId), String.valueOf(usuarioId), id};
             List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT p.id, p.name AS nome, p.quantity AS quantidade, p.description AS descricao, p.price AS preco, p.img AS imagem, c.category_name AS categoria, (SELECT count(*) FROM favorite_products f WHERE f.product_id = p.id AND f.user_id=?) favoritoDoUsuario, (SELECT f.rating FROM user_produts_rating f WHERE f.product_id = p.id AND f.user_id=?) avaliacaoDadaPeloUsuario, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id) quantidadeAvaliacoes, (SELECT COALESCE(sum(f.rating),0) FROM user_produts_rating f WHERE f.product_id = p.id) somaAvaliacoes, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='1') quantidadeAvaliacoesNota1, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='2') quantidadeAvaliacoesNota2, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='3') quantidadeAvaliacoesNota3, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='4') quantidadeAvaliacoesNota4, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='5') quantidadeAvaliacoesNota5 FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id) WHERE p.id=?", bind);
             return new ProdutoVitrineUsuarioDTO(retorno.get(0));
         } catch (Exception e) {
@@ -233,7 +225,7 @@ public class ProdutoData implements IProdutoData {
     @Override
     public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {produtoId,usuarioId};
+            Object[] bind = {produtoId, usuarioId};
             return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "favorite_products", "product_id=? AND user_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar se o produto de id:" + produtoId + " já foi favoritado pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
@@ -245,7 +237,7 @@ public class ProdutoData implements IProdutoData {
     @Override
     public void removeFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {produtoId,usuarioId};
+            Object[] bind = {produtoId, usuarioId};
             this.mysqlDAO.dbGrava("DELETE FROM favorite_products WHERE product_id=? AND user_id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao desfavoritar o produto de id:" + produtoId + " pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
@@ -257,7 +249,7 @@ public class ProdutoData implements IProdutoData {
     @Override
     public void adicionaFavoritacaoProdutoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {produtoId,usuarioId};
+            Object[] bind = {produtoId, usuarioId};
             this.mysqlDAO.dbGrava("INSERT INTO favorite_products (product_id,user_id) VALUES (?,?)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao favoritar o produto de id:" + produtoId + " pelo usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
@@ -265,11 +257,12 @@ public class ProdutoData implements IProdutoData {
             this.mysqlDAO.destroyDb();
         }
     }
+
     @Override
     public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
         try {
             Object[] bind = {};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, description AS descricao, img AS imagem FROM products ORDER BY quantity DESC LIMIT 3", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, name AS nome, description AS descricao, img AS imagem FROM products WHERE quantity > 0 ORDER BY quantity DESC LIMIT 3", bind);
             List<ProdutoHomeDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(produto -> retornoFormatado.add(new ProdutoHomeDTO(produto)));
             return retornoFormatado;

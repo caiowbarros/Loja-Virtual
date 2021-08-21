@@ -10,6 +10,7 @@ import br.uff.loja.core.interfaces.data.ICategoriaData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class CategoriaData implements ICategoriaData {
+
     private final MySQLDAO mysqlDAO;
 
     public CategoriaData() {
@@ -30,5 +31,5 @@ public class CategoriaData implements ICategoriaData {
             this.mysqlDAO.destroyDb();
         }
     }
-    
+
 }

@@ -24,6 +24,7 @@ import br.uff.loja.infrastructure.shared.Helper;
 @WebServlet("/produtos")
 public class ProdutosServlet extends HttpServlet {
     private final IProdutoService produtoService;
+    private final Helper helper;
     private static final String PESQUISASTR = "pesquisa";
     private static final String PLAYSTATIONSTR = "playstation";
     private static final String CHECKEDSTR = "checked";
@@ -38,6 +39,7 @@ public class ProdutosServlet extends HttpServlet {
     private static final String MAXPAGSTR = "maxPag";
 
     public ProdutosServlet() {
+        helper = new Helper();
         produtoService = new ProdutoService();
     }
 
@@ -80,14 +82,12 @@ public class ProdutosServlet extends HttpServlet {
             List<String> listaCategorias = new ArrayList<>();
             if (categorias != null) {
                 listaCategorias = Arrays.asList(categorias);
-                filtro.setCategorias(listaCategorias);
             }
 
             // Converte String Array de sub categorias p Lista
             List<String> listaSubCategorias = new ArrayList<>();
             if (subCategorias != null) {
                 listaSubCategorias = Arrays.asList(subCategorias);
-                filtro.setSubCategorias(listaSubCategorias);
             }
 
             // Converte String Array de especiais p Lista
@@ -114,38 +114,67 @@ public class ProdutosServlet extends HttpServlet {
 
             // define na sessao as variaveis para os checkboxes com base no category id passado
             if (categoryIdParameter.equals("5")) {
+                listaCategorias.add(PLAYSTATIONSTR);
+                listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("6")) {
+                listaCategorias.add(PLAYSTATIONSTR);
+                listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("4")) {
+                listaCategorias.add(PLAYSTATIONSTR);
+                listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("8")) {
+                listaCategorias.add(XBOXSTR);
+                listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("9")) {
+                listaCategorias.add(XBOXSTR);
+                listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("7")) {
+                listaCategorias.add(XBOXSTR);
+                listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("11")) {
+                listaCategorias.add(WIISTR);
+                listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("12")) {
+                listaCategorias.add(WIISTR);
+                listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("10")) {
+                listaCategorias.add(WIISTR);
+                listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("1")) {
+                listaCategorias.add(PLAYSTATIONSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("2")) {
+                listaCategorias.add(XBOXSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
             } else if (categoryIdParameter.equals("3")) {
+                listaCategorias.add(WIISTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
+            }
+            
+            if(!listaCategorias.isEmpty()) {
+                filtro.setCategorias(listaCategorias);
+            }
+            
+            if(!listaSubCategorias.isEmpty()) {
+                filtro.setSubCategorias(listaSubCategorias);
             }
 
             // verifica se chamou um filtro especial
@@ -215,7 +244,7 @@ public class ProdutosServlet extends HttpServlet {
             if (listaEsp.contains(FAVORITOSSTR)) {
                 // se tem usuario logado mostra filtra produtos por favoritos
                 if (session.getAttribute("userId") != null) {
-                    filtro.setUsuarioId(new Helper().tryParseInteger(session.getAttribute("userId").toString()));
+                    filtro.setUsuarioId(helper.tryParseInteger(session.getAttribute("userId").toString()));
                     filtro.setApenasFavoritados(true);
                 } else {
                     session.setAttribute("msg", "Realize login para ver seus favoritos!");
@@ -230,7 +259,7 @@ public class ProdutosServlet extends HttpServlet {
 
             // filtra menor preco
             if (request.getParameter("price_min") != null) {
-                Double priceMin = Double.valueOf(request.getParameter("price_min"));
+                Double priceMin = helper.tryParseDouble(request.getParameter("price_min"));
                 if (priceMin != null) {
                     session.setAttribute("priceMin", priceMin);
                     filtro.setPrecoMinimo(priceMin);
@@ -239,7 +268,7 @@ public class ProdutosServlet extends HttpServlet {
 
             // filtra maior preco
             if (request.getParameter("price_max") != null) {
-                Double priceMax = Double.valueOf(request.getParameter("price_max"));
+                Double priceMax = helper.tryParseDouble(request.getParameter("price_max"));
                 if (priceMax != null) {
                     session.setAttribute("priceMax", priceMax);
                     filtro.setPrecoMaximo(priceMax);
@@ -253,7 +282,10 @@ public class ProdutosServlet extends HttpServlet {
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
+            if(request.getParameter("action")!=null) {
+                action = request.getParameter("action");
+            }
 
             switch (action) {
                 case "ant": {

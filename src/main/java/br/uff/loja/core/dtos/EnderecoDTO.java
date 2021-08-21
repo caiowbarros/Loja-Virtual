@@ -3,9 +3,11 @@ package br.uff.loja.core.dtos;
 import java.util.Map;
 
 public class EnderecoDTO extends BaseDTO {
-    public EnderecoDTO () {}
 
-    public EnderecoDTO (Map<String, Object> endereco) {
+    public EnderecoDTO() {
+    }
+
+    public EnderecoDTO(Map<String, Object> endereco) {
         this.setId(Integer.valueOf(String.valueOf(endereco.get("id"))));
         this.setUsuarioId(Integer.valueOf(String.valueOf(endereco.get("usuarioId"))));
         this.setNome(String.valueOf(endereco.get("nome")));
@@ -66,7 +68,7 @@ public class EnderecoDTO extends BaseDTO {
     public String getLogradouro() {
         return logradouro;
     }
-    
+
     public void setCep(Integer cep) {
         this.cep = cep;
     }

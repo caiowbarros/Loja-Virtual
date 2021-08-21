@@ -3,22 +3,18 @@
     Created on : 29/09/2019, 00:45:25
     Author     : HP
 --%>
+<%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n tiver um usuario logado retorna p controller com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=EnderecoController");
-    }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuario?redirect=endereco");
     }
 
-    ArrayList<ArrayList<String>> grid = null;
+    List<EnderecoDTO> grid = new ArrayList<EnderecoDTO>();
     if (request.getAttribute("grid") != null) {
-        grid = (ArrayList<ArrayList<String>>) request.getAttribute("grid");
+        grid = (List<EnderecoDTO>) request.getAttribute("grid");
     }
 %>
 <!-- Header -->
@@ -40,16 +36,16 @@
     </thead>
     <tbody>
         <%
-            for (int i = 0; i < grid.size(); i++) {
+            for (EnderecoDTO endereco : grid) {
         %>
         <tr class="end-data-container">
             <td class="end-data">
-                <a class="end-link" href="EnderecoController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+                <a class="end-link" href="endereco?sel=<%= endereco.getId()%>">Editar</a>             
             </td>
-            <td class="end-data"><%= grid.get(i).get(1)%></td>
-            <td class="end-data"><%= grid.get(i).get(2)%></td>
-            <td class="end-data"><%= grid.get(i).get(3)%></td>
-            <td class="end-data"><%= grid.get(i).get(4)%></td>
+            <td class="end-data"><%= endereco.getNome()%></td>
+            <td class="end-data"><%= endereco.getLogradouro()%></td>
+            <td class="end-data"><%= endereco.getCidade()%></td>
+            <td class="end-data"><%= endereco.getEstado()%></td>
         </tr>
         <%
             }
@@ -58,7 +54,7 @@
     <tfoot>
         <tr>
             <td class="end-add-new" colspan="5">
-                <a class="end-link" href="EnderecoController?sel">Inserir Novo Endereço</a>
+                <a class="end-link" href="endereco?sel">Inserir Novo Endereço</a>
             </td>
         </tr>
     </tfoot>

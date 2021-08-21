@@ -17,7 +17,9 @@ import javax.servlet.http.HttpSession;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.exceptions.LojaException;
+import br.uff.loja.core.interfaces.services.IRoleService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
+import br.uff.loja.core.services.RoleService;
 import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.infrastructure.shared.Helper;
 
@@ -30,9 +32,13 @@ public class UsuarioServlet extends HttpServlet {
     private static final String USERROLE = "userRole";
     private static final String REDIRECT = "redirect";
     private final IUsuarioService usuarioService;
+    private final IRoleService roleService;
+    private final Helper helper;
 
     public UsuarioServlet() {
         usuarioService = new UsuarioService();
+        roleService = new RoleService();
+        helper = new Helper();
     }
 
     /**
@@ -53,11 +59,14 @@ public class UsuarioServlet extends HttpServlet {
             }
 
             // recupera acao solicitada se existir
-            String action = request.getParameter("action");
+            String action = "";
+            if(request.getParameter("action")!=null){
+                action = request.getParameter("action");
+            }
 
             Integer usuarioIdSelectionado = null;
             if (session.getAttribute(SELUSER) != null) {
-                usuarioIdSelectionado = new Helper().tryParseInteger(session.getAttribute(SELUSER).toString());
+                usuarioIdSelectionado = helper.tryParseInteger(session.getAttribute(SELUSER).toString());
             }
 
             String email = request.getParameter(EMAIL);
@@ -71,7 +80,7 @@ public class UsuarioServlet extends HttpServlet {
                         request.getParameter("name"),
                         email,
                         senha,
-                        new Helper().tryParseInteger(request.getParameter("roleId"))
+                        helper.tryParseInteger(request.getParameter("roleId"))
                     ));
                     break;
                 }
@@ -82,7 +91,8 @@ public class UsuarioServlet extends HttpServlet {
                     session.setAttribute("msg", "Usuário deslogado com sucesso!");
                     // invalida sessao
                     session.invalidate();
-                    break;
+                    response.sendRedirect("");
+                    return;
                 }
                 case "login": {
                     try {
@@ -140,15 +150,16 @@ public class UsuarioServlet extends HttpServlet {
             // se tem usuario logado manda p conta caso contrario p login
             if (session.getAttribute(USERID) != null) {
                 //recupera userId da sessao
-                Integer userId = new Helper().tryParseInteger(session.getAttribute(USERID).toString());
+                Integer userId = helper.tryParseInteger(session.getAttribute(USERID).toString());
                 // define redirect se n foi passado
                 if (redirect == null || "null".equals(redirect)) {
                     if (usuarioIdSelectionado != null) {
-                        if (!usuarioIdSelectionado.equals(userId) && !new Helper().tryParseInteger(session.getAttribute(USERROLE).toString()).equals(EPermissaoUsuario.ADM.getId())) {
+                        if (!usuarioIdSelectionado.equals(userId) && !helper.tryParseInteger(session.getAttribute(USERROLE).toString()).equals(EPermissaoUsuario.ADM.getId())) {
                             session.setAttribute(SELUSER, null);
                             throw new LojaException("Acesso não permitido!");
                         }
 
+                        request.setAttribute("permissoes", roleService.listaRoles());
                         request.setAttribute("usuario", usuarioService.encontraUsuarioPorId(usuarioIdSelectionado));
                         redirect = "pages/usuario-cadastro.jsp";
                     } else {

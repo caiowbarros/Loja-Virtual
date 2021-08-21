@@ -3,22 +3,19 @@
     Created on : 02/10/2019, 02:09:29
     Author     : HP
 --%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
+<%@page import="java.util.List"%>
+<%@page import="br.uff.loja.core.dtos.ProdutoDTO"%>
+<%@page import="br.uff.loja.core.enums.EPermissaoUsuario"%>
 <%@page import="java.util.ArrayList"%>
 <%
     // se n usuario n for adm retorna p ProdutosController
-    if (!session.getAttribute("userRole").equals("1")) {
-        response.sendRedirect("UserController");
+    if (!session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) {
+        response.sendRedirect("usuario");
     }
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
-    ArrayList<ArrayList<String>> grid = null;
+    List<ProdutoDTO> grid = new ArrayList<ProdutoDTO>();
     if (request.getAttribute("grid") != null) {
-        grid = (ArrayList<ArrayList<String>>) request.getAttribute("grid");
+        grid = (List<ProdutoDTO>) request.getAttribute("grid");
     }
 %>
 <!-- Header -->
@@ -41,16 +38,16 @@
     </thead>
     <tbody>
         <%
-            for (int i = 0; i < grid.size(); i++) {
+            for (ProdutoDTO produto : grid) {
         %>
         <tr class="product-data">
             <td>
-                <a href="ProdutoAdmController?sel=<%= grid.get(i).get(0)%>">Editar</a>             
+                <a href="produto-adm?sel=<%= produto.getId()%>">Editar</a>             
             </td>
-            <td><%= grid.get(i).get(1)%></td>
-            <td>R$<%= grid.get(i).get(2)%></td>
-            <td><%= grid.get(i).get(3)%></td>
-            <td><%= grid.get(i).get(4)%></td>
+            <td><%= produto.getNome()%></td>
+            <td><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></td>
+            <td><%= produto.getCategoria()%></td>
+            <td><%= produto.getQuantidade()%></td>
         </tr>
         <%
             }
@@ -59,11 +56,11 @@
     <tfoot>
         <tr class="product-data-add">
             <td colspan="5">
-                <a class="end-link" href="ProdutoAdmController?sel">Inserir Novo Produto</a>
+                <a class="end-link" href="produto-adm?sel">Inserir Novo Produto</a>
             </td>
         </tr>
     </tfoot>
 </table>
-    
+
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

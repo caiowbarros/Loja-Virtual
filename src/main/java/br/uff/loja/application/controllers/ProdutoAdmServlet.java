@@ -14,16 +14,22 @@ import javax.servlet.http.HttpSession;
 import br.uff.loja.core.dtos.ProdutoDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.exceptions.LojaException;
+import br.uff.loja.core.interfaces.services.ICategoriaService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
+import br.uff.loja.core.services.CategoriaService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.infrastructure.shared.Helper;
 
 @WebServlet("/produto-adm")
 public class ProdutoAdmServlet extends HttpServlet {
     private final IProdutoService produtoService;
+    private final ICategoriaService categoriaService;
+    private final Helper helper;
 
     public ProdutoAdmServlet() {
+        helper = new Helper();
         produtoService = new ProdutoService();
+        categoriaService = new CategoriaService();
     }
 
     /**
@@ -43,11 +49,16 @@ public class ProdutoAdmServlet extends HttpServlet {
             if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) {
 
                 if (request.getParameter("sel") != null) {
-                    Integer selParameter = new Helper().tryParseInteger(request.getParameter("sel"));
-                    ProdutoDTO produto = produtoService.encontraProdutoPorId(selParameter);
+                    String selParameterStr = request.getParameter("sel");
+                    Integer selParameter = helper.tryParseInteger(selParameterStr);
+                    ProdutoDTO produto = new ProdutoDTO();
+                    if(selParameter != null){
+                        produto = produtoService.encontraProdutoPorId(selParameter);
+                    }
                     // define atributo de produto
                     request.setAttribute("produto", produto);
-                    session.setAttribute("sel", selParameter);
+                    request.setAttribute("categorias", categoriaService.listaCategorias());
+                    session.setAttribute("sel", selParameterStr);
                     request.getRequestDispatcher("pages/produto-cadastro.jsp").forward(request, response);
                     return;
                 }
@@ -55,7 +66,7 @@ public class ProdutoAdmServlet extends HttpServlet {
                 // define produto selecionado
                 Integer sel = null;
                 if (session.getAttribute("sel") != null) {
-                    sel = new Helper().tryParseInteger(session.getAttribute("sel").toString());
+                    sel = helper.tryParseInteger(session.getAttribute("sel").toString());
                 }
 
                 // recupera acao solicitada se existir
@@ -73,7 +84,7 @@ public class ProdutoAdmServlet extends HttpServlet {
                             Double.valueOf(request.getParameter("price")),
                             request.getParameter("description"),
                             request.getParameter("src"),
-                            new Helper().tryParseInteger(request.getParameter("categoryId")),
+                            helper.tryParseInteger(request.getParameter("categoryId")),
                             0
                         );
                         
@@ -87,7 +98,7 @@ public class ProdutoAdmServlet extends HttpServlet {
                         break;
                     }
                     case "estoqueInsere": {
-                        produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(sel, new Helper().tryParseInteger(request.getParameter("quantity")));
+                        produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(sel, helper.tryParseInteger(request.getParameter("quantity")));
                         session.setAttribute("msg", "Quantidade em estoque aumentada com sucesso!");
                         break;
                     }

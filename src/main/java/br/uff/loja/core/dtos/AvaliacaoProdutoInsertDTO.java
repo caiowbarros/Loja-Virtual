@@ -1,16 +1,18 @@
 package br.uff.loja.core.dtos;
 
 public class AvaliacaoProdutoInsertDTO extends BaseDTO {
+
     private Integer usuarioId;
     private Integer produtoId;
     private Integer avaliacao;
     private String descricao;
     private String titulo;
 
-    public AvaliacaoProdutoInsertDTO() {}
+    public AvaliacaoProdutoInsertDTO() {
+    }
 
     public AvaliacaoProdutoInsertDTO(
-        Integer usuarioId, Integer produtoId, Integer avaliacao, String descricao, String titulo
+            Integer usuarioId, Integer produtoId, Integer avaliacao, String descricao, String titulo
     ) {
         this.setUsuarioId(usuarioId);
         this.setProdutoId(produtoId);

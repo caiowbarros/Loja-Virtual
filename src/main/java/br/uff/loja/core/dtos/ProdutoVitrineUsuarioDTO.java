@@ -1,8 +1,10 @@
 package br.uff.loja.core.dtos;
 
+import br.uff.loja.infrastructure.shared.Helper;
 import java.util.Map;
 
 public class ProdutoVitrineUsuarioDTO extends BaseDTO {
+
     private Integer id;
     private String nome;
     private Integer quantidade;
@@ -25,10 +27,12 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     private Double barra3Estrelas;
     private Double barra2Estrelas;
     private Double barra1Estrelas;
+    private Double resumoAvaliacoes;
 
-    public ProdutoVitrineUsuarioDTO() {}
+    public ProdutoVitrineUsuarioDTO() {
+    }
 
-    public ProdutoVitrineUsuarioDTO(Map<String,Object> produto) {
+    public ProdutoVitrineUsuarioDTO(Map<String, Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
         this.setNome(String.valueOf(produto.get("nome")));
         this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
@@ -37,7 +41,7 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setCategoria(String.valueOf(produto.get("categoria")));
         this.setQuantidade(Integer.valueOf(String.valueOf(produto.get("quantidade"))));
         this.setFavoritoDoUsuario(Integer.valueOf(String.valueOf(produto.get("favoritoDoUsuario"))) > 0);
-        this.setAvaliacaoDadaPeloUsuario(Integer.valueOf(String.valueOf(produto.get("avaliacaoDadaPeloUsuario"))));
+        this.setAvaliacaoDadaPeloUsuario((new Helper()).tryParseInteger(String.valueOf(produto.get("avaliacaoDadaPeloUsuario"))));
         this.setQuantidadeAvaliacoes(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoes"))));
         this.setSomaAvaliacoes(Integer.valueOf(String.valueOf(produto.get("somaAvaliacoes"))));
         this.setQuantidadeAvaliacoesNota1(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota1"))));
@@ -46,11 +50,29 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
         this.setQuantidadeAvaliacoesNota4(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota4"))));
         this.setQuantidadeAvaliacoesNota5(Integer.valueOf(String.valueOf(produto.get("quantidadeAvaliacoesNota5"))));
         // calculos pras barras
-        this.setBarra1Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota1 * 100.0) / this.quantidadeAvaliacoes));
-        this.setBarra2Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota2 * 100.0) / this.quantidadeAvaliacoes));
-        this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100.0) / this.quantidadeAvaliacoes));
-        this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100.0) / this.quantidadeAvaliacoes));
-        this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100.0) / this.quantidadeAvaliacoes));
+        if (this.getQuantidadeAvaliacoes() > 0) {
+            this.setResumoAvaliacoes(Double.valueOf(this.somaAvaliacoes) / Double.valueOf(this.quantidadeAvaliacoes));
+            this.setBarra1Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota1 * 100.0) / this.quantidadeAvaliacoes));
+            this.setBarra2Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota2 * 100.0) / this.quantidadeAvaliacoes));
+            this.setBarra3Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota3 * 100.0) / this.quantidadeAvaliacoes));
+            this.setBarra4Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota4 * 100.0) / this.quantidadeAvaliacoes));
+            this.setBarra5Estrelas(Double.valueOf((this.quantidadeAvaliacoesNota5 * 100.0) / this.quantidadeAvaliacoes));
+        } else {
+            this.setResumoAvaliacoes(0.0);
+            this.setBarra1Estrelas(0.0);
+            this.setBarra2Estrelas(0.0);
+            this.setBarra3Estrelas(0.0);
+            this.setBarra4Estrelas(0.0);
+            this.setBarra5Estrelas(0.0);
+        }
+    }
+
+    public void setResumoAvaliacoes(Double resumoAvaliacoes) {
+        this.resumoAvaliacoes = resumoAvaliacoes;
+    }
+
+    public Double getResumoAvaliacoes() {
+        return this.resumoAvaliacoes;
     }
 
     public void setBarra1Estrelas(Double barra1Estrelas) {
@@ -76,15 +98,19 @@ public class ProdutoVitrineUsuarioDTO extends BaseDTO {
     public Double getBarra1Estrelas() {
         return barra1Estrelas;
     }
+
     public Double getBarra2Estrelas() {
         return barra2Estrelas;
     }
+
     public Double getBarra3Estrelas() {
         return barra3Estrelas;
     }
+
     public Double getBarra4Estrelas() {
         return barra4Estrelas;
     }
+
     public Double getBarra5Estrelas() {
         return barra5Estrelas;
     }

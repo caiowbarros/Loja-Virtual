@@ -2,6 +2,7 @@ package br.uff.loja.core.services;
 
 import java.util.List;
 
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.IVendaData;
@@ -11,6 +12,7 @@ import br.uff.loja.core.interfaces.services.IVendaService;
 import br.uff.loja.infrastructure.data.VendaData;
 
 public class VendaService implements IVendaService {
+
     private IVendaData vendaData;
     private ICarrinhoService carrinhoService;
     private IEnderecoService enderecoService;
@@ -35,5 +37,10 @@ public class VendaService implements IVendaService {
             throw new LojaException("O endereço escolhido de id:" + enderecoId + " não pertence ao dono do carrinho (usuário de id: " + usuarioId + "), escolha outro endereço.");
         }
         vendaData.gravaVenda(carrinhoId, enderecoId);
+    }
+
+    @Override
+    public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
+        return vendaData.listaVendasDoUsuario(usuarioId, itensPorPagina, paginaAtual);
     }
 }

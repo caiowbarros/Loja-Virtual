@@ -3,24 +3,20 @@
     Created on : 02/10/2019, 00:11:02
     Author     : HP
 --%>
-<%@page import="java.util.ArrayList"%>
+<%@page import="br.uff.loja.infrastructure.shared.Helper"%>
+<%@page import="br.uff.loja.core.dtos.ProdutoListaDTO"%>
+<%@page import="br.uff.loja.core.dtos.PaginateDTO"%>
+<%@page import="java.util.List"%>
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Produtos"/>
 </jsp:include>
 <%
-    // mostra se tiver msg
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
-    }
-
-    ArrayList<ArrayList<String>> produtos = null;
+    PaginateDTO<List<ProdutoListaDTO>> produtos = new PaginateDTO<List<ProdutoListaDTO>>();
     if (request.getAttribute("produtos") != null) {
-        produtos = (ArrayList<ArrayList<String>>) request.getAttribute("produtos");
+        produtos = (PaginateDTO<List<ProdutoListaDTO>>) request.getAttribute("produtos");
     }
 %>
-<form method="post" action="ProdutosController" id="frmProdutos">
+<form method="post" action="produtos" id="frmProdutos">
     <!-- Container principal -->
     <div class="products-main">
 
@@ -62,22 +58,22 @@
 
         <!-- Container dos produtos -->
         <div class="products-page">
-            <% if (produtos.size() < 1) { %>
+            <% if (produtos.getDados().size() < 1) { %>
             <h3>O filtro escolhido não retornou nenhum produto. Mas não desista, tente com outro.</h3>
             <%
             } else {
             %>
             <div class="products-container">
                 <%
-                    for (int i = 0; i < produtos.size(); i++) {
+                    for (ProdutoListaDTO produto : produtos.getDados()) {
                 %>
                 <div class="products-item">
-                    <a href="ProdutoController?produtoId=<%= produtos.get(i).get(0)%>">
+                    <a href="produto?produtoId=<%= produto.getId()%>">
                         <div class="products-cart">Ver Detalhes</div>
-                        <img src="<%= produtos.get(i).get(3)%>">
-                        <div class="products-title"><%= produtos.get(i).get(1)%></div>
-                        <div class="products-details"><%= produtos.get(i).get(4)%></div>
-                        <div class="products-price">R$<%= produtos.get(i).get(2)%></div>
+                        <img src="<%= produto.getImagem()%>">
+                        <div class="products-title"><%= produto.getNome()%></div>
+                        <div class="products-details"><%= produto.getCategoria()%></div>
+                        <div class="products-price"><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></div>
                     </a>
                 </div>
                 <%
@@ -86,11 +82,11 @@
             </div>
             <!-- Páginas -->
             <div class="products-paging">
-                <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) > 1) {%>
+                <% if (produtos.getPaginaAtual() > 1) {%>
                 <button class="products-prev" name="action" value="ant">&#8249;</button>
                 <% }%>
-                <span><%= session.getAttribute("ProdutosPag")%></span>
-                <% if (Integer.valueOf(session.getAttribute("ProdutosPag").toString()) < Integer.valueOf(session.getAttribute("maxPag").toString())) { %>
+                <span><%= produtos.getPaginaAtual()%></span>
+                <% if (produtos.getPaginaAtual() < produtos.getUltimaPagina()) { %>
                 <button class="products-next" name="action" value="prox">&#8250;</button>
                 <% }%>
             </div>

@@ -3,24 +3,18 @@
     Created on : 28/09/2019, 23:42:18
     Author     : HP
 --%>
-<%@page import="br.uff.models.Address"%>
+<%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
 <%
     // se n tiver um usuario logado retorna p controller de usuario com redirect p EnderecoController
     if (session.getAttribute("userId") == null) {
-        response.sendRedirect("UserController?redirect=EnderecoController");
-    }
-    // mostra msg se tiver
-    if (session.getAttribute("msg") != null) {
-        String msg = session.getAttribute("msg").toString();
-        session.setAttribute("msg", null);
-        out.println("<script>alert('" + msg + "');</script>");
+        response.sendRedirect("usuario?redirect=endereco");
     }
 
-    Address endereco = null;
+    EnderecoDTO endereco = new EnderecoDTO();
     if (request.getAttribute("endereco") != null) {
-        endereco = (Address) request.getAttribute("endereco");
+        endereco = (EnderecoDTO) request.getAttribute("endereco");
     } else {
-        response.sendRedirect("EnderecoController");
+        response.sendRedirect("endereco");
         return;
     }
 
@@ -30,67 +24,67 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Cadastro de Endereços"/>
 </jsp:include>
-    
+
 <div class="end-add-container">    
-    <form action="EnderecoController" method="post">
-          
+    <form action="endereco" method="post">
+
         <div class="end-group-container">
             <div class="group">      
-                <input value="${endereco.getName()}" name="name" required type="text" maxlength="255" />
+                <input value="<%= endereco.getNome()%>" name="name" required type="text" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Descrição do endereço</label>
             </div>
-            
+
             <div class="group">      
-                <input value="${endereco.getZipcode()}" name="zipcode" required type="number" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
+                <input value="<%= endereco.getCep()%>" name="zipcode" required type="number" maxlength="11" id="cep" onblur="pesquisacep(this.value);"/>
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>CEP</label>
             </div>
-                
+
             <div class="group">      
-                <input value="${endereco.getAddress()}" name="address" required type="text" id="rua" maxlength="255" />
+                <input value="<%= endereco.getLogradouro()%>" name="address" required type="text" id="rua" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Endereço</label>
             </div>
-                
+
             <div class="group">      
-                <input value="${endereco.getCity()}" name="city" required type="text" id="cidade"  maxlength="255" />
+                <input value="<%= endereco.getCidade()%>" name="city" required type="text" id="cidade"  maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Cidade</label>
             </div>
-                
+
             <div class="group">      
-                <input value="${endereco.getState()}" name="state" required type="text" id="uf" maxlength="255" />
+                <input value="<%= endereco.getEstado()%>" name="state" required type="text" id="uf" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Estado</label>
             </div>
-                
+
             <div class="group">      
-                <input name="country" required type="text" readonly value="Brasil" maxlength="255" />
+                <input name="country" required type="text" readonly value="<%= endereco.getPais()%>" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label></label>
             </div>
         </div>
-            
+
         <button class="standard-btn" name="action" formnovalidate value="unsel">Voltar</button>
         <button class="standard-btn" name="action" value="grava" type="submit">Salvar</button>   
         <% if (!sel.equals("")) { %>
         <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
         <% }%>
-            
+
     </form>
 </div>
-        
-        
+
+
 <script type="text/javascript" >
 
-    function limpa_formulário_cep() {
+    function limpa_form_cep() {
         //Limpa valores do formulário de cep.
         document.getElementById('rua').value = ("");
         document.getElementById('cidade').value = ("");
@@ -106,7 +100,7 @@
         } //end if.
         else {
             //CEP não Encontrado.
-            limpa_formulário_cep();
+            limpa_form_cep();
             alert("CEP não encontrado.");
         }
     }
@@ -139,13 +133,13 @@
             } //end if.
             else {
                 //cep é inválido.
-                limpa_formulário_cep();
+                limpa_form_cep();
                 alert("Formato de CEP inválido.");
             }
         } //end if.
         else {
             //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
+            limpa_form_cep();
         }
     }
     ;

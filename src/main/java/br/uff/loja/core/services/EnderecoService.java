@@ -11,6 +11,7 @@ import br.uff.loja.infrastructure.data.EnderecoData;
 import br.uff.loja.infrastructure.data.VendaData;
 
 public class EnderecoService implements IEnderecoService {
+
     private IEnderecoData enderecoData;
     private IVendaData vendaData;
 

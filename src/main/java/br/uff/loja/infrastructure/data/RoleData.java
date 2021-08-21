@@ -10,12 +10,13 @@ import br.uff.loja.core.interfaces.data.IRoleData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class RoleData implements IRoleData {
+
     private final MySQLDAO mysqlDAO;
 
     public RoleData() {
         this.mysqlDAO = new MySQLDAO();
     }
-    
+
     @Override
     public List<RoleDTO> listaRoles() throws LojaException {
         try {
@@ -30,5 +31,5 @@ public class RoleData implements IRoleData {
             this.mysqlDAO.destroyDb();
         }
     }
-    
+
 }

@@ -19,8 +19,10 @@ import br.uff.loja.infrastructure.shared.Helper;
 @WebServlet("/endereco")
 public class EnderecoServlet extends HttpServlet {
     private final IEnderecoService enderecoService;
+    private final Helper helper;
 
     public EnderecoServlet() {
+        helper = new Helper();
         enderecoService = new EnderecoService();
     }
 
@@ -40,18 +42,21 @@ public class EnderecoServlet extends HttpServlet {
             Integer userId = null;
             // recupera usuario logado
             if (session.getAttribute("userId") != null) {
-                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                userId = helper.tryParseInteger(session.getAttribute("userId").toString());
             } else {
                 response.sendRedirect("usuario?redirect=endereco");
                 return;
             }
 
             if (request.getParameter("sel") != null) {
-                Integer enderecoIdSel = new Helper().tryParseInteger(request.getParameter("sel"));
+                String enderecoIdSelStr = request.getParameter("sel");
+                Integer enderecoIdSel = helper.tryParseInteger(enderecoIdSelStr);
+                EnderecoDTO endereco = new EnderecoDTO("", userId, null, "", "", "", "Brasil");
                 if(enderecoIdSel != null) {
-                    request.setAttribute("endereco", enderecoService.encontraEnderecoPorId(enderecoIdSel));
+                    endereco = enderecoService.encontraEnderecoPorId(enderecoIdSel);
                 }
-                session.setAttribute("sel", enderecoIdSel);
+                request.setAttribute("endereco", endereco);
+                session.setAttribute("sel", enderecoIdSelStr);
                 request.getRequestDispatcher("pages/endereco-cadastro.jsp").forward(request, response);
                 return;
             }
@@ -59,7 +64,7 @@ public class EnderecoServlet extends HttpServlet {
             // define endereco selecionado
             Integer enderecoIdSel = null;
             if (session.getAttribute("sel") != null) {
-                enderecoIdSel = new Helper().tryParseInteger(session.getAttribute("sel").toString());
+                enderecoIdSel = helper.tryParseInteger(session.getAttribute("sel").toString());
             }
 
             // recupera acao solicitada se existir
@@ -74,7 +79,7 @@ public class EnderecoServlet extends HttpServlet {
                     EnderecoDTO enderecoDto = new EnderecoDTO(
                         request.getParameter("name"),
                         userId,
-                        new Helper().tryParseInteger(request.getParameter("zipcode")),
+                        helper.tryParseInteger(request.getParameter("zipcode")),
                         request.getParameter("address"),
                         request.getParameter("city"),
                         request.getParameter("state"),

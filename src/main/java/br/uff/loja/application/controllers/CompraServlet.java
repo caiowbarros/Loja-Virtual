@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
@@ -27,11 +28,13 @@ public class CompraServlet extends HttpServlet {
     private final IVendaService vendaService;
     private final ICarrinhoService carrinhoService;
     private final IEnderecoService enderecoService;
+    private final Helper helper;
 
     public CompraServlet() {
         vendaService = new VendaService();
         carrinhoService = new CarrinhoService();
         enderecoService = new EnderecoService();
+        helper = new Helper();
     }
 
     /**
@@ -53,13 +56,18 @@ public class CompraServlet extends HttpServlet {
                 response.sendRedirect("usuario?redirect=carrinho");
                 return;
             } else {
-                usuarioId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                usuarioId = helper.tryParseInteger(session.getAttribute("userId").toString());
             }
 
             // se solicitar historico manda p pag d compras realizadas
             if (request.getParameter("historico") != null) {
-                List<VendaDTO> vendas = vendaService.listaVendasDoUsuario(usuarioId);
-                for(VendaDTO venda : vendas) {
+                Integer paginaAtual = 1;
+                if (request.getParameter("paginaAtual") != null) {
+                    paginaAtual = helper.tryParseInteger(request.getParameter("paginaAtual"));
+                }
+
+                PaginateDTO<List<VendaDTO>> vendas = vendaService.listaVendasDoUsuario(usuarioId, 5, paginaAtual);
+                for(VendaDTO venda : vendas.getDados()) {
                     venda.setProdutosDoCarrinho(carrinhoService.listaProdutosCarrinho(venda.getCarrinhoId()));
                     venda.setEndereco(enderecoService.encontraEnderecoPorId(venda.getEnderecoId()));
                 }
@@ -71,12 +79,12 @@ public class CompraServlet extends HttpServlet {
 
             Integer enderecoId = null;
             if (session.getAttribute("enderecoId") != null) {
-                enderecoId = new Helper().tryParseInteger(session.getAttribute("enderecoId").toString());
+                enderecoId = helper.tryParseInteger(session.getAttribute("enderecoId").toString());
             }
 
             Integer carrinhoId = null;
             if (session.getAttribute("carrinhoId") != null) {
-                carrinhoId = new Helper().tryParseInteger(session.getAttribute("carrinhoId").toString());
+                carrinhoId = helper.tryParseInteger(session.getAttribute("carrinhoId").toString());
             }
 
             // recupera acao solicitada se existir

@@ -9,6 +9,7 @@ import br.uff.loja.core.interfaces.services.IRoleService;
 import br.uff.loja.infrastructure.data.RoleData;
 
 public class RoleService implements IRoleService {
+
     private IRoleData roleData;
 
     public RoleService() {
@@ -19,5 +20,5 @@ public class RoleService implements IRoleService {
     public List<RoleDTO> listaRoles() throws LojaException {
         return roleData.listaRoles();
     }
-    
+
 }

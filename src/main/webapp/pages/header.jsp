@@ -25,12 +25,12 @@
 
     <body>
         <%
-        // mostra se tiver msg
-        if (session.getAttribute("msg") != null) {
-            String msg = session.getAttribute("msg").toString();
-            session.setAttribute("msg", null);
-            out.println("<script>alert('" + msg + "');</script>");
-        }
+            // mostra se tiver msg
+            if (session.getAttribute("msg") != null) {
+                String msg = session.getAttribute("msg").toString();
+                session.setAttribute("msg", null);
+                out.println("<script>alert('" + msg + "');</script>");
+            }
         %>
         <header>
             <!-- Logo -->
@@ -40,44 +40,44 @@
             <!-- Dropdown -->
             <div class="dropdown-menu">
                 <div class="dropdown ps">
-                    <button class="dropbtn" onclick="location.href='ProdutosController?categoryId=1';">Playstation</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=1';">Playstation</button>
                     <div class="dropdown-content">
-                        <a href="ProdutosController?categoryId=5">Consoles</a>
-                        <a href="ProdutosController?categoryId=6">Jogos</a>
-                        <a href="ProdutosController?categoryId=4">Acess�rios</a>
+                        <a href="produtos?categoryId=5">Consoles</a>
+                        <a href="produtos?categoryId=6">Jogos</a>
+                        <a href="produtos?categoryId=4">Acess�rios</a>
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button class="dropbtn" onclick="location.href='ProdutosController?categoryId=2';">Xbox</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=2';">Xbox</button>
                     <div id="feminino" class="dropdown-content">
-                        <a href="ProdutosController?categoryId=8">Consoles</a>
-                        <a href="ProdutosController?categoryId=9">Jogos</a>
-                        <a href="ProdutosController?categoryId=7">Acess�rios</a>
+                        <a href="produtos?categoryId=8">Consoles</a>
+                        <a href="produtos?categoryId=9">Jogos</a>
+                        <a href="produtos?categoryId=7">Acess�rios</a>
                     </div>
                 </div>
                 <div class="dropdown wii">
-                    <button class="dropbtn" onclick="location.href='ProdutosController?categoryId=3';">Wii</button>
+                    <button class="dropbtn" onclick="location.href = 'produtos?categoryId=3';">Wii</button>
                     <div id="infantil" class="dropdown-content">
-                        <a href="ProdutosController?categoryId=11">Consoles</a>
-                        <a href="ProdutosController?categoryId=12">Jogos</a>
-                        <a href="ProdutosController?categoryId=10">Acess�rios</a>
+                        <a href="produtos?categoryId=11">Consoles</a>
+                        <a href="produtos?categoryId=12">Jogos</a>
+                        <a href="produtos?categoryId=10">Acess�rios</a>
                     </div>
                 </div>
             </div>
             <div class="canto-header">
                 <!-- Pesquisa -->
                 <div class="consulta-header">
-                    <form id="pesquisa" method="POST" action="ProdutosController">
+                    <form id="pesquisa" method="POST" action="produtos">
                         <input name="pesquisa" type="search" placeholder="Buscar..." required>
                     </form>
                 </div>
                 <!-- Minha Conta -->
                 <div class="login-header">
-                    <a href="UserController"><img alt="Minha Conta" src="img/my-account.png" width="20" style="vertical-align: middle"></a>
+                    <a href="usuario"><img alt="Minha Conta" src="img/my-account.png" width="20" style="vertical-align: middle"></a>
                 </div>
                 <!-- Carrinho -->
                 <div class="carrinho-header">
-                    <a href="CarrinhoController"><img alt="Meu Carrinho" src="img/cart.png" width="25" style="vertical-align: middle"></a>
+                    <a href="carrinho"><img alt="Meu Carrinho" src="img/cart.png" width="25" style="vertical-align: middle"></a>
                 </div>
             </div>
         </header>

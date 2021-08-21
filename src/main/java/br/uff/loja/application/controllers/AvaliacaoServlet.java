@@ -21,9 +21,11 @@ public class AvaliacaoServlet extends HttpServlet {
     private final IAvaliacaoService avaliacaoService;
     private static final String PRODUTOID = "produtoId";
     private static final String RATING = "rating";
+    private final Helper helper;
 
     public AvaliacaoServlet() {
         avaliacaoService = new AvaliacaoService();
+        helper = new Helper();
     }
 
     /**
@@ -52,15 +54,16 @@ public class AvaliacaoServlet extends HttpServlet {
             // se n tem usuario logado manda p controller de user
             Integer userId = null;
             if (session.getAttribute("userId") == null) {
+                session.setAttribute("msg", "Realize login para avaliar um produto!");
                 response.sendRedirect("usuario?redirect=avaliacao");
                 return;
             } else {
-                userId = new Helper().tryParseInteger(session.getAttribute("userId").toString());
+                userId = helper.tryParseInteger(session.getAttribute("userId").toString());
             }
 
             Integer produtoId = null;
             if (session.getAttribute(PRODUTOID) != null) {
-                produtoId = new Helper().tryParseInteger(session.getAttribute(PRODUTOID).toString());
+                produtoId = helper.tryParseInteger(session.getAttribute(PRODUTOID).toString());
             } else {
                 session.setAttribute("msg", "Por favor, selecione um produto.");
                 response.sendRedirect("produtos");
