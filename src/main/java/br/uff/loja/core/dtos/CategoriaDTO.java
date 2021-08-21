@@ -3,6 +3,7 @@ package br.uff.loja.core.dtos;
 import java.util.Map;
 
 public class CategoriaDTO {
+
     private Integer id;
     private String nome;
 
@@ -22,9 +23,10 @@ public class CategoriaDTO {
         return nome;
     }
 
-    public CategoriaDTO() {}
-    
-    public CategoriaDTO(Map<String,Object> categoria) {
+    public CategoriaDTO() {
+    }
+
+    public CategoriaDTO(Map<String, Object> categoria) {
         this.setId(Integer.valueOf(String.valueOf(categoria.get("id"))));
         this.setNome(String.valueOf(categoria.get("nome")));
     }

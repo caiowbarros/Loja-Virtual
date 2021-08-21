@@ -2,7 +2,8 @@ package br.uff.loja.core.dtos;
 
 import java.util.Map;
 
-public class ProdutoDTO extends BaseDTO {    
+public class ProdutoDTO extends BaseDTO {
+
     private Integer id;
     private String nome;
     private Double preco;
@@ -11,7 +12,7 @@ public class ProdutoDTO extends BaseDTO {
     private Integer categoriaId;
     private Integer quantidade;
     private String categoria;
-    
+
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
@@ -19,7 +20,7 @@ public class ProdutoDTO extends BaseDTO {
     public String getCategoria() {
         return categoria;
     }
-    
+
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
@@ -76,9 +77,10 @@ public class ProdutoDTO extends BaseDTO {
         return id;
     }
 
-    public ProdutoDTO() {}
+    public ProdutoDTO() {
+    }
 
-    public ProdutoDTO(Map<String,Object> produto) {
+    public ProdutoDTO(Map<String, Object> produto) {
         this.setId(Integer.valueOf(String.valueOf(produto.get("id"))));
         this.setNome(String.valueOf(produto.get("nome")));
         this.setPreco(Double.valueOf(String.valueOf(produto.get("preco"))));
@@ -90,13 +92,13 @@ public class ProdutoDTO extends BaseDTO {
     }
 
     public ProdutoDTO(
-        Integer id,
-        String nome,
-        Double preco,
-        String descricao,
-        String imagem,
-        Integer categoriaId,
-        Integer quantidade
+            Integer id,
+            String nome,
+            Double preco,
+            String descricao,
+            String imagem,
+            Integer categoriaId,
+            Integer quantidade
     ) {
         this.setId(id);
         this.setNome(nome);

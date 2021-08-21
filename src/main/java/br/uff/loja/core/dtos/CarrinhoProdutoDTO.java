@@ -3,6 +3,7 @@ package br.uff.loja.core.dtos;
 import java.util.Map;
 
 public class CarrinhoProdutoDTO extends BaseDTO {
+
     private Integer id;
     private Integer produtoId;
     private String nome;
@@ -13,9 +14,10 @@ public class CarrinhoProdutoDTO extends BaseDTO {
     private Integer quantidade;
     private Double precoTotal;
 
-    public CarrinhoProdutoDTO() {}
-    
-    public CarrinhoProdutoDTO(Map<String,Object> carrinhoProduto) {
+    public CarrinhoProdutoDTO() {
+    }
+
+    public CarrinhoProdutoDTO(Map<String, Object> carrinhoProduto) {
         this.setId(Integer.valueOf(String.valueOf(carrinhoProduto.get("id"))));
         this.setProdutoId(Integer.valueOf(String.valueOf(carrinhoProduto.get("produtoId"))));
         this.setNome(String.valueOf(carrinhoProduto.get("nome")));
@@ -30,54 +32,71 @@ public class CarrinhoProdutoDTO extends BaseDTO {
     public void setProdutoId(Integer produtoId) {
         this.produtoId = produtoId;
     }
+
     public Integer getProdutoId() {
         return produtoId;
     }
+
     public String getDescricao() {
         return descricao;
     }
+
     public Integer getId() {
         return id;
     }
+
     public String getImagem() {
         return imagem;
     }
+
     public String getNome() {
         return nome;
     }
+
     public Double getPreco() {
         return preco;
     }
+
     public Double getPrecoTotal() {
         return precoTotal;
     }
+
     public Integer getQuantidade() {
         return quantidade;
     }
+
     public Integer getQuantidadeEmEstoque() {
         return quantidadeEmEstoque;
     }
+
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public void setImagem(String imagem) {
         this.imagem = imagem;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public void setPreco(Double preco) {
         this.preco = preco;
     }
+
     public void setPrecoTotal(Double precoTotal) {
         this.precoTotal = precoTotal;
     }
+
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
+
     public void setQuantidadeEmEstoque(Integer quantidadeEmEstoque) {
         this.quantidadeEmEstoque = quantidadeEmEstoque;
     }

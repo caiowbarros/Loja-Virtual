@@ -11,6 +11,7 @@ import br.uff.loja.core.interfaces.data.IAvaliacaoProdutoData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class AvaliacaoProdutoData implements IAvaliacaoProdutoData {
+
     private final MySQLDAO mysqlDAO;
 
     public AvaliacaoProdutoData() {

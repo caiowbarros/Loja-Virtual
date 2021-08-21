@@ -9,107 +9,107 @@ and open the template in the editor.
 */
 
 .sec-container {
-  margin: 50px 5% 50px 5%;
-  display: flex;
-  justify-content: space-between;
+    margin: 50px 5% 50px 5%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .sec-img {
-  display: flex;
-  justify-content: space-evenly;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .sec-img img {
-  width: 420px;
-  height: 320px;
-  z-index: -1;
+    width: 420px;
+    height: 320px;
+    z-index: -1;
 }
 
 .sec-img figcaption {
-  position: absolute;
-  top: 575px;
-  left: 170px;
-  background-color: white;
-  padding: 12px 16px;
-  font-size: 22px;
+    position: absolute;
+    top: 575px;
+    left: 170px;
+    background-color: white;
+    padding: 12px 16px;
+    font-size: 22px;
 }
 
 .img-btn {
-  position: absolute;
-  align-self: center;
+    position: absolute;
+    align-self: center;
 }
 
 .img-btn a:hover {
-  background-color: rgba(0,153,204,0.9);
+    background-color: rgba(0,153,204,0.9);
 }
 
 .img-btn a {
-  text-decoration: none;
-  color: white;
-  background-color: rgba(95, 115, 138, 0.9);
-  padding: 12px 16px;
-  font-size: 22px;
-  cursor: pointer;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(95, 115, 138, 0.9);
+    padding: 12px 16px;
+    font-size: 22px;
+    cursor: pointer;
 }
 
 .sec-img figcaption a {
-  text-decoration: none;
-  color: white;
+    text-decoration: none;
+    color: white;
 }
 
 .sec-img figcaption:hover {
-  opacity: 0.75;
+    opacity: 0.75;
 }
 
 /* Slideshow container */
 .slideshow-container {
-  position: relative;
-  margin: 0px 5%;
+    position: relative;
+    margin: 0px 5%;
 }
 
 /* Hide the images by default */
 .mySlides {
-  display: none;
+    display: none;
 }
 
 /* Next & previous buttons */
 .prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  margin-top: -22px;
-  padding: 16px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
 }
 
 /* Position the "next button" to the right */
 .next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
+    right: 0;
+    border-radius: 3px 0 0 3px;
 }
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.8);
 }
 
 /* Caption text */
 .text {
-  color: white;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 25px;
-  margin-left: 75px;
-  background-color: rgba(95, 115, 138, 0.9);
-  border-radius: 6px;
-  cursor: pointer;
+    color: white;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 25px;
+    margin-left: 75px;
+    background-color: rgba(95, 115, 138, 0.9);
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .text:hover {
@@ -118,34 +118,34 @@ and open the template in the editor.
 
 /* The dots/bullets/indicators */
 .dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
 }
 
 .active, .dot:hover {
-  background-color: rgba(0,153,204,0.9);
+    background-color: rgba(0,153,204,0.9);
 }
 
 /* Fading animation */
 .fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
-  animation-name: fade;
-  animation-duration: 1.5s;
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
 }
 
 @-webkit-keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
+    from {opacity: .4}
+    to {opacity: 1}
 }
 
 @keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
+    from {opacity: .4}
+    to {opacity: 1}
 }

@@ -6,5 +6,6 @@ import br.uff.loja.core.dtos.RoleDTO;
 import br.uff.loja.core.exceptions.LojaException;
 
 public interface IRoleService {
+
     public List<RoleDTO> listaRoles() throws LojaException;
 }

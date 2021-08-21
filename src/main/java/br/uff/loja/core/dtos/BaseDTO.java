@@ -10,5 +10,5 @@ public class BaseDTO implements IBaseDTO {
     public String toJson() {
         return new Gson().toJson(this);
     }
-    
+
 }

@@ -3,6 +3,7 @@ package br.uff.loja.core.dtos;
 import java.util.Map;
 
 public class RoleDTO {
+
     private Integer id;
     private String nome;
 
@@ -22,9 +23,10 @@ public class RoleDTO {
         return nome;
     }
 
-    public RoleDTO() {}
-    
-    public RoleDTO(Map<String,Object> role) {
+    public RoleDTO() {
+    }
+
+    public RoleDTO(Map<String, Object> role) {
         this.setId(Integer.valueOf(String.valueOf(role.get("id"))));
         this.setNome(String.valueOf(role.get("nome")));
     }

@@ -11,6 +11,7 @@ import br.uff.loja.core.interfaces.services.IVendaService;
 import br.uff.loja.infrastructure.data.VendaData;
 
 public class VendaService implements IVendaService {
+
     private IVendaData vendaData;
     private ICarrinhoService carrinhoService;
     private IEnderecoService enderecoService;

@@ -3,6 +3,7 @@ package br.uff.loja.core.dtos;
 import java.util.Map;
 
 public class AvaliacaoProdutoListDTO extends BaseDTO {
+
     private String avaliador;
     private String avaliacaoTitulo;
     private String avaliacao;
@@ -10,7 +11,8 @@ public class AvaliacaoProdutoListDTO extends BaseDTO {
     private String avaliacaoData;
     private String avaliacaoDataSimples;
 
-    public AvaliacaoProdutoListDTO() {}
+    public AvaliacaoProdutoListDTO() {
+    }
 
     public AvaliacaoProdutoListDTO(Map<String, Object> avaliacao) {
         this.setAvaliador(String.valueOf(avaliacao.get("avaliador")));

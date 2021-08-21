@@ -10,6 +10,7 @@ import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.infrastructure.data.AvaliacaoProdutoData;
 
 public class AvaliacaoService implements IAvaliacaoService {
+
     private IAvaliacaoProdutoData avaliacaoProdutoData;
 
     public AvaliacaoService() {
@@ -18,7 +19,7 @@ public class AvaliacaoService implements IAvaliacaoService {
 
     @Override
     public void avaliaProduto(AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO) throws LojaException {
-        if(Boolean.FALSE.equals(avaliacaoProdutoData.jaFoiAvaliado(avaliacaoProdutoInsertDTO.getUsuarioId(), avaliacaoProdutoInsertDTO.getProdutoId()))) {
+        if (Boolean.FALSE.equals(avaliacaoProdutoData.jaFoiAvaliado(avaliacaoProdutoInsertDTO.getUsuarioId(), avaliacaoProdutoInsertDTO.getProdutoId()))) {
             avaliacaoProdutoData.insereAvaliacaoDoProduto(avaliacaoProdutoInsertDTO);
             return;
         }

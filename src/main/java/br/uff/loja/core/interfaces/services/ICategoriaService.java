@@ -6,5 +6,6 @@ import br.uff.loja.core.dtos.CategoriaDTO;
 import br.uff.loja.core.exceptions.LojaException;
 
 public interface ICategoriaService {
+
     public List<CategoriaDTO> listaCategorias() throws LojaException;
 }

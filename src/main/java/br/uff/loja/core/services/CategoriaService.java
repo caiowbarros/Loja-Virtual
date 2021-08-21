@@ -9,6 +9,7 @@ import br.uff.loja.core.interfaces.services.ICategoriaService;
 import br.uff.loja.infrastructure.data.CategoriaData;
 
 public class CategoriaService implements ICategoriaService {
+
     private ICategoriaData categoriaData;
 
     public CategoriaService() {

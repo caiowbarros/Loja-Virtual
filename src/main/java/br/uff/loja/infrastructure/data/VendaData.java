@@ -10,6 +10,7 @@ import br.uff.loja.core.interfaces.data.IVendaData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class VendaData implements IVendaData {
+
     private final MySQLDAO mysqlDAO;
 
     public VendaData() {
@@ -34,7 +35,7 @@ public class VendaData implements IVendaData {
     @Override
     public void gravaVenda(Integer carrinhoId, Integer enderecoId) throws LojaException {
         try {
-            Object[] bind = {carrinhoId,enderecoId};
+            Object[] bind = {carrinhoId, enderecoId};
             this.mysqlDAO.dbGrava("CALL buy_cart_itens(?, ?)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao realizar a venda. (" + e.getMessage() + ")");
@@ -42,12 +43,12 @@ public class VendaData implements IVendaData {
             this.mysqlDAO.destroyDb();
         }
     }
-    
+
     @Override
     public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException {
         try {
             Object[] bind = {enderecoId};
-            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)","sales","address_id=?", bind))) > 0;
+            return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "sales", "address_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException("Falha ao Verificar se o Endereço de id: " + enderecoId + " foi usado em alguma Venda. (" + e.getMessage() + ")");
         } finally {

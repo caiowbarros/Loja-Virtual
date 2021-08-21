@@ -14,6 +14,7 @@ import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class ProdutoService implements IProdutoService {
+
     private IProdutoData produtoData;
 
     public ProdutoService() {
@@ -27,7 +28,7 @@ public class ProdutoService implements IProdutoService {
 
     @Override
     public void excluiProdutoPorId(Integer id) throws LojaException {
-        produtoData.excluiProdutoPorId(id);        
+        produtoData.excluiProdutoPorId(id);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class ProdutoService implements IProdutoService {
 
     @Override
     public void usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException {
-        if(Boolean.TRUE.equals(produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId))) {
+        if (Boolean.TRUE.equals(produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId))) {
             produtoData.removeFavoritacaoProdutoPeloUsuario(produtoId, usuarioId);
         } else {
             produtoData.adicionaFavoritacaoProdutoPeloUsuario(produtoId, usuarioId);

@@ -10,6 +10,7 @@ import br.uff.loja.core.interfaces.data.IEnderecoData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
 
 public class EnderecoData implements IEnderecoData {
+
     private final MySQLDAO mysqlDAO;
 
     public EnderecoData() {
@@ -44,7 +45,7 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public void atualizaEnderecoPorId(Integer id, EnderecoDTO endereco) throws LojaException {
         try {
-            Object[] bind = {endereco.getNome(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getPais(),id};
+            Object[] bind = {endereco.getNome(), endereco.getCep(), endereco.getLogradouro(), endereco.getCidade(), endereco.getEstado(), endereco.getPais(), id};
             this.mysqlDAO.dbGrava("UPDATE address SET name=?, zipcode=?, address=?, city=?, state=?, country=? WHERE id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar o Endereço de id: " + id + ". (" + e.getMessage() + ")");
@@ -56,7 +57,7 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public void insereEndereco(EnderecoDTO endereco) throws LojaException {
         try {
-            Object[] bind = {endereco.getNome(),endereco.getUsuarioId(),endereco.getCep(),endereco.getLogradouro(),endereco.getCidade(),endereco.getEstado(),endereco.getCidade()};
+            Object[] bind = {endereco.getNome(), endereco.getUsuarioId(), endereco.getCep(), endereco.getLogradouro(), endereco.getCidade(), endereco.getEstado(), endereco.getCidade()};
             this.mysqlDAO.dbGrava("INSERT INTO address (name,user_id,zipcode,address,city,state,country) VALUES (?,?,?,?,?,?,?)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Inserir o Endereço de para o Usuário de id: " + endereco.getUsuarioId() + ". (" + e.getMessage() + ")");
@@ -83,7 +84,7 @@ public class EnderecoData implements IEnderecoData {
     @Override
     public Boolean verificaEnderecoDoUsuario(Integer id, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {id,usuarioId};
+            Object[] bind = {id, usuarioId};
             return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("count(*)", "address", "id=? AND user_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar se o endereço de id:" + id + " é do usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
@@ -91,5 +92,5 @@ public class EnderecoData implements IEnderecoData {
             this.mysqlDAO.destroyDb();
         }
     }
-    
+
 }

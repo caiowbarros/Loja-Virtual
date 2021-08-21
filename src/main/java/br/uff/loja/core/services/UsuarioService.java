@@ -9,6 +9,7 @@ import br.uff.loja.core.interfaces.services.IUsuarioService;
 import br.uff.loja.infrastructure.data.UsuarioData;
 
 public class UsuarioService implements IUsuarioService {
+
     private IUsuarioData usuarioData;
 
     public UsuarioService() {
@@ -26,11 +27,11 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioDTO gravaUsuario(UsuarioDTO usuario) throws LojaException {
-        if(Boolean.TRUE.equals(usuarioData.emailJaUsado(usuario.getEmail(), String.valueOf(usuario.getId())))) {
+        if (Boolean.TRUE.equals(usuarioData.emailJaUsado(usuario.getEmail(), String.valueOf(usuario.getId())))) {
             throw new LojaException("O e-mail " + usuario.getEmail() + " já está sendo usado por outro usuário...");
         }
 
-        if(usuario.getId() != null) {
+        if (usuario.getId() != null) {
             usuarioData.atualizaUsuarioPorId(usuario.getId(), usuario);
         } else {
             usuarioData.insereUsuario(usuario);
@@ -48,5 +49,5 @@ public class UsuarioService implements IUsuarioService {
     public UsuarioDTO encontraUsuarioPorId(Integer id) throws LojaException {
         return usuarioData.encontraUsuarioPorId(id);
     }
-    
+
 }
