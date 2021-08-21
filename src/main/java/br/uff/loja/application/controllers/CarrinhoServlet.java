@@ -108,6 +108,8 @@ public class CarrinhoServlet extends HttpServlet {
             switch (action) {
                 case "finalizaCompra": {
                     request.setAttribute("enderecos", enderecoService.listaEnderecosPorUsuarioId(userId));
+                    session.setAttribute(PRODUTOS, carrinhoService.listaProdutosCarrinho(carrinhoId));
+                    session.setAttribute(PRECOTOTAL, carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinhoId));
                     request.getRequestDispatcher("pages/carrinho-confirma.jsp").forward(request, response);
                     return;
                 }
@@ -147,6 +149,9 @@ public class CarrinhoServlet extends HttpServlet {
                     } else {
                         session.setAttribute("enderecoId", enderecoId);
                     }
+                    
+                    session.setAttribute(PRODUTOS, carrinhoService.listaProdutosCarrinho(carrinhoId));
+                    
                     request.getRequestDispatcher("compra").forward(request, response);
                     return;
                 }

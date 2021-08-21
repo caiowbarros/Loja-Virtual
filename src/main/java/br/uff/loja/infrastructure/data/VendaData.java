@@ -20,7 +20,7 @@ public class VendaData implements IVendaData {
     public List<VendaDTO> listaVendasDoUsuario(Integer usuarioId) throws LojaException {
         try {
             Object[] bind = {usuarioId};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, cart_id AS carrinhoId, total_price AS precoTotal, created_at AS criadoEm, address_id AS enderecoId, user_id AS usuarioId FROM sales WHERE user_id=?", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, cart_id AS carrinhoId, total_price AS precoTotal, created_at AS criadoEm, address_id AS enderecoId, user_id AS usuarioId FROM sales WHERE user_id=? ORDER BY id DESC", bind);
             List<VendaDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(venda -> retornoFormatado.add(new VendaDTO(venda)));
             return retornoFormatado;

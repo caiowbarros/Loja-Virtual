@@ -27,7 +27,7 @@ and open the template in the editor.
     %>
     <div class="mySlides fade">
         <div style="width:100%;height:600px;background: url('<%= produto.getImagem()%>') no-repeat center center;background-size: auto;background-size: cover;">&nbsp;</div>
-        <div class="text" onclick="location.href = 'produto?produtoId=<%= produto.getId()%>';">Adquira o Jogo</div>
+        <div class="text" onclick="location.href = 'produto?produtoId=<%= produto.getId()%>';">Adquira o Produto</div>
     </div>
     <%
         }

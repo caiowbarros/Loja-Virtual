@@ -3,6 +3,9 @@
     Created on : 02/10/2019, 11:42:33
     Author     : HP
 --%>
+<%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
+<%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
+<%@page import="java.util.List"%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="java.util.ArrayList"%>
 <%
@@ -10,19 +13,20 @@
     if (session.getAttribute("userId") == null) {
         session.setAttribute("msg", "Realize seu login para prosseguir.");
         response.sendRedirect("usuario?redirect=carrinho");
+        return;
     }
 
-    ArrayList<ArrayList<String>> enderecos = null;
+    List<EnderecoDTO> enderecos = new ArrayList<EnderecoDTO>();
     if (request.getAttribute("enderecos") != null) {
-        enderecos = (ArrayList<ArrayList<String>>) request.getAttribute("enderecos");
+        enderecos = (List<EnderecoDTO>) request.getAttribute("enderecos");
     }
 
-    ArrayList<ArrayList<String>> produtos = null;
+    List<CarrinhoProdutoDTO> produtos = new ArrayList<CarrinhoProdutoDTO>();
     if (session.getAttribute("produtos") != null) {
-        produtos = (ArrayList<ArrayList<String>>) session.getAttribute("produtos");
+        produtos = (List<CarrinhoProdutoDTO>) session.getAttribute("produtos");
     }
 
-    double totalPrice = Double.parseDouble(request.getAttribute("totalPrice").toString());
+    double totalPrice = Double.parseDouble(session.getAttribute("totalPrice").toString());
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
@@ -36,13 +40,13 @@
             <h2>Detalhes da entrega</h2>
             <div class="confirma-end">
                 <%
-                    for (int i = 0; i < enderecos.size(); i++) {
+                    for (EnderecoDTO endereco : enderecos) {
                 %>
-                <div class="confirma-radio" id="check<%= enderecos.get(i).get(0)%>" onclick="radioCheck(<%=enderecos.get(i).get(0)%>)">
+                <div class="confirma-radio" id="check<%= endereco.getId()%>" onclick="radioCheck(<%=endereco.getId()%>)">
                     <div class="radio-container">
-                        <input required type="radio" name="end" id="end<%= enderecos.get(i).get(0)%>" value="<%= enderecos.get(i).get(0)%>"><label for="end<%= enderecos.get(i).get(0)%>">&nbsp;<%= enderecos.get(i).get(1)%></label><br>
+                        <input required type="radio" name="end" id="end<%=endereco.getId()%>" value="<%= endereco.getId()%>"><label for="end<%= endereco.getId()%>">&nbsp;<%= endereco.getNome()%></label><br>
                     </div>
-                    <a href="endereco?sel=<%= enderecos.get(i).get(0)%>">Editar</a>
+                    <a href="endereco?sel=<%= endereco.getId()%>">Editar</a>
                 </div>
                 <script>
                     function radioCheck(id) {
@@ -88,15 +92,15 @@
                     <div class="detalhe-total"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
                 </div>
                 <%
-                    for (int i = 0; i < produtos.size(); i++) {
+                    for (CarrinhoProdutoDTO produto : produtos) {
                 %>
                 <div class="detalhe-produto">
                     <div class="detalhe-img">
-                        <img src="<%= produtos.get(i).get(1)%>">
+                        <img src="<%= produto.getImagem()%>">
                     </div>
                     <div class="detalhe-info">
-                        <div class="detalhe-nome">&nbsp;<%= produtos.get(i).get(0)%></div>
-                        <div class="detalhe-id">&nbsp;x&nbsp;<%= produtos.get(i).get(3)%>&nbsp;Unidade(s)</div>
+                        <div class="detalhe-nome">&nbsp;<%= produto.getNome()%></div>
+                        <div class="detalhe-id">&nbsp;x&nbsp;<%= produto.getQuantidade()%>&nbsp;Unidade<%= (produto.getQuantidade() > 0 ? "s" : "")%></div>
                     </div>
                 </div>
                 <%
@@ -108,8 +112,6 @@
             </div>
         </div>
     </div>
-
 </main>
-
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

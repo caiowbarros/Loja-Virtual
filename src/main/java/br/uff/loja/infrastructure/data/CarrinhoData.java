@@ -9,8 +9,10 @@ import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
+import java.util.Arrays;
 
 public class CarrinhoData implements ICarrinhoData {
+
     private final MySQLDAO mysqlDAO;
 
     private static final String COUNTSTRING = "count(*)";
@@ -40,7 +42,7 @@ public class CarrinhoData implements ICarrinhoData {
     public List<CarrinhoDTO> listaCarrinhosDoUsuarioNaoVendidos(Integer usuarioId) throws LojaException {
         try {
             Object[] bind = {usuarioId};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE user_id=? AND id NOT IN (SELECT cart_id FROM sales)", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE user_id=? AND id NOT IN (SELECT cart_id FROM sales) ORDER BY id DESC", bind);
             List<CarrinhoDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(carrinho -> retornoFormatado.add(new CarrinhoDTO(carrinho)));
             return retornoFormatado;
@@ -66,7 +68,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void defineDonoDeUmCarrinhoSemUsuarioNoMomento(Integer id, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {usuarioId,id};
+            Object[] bind = {usuarioId, id};
             this.mysqlDAO.dbGrava("UPDATE carts SET user_id=? WHERE id=? AND user_id IS NULL", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar o Dono do Carrinho de id: " + id + ". (" + e.getMessage() + ")");
@@ -90,7 +92,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public Boolean carrinhoDoUsuario(Integer id, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {id,usuarioId};
+            Object[] bind = {id, usuarioId};
             return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor(COUNTSTRING, CARTTABLESTRING, "id=? AND user_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException(ERROPREFIXOSTRING + id + " é do usuário de id: " + usuarioId + ". (" + e.getMessage() + ")");
@@ -126,11 +128,11 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
         try {
-            Object[] bind = {produtoId,id};
+            Object[] bind = {produtoId, id};
             String quantity = String.valueOf(this.mysqlDAO.dbValor("quantity", CARTSPRODUCTSTABLESTRING, "product_id=? AND cart_id=?", bind));
             return Integer.valueOf(quantity.equals("null") ? "0" : quantity);
         } catch (Exception e) {
-            throw new LojaException("Falha ao verificar a quantidade do produto de id: " + produtoId +  ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao verificar a quantidade do produto de id: " + produtoId + ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
@@ -139,7 +141,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void criaCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException {
         try {
-            Object[] bind = {ip,criadoEm,usuarioId};
+            Object[] bind = {ip, criadoEm, usuarioId};
             this.mysqlDAO.dbGrava("INSERT INTO carts (ip,created_at,user_id) VALUES (?,?,?)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Inserir o Carrinho de para o Usuário de id: " + usuarioId + " e ip: " + ip + ". (" + e.getMessage() + ")");
@@ -151,10 +153,8 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public CarrinhoDTO encontraCarrinho(String ip, String criadoEm, Integer usuarioId) throws LojaException {
         try {
-            ArrayList<Object> bind = new ArrayList<Object>();
-            bind.add(ip);
-            bind.add(criadoEm);
-            if(usuarioId != null) {
+            ArrayList<Object> bind = new ArrayList<Object>(Arrays.asList(ip, criadoEm));
+            if (usuarioId != null) {
                 bind.add(usuarioId);
             }
             List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT id, user_id AS usuarioId, created_at AS criadoEm, ip FROM carts WHERE ip=? AND created_at=? AND user_id" + (usuarioId == null ? " IS NULL " : "=?") + " ORDER BY id DESC LIMIT 1", bind.toArray());
@@ -184,7 +184,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public Boolean verificaProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
         try {
-            Object[] bind = {produtoId,id};
+            Object[] bind = {produtoId, id};
             return Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor(COUNTSTRING, CARTSPRODUCTSTABLESTRING, "product_id=? AND cart_id=?", bind))) > 0;
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar se o produto de id: " + produtoId + " está no Carrinho de id: " + id + ". (" + e.getMessage() + ")");
@@ -196,7 +196,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void adicionaProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
         try {
-            Object[] bind = {produtoId,id};
+            Object[] bind = {produtoId, id};
             this.mysqlDAO.dbGrava("INSERT INTO carts_products (product_id,cart_id,quantity) VALUES (?,?,1)", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Inserir o Produto de id: " + produtoId + ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
@@ -208,7 +208,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void removeProdutoDoCarrinho(Integer id, Integer produtoId) throws LojaException {
         try {
-            Object[] bind = {produtoId,id};
+            Object[] bind = {produtoId, id};
             this.mysqlDAO.dbGrava("DELETE FROM carts_products WHERE product_id=? AND cart_id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Remover o Produto de id: " + produtoId + ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
@@ -220,7 +220,7 @@ public class CarrinhoData implements ICarrinhoData {
     @Override
     public void atualizaQtdDoProdutoNoCarrinho(Integer id, Integer produtoId, Integer novaQtd) throws LojaException {
         try {
-            Object[] bind = {novaQtd,produtoId,id};
+            Object[] bind = {novaQtd, produtoId, id};
             this.mysqlDAO.dbGrava("UPDATE carts_products SET quantity=? WHERE product_id=? AND cart_id=?", bind, false);
         } catch (Exception e) {
             throw new LojaException("Falha ao Atualizar quantidade do Produto de id: " + produtoId + ERROESPECIFICANDOCARRINHO + id + ". (" + e.getMessage() + ")");
@@ -241,5 +241,5 @@ public class CarrinhoData implements ICarrinhoData {
             this.mysqlDAO.destroyDb();
         }
     }
-    
+
 }
