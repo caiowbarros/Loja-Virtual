@@ -44,8 +44,8 @@
                 </li>
                 <li style="text-align: -webkit-center;">
                     <fieldset>
-                        <legend><img src="img/paypal.png"></legend>
-                        <img class="credit-card-img" src="img/credit-card.png">
+                        <legend><img alt="paypal" src="img/paypal.png"></legend>
+                        <img alt="paypal cartão de c?edito" class="credit-card-img" src="img/credit-card.png">
                     </fieldset>
                 </li>
                 <li>
@@ -87,7 +87,7 @@
                 %>
                 <div class="detalhe-produto">
                     <div class="detalhe-img">
-                        <img src="<%= produto.getImagem()%>">
+                        <img alt="<%= produto.getNome()%>" src="<%= produto.getImagem()%>">
                     </div>
                     <div class="detalhe-info">
                         <div class="detalhe-nome">&nbsp;<%= produto.getNome()%></div>

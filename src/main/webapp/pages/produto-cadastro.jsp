@@ -47,11 +47,11 @@
                     <input value="<%= produto.getNome()%>" class="field-long" name="name" required type="text" maxlength="255" />
                 </li>
                 <li>
-                    <label>Preço </label>
+                    <label>Pre?o </label>
                     <input value="<%= produto.getPreco()%>" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />
                 </li>
                 <li>
-                    <label>Descrição </label>
+                    <label>Descri??o </label>
                     <textarea class="field-long field-textarea" name="description" required maxlength="255"><%= produto.getDescricao()%></textarea>
                 </li>
                 <li>
@@ -74,16 +74,14 @@
                     <% }%>
                 </li>
             </ul>
-
         </form>
-
     </div>
 
     <div class="produto-right-container">
 
-        <h2>Prévia da Imagem</h2>
+        <h2>Pr?via da Imagem</h2>
         <div class="previa-img">
-            <img id="prev"/>
+            <img alt="Imagem do Produto" id="prev"/>
         </div>
 
         <% if (!sel.equals("")) { %>
@@ -99,14 +97,8 @@
             </ul>
         </form>
         <% }%>
-
     </div>
-
 </div>
-
-
-
-
 <script>
     window.onload = function () {
         // qnd a pag esta carregada set prev
@@ -150,9 +142,6 @@
     function setPrevBySrcInput() {
         document.querySelector('#prev').src = document.querySelector('[name=src]').value;
     }
-
-
-
 </script>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

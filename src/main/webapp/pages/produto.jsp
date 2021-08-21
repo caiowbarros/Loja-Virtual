@@ -37,20 +37,20 @@
 
     <!-- Coluna da esquerda / Imagem do produto -->
     <div class="left-column">
-        <img src="<%= produto.getImagem()%>">
+        <img alt="<%= produto.getNome()%>" src="<%= produto.getImagem()%>">
     </div>
 
     <!-- Coluna da direita -->
     <div class="right-column">
 
-        <!-- Descrição do produto -->
+        <!-- Descri??o do produto -->
         <div class="product-description">
             <span><%= produto.getCategoria()%></span>
             <h1><%= produto.getNome()%></h1>
             <p><%= produto.getDescricao()%></p>
         </div>
 
-        <!-- Preço do produto -->
+        <!-- Pre?o do produto -->
         <div class="product-price">
             <span><%= new Helper().tryParseMoneyFormat(produto.getPreco())%></span>
             <a href="carrinho?addProdutoId=<%= produto.getId()%>" class="cart-btn">+ Carrinho</a>
@@ -58,7 +58,7 @@
             <input <%= (produto.getFavoritoDoUsuario() ? "checked" : "")%> onchange="window.location.href = 'produto?fav=<%= produto.getId()%>'" id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">&#x2764;</label>
         </div>
-        <!-- Avaliação do produto (em estrelas) -->
+        <!-- Avalia??o do produto (em estrelas) -->
         <div class="rate" <%= (produto.getAvaliacaoDadaPeloUsuario() != null ? "style='pointer-events:none'" : "")%>>
             <input <%= (String.valueOf(produto.getAvaliacaoDadaPeloUsuario()).equals("5") ? "checked" : "")%> onClick="window.location.href = 'avaliacao?produtoId=<%= produto.getId()%>&rating=5'" type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text"></label>
@@ -77,9 +77,9 @@
 
 <div class="product-rating">
 
-    <!-- Coluna da esquerda (resumo da avaliação) -->
+    <!-- Coluna da esquerda (resumo da avalia??o) -->
     <div class="left-rating">
-        <div class="review-resume">Resumo das avaliações</div>
+        <div class="review-resume">Resumo das avalia??es</div>
         <div class="review-rate"><%= produto.getResumoAvaliacoes()%> / 5</div>
         <div class="review-list">
             <ul>
@@ -122,13 +122,13 @@
         </div>
     </div>
 
-    <!-- Coluna da direita (avaliações em si) -->
+    <!-- Coluna da direita (avalia??es em si) -->
     <div class="right-rating">
 
         <%
             for (AvaliacaoProdutoListDTO avaliacao : avaliacoes) {
         %>
-        <!-- Avaliação do cliente -->
+        <!-- Avalia??o do cliente -->
         <div class="review-star">
             <%
                 for (int r = 0; r < Integer.valueOf(avaliacao.getAvaliacao()); r++) {
@@ -147,9 +147,9 @@
         %>
 
         <% if (produto.getAvaliacaoDadaPeloUsuario() == null) {%>
-        <!-- Botão para avaliar o produto -->
+        <!-- Bot?o para avaliar o produto -->
         <div class="review-btn">
-            <a href="avaliacao?produtoId=<%= produto.getId()%>">Adicionar uma avaliação</a>
+            <a href="avaliacao?produtoId=<%= produto.getId()%>">Adicionar uma avalia??o</a>
         </div>
         <% }%>
     </div>

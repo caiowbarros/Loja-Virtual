@@ -49,20 +49,20 @@
         <div class="right-row">
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href = 'endereco';">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>Lista de Endereços</p>
+                    <em class="fas fa-map-marker-alt"></em>
+                    <p>Lista de EndereÃ§os</p>
                 </div>
             </div>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href = 'produtos?esp=favoritos';">
-                    <i class="fas fa-heart"></i>
+                    <em class="fas fa-heart"></em>
                     <p>Favoritos</p>
                 </div>
             </div>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href = 'compra?historico';">
-                    <i class="fas fa-shopping-bag"></i>
-                    <p>Histórico de Pedidos</p>
+                    <em class="fas fa-shopping-bag"></em>
+                    <p>HistÃ³rico de Pedidos</p>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
             <% if (session.getAttribute("userRole").equals(EPermissaoUsuario.ADM.getId())) { %>
             <div class="user-info">
                 <div class="user-info-middle" onclick="location.href = 'produto-adm';">
-                    <i class="fas fa-barcode"></i>
+                    <em class="fas fa-barcode"></em>
                     <p>Cadastro de Produtos</p>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             %>
             <div class="user-info">
                 <div class="user-info-middle" onclick="Logout()">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <em class="fas fa-sign-out-alt"></em>
                     <p>
                     <form method="post" action="usuario">
                         <button onclick="return confirm('Tem certeza que deseja fazer o LOGOUT?');false;" type="submit" id="logout-btn" name="action" value="logout" formnovalidate>Logout</button>

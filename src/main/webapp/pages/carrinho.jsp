@@ -47,7 +47,7 @@
 <!-- Produto no carrinho -->
 <div class="cart-product">
     <div class="cart-img">
-        <img src="<%= produto.getImagem()%>">
+        <img alt="<%= produto.getNome()%>" src="<%= produto.getImagem()%>">
     </div>
     <div class="cart-details">
         <div class="cart-name"><%= produto.getNome()%></div>

@@ -44,7 +44,7 @@
                     <div class="dropdown-content">
                         <a href="produtos?categoryId=5">Consoles</a>
                         <a href="produtos?categoryId=6">Jogos</a>
-                        <a href="produtos?categoryId=4">Acess�rios</a>
+                        <a href="produtos?categoryId=4">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -52,7 +52,7 @@
                     <div id="feminino" class="dropdown-content">
                         <a href="produtos?categoryId=8">Consoles</a>
                         <a href="produtos?categoryId=9">Jogos</a>
-                        <a href="produtos?categoryId=7">Acess�rios</a>
+                        <a href="produtos?categoryId=7">Acessórios</a>
                     </div>
                 </div>
                 <div class="dropdown wii">
@@ -60,7 +60,7 @@
                     <div id="infantil" class="dropdown-content">
                         <a href="produtos?categoryId=11">Consoles</a>
                         <a href="produtos?categoryId=12">Jogos</a>
-                        <a href="produtos?categoryId=10">Acess�rios</a>
+                        <a href="produtos?categoryId=10">Acessórios</a>
                     </div>
                 </div>
             </div>
