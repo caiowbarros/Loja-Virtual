@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
@@ -60,8 +61,13 @@ public class CompraServlet extends HttpServlet {
 
             // se solicitar historico manda p pag d compras realizadas
             if (request.getParameter("historico") != null) {
-                List<VendaDTO> vendas = vendaService.listaVendasDoUsuario(usuarioId);
-                for(VendaDTO venda : vendas) {
+                Integer paginaAtual = 1;
+                if (request.getParameter("paginaAtual") != null) {
+                    paginaAtual = helper.tryParseInteger(request.getParameter("paginaAtual"));
+                }
+
+                PaginateDTO<List<VendaDTO>> vendas = vendaService.listaVendasDoUsuario(usuarioId, 5, paginaAtual);
+                for(VendaDTO venda : vendas.getDados()) {
                     venda.setProdutosDoCarrinho(carrinhoService.listaProdutosCarrinho(venda.getCarrinhoId()));
                     venda.setEndereco(enderecoService.encontraEnderecoPorId(venda.getEnderecoId()));
                 }

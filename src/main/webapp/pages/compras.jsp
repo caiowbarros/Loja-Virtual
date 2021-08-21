@@ -5,6 +5,7 @@
 --%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
+<%@page import="br.uff.loja.core.dtos.PaginateDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="br.uff.loja.core.dtos.VendaDTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -14,9 +15,9 @@
         response.sendRedirect("usuario?redirect=compra");
     }
 
-    List<VendaDTO> vendas = new ArrayList<VendaDTO>();
+    PaginateDTO<List<VendaDTO>> vendas = new PaginateDTO<List<VendaDTO>>();
     if (request.getAttribute("vendas") != null) {
-        vendas = (List<VendaDTO>) request.getAttribute("vendas");
+        vendas = (PaginateDTO<List<VendaDTO>>)request.getAttribute("vendas");
     }
 %>
 <jsp:include page="header.jsp">
@@ -25,16 +26,16 @@
 
 <h2 class="meus-pedidos">Meus Pedidos</h2>
 <%
-    for (VendaDTO venda : vendas) {
+    for (VendaDTO venda : vendas.getDados()) {
 %>
 
 <div class="compras-container">
     <table class="end-grid">
         <thead>
             <tr class="end-title-container">
-                <td class="end-title">N° do Pedido</td>
+                <td class="end-title">Nï¿½ do Pedido</td>
                 <td class="end-title">Momento da Compra</td>
-                <td class="end-title">Endereço de Entrega</td>
+                <td class="end-title">Endereï¿½o de Entrega</td>
                 <td class="end-title">Total</td>
             </tr>
         </thead>
@@ -54,9 +55,9 @@
                     <td class="end-title"></td>
                     <td class="end-title">Produto</td>
                     <td class="end-title">Quantidade</td>
-                    <td class="end-title">Preço Unitário</td>
+                    <td class="end-title">Preï¿½o Unitï¿½rio</td>
                     <td class="end-title">Subtotal</td>
-                    <td class="end-title">Avaliação</td>
+                    <td class="end-title">Avaliaï¿½ï¿½o</td>
                 </tr>
             </thead>
             <tbody>
@@ -83,11 +84,21 @@
 
 <%
     }
-    if (vendas.size() == 0) {
+    if (vendas.getDados().size() == 0) {
 %>
-<h2 class="meus-pedidos">Nenhuma compra foi realizada ainda, corra e faça uma compra para ela aparecer aqui!</h2>
+<h2 class="meus-pedidos">Nenhuma compra foi realizada ainda, corra e faï¿½a uma compra para ela aparecer aqui!</h2>
 <%
     }
 %>
+<!-- Pï¿½ginas -->
+<div style="font-size: 50px; text-align: center;">
+    <% if (vendas.getPaginaAtual() > 1) {%>
+    <a href="compra?historico&paginaAtual=<%= vendas.getPaginaAtual()-1%>">&#8249;</a>
+    <% }%>
+    <span><%= vendas.getPaginaAtual()%></span>
+    <% if (vendas.getPaginaAtual() < vendas.getUltimaPagina()) { %>
+    <a href="compra?historico&paginaAtual=<%= vendas.getPaginaAtual()+1%>">&#8250;</a>
+    <% }%>
+</div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>

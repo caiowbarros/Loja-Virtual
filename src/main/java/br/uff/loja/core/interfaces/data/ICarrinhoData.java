@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.uff.loja.core.dtos.CarrinhoDTO;
 import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.exceptions.LojaException;
 
 public interface ICarrinhoData {
@@ -11,6 +12,8 @@ public interface ICarrinhoData {
     public CarrinhoDTO encontraCarrinho(Integer id) throws LojaException;
 
     public List<CarrinhoDTO> listaCarrinhosDoUsuarioNaoVendidos(Integer usuarioId) throws LojaException;
+
+    public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina, Integer paginaAtual) throws LojaException;
 
     public Boolean carrinhoVendido(Integer id) throws LojaException;
 

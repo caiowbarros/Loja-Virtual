@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.uff.loja.core.dtos.CarrinhoDTO;
 import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
@@ -105,5 +106,10 @@ public class CarrinhoService implements ICarrinhoService {
     @Override
     public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException {
         return carrinhoData.recuperaPrecoTotalDeUmCarrinho(id);
+    }
+
+    @Override
+    public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
+        return carrinhoData.listaProdutosCarrinho(id, itensPorPagina, paginaAtual);
     }
 }

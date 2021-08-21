@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.uff.loja.core.dtos.CarrinhoDTO;
 import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
+import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.ICarrinhoData;
 import br.uff.loja.infrastructure.database.MySQLDAO;
@@ -20,6 +21,7 @@ public class CarrinhoData implements ICarrinhoData {
     private static final String CARTSPRODUCTSTABLESTRING = "carts_products";
     private static final String ERROPREFIXOSTRING = "Falha ao verificar se o Carrinho de id: ";
     private static final String ERROESPECIFICANDOCARRINHO = " no Carrinho de id: ";
+    private static final String CONSULTAPRODUTOSCARRINHO = "SELECT c.cart_id AS id, p.id AS produtoId, p.name AS nome, p.description AS descricao, p.img AS imagem, p.price AS preco, p.quantity AS quantidadeEmEstoque, c.quantity AS quantidade, p.price * c.quantity AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=?";
 
     public CarrinhoData() {
         this.mysqlDAO = new MySQLDAO();
@@ -170,7 +172,7 @@ public class CarrinhoData implements ICarrinhoData {
     public List<CarrinhoProdutoDTO> listaProdutosCarrinho(Integer id) throws LojaException {
         try {
             Object[] bind = {id};
-            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega("SELECT c.cart_id AS id, p.id AS produtoId, p.name AS nome, p.description AS descricao, p.img AS imagem, p.price AS preco, p.quantity AS quantidadeEmEstoque, c.quantity AS quantidade, p.price * c.quantity AS precoTotal FROM carts_products c LEFT JOIN products p ON (c.product_id = p.id) WHERE c.cart_id=?", bind);
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(CONSULTAPRODUTOSCARRINHO, bind);
             List<CarrinhoProdutoDTO> retornoFormatado = new ArrayList<>();
             retornoDesformatado.forEach(carrinho -> retornoFormatado.add(new CarrinhoProdutoDTO(carrinho)));
             return retornoFormatado;
@@ -237,6 +239,34 @@ public class CarrinhoData implements ICarrinhoData {
             return Double.valueOf(totalPrice.equals("null") ? "0" : totalPrice);
         } catch (Exception e) {
             throw new LojaException("Falha ao verificar o valor total do carinho de id: " + id + ". (" + e.getMessage() + ")");
+        } finally {
+            this.mysqlDAO.destroyDb();
+        }
+    }
+
+    @Override
+    public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
+        try {
+            Object[] bind = {id};
+
+            // define offset
+            String offset = "";
+            if (paginaAtual > 1) {
+                Integer calcOffset = (paginaAtual - 1) * itensPorPagina;
+                offset = " OFFSET " + calcOffset + " ";
+            }
+
+            String limit = " LIMIT " + itensPorPagina + " ";
+
+            List<HashMap<String, Object>> retornoDesformatado = this.mysqlDAO.dbCarrega(CONSULTAPRODUTOSCARRINHO + limit + offset, bind);
+            List<CarrinhoProdutoDTO> retornoFormatado = new ArrayList<>();
+            retornoDesformatado.forEach(carrinho -> retornoFormatado.add(new CarrinhoProdutoDTO(carrinho)));
+
+            Integer ultimaPagina = Integer.valueOf(String.valueOf(this.mysqlDAO.dbValor("ceil(count(*)/" + itensPorPagina + ")", CONSULTAPRODUTOSCARRINHO, "", bind)));
+
+            return new PaginateDTO<>(paginaAtual, retornoFormatado, ultimaPagina);
+        } catch (Exception e) {
+            throw new LojaException("Falha ao Paginar e recuperar a página " + paginaAtual + " os Produtos do Carrinho de id: " + id + ". (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
