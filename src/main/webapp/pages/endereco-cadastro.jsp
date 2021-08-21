@@ -22,7 +22,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Cadastro de Endereços"/>
+    <jsp:param name="title" value="Cadastro de Endere?os"/>
 </jsp:include>
 
 <div class="end-add-container">    
@@ -33,7 +33,7 @@
                 <input value="<%= endereco.getNome()%>" name="name" required type="text" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Descrição do endereço</label>
+                <label>Descri??o do Endere?o</label>
             </div>
 
             <div class="group">      
@@ -47,7 +47,7 @@
                 <input value="<%= endereco.getLogradouro()%>" name="address" required type="text" id="rua" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Endereço</label>
+                <label>Logradouro com N?mero e Complemento</label>
             </div>
 
             <div class="group">      
@@ -75,13 +75,10 @@
         <button class="standard-btn" name="action" formnovalidate value="unsel">Voltar</button>
         <button class="standard-btn" name="action" value="grava" type="submit">Salvar</button>   
         <% if (!sel.equals("")) { %>
-        <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse endereço?');false;">Apagar</button>
+        <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse Endere?o?');false;">Apagar</button>
         <% }%>
-
     </form>
 </div>
-
-
 <script type="text/javascript" >
 
     function limpa_form_cep() {
@@ -106,7 +103,7 @@
     }
 
     function pesquisacep(valor) {
-        //Nova variável "cep" somente com dígitos.
+        //Nova vari?vel "cep" somente com n?meros.
         var cep = valor.replace(/\D/g, '');
 
         //Verifica se campo cep possui valor informado.

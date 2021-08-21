@@ -23,10 +23,11 @@
     <jsp:param name="title" value="Grid de Produtos"/>
 </jsp:include>
 
-<table class="product-grid" cellspacing="10">
+<table class="product-grid">
+    <caption>Produtos</caption>
     <thead>
         <tr>
-            <th colspan="5"><h2>Produtos</h2></th>
+            <th scope="row" colspan="5"><h2>Produtos</h2></th>
         </tr>
         <tr class="product-grid-title">
             <td>Operações</td>
