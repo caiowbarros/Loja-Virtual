@@ -3,6 +3,7 @@
     Created on : 28/09/2019, 23:42:18
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
 <%
     // se n tiver um usuario logado retorna p controller de usuario com redirect p EnderecoController

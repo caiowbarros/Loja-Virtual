@@ -3,6 +3,7 @@
     Created on : 13/09/2019, 18:51:42
     Author     : Caio
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="java.util.List"%>
 <%@page import="br.uff.loja.core.dtos.AvaliacaoProdutoListDTO"%>

@@ -3,6 +3,7 @@
     Created on : 12/09/2019, 19:35:15
     Author     : Caio
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>

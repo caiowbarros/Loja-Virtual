@@ -3,6 +3,7 @@
     Created on : 12/09/2019, 19:33:29
     Author     : Caio
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Pra impedir de ficar elementos em cima do footer -->
 </body>
 <footer>

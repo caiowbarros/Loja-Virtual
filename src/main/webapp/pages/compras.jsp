@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 00:50:48
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
 <%@page import="br.uff.loja.core.dtos.PaginateDTO"%>

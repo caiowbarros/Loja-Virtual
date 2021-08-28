@@ -3,6 +3,7 @@
     Created on : 19/09/2019, 00:23:53
     Author     : Caio
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     // se tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") != null) {

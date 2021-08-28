@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 23:33:28
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%
     // se n tiver um usuario logado retorna p controller
