@@ -22,14 +22,14 @@
         itens = (List<CarrinhoProdutoDTO>) request.getAttribute("produtos");
     }
 %>
-<!-- TÌtulo da p·gina -->
+<!-- T√≠tulo da p√°gina -->
 <h1 class="cart-title">Carrinho</h1>
 
 <!-- Coluna de labels -->
 <div class="cart-column">
     <label class="cart-img transparent">Imagem</label>
     <label class="cart-details transparent">Produto</label>
-    <label class="cart-price">PreÁo</label>
+    <label class="cart-price">Pre√ßo</label>
     <label class="cart-qnt">Quantidade</label>
     <label class="cart-remove transparent">Remover</label>
     <label class="cart-total">Total</label>
@@ -38,7 +38,7 @@
     if (itens.size() < 1) {
 %>
 <div class="cart-product">
-    <h2>Seu carrinho est· vazio por enquanto.</h2>
+    <h2>Seu carrinho est√° vazio por enquanto.</h2>
 </div>
 <%
 } else {
@@ -70,20 +70,19 @@
         }
     }
 %>
-
 <!-- Checkout -->
 <div class="total-finalize">
     <%
         if (itens.size() > 0) {
     %>
     <div class="total-item">
-        <p>Frete gr·tis para todo Brasil!</p>
+        <p>Frete gr√°tis para todo Brasil!</p>
         <label>Subtotal</label>
         <div class="total-subtotal"><%= new Helper().tryParseMoneyFormat(totalPrice)%></div>
     </div>
     <div class="total-item">
         <label>Frete</label>
-        <div class="total-ship">Gr·tis</div>
+        <div class="total-ship">Gr√°tis</div>
     </div>
     <div class="total-item">
         <label>Total</label>
@@ -113,7 +112,7 @@
         if (isValidForm) {
             form.submit();
         } else {
-            alert("Por favor insira uma quantidade v·lida! A quantidade atual est· acima da quantidade do produto em estoque ou abaixo da quantidade mÌnima.");
+            alert("Por favor insira uma quantidade v√°lida! A quantidade atual est√° acima da quantidade do produto em estoque ou abaixo da quantidade m√≠nima.");
             return false;
         }
     }

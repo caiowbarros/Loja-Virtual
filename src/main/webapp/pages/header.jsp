@@ -5,7 +5,6 @@
 --%>
 <!DOCTYPE html>
 <html lang="pt-br">
-
     <head>
         <title>UFF | ${param.title}</title>
         <meta charset="UTF-8">
@@ -29,6 +28,7 @@
             if (session.getAttribute("msg") != null) {
                 String msg = session.getAttribute("msg").toString();
                 session.setAttribute("msg", null);
+                out.println("<div id='msg-alerta-pop-up' style='display: none;'>" + msg + "</div>");
                 out.println("<script>alert('" + msg + "');</script>");
             }
         %>

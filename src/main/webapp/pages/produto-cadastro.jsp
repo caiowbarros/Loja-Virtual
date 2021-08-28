@@ -47,11 +47,11 @@
                     <input value="<%= produto.getNome()%>" class="field-long" name="name" required type="text" maxlength="255" />
                 </li>
                 <li>
-                    <label>Pre?o </label>
+                    <label>Preço </label>
                     <input value="<%= produto.getPreco()%>" class="field-long" name="price" required type="number" max="5000" min="0.01" step="0.01" maxlength="255" />
                 </li>
                 <li>
-                    <label>Descri??o </label>
+                    <label>Descrição </label>
                     <textarea class="field-long field-textarea" name="description" required maxlength="255"><%= produto.getDescricao()%></textarea>
                 </li>
                 <li>
@@ -79,7 +79,7 @@
 
     <div class="produto-right-container">
 
-        <h2>Pr?via da Imagem</h2>
+        <h2>Prévia da Imagem</h2>
         <div class="previa-img">
             <img alt="Imagem do Produto" id="prev"/>
         </div>

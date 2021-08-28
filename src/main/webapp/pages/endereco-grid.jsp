@@ -19,18 +19,18 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Meus Endere?os"/>
+    <jsp:param name="title" value="Meus Endereços"/>
 </jsp:include>
 <table class="end-grid">
-    <caption>Endere?os</caption>
+    <caption>Endereços</caption>
     <thead>
         <tr>
-            <th scope="row" colspan="5"><h2>Meus Endere?os</h2></th>
+            <th scope="row" colspan="5"><h2>Meus Endereços</h2></th>
         </tr>
         <tr class="end-title-container">
             <td class="end-title">Opera??es</td>
-            <td class="end-title">Descri??o do Endere?o</td>
-            <td class="end-title">Endere?o</td>
+            <td class="end-title">Descrição do Endereço</td>
+            <td class="end-title">Endereço</td>
             <td class="end-title">Cidade</td>
             <td class="end-title">Estado</td>
         </tr>
@@ -55,7 +55,7 @@
     <tfoot>
         <tr>
             <td class="end-add-new" colspan="5">
-                <a class="end-link" href="endereco?sel">Inserir Novo Endere?o</a>
+                <a class="end-link" href="endereco?sel">Inserir Novo Endereço</a>
             </td>
         </tr>
     </tfoot>

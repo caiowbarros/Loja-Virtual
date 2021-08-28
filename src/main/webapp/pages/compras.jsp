@@ -28,7 +28,6 @@
 <%
     for (VendaDTO venda : vendas.getDados()) {
 %>
-
 <div class="compras-container">
     <table class="end-grid">
         <caption>Vendas</caption>

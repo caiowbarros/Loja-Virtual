@@ -30,9 +30,9 @@
             <th scope="row" colspan="5"><h2>Produtos</h2></th>
         </tr>
         <tr class="product-grid-title">
-            <td>Operações</td>
+            <td>OperaÃ§Ãµes</td>
             <td>Nome</td>
-            <td>Preço</td>
+            <td>PreÃ§o</td>
             <td>Categoria</td>
             <td>Quantidade no Estoque</td>
         </tr>
