@@ -33,8 +33,7 @@ public class Helper implements IHelper {
     }
 
     public String tryParseMoneyFormat(Object preco) {
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        return formatter.format(preco);
+        return "R$" + String.format("%.2f", preco);
     }
 
     public Double tryParseDouble(String intStr) {
