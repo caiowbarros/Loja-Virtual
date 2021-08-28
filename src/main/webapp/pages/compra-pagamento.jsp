@@ -44,7 +44,7 @@
                 <li style="text-align: -webkit-center;">
                     <fieldset>
                         <legend><img alt="paypal" src="img/paypal.png"></legend>
-                        <img alt="paypal cartão de c?edito" class="credit-card-img" src="img/credit-card.png">
+                        <img alt="paypal cartão de crédito" class="credit-card-img" src="img/credit-card.png">
                     </fieldset>
                 </li>
                 <li>
