@@ -3,14 +3,12 @@ services:
   e_store_mvn:
     image: maven:3.6-jdk-8
     container_name: e_store_mvn
-    environment:
-      - PORT=8181
-    command: /bin/sh -c "rm -R target -f && cp .env.example .env && mvn package && java -jar target/dependency/webapp-runner.jar --port 8181 target/loja-1.0.1.war"
+    command: /bin/sh -c "rm -R target -f && cp .env.example .env && mvn package && java -jar target/dependency/webapp-runner.jar --port ${MVN_PORT} target/loja-1.0.1.war"
     volumes:
       - ./:/var/app
     working_dir: /var/app
     ports:
-      - 8181:8181
+      - ${MVN_PORT}:${MVN_PORT}
     depends_on: 
       - e_store_mysql
   e_store_mysql:
@@ -18,14 +16,13 @@ services:
     restart: always
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:${MYSQL_PORT}
     volumes:
       - ./database/dump:/docker-entrypoint-initdb.d
       - ./database/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     container_name: e_store_mysql
     environment:
-      - MYSQL_DATABASE=e_store
-      - MYSQL_USER=e_store
-      - MYSQL_PASSWORD=123456
-      - MYSQL_ROOT_PASSWORD=123456
-    
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
