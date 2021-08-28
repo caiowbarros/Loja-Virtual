@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 11:42:33
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
 <%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
 <%@page import="java.util.List"%>
@@ -34,7 +35,6 @@
 </jsp:include>
 
 <main class="confirma-container">
-
     <div class="left-confirma">
         <form method="post" action="carrinho">
             <h2>Detalhes da entrega</h2>
@@ -57,16 +57,16 @@
                     }
                 %>
                 <div class="confirma-novoend">
-                    <a href="endereco?sel">Inserir novo endereço</a>
+                    <a href="endereco?sel">Inserir novo endereÃ§o</a>
                 </div>
             </div>
 
-            <h2>Método de entrega</h2>
+            <h2>MÃ©todo de entrega</h2>
             <div class="confirma-frete">
                 <div class="confirma-radio">
                     <div class="radio-container">
                         <input type="radio" name="frete" checked>
-                        <div class="radio-label">Normal - 5 dias úteis (Frete grátis)</div>
+                        <div class="radio-label">Normal - 5 dias Ãºteis (Frete grÃ¡tis)</div>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="detalhe-item">
                     <label>Frete</label>
-                    <div class="detalhe-frete">Grátis</div>
+                    <div class="detalhe-frete">GrÃ¡tis</div>
                 </div>
                 <div class="detalhe-item">
                     <label>Total</label>

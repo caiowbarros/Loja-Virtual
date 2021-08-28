@@ -3,6 +3,7 @@
     Created on : 28/09/2019, 23:42:18
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
 <%
     // se n tiver um usuario logado retorna p controller de usuario com redirect p EnderecoController
@@ -22,7 +23,7 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Cadastro de Endere?os"/>
+    <jsp:param name="title" value="Cadastro de Endere√ßos"/>
 </jsp:include>
 
 <div class="end-add-container">    
@@ -33,7 +34,7 @@
                 <input value="<%= endereco.getNome()%>" name="name" required type="text" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Descri??o do Endere?o</label>
+                <label>Nome identificador desse Endere√ßo</label>
             </div>
 
             <div class="group">      
@@ -47,7 +48,7 @@
                 <input value="<%= endereco.getLogradouro()%>" name="address" required type="text" id="rua" maxlength="255" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Logradouro com N?mero e Complemento</label>
+                <label>Logradouro com N√∫mero e Complemento</label>
             </div>
 
             <div class="group">      
@@ -75,14 +76,14 @@
         <button class="standard-btn" name="action" formnovalidate value="unsel">Voltar</button>
         <button class="standard-btn" name="action" value="grava" type="submit">Salvar</button>   
         <% if (!sel.equals("")) { %>
-        <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse Endere?o?');false;">Apagar</button>
+        <button class="standard-btn" type="submit" name="action" value="del" formnovalidate onclick="return confirm('Tem certeza que deseja excluir esse Endere√ßo?');false;">Apagar</button>
         <% }%>
     </form>
 </div>
 <script type="text/javascript" >
 
     function limpa_form_cep() {
-        //Limpa valores do formul·rio de cep.
+        //Limpa valores do formul√°rio de cep.
         document.getElementById('rua').value = ("");
         document.getElementById('cidade').value = ("");
         document.getElementById('uf').value = ("");
@@ -96,19 +97,19 @@
             document.getElementById('uf').value = (conteudo.uf);
         } //end if.
         else {
-            //CEP n„o Encontrado.
+            //CEP n√£o Encontrado.
             limpa_form_cep();
-            alert("CEP n„o encontrado.");
+            alert("CEP n√£o encontrado.");
         }
     }
 
     function pesquisacep(valor) {
-        //Nova vari?vel "cep" somente com n?meros.
+        //Nova vari√°vel "cep" somente com n√∫meros.
         var cep = valor.replace(/\D/g, '');
 
         //Verifica se campo cep possui valor informado.
         if (cep != "") {
-            //Express„o regular para validar o CEP.
+            //Express–≥o regular para validar o CEP.
             var validacep = /^[0-9]{8}$/;
 
             //Valida o formato do CEP.
@@ -124,18 +125,18 @@
                 //Sincroniza com o callback.
                 script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=meu_callback';
 
-                //Insere script no documento e carrega o conte˙do.
+                //Insere script no documento e carrega o conte√∫do.
                 document.body.appendChild(script);
 
             } //end if.
             else {
-                //cep È inv·lido.
+                //cep n¬∫ inv√°lido.
                 limpa_form_cep();
-                alert("Formato de CEP inv·lido.");
+                alert("Formato de CEP inv√°lido.");
             }
         } //end if.
         else {
-            //cep sem valor, limpa formul·rio.
+            //cep sem valor, limpa formul√°rio.
             limpa_form_cep();
         }
     }

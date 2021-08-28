@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 02:31:48
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.core.dtos.EnderecoDTO"%>
 <%@page import="br.uff.loja.core.dtos.CarrinhoProdutoDTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -28,14 +29,13 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="P·gina de Pagamento"/>
+    <jsp:param name="title" value="P√°gina de Pagamento"/>
 </jsp:include>
 
 <main class="confirma-container">
 
     <div class="left-confirma">
-
-        <h2>MÈtodo de pagamento</h2>
+        <h2>M√©todo de pagamento</h2>
 
         <div class="confirma-forma-pag">
             <ul class="form-style-1">
@@ -45,7 +45,7 @@
                 <li style="text-align: -webkit-center;">
                     <fieldset>
                         <legend><img alt="paypal" src="img/paypal.png"></legend>
-                        <img alt="paypal cart„o de c?edito" class="credit-card-img" src="img/credit-card.png">
+                        <img alt="paypal cart√£o de cr√©dito" class="credit-card-img" src="img/credit-card.png">
                     </fieldset>
                 </li>
                 <li>
@@ -55,7 +55,7 @@
                     <hr>
                     <fieldset>
                         <legend>Outra forma de pagamento:</legend>
-                        <small>Compre apenas clicando no bot„o!</small>
+                        <small>Compre apenas clicando no bot√£o!</small>
                         <form action="compra" method="POST">
                             <button type="submit" name="action" value="pagamentoOk">Comprar</button>
                         </form>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="detalhe-item">
                     <label>Frete</label>
-                    <div class="detalhe-frete">Gr·tis</div>
+                    <div class="detalhe-frete">Gr√°tis</div>
                 </div>
                 <div class="detalhe-item">
                     <label>Total</label>
@@ -104,7 +104,7 @@
         </div>
         <div class="detalhe-carrinho">
             <div class="detalhe-valor">
-                <div class="detalhe-endereco">EndereÁo de Entrega escolhido</div>
+                <div class="detalhe-endereco">Endere√ßo de Entrega escolhido</div>
                 <div class="detalhe-endereco-info">    
                     <p><%= endereco.getNome()%></p>
                     <p><%= endereco.getCep()%></p>
@@ -116,8 +116,8 @@
         </div>
         <div class="detalhe-carrinho">
             <div class="detalhe-valor">
-                <div class="detalhe-endereco">MÈtodo de entrega</div>
-                <div class="detalhe-entrega">ENTREGA CONVENCIONAL - Frete gr·tis para todo o Brasil (Previs„o de entrega em 5 dias ˙teis)</div>
+                <div class="detalhe-endereco">M√©todo de entrega</div>
+                <div class="detalhe-entrega">ENTREGA CONVENCIONAL - Frete gr√°tis para todo o Brasil (Previs√£o de entrega em 5 dias √∫teis)</div>
             </div>
         </div>
     </div>

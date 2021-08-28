@@ -3,6 +3,7 @@
     Created on : 19/09/2019, 00:23:53
     Author     : Caio
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     // se tiver um usuario logado retorna p controller
     if (session.getAttribute("userId") != null) {
@@ -13,10 +14,8 @@
 <jsp:include page="header.jsp">
     <jsp:param name="title" value="Login"/>
 </jsp:include>
-
 <!-- Imagem de fundo -->
 <div class="login-background"></div>
-
 <main class="login-container">
     <!-- Coluna da esquerda (login) -->
     <div class="login-column">
@@ -93,7 +92,7 @@
                         var senha = document.getElementById("criaSENHA");
                         var conf = document.getElementById("criaCONFSENHA");
                         if (senha.value != conf.value) {
-                            alert("A senha não bate com a conferência");
+                            alert("A senha nÃ£o bate com a conferÃªncia");
                             return false;
                         } else {
                             return true;

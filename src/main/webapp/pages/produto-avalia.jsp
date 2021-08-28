@@ -3,6 +3,7 @@
     Created on : 02/10/2019, 23:33:28
     Author     : HP
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="br.uff.loja.infrastructure.shared.Helper"%>
 <%
     // se n tiver um usuario logado retorna p controller
@@ -22,15 +23,15 @@
 %>
 <!-- Header -->
 <jsp:include page="header.jsp">
-    <jsp:param name="title" value="Avalia??o do Produto"/>
+    <jsp:param name="title" value="Avaliação do Produto"/>
 </jsp:include>
 
 <form action="avaliacao" method="post">
 
     <ul class="form-style-1">
-        <!-- Avalia??o do produto (em estrelas) -->
+        <!-- Avaliação do produto (em estrelas) -->
         <li>
-            <label>Avalia??o </label>
+            <label>Avaliação </label>
             <div class="rate">
                 <input <%= rating.equals(5) ? "checked" : ""%> type="radio" id="star5" name="rating" value="5" />
                 <label for="star5" title="text"></label>
@@ -47,15 +48,15 @@
         </li>
         <li>
             <br>
-            <label>T?tulo </label>
+            <label>Título </label>
             <input class="field-long" name="title" required type="text" maxlength="255" />
         </li>
         <li>
-            <label>Descri??o </label>
+            <label>Descrição </label>
             <textarea class="field-long field-textarea" name="description" required type="text" maxlength="255"></textarea>
         </li>
         <li class="center">
-            <a href="ProdutoController">Voltar</a>
+            <a href="produto">Voltar</a>
             <button name="action" value="avalia" type="submit">Salvar</button>
         </li>
     </ul>
