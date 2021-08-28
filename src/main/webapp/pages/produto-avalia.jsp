@@ -55,7 +55,7 @@
             <textarea class="field-long field-textarea" name="description" required type="text" maxlength="255"></textarea>
         </li>
         <li class="center">
-            <a href="ProdutoController">Voltar</a>
+            <a href="produto">Voltar</a>
             <button name="action" value="avalia" type="submit">Salvar</button>
         </li>
     </ul>

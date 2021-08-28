@@ -5,7 +5,7 @@ services:
     container_name: e_store_mvn
     environment:
       - PORT=8181
-    command: /bin/sh -c "rm -R target -f && cp .env.example .env && mvn package && java -jar target/endorsed/webapp-runner.jar --port 8181 target/loja-1.0-SNAPSHOT.war"
+    command: /bin/sh -c "rm -R target -f && cp .env.example .env && mvn package && java -jar target/dependency/webapp-runner.jar --port 8181 target/loja-1.0.1.war"
     volumes:
       - ./:/var/app
     working_dir: /var/app
@@ -20,7 +20,8 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./dump:/docker-entrypoint-initdb.d
+      - ./database/dump:/docker-entrypoint-initdb.d
+      - ./database/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     container_name: e_store_mysql
     environment:
       - MYSQL_DATABASE=e_store
