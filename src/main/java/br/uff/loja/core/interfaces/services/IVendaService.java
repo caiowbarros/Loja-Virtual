@@ -13,6 +13,4 @@ public interface IVendaService {
     public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException;
 
     public void gravaVenda(Integer usuarioId, Integer carrinhoId, Integer enderecoId) throws LojaException;
-
-    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException;
 }

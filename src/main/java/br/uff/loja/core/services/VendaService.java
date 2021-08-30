@@ -31,24 +31,16 @@ public class VendaService implements IVendaService {
     @Override
     public void gravaVenda(Integer usuarioId, Integer carrinhoId, Integer enderecoId) throws LojaException {
         if (Boolean.FALSE.equals(carrinhoService.carrinhoAtivoValido(carrinhoId, usuarioId))) {
-            throw new LojaException("O carrinho de id: " + carrinhoId
-                    + " não encontra-se válido no momento, verifique se o mesmo possui itens nele, se já foi vendido ou se pertence a outro usuário.");
+            throw new LojaException("O carrinho de id: " + carrinhoId + " não encontra-se válido no momento, verifique se o mesmo possui itens nele, se já foi vendido ou se pertence a outro usuário.");
         }
         if (Boolean.FALSE.equals(enderecoService.verificaEnderecoDoUsuario(enderecoId, usuarioId))) {
-            throw new LojaException("O endereço escolhido de id:" + enderecoId
-                    + " não pertence ao dono do carrinho (usuário de id: " + usuarioId + "), escolha outro endereço.");
+            throw new LojaException("O endereço escolhido de id:" + enderecoId + " não pertence ao dono do carrinho (usuário de id: " + usuarioId + "), escolha outro endereço.");
         }
         vendaData.gravaVenda(carrinhoId, enderecoId);
     }
 
     @Override
-    public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina,
-            Integer paginaAtual) throws LojaException {
+    public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
         return vendaData.listaVendasDoUsuario(usuarioId, itensPorPagina, paginaAtual);
-    }
-
-    @Override
-    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException {
-        return vendaData.enderecoFoiUsadoEmAlgumaVenda(enderecoId);
     }
 }

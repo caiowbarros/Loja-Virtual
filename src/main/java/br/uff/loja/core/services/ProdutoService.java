@@ -49,7 +49,7 @@ public class ProdutoService implements IProdutoService {
 
     @Override
     public void usuarioToogleFavoritaProdutoPorId(Integer produtoId, Integer usuarioId) throws LojaException {
-        if (Boolean.TRUE.equals(this.produtoFavoritadoPeloUsuario(produtoId, usuarioId))) {
+        if (Boolean.TRUE.equals(produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId))) {
             produtoData.removeFavoritacaoProdutoPeloUsuario(produtoId, usuarioId);
         } else {
             produtoData.adicionaFavoritacaoProdutoPeloUsuario(produtoId, usuarioId);
@@ -74,10 +74,5 @@ public class ProdutoService implements IProdutoService {
     @Override
     public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
         return produtoData.listaProdutosBanner();
-    }
-
-    @Override
-    public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
-        return produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
     }
 }

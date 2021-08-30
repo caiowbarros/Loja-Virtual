@@ -31,6 +31,4 @@ public interface IProdutoService {
     public ProdutoVitrineUsuarioDTO mostraProdutoVitrineParaUsuario(Integer id, Integer usuarioId) throws LojaException;
 
     public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException;
-
-    public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException;
 }

@@ -26,8 +26,7 @@ public class CarrinhoService implements ICarrinhoService {
     @Override
     public CarrinhoDTO recuperaCarrinhoAtivo(Integer carrinhoId, Integer usuarioId, String ip) throws LojaException {
         if (carrinhoId != null) {
-            if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId))
-                    && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
+            if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
                 if (usuarioId == null) {
                     if (Boolean.TRUE.equals(carrinhoData.carrinhoSemDono(carrinhoId))) {
                         return carrinhoData.encontraCarrinho(carrinhoId);
@@ -55,9 +54,8 @@ public class CarrinhoService implements ICarrinhoService {
 
     @Override
     public void insereProdutoCarrinho(Integer carrinhoId, Integer produtoId) throws LojaException {
-        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId))
-                && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
-            Integer qtd = this.quantidadeProdutoNoCarrinho(carrinhoId, produtoId);
+        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
+            Integer qtd = carrinhoData.quantidadeProdutoNoCarrinho(carrinhoId, produtoId);
             if (qtd > 0) {
                 carrinhoData.atualizaQtdDoProdutoNoCarrinho(carrinhoId, produtoId, qtd + 1);
             } else {
@@ -65,26 +63,22 @@ public class CarrinhoService implements ICarrinhoService {
             }
             return;
         }
-        throw new LojaException("Não foi possível inserir o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO
-                + carrinhoId + ".");
+        throw new LojaException("Não foi possível inserir o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
 
     }
 
     @Override
     public void removeProdutoCarrinho(Integer carrinhoId, Integer produtoId) throws LojaException {
-        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId))
-                && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
-            Integer qtd = this.quantidadeProdutoNoCarrinho(carrinhoId, produtoId);
+        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
+            Integer qtd = carrinhoData.quantidadeProdutoNoCarrinho(carrinhoId, produtoId);
             if (qtd > 0) {
                 carrinhoData.removeProdutoDoCarrinho(carrinhoId, produtoId);
             } else {
-                throw new LojaException(
-                        "O produto de id: " + produtoId + " não encontra-se no carrinho de id: " + carrinhoId + ".");
+                throw new LojaException("O produto de id: " + produtoId + " não encontra-se no carrinho de id: " + carrinhoId + ".");
             }
             return;
         }
-        throw new LojaException("Não foi possível remover o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO
-                + carrinhoId + ".");
+        throw new LojaException("Não foi possível remover o produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
     }
 
     @Override
@@ -96,23 +90,17 @@ public class CarrinhoService implements ICarrinhoService {
     }
 
     @Override
-    public void alteraQuantidadeProdutoCarrinho(Integer carrinhoId, Integer produtoId, Integer quantidade)
-            throws LojaException {
-        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId))
-                && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
+    public void alteraQuantidadeProdutoCarrinho(Integer carrinhoId, Integer produtoId, Integer quantidade) throws LojaException {
+        if (Boolean.TRUE.equals(carrinhoData.carrinhoExiste(carrinhoId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(carrinhoId))) {
             carrinhoData.atualizaQtdDoProdutoNoCarrinho(carrinhoId, produtoId, quantidade);
             return;
         }
-        throw new LojaException("Não foi possível atualizar a quantidade do produto de Id: " + produtoId
-                + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
+        throw new LojaException("Não foi possível atualizar a quantidade do produto de Id: " + produtoId + TEXTOAVISOESPECIFICACARRINHO + carrinhoId + ".");
     }
 
     @Override
     public Boolean carrinhoAtivoValido(Integer id, Integer usuarioId) throws LojaException {
-        return Boolean.TRUE.equals(carrinhoData.carrinhoExiste(id))
-                && Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(id, usuarioId))
-                && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(id))
-                && Boolean.TRUE.equals(carrinhoData.quantidadeProdutosCarrinho(id) > 0);
+        return Boolean.TRUE.equals(carrinhoData.carrinhoExiste(id)) && Boolean.TRUE.equals(carrinhoData.carrinhoDoUsuario(id, usuarioId)) && Boolean.FALSE.equals(carrinhoData.carrinhoVendido(id)) && Boolean.TRUE.equals(carrinhoData.quantidadeProdutosCarrinho(id) > 0);
     }
 
     @Override
@@ -121,13 +109,7 @@ public class CarrinhoService implements ICarrinhoService {
     }
 
     @Override
-    public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina,
-            Integer paginaAtual) throws LojaException {
+    public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
         return carrinhoData.listaProdutosCarrinho(id, itensPorPagina, paginaAtual);
-    }
-
-    @Override
-    public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
-        return carrinhoData.quantidadeProdutoNoCarrinho(id, produtoId);
     }
 }
