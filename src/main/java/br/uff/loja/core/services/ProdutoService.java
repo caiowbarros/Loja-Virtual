@@ -75,4 +75,9 @@ public class ProdutoService implements IProdutoService {
     public List<ProdutoHomeDTO> listaProdutosBanner() throws LojaException {
         return produtoData.listaProdutosBanner();
     }
+
+    @Override
+    public Boolean produtoFavoritadoPeloUsuario(Integer produtoId, Integer usuarioId) throws LojaException {
+        return produtoData.produtoFavoritadoPeloUsuario(produtoId, usuarioId);
+    }
 }

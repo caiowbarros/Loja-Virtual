@@ -19,8 +19,6 @@ import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
-import br.uff.loja.core.interfaces.data.ICarrinhoData;
-import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
@@ -33,8 +31,6 @@ import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.core.services.VendaService;
-import br.uff.loja.infrastructure.data.CarrinhoData;
-import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class LojaApplicationTests {
 
@@ -164,17 +160,16 @@ public class LojaApplicationTests {
     @Test
     public void testaToogleFavoritaProduto() throws Exception {
         IProdutoService produtoService = new ProdutoService();
-        IProdutoData produtoData = new ProdutoData();
 
         IUsuarioService usuarioService = new UsuarioService();
 
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
 
-        Boolean antes = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
+        Boolean antes = produtoService.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
 
         produtoService.usuarioToogleFavoritaProdutoPorId(primeiroProduto.getId(), usuarioId);
-        Boolean depois = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
+        Boolean depois = produtoService.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
 
         assertNotEquals(String.valueOf(antes), String.valueOf(depois));
     }
@@ -293,7 +288,6 @@ public class LojaApplicationTests {
     @Test
     public void TestaInserirProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
-        ICarrinhoData carrinhoData = new CarrinhoData();
         IUsuarioService usuarioService = new UsuarioService();
         IProdutoService produtoService = new ProdutoService();
 
@@ -301,11 +295,11 @@ public class LojaApplicationTests {
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
 
-        Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
+        Integer qtdProdutoNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
         carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
-        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1), String.valueOf(carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
+        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1), String.valueOf(carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
     }
 
     @Test

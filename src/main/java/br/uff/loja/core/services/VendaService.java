@@ -43,4 +43,9 @@ public class VendaService implements IVendaService {
     public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
         return vendaData.listaVendasDoUsuario(usuarioId, itensPorPagina, paginaAtual);
     }
+
+    @Override
+    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException {
+        return vendaData.enderecoFoiUsadoEmAlgumaVenda(enderecoId);
+    }
 }
