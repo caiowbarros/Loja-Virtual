@@ -17,6 +17,7 @@ import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoHomeDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.dtos.VendaDTO;
@@ -24,14 +25,18 @@ import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
+import br.uff.loja.core.interfaces.services.ICategoriaService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
+import br.uff.loja.core.interfaces.services.IRoleService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
 import br.uff.loja.core.interfaces.services.IVendaService;
 import br.uff.loja.core.services.AvaliacaoService;
 import br.uff.loja.core.services.CarrinhoService;
+import br.uff.loja.core.services.CategoriaService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
+import br.uff.loja.core.services.RoleService;
 import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.core.services.VendaService;
 
@@ -422,14 +427,15 @@ public class LojaApplicationTests {
 
         Integer paginaAtual = 0;
         Integer ultimaPagina = 1;
+        Integer itensPorPagina = 2;
 
         List<VendaDTO> vendasDoPaginate = new ArrayList<>();
 
         while (ultimaPagina > paginaAtual) {
             paginaAtual += 1;
 
-            PaginateDTO<List<VendaDTO>> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId(), 1,
-                    paginaAtual);
+            PaginateDTO<List<VendaDTO>> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId(),
+                    itensPorPagina, paginaAtual);
 
             vendasDoPaginate.addAll(vendas.getDados());
             ultimaPagina = vendas.getUltimaPagina();
@@ -437,5 +443,37 @@ public class LojaApplicationTests {
 
         assertEquals(new Gson().toJson(vendaService.listaVendasDoUsuario(primeiroUsuario.getId())),
                 new Gson().toJson(vendasDoPaginate));
+    }
+
+    @Test
+    public void TestaListaRoles() throws Exception {
+        IRoleService roleService = new RoleService();
+
+        assertEquals(String.valueOf(roleService.listaRoles().size() > 0), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaListaCategorias() throws Exception {
+        ICategoriaService categoriaService = new CategoriaService();
+
+        assertEquals(String.valueOf(categoriaService.listaCategorias().size() > 0), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaListaProdutosBanner() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+        assertEquals(String.valueOf(produtoService.listaProdutosBanner().size() <= 3), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaMostraProdutoUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        IProdutoService produtoService = new ProdutoService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        ProdutoHomeDTO primeiroProduto = produtoService.listaProdutosBanner().get(0);
+
+        assertEquals(produtoService.mostraProdutoVitrineParaUsuario(primeiroProduto.getId(), primeiroUsuario.getId())
+                .getId(), primeiroProduto.getId());
     }
 }
