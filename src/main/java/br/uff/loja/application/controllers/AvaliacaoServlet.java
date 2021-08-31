@@ -78,6 +78,7 @@ public class AvaliacaoServlet extends HttpServlet {
 
             if (action.equals("avalia")) {
                 avaliacaoService.avaliaProduto(new AvaliacaoProdutoInsertDTO(userId, produtoId, Integer.valueOf(session.getAttribute(RATING).toString()), request.getParameter("description"), request.getParameter("title")));
+                session.setAttribute(RATING, null);
                 response.sendRedirect("produto");
                 return;
             }

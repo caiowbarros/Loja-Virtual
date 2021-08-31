@@ -249,6 +249,24 @@ public class LojaApplicationTests {
     }
 
     @Test
+    public void testaExcessaoEmailDuplicadoUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        primeiroUsuario.setId(null);
+
+        String msgErr = "";
+
+        try {
+            usuarioService.gravaUsuario(primeiroUsuario);
+        } catch (Exception exc) {
+            msgErr = exc.getMessage();
+        }
+
+        assertEquals("O e-mail " + primeiroUsuario.getEmail() + " já está sendo usado por outro usuário...", msgErr);
+    }
+
+    @Test
     public void testaListaProdutosVitrine() throws Exception {
         IProdutoService produtoService = new ProdutoService();
 
@@ -421,6 +439,43 @@ public class LojaApplicationTests {
                 primeiroUsuario.getId(), "0.0.0.0");
 
         assertNotEquals(vendas.get(0).getCarrinhoId(), carrinho.getId());
+    }
+
+    @Test
+    public void TestaRecuperaCarrinhoSemInformarId() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IUsuarioService usuarioService = new UsuarioService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
+
+        assertEquals(String.valueOf(carrinho.getId() != null), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaRecuperaCarrinhoSemDono() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+
+        CarrinhoDTO carrinhoSemDono = carrinhoService.recuperaCarrinhoAtivo(null, null, "0.0.0.0");
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(carrinhoSemDono.getId(), null, "0.0.0.0");
+
+        assertEquals(String.valueOf(carrinhoSemDono.getId()), String.valueOf(carrinho.getId()));
+    }
+
+    @Test
+    public void TestaRecuperaCarrinhoSemUsuarioDepoisDefinir() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IUsuarioService usuarioService = new UsuarioService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+
+        CarrinhoDTO carrinhoSemDono = carrinhoService.recuperaCarrinhoAtivo(null, null, "0.0.0.0");
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(carrinhoSemDono.getId(), primeiroUsuario.getId(),
+                "0.0.0.0");
+
+        assertEquals(String.valueOf(carrinho.getUsuarioId()), String.valueOf(primeiroUsuario.getId()));
     }
 
     @Test

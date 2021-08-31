@@ -43,6 +43,9 @@ public class ProdutoServlet extends HttpServlet {
         // pega sessao
         HttpSession session = request.getSession();
         try {
+            // se rating estiver setado na sessao... define null
+            session.setAttribute("rating", null);
+
             // se tem produto selecionado por parametro passa p sessao
             Integer produtoId = null;
             if (request.getParameter(PRODUTOID) != null) {
