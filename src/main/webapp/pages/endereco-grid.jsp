@@ -29,7 +29,7 @@
             <th scope="row" colspan="5"><h2>Meus Endereços</h2></th>
         </tr>
         <tr class="end-title-container">
-            <td class="end-title">Opera??es</td>
+            <td class="end-title">Operações</td>
             <td class="end-title">Descrição do Endereço</td>
             <td class="end-title">Endereço</td>
             <td class="end-title">Cidade</td>
