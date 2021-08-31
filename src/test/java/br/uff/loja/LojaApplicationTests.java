@@ -327,8 +327,8 @@ public class LojaApplicationTests {
     public void TestaCompra() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
-        IVendaService vendaService = new VendaService();
         IEnderecoService enderecoService = new EnderecoService();
+        IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
 

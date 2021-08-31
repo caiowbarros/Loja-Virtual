@@ -12,11 +12,9 @@ import br.uff.loja.infrastructure.data.EnderecoData;
 public class EnderecoService implements IEnderecoService {
 
     private IEnderecoData enderecoData;
-    private IVendaService vendaService;
 
     public EnderecoService() {
         enderecoData = new EnderecoData();
-        vendaService = new VendaService();
     }
 
     @Override
@@ -26,7 +24,7 @@ public class EnderecoService implements IEnderecoService {
 
     @Override
     public void excluiEnderecoPorId(Integer id) throws LojaException {
-        if (Boolean.TRUE.equals(vendaService.enderecoFoiUsadoEmAlgumaVenda(id))) {
+        if (Boolean.TRUE.equals(enderecoData.enderecoFoiUsadoEmAlgumaVenda(id))) {
             throw new LojaException("Esse endereço não pode ser excluído pois foi usado para realizar uma venda...");
         }
         enderecoData.excluiEnderecoPorId(id);

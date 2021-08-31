@@ -23,6 +23,12 @@ public class VendaService implements IVendaService {
         enderecoService = new EnderecoService();
     }
 
+    public VendaService(ICarrinhoService carrinhoSrvc, IEnderecoService enderecoSrvc) {
+        vendaData = new VendaData();
+        carrinhoService = carrinhoSrvc;
+        enderecoService = enderecoSrvc;
+    }
+
     @Override
     public List<VendaDTO> listaVendasDoUsuario(Integer usuarioId) throws LojaException {
         return vendaData.listaVendasDoUsuario(usuarioId);
@@ -42,10 +48,5 @@ public class VendaService implements IVendaService {
     @Override
     public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
         return vendaData.listaVendasDoUsuario(usuarioId, itensPorPagina, paginaAtual);
-    }
-
-    @Override
-    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException {
-        return vendaData.enderecoFoiUsadoEmAlgumaVenda(enderecoId);
     }
 }
