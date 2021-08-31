@@ -412,6 +412,11 @@ public class LojaApplicationTests {
 
         List<VendaDTO> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
 
+        if (vendas.size() == 0) {
+            this.TestaCompra();
+            vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
+        }
+
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(vendas.get(0).getCarrinhoId(),
                 primeiroUsuario.getId(), "0.0.0.0");
 

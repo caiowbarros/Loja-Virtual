@@ -1,6 +1,9 @@
 package br.uff.loja.core.enums;
 
 public enum EProdutoCategoria {
+    PLAYSTATION(1, "Playstation"),
+    XBOX(2, "Xbox"),
+    WII(3, "Wii"),
     PLAYSTATIONACESSORIOS(4, "Playstation > Acessórios"),
     PLAYSTATIONCONSOLES(5, "Playstation > Consoles"),
     PLAYSTATIONJOGOS(6, "Playstation > Jogos"),

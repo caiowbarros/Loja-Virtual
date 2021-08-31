@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
+import br.uff.loja.core.enums.EProdutoCategoria;
 import br.uff.loja.core.interfaces.services.IProdutoService;
 import br.uff.loja.core.services.ProdutoService;
 import br.uff.loja.infrastructure.shared.Helper;
@@ -113,58 +114,58 @@ public class ProdutosServlet extends HttpServlet {
             }
 
             // define na sessao as variaveis para os checkboxes com base no category id passado
-            if (categoryIdParameter.equals("5")) {
+            if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.PLAYSTATIONCONSOLES.getId()))) {
                 listaCategorias.add(PLAYSTATIONSTR);
                 listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("6")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.PLAYSTATIONJOGOS.getId()))) {
                 listaCategorias.add(PLAYSTATIONSTR);
                 listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("4")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.PLAYSTATIONACESSORIOS.getId()))) {
                 listaCategorias.add(PLAYSTATIONSTR);
                 listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("8")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.XBOXCONSOLES.getId()))) {
                 listaCategorias.add(XBOXSTR);
                 listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("9")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.XBOXJOGOS.getId()))) {
                 listaCategorias.add(XBOXSTR);
                 listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("7")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.XBOXACESSORIOS.getId()))) {
                 listaCategorias.add(XBOXSTR);
                 listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("11")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.WIICONSOLES.getId()))) {
                 listaCategorias.add(WIISTR);
                 listaSubCategorias.add(CONSOLESSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(CONSOLESSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("12")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.WIIJOGOS.getId()))) {
                 listaCategorias.add(WIISTR);
                 listaSubCategorias.add(JOGOSSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(JOGOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("10")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.WIIACESSORIOS.getId()))) {
                 listaCategorias.add(WIISTR);
                 listaSubCategorias.add(ACESSORIOSSTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
                 session.setAttribute(ACESSORIOSSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("1")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.PLAYSTATION.getId()))) {
                 listaCategorias.add(PLAYSTATIONSTR);
                 session.setAttribute(PLAYSTATIONSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("2")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.XBOX.getId()))) {
                 listaCategorias.add(XBOXSTR);
                 session.setAttribute(XBOXSTR, CHECKEDSTR);
-            } else if (categoryIdParameter.equals("3")) {
+            } else if (categoryIdParameter.equals(String.valueOf(EProdutoCategoria.WII.getId()))) {
                 listaCategorias.add(WIISTR);
                 session.setAttribute(WIISTR, CHECKEDSTR);
             }
