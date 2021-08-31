@@ -18,4 +18,6 @@ public interface IEnderecoData {
     public void insereEndereco(EnderecoDTO endereco) throws LojaException;
 
     public List<EnderecoDTO> listaEnderecosPorUsuarioId(Integer usuarioId) throws LojaException;
+
+    public Boolean enderecoFoiUsadoEmAlgumaVenda(Integer enderecoId) throws LojaException;
 }

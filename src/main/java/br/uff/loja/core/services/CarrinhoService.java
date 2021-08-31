@@ -112,4 +112,9 @@ public class CarrinhoService implements ICarrinhoService {
     public PaginateDTO<List<CarrinhoProdutoDTO>> listaProdutosCarrinho(Integer id, Integer itensPorPagina, Integer paginaAtual) throws LojaException {
         return carrinhoData.listaProdutosCarrinho(id, itensPorPagina, paginaAtual);
     }
+
+    @Override
+    public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException {
+        return carrinhoData.quantidadeProdutoNoCarrinho(id, produtoId);
+    }
 }

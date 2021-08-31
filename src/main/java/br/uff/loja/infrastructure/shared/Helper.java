@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.uff.loja.core.interfaces.shared.IHelper;
-import java.text.NumberFormat;
 
 public class Helper implements IHelper {
 

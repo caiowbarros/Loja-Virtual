@@ -10,7 +10,8 @@ public interface IVendaService {
 
     public List<VendaDTO> listaVendasDoUsuario(Integer usuarioId) throws LojaException;
 
-    public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina, Integer paginaAtual) throws LojaException;
+    public PaginateDTO<List<VendaDTO>> listaVendasDoUsuario(Integer usuarioId, Integer itensPorPagina,
+            Integer paginaAtual) throws LojaException;
 
     public void gravaVenda(Integer usuarioId, Integer carrinhoId, Integer enderecoId) throws LojaException;
 }

@@ -24,4 +24,6 @@ public interface ICarrinhoService {
     public Boolean carrinhoAtivoValido(Integer id, Integer usuarioId) throws LojaException;
 
     public Double recuperaPrecoTotalDeUmCarrinho(Integer id) throws LojaException;
+
+    public Integer quantidadeProdutoNoCarrinho(Integer id, Integer produtoId) throws LojaException;
 }

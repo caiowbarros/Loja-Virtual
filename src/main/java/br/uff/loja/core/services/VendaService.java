@@ -23,6 +23,12 @@ public class VendaService implements IVendaService {
         enderecoService = new EnderecoService();
     }
 
+    public VendaService(ICarrinhoService carrinhoSrvc, IEnderecoService enderecoSrvc) {
+        vendaData = new VendaData();
+        carrinhoService = carrinhoSrvc;
+        enderecoService = enderecoSrvc;
+    }
+
     @Override
     public List<VendaDTO> listaVendasDoUsuario(Integer usuarioId) throws LojaException {
         return vendaData.listaVendasDoUsuario(usuarioId);

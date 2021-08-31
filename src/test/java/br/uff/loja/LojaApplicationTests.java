@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import org.junit.Test;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
@@ -15,26 +17,28 @@ import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.dtos.FiltraProdutoDTO;
 import br.uff.loja.core.dtos.PaginateDTO;
 import br.uff.loja.core.dtos.ProdutoDTO;
+import br.uff.loja.core.dtos.ProdutoHomeDTO;
 import br.uff.loja.core.dtos.ProdutoListaDTO;
 import br.uff.loja.core.dtos.UsuarioDTO;
+import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
-import br.uff.loja.core.interfaces.data.ICarrinhoData;
-import br.uff.loja.core.interfaces.data.IProdutoData;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
+import br.uff.loja.core.interfaces.services.ICategoriaService;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
 import br.uff.loja.core.interfaces.services.IProdutoService;
+import br.uff.loja.core.interfaces.services.IRoleService;
 import br.uff.loja.core.interfaces.services.IUsuarioService;
 import br.uff.loja.core.interfaces.services.IVendaService;
 import br.uff.loja.core.services.AvaliacaoService;
 import br.uff.loja.core.services.CarrinhoService;
+import br.uff.loja.core.services.CategoriaService;
 import br.uff.loja.core.services.EnderecoService;
 import br.uff.loja.core.services.ProdutoService;
+import br.uff.loja.core.services.RoleService;
 import br.uff.loja.core.services.UsuarioService;
 import br.uff.loja.core.services.VendaService;
-import br.uff.loja.infrastructure.data.CarrinhoData;
-import br.uff.loja.infrastructure.data.ProdutoData;
 
 public class LojaApplicationTests {
 
@@ -49,7 +53,8 @@ public class LojaApplicationTests {
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
 
         try {
-            AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuarioId, produtoId, 4, "Testando descrição!", "Tô testando pois se gravar 2 vezes deu ruim!");
+            AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuarioId, produtoId, 4,
+                    "Testando descrição!", "Tô testando pois se gravar 2 vezes deu ruim!");
 
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
             avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
@@ -72,9 +77,11 @@ public class LojaApplicationTests {
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
 
         Integer qtdEnderecosAntesInsercao = enderecoService.listaEnderecosPorUsuarioId(usuarioId).size();
-        enderecoService.insereEndereco(new EnderecoDTO("Casa", usuarioId, 24230322, "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
+        enderecoService.insereEndereco(new EnderecoDTO("Casa", usuarioId, 24230322,
+                "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
 
-        assertEquals(String.valueOf(qtdEnderecosAntesInsercao + 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
+        assertEquals(String.valueOf(qtdEnderecosAntesInsercao + 1),
+                String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
     }
 
     @Test
@@ -95,7 +102,8 @@ public class LojaApplicationTests {
 
         enderecoService.atualizaEnderecoPorId(primeiroEndereco.getId(), primeiroEndereco);
 
-        assertEquals(primeiroEndereco.toJson(), enderecoService.encontraEnderecoPorId(primeiroEndereco.getId()).toJson());
+        assertEquals(primeiroEndereco.toJson(),
+                enderecoService.encontraEnderecoPorId(primeiroEndereco.getId()).toJson());
     }
 
     @Test
@@ -115,7 +123,8 @@ public class LojaApplicationTests {
 
         enderecoService.excluiEnderecoPorId(ultimoEndereco.getId());
 
-        assertEquals(String.valueOf(enderecosDoUsuario.size() - 1), String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
+        assertEquals(String.valueOf(enderecosDoUsuario.size() - 1),
+                String.valueOf(enderecoService.listaEnderecosPorUsuarioId(usuarioId).size()));
     }
 
     @Test
@@ -123,17 +132,11 @@ public class LojaApplicationTests {
         IProdutoService produtoService = new ProdutoService();
 
         Integer qtdProdutosAntesInsercao = produtoService.listaProdutosAdm().size();
-        produtoService.insereProduto(new ProdutoDTO(
-                null,
-                "Playstation 6",
-                2000000.55,
-                "Super caro!",
-                "url de uma imagem",
-                EProdutoCategoria.PLAYSTATIONCONSOLES.getId(),
-                1
-        ));
+        produtoService.insereProduto(new ProdutoDTO(null, "Playstation 6", 2000000.55, "Super caro!",
+                "url de uma imagem", EProdutoCategoria.PLAYSTATIONCONSOLES.getId(), 1));
 
-        assertEquals(String.valueOf(qtdProdutosAntesInsercao + 1), String.valueOf(produtoService.listaProdutosAdm().size()));
+        assertEquals(String.valueOf(qtdProdutosAntesInsercao + 1),
+                String.valueOf(produtoService.listaProdutosAdm().size()));
     }
 
     @Test
@@ -158,23 +161,23 @@ public class LojaApplicationTests {
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
         produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), quantidadeIncremento);
 
-        assertEquals(String.valueOf(primeiroProduto.getQuantidade() + quantidadeIncremento), String.valueOf(produtoService.encontraProdutoPorId(primeiroProduto.getId()).getQuantidade()));
+        assertEquals(String.valueOf(primeiroProduto.getQuantidade() + quantidadeIncremento),
+                String.valueOf(produtoService.encontraProdutoPorId(primeiroProduto.getId()).getQuantidade()));
     }
 
     @Test
     public void testaToogleFavoritaProduto() throws Exception {
         IProdutoService produtoService = new ProdutoService();
-        IProdutoData produtoData = new ProdutoData();
 
         IUsuarioService usuarioService = new UsuarioService();
 
         Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
 
-        Boolean antes = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
+        Boolean antes = produtoService.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
 
         produtoService.usuarioToogleFavoritaProdutoPorId(primeiroProduto.getId(), usuarioId);
-        Boolean depois = produtoData.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
+        Boolean depois = produtoService.produtoFavoritadoPeloUsuario(primeiroProduto.getId(), usuarioId);
 
         assertNotEquals(String.valueOf(antes), String.valueOf(depois));
     }
@@ -234,13 +237,8 @@ public class LojaApplicationTests {
     public void testaInsercaoUsuario() throws Exception {
         IUsuarioService usuarioService = new UsuarioService();
 
-        UsuarioDTO novoUsuario = new UsuarioDTO(
-                null,
-                "Teste Insert User",
-                "testando@example.com" + Math.random(),
-                "123@SeiQueEhUmaSenhaRuim",
-                EPermissaoUsuario.CLIENTE.getId()
-        );
+        UsuarioDTO novoUsuario = new UsuarioDTO(null, "Teste Insert User", "testando@example.com" + Math.random(),
+                "123@SeiQueEhUmaSenhaRuim", EPermissaoUsuario.CLIENTE.getId());
 
         UsuarioDTO usuarioGravado = usuarioService.gravaUsuario(novoUsuario);
 
@@ -293,7 +291,6 @@ public class LojaApplicationTests {
     @Test
     public void TestaInserirProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
-        ICarrinhoData carrinhoData = new CarrinhoData();
         IUsuarioService usuarioService = new UsuarioService();
         IProdutoService produtoService = new ProdutoService();
 
@@ -301,11 +298,13 @@ public class LojaApplicationTests {
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
 
-        Integer qtdProdutoNoCarrinho = carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
+        Integer qtdProdutoNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
+                primeiroProduto.getId());
 
         carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
-        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1), String.valueOf(carrinhoData.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
+        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1),
+                String.valueOf(carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
     }
 
     @Test
@@ -326,15 +325,16 @@ public class LojaApplicationTests {
         CarrinhoProdutoDTO primeiroProduto = produtos.get(0);
         carrinhoService.removeProdutoCarrinho(carrinho.getId(), primeiroProduto.getProdutoId());
 
-        assertEquals(String.valueOf(produtos.size() - 1), String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId()).size()));
+        assertEquals(String.valueOf(produtos.size() - 1),
+                String.valueOf(carrinhoService.listaProdutosCarrinho(carrinho.getId()).size()));
     }
 
     @Test
     public void TestaCompra() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
-        IVendaService vendaService = new VendaService();
         IEnderecoService enderecoService = new EnderecoService();
+        IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
 
@@ -355,7 +355,8 @@ public class LojaApplicationTests {
 
         vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
 
-        assertEquals(String.valueOf(qtdVendasDoUsuarioAntes + 1), String.valueOf(vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size()));
+        assertEquals(String.valueOf(qtdVendasDoUsuarioAntes + 1),
+                String.valueOf(vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size()));
     }
 
     @Test
@@ -373,7 +374,8 @@ public class LojaApplicationTests {
 
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(segundoUsuario.getId());
         if (enderecosDoUsuario.size() == 0) {
-            enderecoService.insereEndereco(new EnderecoDTO("Casa", segundoUsuario.getId(), 24241000, "Rua Doutor Mário Viana, 501", "Niterói", "RJ", "Brasil"));
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", segundoUsuario.getId(), 24241000,
+                    "Rua Doutor Mário Viana, 501", "Niterói", "RJ", "Brasil"));
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(segundoUsuario.getId());
         }
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
@@ -385,7 +387,9 @@ public class LojaApplicationTests {
         }
 
         String msgErro = "";
-        String erroEsperado = "O endereço escolhido de id:" + primeiroEndereco.getId() + " não pertence ao dono do carrinho (usuário de id: " + carrinho.getUsuarioId() + "), escolha outro endereço.";
+        String erroEsperado = "O endereço escolhido de id:" + primeiroEndereco.getId()
+                + " não pertence ao dono do carrinho (usuário de id: " + carrinho.getUsuarioId()
+                + "), escolha outro endereço.";
 
         try {
             vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
@@ -394,5 +398,87 @@ public class LojaApplicationTests {
         }
 
         assertEquals(erroEsperado, msgErro);
+    }
+
+    @Test
+    public void TestaRecuperaCarrinhoVendido() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IUsuarioService usuarioService = new UsuarioService();
+        IVendaService vendaService = new VendaService();
+
+        List<UsuarioDTO> listaUsuarios = usuarioService.listaUsuarios();
+
+        UsuarioDTO primeiroUsuario = listaUsuarios.get(0);
+
+        List<VendaDTO> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
+
+        if (vendas.size() == 0) {
+            this.TestaCompra();
+            vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
+        }
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(vendas.get(0).getCarrinhoId(),
+                primeiroUsuario.getId(), "0.0.0.0");
+
+        assertNotEquals(vendas.get(0).getCarrinhoId(), carrinho.getId());
+    }
+
+    @Test
+    public void TestaPercorreVendasUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        IVendaService vendaService = new VendaService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+
+        Integer paginaAtual = 0;
+        Integer ultimaPagina = 1;
+        Integer itensPorPagina = 2;
+
+        List<VendaDTO> vendasDoPaginate = new ArrayList<>();
+
+        while (ultimaPagina > paginaAtual) {
+            paginaAtual += 1;
+
+            PaginateDTO<List<VendaDTO>> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId(),
+                    itensPorPagina, paginaAtual);
+
+            vendasDoPaginate.addAll(vendas.getDados());
+            ultimaPagina = vendas.getUltimaPagina();
+        }
+
+        assertEquals(new Gson().toJson(vendaService.listaVendasDoUsuario(primeiroUsuario.getId())),
+                new Gson().toJson(vendasDoPaginate));
+    }
+
+    @Test
+    public void TestaListaRoles() throws Exception {
+        IRoleService roleService = new RoleService();
+
+        assertEquals(String.valueOf(roleService.listaRoles().size() > 0), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaListaCategorias() throws Exception {
+        ICategoriaService categoriaService = new CategoriaService();
+
+        assertEquals(String.valueOf(categoriaService.listaCategorias().size() > 0), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaListaProdutosBanner() throws Exception {
+        IProdutoService produtoService = new ProdutoService();
+        assertEquals(String.valueOf(produtoService.listaProdutosBanner().size() <= 3), String.valueOf(true));
+    }
+
+    @Test
+    public void TestaMostraProdutoUsuario() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        IProdutoService produtoService = new ProdutoService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        ProdutoHomeDTO primeiroProduto = produtoService.listaProdutosBanner().get(0);
+
+        assertEquals(produtoService.mostraProdutoVitrineParaUsuario(primeiroProduto.getId(), primeiroUsuario.getId())
+                .getId(), primeiroProduto.getId());
     }
 }
