@@ -86,6 +86,9 @@
                     }
                 %>
             </div>
+            <%
+                }
+            %>
             <!-- Páginas -->
             <div class="products-paging">
                 <% if (produtos.getPaginaAtual() > 1) {%>
@@ -96,9 +99,6 @@
                 <button class="products-next" name="action" value="prox">&#8250;</button>
                 <% }%>
             </div>
-            <%
-                }
-            %>
         </div>
     </div>
 </form>
