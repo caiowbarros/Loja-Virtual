@@ -216,7 +216,7 @@ public class ProdutoData implements IProdutoData {
             List<HashMap<String, Object>> retorno = this.mysqlDAO.dbCarrega("SELECT p.id, p.name AS nome, p.quantity AS quantidade, p.description AS descricao, p.price AS preco, p.img AS imagem, c.category_name AS categoria, (SELECT count(*) FROM favorite_products f WHERE f.product_id = p.id AND f.user_id=?) favoritoDoUsuario, (SELECT f.rating FROM user_produts_rating f WHERE f.product_id = p.id AND f.user_id=?) avaliacaoDadaPeloUsuario, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id) quantidadeAvaliacoes, (SELECT COALESCE(sum(f.rating),0) FROM user_produts_rating f WHERE f.product_id = p.id) somaAvaliacoes, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='1') quantidadeAvaliacoesNota1, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='2') quantidadeAvaliacoesNota2, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='3') quantidadeAvaliacoesNota3, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='4') quantidadeAvaliacoesNota4, (SELECT count(*) FROM user_produts_rating f WHERE f.product_id = p.id AND f.rating='5') quantidadeAvaliacoesNota5 FROM products p LEFT JOIN vw_category c ON (p.category_id = c.id) WHERE p.id=?", bind);
             return new ProdutoVitrineUsuarioDTO(retorno.get(0));
         } catch (Exception e) {
-            throw new LojaException("Falha ao Listar os Produtos. (" + e.getMessage() + ")");
+            throw new LojaException("Falha ao mostrar o Produto " + id + " para o usuario. (" + e.getMessage() + ")");
         } finally {
             this.mysqlDAO.destroyDb();
         }
