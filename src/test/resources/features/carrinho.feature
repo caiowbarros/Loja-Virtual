@@ -7,7 +7,7 @@ Funcionalidade: Testar a recuperacao de um carrinho
   Esquema do Cenario: Testar passar dados aleatorios
     Dado sistema pega as variaveis <carrinho>, <usuario> e <ip> pra recuperar o carrinho
     Quando usuario solicita o carrinho
-    Entao recebo o carrinho criado ou recuperado
+    Entao recebo o carrinho criado ou recuperado com o usuario <usuario>
 
     Exemplos:
       | carrinho | usuario | ip    |

@@ -35,9 +35,9 @@ public class CarrinhoStepDefinition {
         }
     }
 
-    @Entao("recebo o carrinho criado ou recuperado")
-    public void recebo_o_carrinho_criado_ou_recuperado() {
-        Assert.assertEquals("", exMsg);
-        exMsg = "";
+    @Entao("recebo o carrinho criado ou recuperado com o usuario {int}")
+    public void recebo_o_carrinho_criado_ou_recuperado_com_o_usuario(Integer int1) {
+        Assert.assertEquals(carrinhoRetorno.getUsuarioId(), int1);
+
     }
 }
