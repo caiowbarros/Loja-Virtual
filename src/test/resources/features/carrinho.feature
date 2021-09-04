@@ -11,6 +11,8 @@ Funcionalidade: Testar a recuperacao de um carrinho
 
     Exemplos:
       | carrinho | usuario | ip    |
+      | 2        | 0       | 22222 |
+      | 2        | 2       | 22222 |
       | 543      | 2       | 22222 |
       | 0        | 2       | 0     |
       | 1        | 2       | 3     |
