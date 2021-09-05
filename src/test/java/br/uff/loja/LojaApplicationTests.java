@@ -23,6 +23,7 @@ import br.uff.loja.core.dtos.UsuarioDTO;
 import br.uff.loja.core.dtos.VendaDTO;
 import br.uff.loja.core.enums.EPermissaoUsuario;
 import br.uff.loja.core.enums.EProdutoCategoria;
+import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.services.IAvaliacaoService;
 import br.uff.loja.core.interfaces.services.ICarrinhoService;
 import br.uff.loja.core.interfaces.services.ICategoriaService;
@@ -93,7 +94,8 @@ public class LojaApplicationTests {
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
 
         if (enderecosDoUsuario.size() == 0) {
-            this.testaInclusaoEndereco();
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", usuarioId, 24230322,
+                    "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         }
 
@@ -111,11 +113,12 @@ public class LojaApplicationTests {
         IEnderecoService enderecoService = new EnderecoService();
         IUsuarioService usuarioService = new UsuarioService();
 
-        Integer usuarioId = usuarioService.listaUsuarios().get(0).getId();
+        Integer usuarioId = usuarioService.listaUsuarios().get(1).getId();
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
 
         if (enderecosDoUsuario.size() <= 1) {
-            this.testaInclusaoEndereco();
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", usuarioId, 24230322,
+                    "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(usuarioId);
         }
 
@@ -314,6 +317,7 @@ public class LojaApplicationTests {
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
         ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
 
         Integer qtdProdutoNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
@@ -321,14 +325,20 @@ public class LojaApplicationTests {
 
         carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
 
-        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1),
-                String.valueOf(carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId())));
+        Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), primeiroProduto.getId());
+
+        if (qtdNoCarrinho >= primeiroProduto.getQuantidade()) {
+            produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), qtdNoCarrinho + 10);
+        }
+
+        assertEquals(String.valueOf(qtdProdutoNoCarrinho + 1), String.valueOf(qtdNoCarrinho));
     }
 
     @Test
     public void TestaRemoverProdutoCarrinho() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
+        IProdutoService produtoService = new ProdutoService();
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
@@ -336,7 +346,18 @@ public class LojaApplicationTests {
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
 
         if (produtos.size() == 0) {
-            this.TestaInserirProdutoCarrinho();
+
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
+
+            Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
+                    primeiroProduto.getId());
+
+            if (qtdNoCarrinho >= primeiroProduto.getQuantidade()) {
+                produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), qtdNoCarrinho + 10);
+            }
+
             produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
         }
 
@@ -353,12 +374,14 @@ public class LojaApplicationTests {
         IUsuarioService usuarioService = new UsuarioService();
         IEnderecoService enderecoService = new EnderecoService();
         IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
+        IProdutoService produtoService = new ProdutoService();
 
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
 
         List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
         if (enderecosDoUsuario.size() == 0) {
-            this.testaInclusaoEndereco();
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", primeiroUsuario.getId(), 24230322,
+                    "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
             enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
         }
         EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
@@ -366,8 +389,26 @@ public class LojaApplicationTests {
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
         if (produtos.size() == 0) {
-            this.TestaInserirProdutoCarrinho();
+
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         }
+
+        produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
+
+        produtos.forEach(produto -> {
+            try {
+                Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
+                        produto.getProdutoId());
+
+                if (qtdNoCarrinho >= produto.getQuantidadeEmEstoque()) {
+                    produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(produto.getProdutoId(), qtdNoCarrinho + 10);
+                }
+            } catch (LojaException e) {
+                e.printStackTrace();
+            }
+        });
 
         Integer qtdVendasDoUsuarioAntes = vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size();
 
@@ -375,6 +416,96 @@ public class LojaApplicationTests {
 
         assertEquals(String.valueOf(qtdVendasDoUsuarioAntes + 1),
                 String.valueOf(vendaService.listaVendasDoUsuario(primeiroUsuario.getId()).size()));
+    }
+
+    @Test
+    public void TestaCompraCarrinhoDeOutroUsuario() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IUsuarioService usuarioService = new UsuarioService();
+        IEnderecoService enderecoService = new EnderecoService();
+        IProdutoService produtoService = new ProdutoService();
+        IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+        UsuarioDTO segundoUsuario = usuarioService.listaUsuarios().get(1);
+
+        String errMsg = "";
+
+        List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+        if (enderecosDoUsuario.size() == 0) {
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", primeiroUsuario.getId(), 24230322,
+                    "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
+            enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+        }
+        EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, segundoUsuario.getId(), "0.0.0.0");
+        List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
+        if (produtos.size() == 0) {
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
+        }
+
+        try {
+            vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
+        } catch (Exception ex) {
+            errMsg = ex.getMessage();
+        }
+
+        assertEquals("O carrinho de id: " + carrinho.getId()
+                + " não encontra-se válido no momento, verifique se o mesmo possui itens nele, se já foi vendido ou se pertence a outro usuário.",
+                errMsg);
+    }
+
+    @Test
+    public void TestaCompraCarrinhoETentaAlterarQtdProduto() throws Exception {
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IUsuarioService usuarioService = new UsuarioService();
+        IEnderecoService enderecoService = new EnderecoService();
+        IProdutoService produtoService = new ProdutoService();
+        IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+
+        String errMsg = "";
+
+        List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+        if (enderecosDoUsuario.size() == 0) {
+            enderecoService.insereEndereco(new EnderecoDTO("Casa", primeiroUsuario.getId(), 24230322,
+                    "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
+            enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+        }
+        EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
+        List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
+        if (produtos.size() == 0) {
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
+
+            Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
+                    primeiroProduto.getId());
+
+            if (qtdNoCarrinho >= primeiroProduto.getQuantidade()) {
+                produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), qtdNoCarrinho + 10);
+            }
+
+        }
+
+        vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
+
+        CarrinhoProdutoDTO produtoCarrinho = carrinhoService.listaProdutosCarrinho(carrinho.getId()).get(0);
+
+        try {
+            carrinhoService.alteraQuantidadeProdutoCarrinho(carrinho.getId(), produtoCarrinho.getId(),
+                    produtoCarrinho.getQuantidade() + 2);
+        } catch (Exception ex) {
+            errMsg = ex.getMessage();
+        }
+
+        assertEquals("Não foi possível atualizar a quantidade do produto de Id: " + produtoCarrinho.getId()
+                + " no carrinho de Id: " + carrinho.getId() + ".", errMsg);
     }
 
     @Test
@@ -401,7 +532,16 @@ public class LojaApplicationTests {
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
         List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
         if (produtos.size() == 0) {
-            carrinhoService.insereProdutoCarrinho(carrinho.getId(), produtoService.listaProdutosAdm().get(0).getId());
+            ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+            Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(),
+                    primeiroProduto.getId());
+
+            if (qtdNoCarrinho >= primeiroProduto.getQuantidade()) {
+                produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(primeiroProduto.getId(), qtdNoCarrinho + 10);
+            }
+
+            carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
         }
 
         String msgErro = "";
@@ -422,7 +562,9 @@ public class LojaApplicationTests {
     public void TestaRecuperaCarrinhoVendido() throws Exception {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IUsuarioService usuarioService = new UsuarioService();
-        IVendaService vendaService = new VendaService();
+        IEnderecoService enderecoService = new EnderecoService();
+        IVendaService vendaService = new VendaService(carrinhoService, enderecoService);
+        IProdutoService produtoService = new ProdutoService();
 
         List<UsuarioDTO> listaUsuarios = usuarioService.listaUsuarios();
 
@@ -431,7 +573,25 @@ public class LojaApplicationTests {
         List<VendaDTO> vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
 
         if (vendas.size() == 0) {
-            this.TestaCompra();
+            List<EnderecoDTO> enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+            if (enderecosDoUsuario.size() == 0) {
+                enderecoService.insereEndereco(new EnderecoDTO("Casa", primeiroUsuario.getId(), 24230322,
+                        "Avenida Almirante Ary Parreiras, 6", "Niterói", "RJ", "Brasil"));
+                enderecosDoUsuario = enderecoService.listaEnderecosPorUsuarioId(primeiroUsuario.getId());
+            }
+            EnderecoDTO primeiroEndereco = enderecosDoUsuario.get(0);
+
+            CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
+            List<CarrinhoProdutoDTO> produtos = carrinhoService.listaProdutosCarrinho(carrinho.getId());
+            if (produtos.size() == 0) {
+
+                ProdutoDTO primeiroProduto = produtoService.listaProdutosAdm().get(0);
+
+                carrinhoService.insereProdutoCarrinho(carrinho.getId(), primeiroProduto.getId());
+            }
+
+            vendaService.gravaVenda(primeiroUsuario.getId(), carrinho.getId(), primeiroEndereco.getId());
+
             vendas = vendaService.listaVendasDoUsuario(primeiroUsuario.getId());
         }
 
@@ -476,6 +636,58 @@ public class LojaApplicationTests {
                 "0.0.0.0");
 
         assertEquals(String.valueOf(carrinho.getUsuarioId()), String.valueOf(primeiroUsuario.getId()));
+    }
+
+    @Test
+    public void TestaPercorreProdutosCarrinhoPaginate() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        ICarrinhoService carrinhoService = new CarrinhoService();
+        IProdutoService produtoService = new ProdutoService();
+
+        UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
+
+        CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
+
+        List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
+
+        produtos.forEach(produto -> {
+            try {
+                carrinhoService.insereProdutoCarrinho(carrinho.getId(), produto.getId());
+
+                Integer qtdNoCarrinho = carrinhoService.quantidadeProdutoNoCarrinho(carrinho.getId(), produto.getId());
+
+                if (qtdNoCarrinho >= produto.getQuantidade()) {
+                    produtoService.insereQuantidadeEmEstoqueDoProdutoPorId(produto.getId(), qtdNoCarrinho + 10);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        Integer paginaAtual = 0;
+        Integer ultimaPagina = 1;
+        Integer itensPorPagina = 1;
+
+        List<CarrinhoProdutoDTO> produtosDoCarrinho = new ArrayList<>();
+
+        while (ultimaPagina > paginaAtual) {
+            paginaAtual += 1;
+
+            PaginateDTO<List<CarrinhoProdutoDTO>> produtosDoPaginate = carrinhoService
+                    .listaProdutosCarrinho(carrinho.getId(), itensPorPagina, paginaAtual);
+
+            produtosDoCarrinho.addAll(produtosDoPaginate.getDados());
+            ultimaPagina = produtosDoPaginate.getUltimaPagina();
+        }
+
+        ArrayList<Integer> produtosAdmListaIds = new ArrayList<>();
+        carrinhoService.listaProdutosCarrinho(carrinho.getId())
+                .forEach(produto -> produtosAdmListaIds.add(produto.getProdutoId()));
+
+        ArrayList<Integer> produtosPaginateIds = new ArrayList<>();
+        produtosDoCarrinho.forEach(produto -> produtosPaginateIds.add(produto.getProdutoId()));
+
+        assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
     }
 
     @Test

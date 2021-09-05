@@ -6,7 +6,6 @@ import br.uff.loja.core.dtos.EnderecoDTO;
 import br.uff.loja.core.exceptions.LojaException;
 import br.uff.loja.core.interfaces.data.IEnderecoData;
 import br.uff.loja.core.interfaces.services.IEnderecoService;
-import br.uff.loja.core.interfaces.services.IVendaService;
 import br.uff.loja.infrastructure.data.EnderecoData;
 
 public class EnderecoService implements IEnderecoService {
