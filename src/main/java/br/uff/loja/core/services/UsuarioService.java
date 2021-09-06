@@ -37,7 +37,8 @@ public class UsuarioService implements IUsuarioService {
             usuarioData.insereUsuario(usuario);
         }
 
-        return usuarioData.encontraUsuarioPorId(usuarioData.encontraUsuarioIdPorEmailESenha(usuario.getEmail(), usuario.getSenha()));
+        return usuarioData.encontraUsuarioPorId(
+                usuarioData.encontraUsuarioIdPorEmailESenha(usuario.getEmail(), usuario.getSenha()));
     }
 
     @Override
@@ -48,6 +49,11 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public UsuarioDTO encontraUsuarioPorId(Integer id) throws LojaException {
         return usuarioData.encontraUsuarioPorId(id);
+    }
+
+    @Override
+    public Boolean ehAdmin(Integer id) throws LojaException {
+        return usuarioData.ehAdmin(id);
     }
 
 }

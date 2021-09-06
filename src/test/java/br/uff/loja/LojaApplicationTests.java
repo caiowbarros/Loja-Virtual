@@ -71,6 +71,45 @@ public class LojaApplicationTests {
     }
 
     @Test
+    public void testaAvaliacaoProduto() throws Exception {
+        IAvaliacaoService avaliacaoService = new AvaliacaoService();
+        IProdutoService produtoService = new ProdutoService();
+        IUsuarioService usuarioService = new UsuarioService();
+
+        String exMessage = "";
+
+        List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
+        List<UsuarioDTO> usuarios = usuarioService.listaUsuarios();
+
+        Boolean produtoAvaliado = false;
+        Integer indexP = 0;
+        Integer indexU = 0;
+
+        while (produtoAvaliado == false) {
+            try {
+                AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(
+                        usuarios.get(indexU).getId(), produtos.get(indexP).getId(), 4, "Testando descrição!",
+                        "Tô testando avaliacao!");
+
+                if (produtos.size() - 1 > indexP) {
+                    indexP++;
+                } else {
+                    indexP = 0;
+                    indexU++;
+                }
+
+                avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
+
+                produtoAvaliado = true;
+            } catch (Exception ex) {
+                exMessage = ex.getMessage();
+            }
+        }
+
+        assertEquals(true, produtoAvaliado);
+    }
+
+    @Test
     public void testaInclusaoEndereco() throws Exception {
         IEnderecoService enderecoService = new EnderecoService();
         IUsuarioService usuarioService = new UsuarioService();
@@ -186,6 +225,26 @@ public class LojaApplicationTests {
     }
 
     @Test
+    public void checaUsuarioAdm() throws Exception {
+        IUsuarioService usuarioService = new UsuarioService();
+        String errMsg = "";
+
+        usuarioService.listaUsuarios().forEach(usuario -> {
+            try {
+                Boolean bdCheckEhAdm = usuarioService.ehAdmin(usuario.getId());
+                Boolean enumCheckEhAdm = usuario.getPermissaoId().equals(EPermissaoUsuario.ADM.getId());
+                if (Boolean.FALSE.equals(bdCheckEhAdm.equals(enumCheckEhAdm))) {
+                    throw new Exception("Validação bd e enum pra verificar se eh adm nao casa...");
+                }
+            } catch (Exception e) {
+                errMsg.concat(e.getMessage());
+            }
+        });
+
+        assertEquals("", errMsg);
+    }
+
+    @Test
     public void testaExclusaoProduto() throws Exception {
         IProdutoService produtoService = new ProdutoService();
         List<ProdutoDTO> produtos = produtoService.listaProdutosAdm();
@@ -297,6 +356,8 @@ public class LojaApplicationTests {
             PaginateDTO<List<ProdutoListaDTO>> produtosFiltrado = produtoService.listaProdutosVitrine(filtro);
 
             produtosDoPaginate.addAll(produtosFiltrado.getDados());
+
+            paginaAtual = produtosFiltrado.getPaginaAtual();
             ultimaPagina = produtosFiltrado.getUltimaPagina();
         }
 
@@ -644,6 +705,8 @@ public class LojaApplicationTests {
         ICarrinhoService carrinhoService = new CarrinhoService();
         IProdutoService produtoService = new ProdutoService();
 
+        Double totalPrecoCarrinho = 0.0;
+
         UsuarioDTO primeiroUsuario = usuarioService.listaUsuarios().get(0);
 
         CarrinhoDTO carrinho = carrinhoService.recuperaCarrinhoAtivo(null, primeiroUsuario.getId(), "0.0.0.0");
@@ -677,6 +740,8 @@ public class LojaApplicationTests {
                     .listaProdutosCarrinho(carrinho.getId(), itensPorPagina, paginaAtual);
 
             produtosDoCarrinho.addAll(produtosDoPaginate.getDados());
+
+            paginaAtual = produtosDoPaginate.getPaginaAtual();
             ultimaPagina = produtosDoPaginate.getUltimaPagina();
         }
 
@@ -685,9 +750,18 @@ public class LojaApplicationTests {
                 .forEach(produto -> produtosAdmListaIds.add(produto.getProdutoId()));
 
         ArrayList<Integer> produtosPaginateIds = new ArrayList<>();
-        produtosDoCarrinho.forEach(produto -> produtosPaginateIds.add(produto.getProdutoId()));
+        ArrayList<Double> precoXquantidade = new ArrayList<>();
+        produtosDoCarrinho.forEach(produto -> {
+            produtosPaginateIds.add(produto.getProdutoId());
+            precoXquantidade.add(produto.getPreco() * produto.getQuantidade());
+        });
 
-        assertEquals(produtosAdmListaIds.toString(), produtosPaginateIds.toString());
+        for (Double precoXqtd : precoXquantidade) {
+            totalPrecoCarrinho += precoXqtd;
+        }
+
+        assertEquals(true, produtosAdmListaIds.toString().equals(produtosPaginateIds.toString())
+                && totalPrecoCarrinho.equals(carrinhoService.recuperaPrecoTotalDeUmCarrinho(carrinho.getId())));
     }
 
     @Test
@@ -710,6 +784,8 @@ public class LojaApplicationTests {
                     itensPorPagina, paginaAtual);
 
             vendasDoPaginate.addAll(vendas.getDados());
+
+            paginaAtual = vendas.getPaginaAtual();
             ultimaPagina = vendas.getUltimaPagina();
         }
 

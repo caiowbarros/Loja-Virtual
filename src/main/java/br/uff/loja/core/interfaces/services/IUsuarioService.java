@@ -14,4 +14,6 @@ public interface IUsuarioService {
     public List<UsuarioDTO> listaUsuarios() throws LojaException;
 
     public UsuarioDTO encontraUsuarioPorId(Integer id) throws LojaException;
+
+    public Boolean ehAdmin(Integer id) throws LojaException;
 }

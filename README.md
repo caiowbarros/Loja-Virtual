@@ -20,6 +20,6 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web e melhorado
 ## Padrão
 1. Configure seu arquivo `.env`, pode copiar o .env.example para usar como template `cp .env.example .env`
 2. Restaure o dump .sql em um banco de dados mysql 5.6, o dump pode ser encontrado em https://github.com/caiowbarros/Loja-Virtual/blob/master/database/dump/dump.sql
-3. Rode `mvn package` para buildar o projeto
+3. Rode `rm -R target -f && cp .env.local .env && mvn package` para buildar o projeto
 4. Rode `java -jar target/dependency/webapp-runner.jar --port $PORT target/loja-1.0.1.war` para testar seu projeto, trocando o `$PORT` pela porta que você tiver definido no .env na variável PORT
 5. Acesse http://localhost:`$PORT` e verifique se está funcionando
