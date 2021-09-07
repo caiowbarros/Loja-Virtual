@@ -5,12 +5,14 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.google.gson.Gson;
 
 import org.junit.Test;
 
 import br.uff.loja.core.dtos.AvaliacaoProdutoInsertDTO;
+import br.uff.loja.core.dtos.AvaliacaoProdutoListDTO;
 import br.uff.loja.core.dtos.CarrinhoDTO;
 import br.uff.loja.core.dtos.CarrinhoProdutoDTO;
 import br.uff.loja.core.dtos.EnderecoDTO;
@@ -87,20 +89,34 @@ public class LojaApplicationTests {
 
         while (produtoAvaliado == false) {
             try {
-                AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(
-                        usuarios.get(indexU).getId(), produtos.get(indexP).getId(), 4, "Testando descrição!",
-                        "Tô testando avaliacao!");
+                Integer produtoId = produtos.get(indexP).getId();
+                UsuarioDTO usuario = usuarios.get(indexU);
+
+                AvaliacaoProdutoInsertDTO avaliacaoProdutoInsertDTO = new AvaliacaoProdutoInsertDTO(usuario.getId(),
+                        produtoId, 4, "Testando descrição!", "Tô testando avaliacao!");
 
                 if (produtos.size() - 1 > indexP) {
                     indexP++;
                 } else {
                     indexP = 0;
                     indexU++;
+                    if (indexU > usuarios.size() - 1) {
+                        usuarioService.gravaUsuario(new UsuarioDTO(null, "INclusao p n ficar sem usuario",
+                                "ushu@sauhsua.com" + new Random().nextInt(1000), "123",
+                                EPermissaoUsuario.CLIENTE.getId()));
+                        indexU = 0;
+                    }
                 }
+
+                List<AvaliacaoProdutoListDTO> avaliacoesAntes = avaliacaoService
+                        .recuperaAvaliacoesDeUmProduto(produtoId);
 
                 avaliacaoService.avaliaProduto(avaliacaoProdutoInsertDTO);
 
-                produtoAvaliado = true;
+                List<AvaliacaoProdutoListDTO> avaliacoesDepois = avaliacaoService
+                        .recuperaAvaliacoesDeUmProduto(produtoId);
+
+                produtoAvaliado = avaliacoesAntes.size() < avaliacoesDepois.size() ;
             } catch (Exception ex) {
                 exMessage = ex.getMessage();
             }
