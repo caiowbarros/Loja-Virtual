@@ -15,6 +15,7 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web e melhorado
 # Como rodar o projeto...
 ## Docker
 1. Rode `cp .env.example .env && docker-compose up --build -d`
+  * Para acompanhar os logs de criação do container maven, execute o seguinte comando: `docker logs --tail 50 -f e_store_mvn` 
 2. Aguarde o container startar
 3. Acesse http://localhost:8181 e verifique se está funcionando
 ## Padrão
@@ -23,3 +24,7 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web e melhorado
 3. Rode `rm -R target -f && cp .env.local .env && mvn package` para buildar o projeto
 4. Rode `java -jar target/dependency/webapp-runner.jar --port $PORT target/loja-1.0.1.war` para testar seu projeto, trocando o `$PORT` pela porta que você tiver definido no .env na variável PORT
 5. Acesse http://localhost:`$PORT` e verifique se está funcionando
+# Api
+## Documentação
+* [CLIQUE AQUI PARA VER A DOCUMENTAÇÃO DA API NO POSTMAN](https://documenter.getpostman.com/view/13081554/U16bvUBT)
+* [CLIQUE AQUI PARA IR ATÉ O ARQUIVO ONDE ENCONTRA-SE A COLLECTION DO POSTMAN PARA SER IMPORTADA NO SEU POSTMAN](https://github.com/caiowbarros/Loja-Virtual/blob/master/Loja.postman_collection.json)

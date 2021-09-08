@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "2bd1c32a-547b-4fb6-ae32-65ce47c75cd7",
+		"name": "Loja",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Usuário",
+					"item": [
+						{
+							"name": "Lista",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{usuarioId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "usuario_id",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlLojaRest}}/usuario/",
+									"host": [
+										"{{baseUrlLojaRest}}"
+									],
+									"path": [
+										"usuario",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostra",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlLojaRest}}/usuario/{{usuarioId}}",
+									"host": [
+										"{{baseUrlLojaRest}}"
+									],
+									"path": [
+										"usuario",
+										"{{usuarioId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Produto",
+					"item": [
+						{
+							"name": "Lista",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{usuarioId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "usuario_id",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlLojaRest}}/produto/",
+									"host": [
+										"{{baseUrlLojaRest}}"
+									],
+									"path": [
+										"produto",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostra",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlLojaRest}}/produto/{{produtoId}}",
+									"host": [
+										"{{baseUrlLojaRest}}"
+									],
+									"path": [
+										"produto",
+										"{{produtoId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Categoria",
+					"item": [
+						{
+							"name": "Lista",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{usuarioId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "usuario_id",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlLojaRest}}/categoria",
+									"host": [
+										"{{baseUrlLojaRest}}"
+									],
+									"path": [
+										"categoria"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "usuarioId",
+			"value": "2"
+		},
+		{
+			"key": "produtoId",
+			"value": "5"
+		}
+	]
+}
