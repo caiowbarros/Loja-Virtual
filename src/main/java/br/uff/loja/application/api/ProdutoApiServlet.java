@@ -36,12 +36,12 @@ public class ProdutoApiServlet extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
 		try {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			String pathInfo = request.getPathInfo();
 			String[] parameters = pathInfo.split("/");
-			PrintWriter out = response.getWriter();
 
 			if (parameters.length > 0) {
 				int id = Integer.parseInt(parameters[1]);
@@ -57,7 +57,8 @@ public class ProdutoApiServlet extends HttpServlet {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			response.sendError(500);
+			out.println(new Gson().toJson(ex));
+			response.setStatus(500);
 		}
 	}
 

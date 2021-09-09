@@ -36,16 +36,17 @@ public class CategoriaApiServlet extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    PrintWriter out = response.getWriter();
     try {
       response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-      PrintWriter out = response.getWriter();
+      response.setCharacterEncoding("UTF-8");
       List<CategoriaDTO> data = categoriaService.listaCategorias();
       String json = new Gson().toJson(data);
       out.println(json);
     } catch (Exception ex) {
       ex.printStackTrace();
-      response.sendError(500);
+			out.println(new Gson().toJson(ex));
+      response.setStatus(500);
     }
   }
 

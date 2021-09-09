@@ -14,21 +14,6 @@
 						{
 							"name": "Lista",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{usuarioId}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "usuario_id",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -62,6 +47,26 @@
 							},
 							"response": []
 						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
 					]
 				},
 				{
@@ -70,21 +75,6 @@
 						{
 							"name": "Lista",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{usuarioId}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "usuario_id",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -126,21 +116,6 @@
 						{
 							"name": "Lista",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{usuarioId}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "usuario_id",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
