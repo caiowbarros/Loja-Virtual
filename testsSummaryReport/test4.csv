@@ -1,0 +1,7 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+Lista Usuários,500,4,2,6,0.60,0.000%,14.31270,8.23,1.80,589.0
+Mostra Usuário 2,500,3,1,4,0.58,0.000%,14.31311,2.88,1.82,206.0
+Lista Produtos,500,17,12,55,3.73,0.000%,14.30697,9399.22,1.80,672735.0
+Mostra Produto 5,500,3,2,5,0.60,0.000%,14.31270,8.05,1.82,576.0
+Lista Categorias,500,2,1,4,0.62,0.000%,14.31229,6.95,1.83,497.0
+TOTAL,2500,6,1,55,6.06,0.000%,71.50825,9421.81,9.06,134920.6
