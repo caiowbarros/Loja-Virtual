@@ -28,3 +28,19 @@ UFF - Trabalho feito em grupo para a matéria de Desenvolvimento Web e melhorado
 ## Documentação
 * [CLIQUE AQUI PARA VER A DOCUMENTAÇÃO DA API NO POSTMAN](https://documenter.getpostman.com/view/13081554/U16bvUBT)
 * [CLIQUE AQUI PARA IR ATÉ O ARQUIVO ONDE ENCONTRA-SE A COLLECTION DO POSTMAN PARA SER IMPORTADA NO SEU POSTMAN](https://github.com/caiowbarros/Loja-Virtual/blob/master/Loja.postman_collection.json)
+
+# PiTest
+* O PIT é um sistema de teste de mutação de última geração, fornecendo cobertura de teste padrão ouro para Java e jvm.
+* O que é teste de mutação?
+  * O teste de mutação é conceitualmente muito simples.
+  * Falhas (ou mutações) são propagadas automaticamente em seu código e, em seguida, seus testes são executados. Se seus testes falharem, a mutação é morta; se seus testes passarem, a mutação sobreviveu.
+  * A qualidade dos seus testes pode ser avaliada pela porcentagem de mutações eliminadas.
+  * Colocando de outra forma - o PIT executa seus testes de unidade em versões modificadas automaticamente do código do seu aplicativo. Quando o código do aplicativo muda, ele deve produzir resultados diferentes e fazer com que os testes de unidade falhem. Se um teste de unidade não falhar nessa situação, isso pode indicar um problema com o conjunto de testes.
+  * A cobertura de teste tradicional (ou seja, linha, instrução, ramificação, etc.) mede apenas qual código é executado por seus testes. Ele não verifica se seus testes são realmente capazes de detectar falhas no código executado. Portanto, ele só é capaz de identificar códigos que definitivamente não foram testados.
+  * Os exemplos mais extremos do problema são testes sem asserções. Felizmente, eles são incomuns na maioria das bases de código. Muito mais comum é o código que é apenas parcialmente testado por seu conjunto. Uma suíte que testa apenas parcialmente o código ainda pode executar todas as suas ramificações.
+  * Como ele é realmente capaz de detectar se cada afirmação foi testada de forma significativa, o teste de mutação é o padrão ouro contra o qual todos os outros tipos de cobertura são medidos.
+## Como gerar o relatório
+* Para rodar o PiTest, execute o seguinte comando após já ter buildado o projeto:
+```sh
+mvn org.pitest:pitest-maven:mutationCoverage
+```
